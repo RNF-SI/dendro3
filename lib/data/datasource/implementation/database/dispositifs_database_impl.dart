@@ -1,4 +1,4 @@
-import 'package:dendro3/data/datasource/interface/dispositifs_database.dart';
+import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

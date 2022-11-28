@@ -12,6 +12,19 @@ class Dispositif with _$Dispositif {
 
   const Dispositif._();
 
+  factory Dispositif.fromJson(Map<String, dynamic> json) => Dispositif(
+        id: json["id"],
+        name: json["name"],
+        idOrganisme: json["idOrganisme"],
+        alluvial: json["alluvial"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "idOrganisme": idOrganisme,
+        "alluvial": alluvial,
+      };
   // Dispositif complete() => copyWith(isCompleted: true);
 
   // Dispositif incomplete() => copyWith(isCompleted: false);
