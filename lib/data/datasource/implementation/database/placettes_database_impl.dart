@@ -1,0 +1,96 @@
+import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/bmsSup30_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
+import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
+import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
+import 'package:dendro3/data/entity/placettes_entity.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+class PlacettesDatabaseImpl implements PlacettesDatabase {
+  static const _tableName = 't_placettes';
+
+  Future<Database> get database async {
+    return await DB.instance.database;
+  }
+  // @override
+  // Future<PlacetteListEntity> allPlacettes() async {
+  //   final db = await database;
+  //   return db.query(_tableName);
+  // }
+
+  static Future<void> insertPlacette(
+      Batch batch, final PlacetteEntity placette) async {
+    final placetteInsertProperties = {
+      for (var property in placette.keys.where((k) =>
+          k == 'id_placette' ||
+          k == 'id_dispositif' ||
+          k == 'id_placette_orig' ||
+          k == 'strate' ||
+          k == 'pente' ||
+          k == 'poids_placette' ||
+          k == 'correction_pente' ||
+          k == 'exposition' ||
+          k == 'profondeur_app' ||
+          k == 'profondeur_hydr' ||
+          k == 'texture' ||
+          k == 'habitat' ||
+          k == 'station' ||
+          k == 'typologie' ||
+          k == 'groupe' ||
+          k == 'groupe1' ||
+          k == 'groupe2' ||
+          k == 'ref_habitat' ||
+          k == 'precision_habitat' ||
+          k == 'ref_station' ||
+          k == 'ref_typologie' ||
+          k == 'descriptif_groupe' ||
+          k == 'descriptif_groupe1' ||
+          k == 'descriptif_groupe2' ||
+          k == 'precision_gps' ||
+          k == 'cheminement'))
+        property: placette[property]
+    };
+
+    batch.insert(_tableName, placetteInsertProperties,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+
+    await placette['arbres']
+        .map((arbre) async =>
+            {await ArbresDatabaseImpl.insertArbre(batch, arbre)})
+        .toList();
+    await placette['bmsSup30']
+        .map((bmSup30) async =>
+            {await BmsSup30DatabaseImpl.insertBmSup30(batch, bmSup30)})
+        .toList();
+    await placette['reperes']
+        .map((repere) async =>
+            {await ReperesDatabaseImpl.insertRepere(batch, repere)})
+        .toList();
+  }
+
+  // @override
+  // Future<void> updatePlacette(final PlacetteEntity placette) async {
+  //   final db = await database;
+  //   final int id = placette['id'];
+  //   await db.update(
+  //     _tableName,
+  //     placette,
+  //     where: '$_columnId = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
+
+  // @override
+  // Future<void> deletePlacette(final int id) async {
+  //   final db = await database;
+  //   await db.delete(
+  //     _tableName,
+  //     where: '$_columnId = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
+
+}

@@ -1,0 +1,381 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+
+part of 'regeneration.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
+/// @nodoc
+mixin _$Regeneration {
+  int get idRegeneration => throw _privateConstructorUsedError;
+  int get idCyclePlacette => throw _privateConstructorUsedError;
+  int get sousPlacette => throw _privateConstructorUsedError;
+  String get codeEssence => throw _privateConstructorUsedError;
+  double get recouvrement => throw _privateConstructorUsedError;
+  int get classe1 => throw _privateConstructorUsedError;
+  int get classe2 => throw _privateConstructorUsedError;
+  int get classe3 => throw _privateConstructorUsedError;
+  bool get taillis => throw _privateConstructorUsedError;
+  bool get abroutissement => throw _privateConstructorUsedError;
+  int? get idNomenclatureAbroutissement => throw _privateConstructorUsedError;
+  String? get observation => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $RegenerationCopyWith<Regeneration> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RegenerationCopyWith<$Res> {
+  factory $RegenerationCopyWith(
+          Regeneration value, $Res Function(Regeneration) then) =
+      _$RegenerationCopyWithImpl<$Res, Regeneration>;
+  @useResult
+  $Res call(
+      {int idRegeneration,
+      int idCyclePlacette,
+      int sousPlacette,
+      String codeEssence,
+      double recouvrement,
+      int classe1,
+      int classe2,
+      int classe3,
+      bool taillis,
+      bool abroutissement,
+      int? idNomenclatureAbroutissement,
+      String? observation});
+}
+
+/// @nodoc
+class _$RegenerationCopyWithImpl<$Res, $Val extends Regeneration>
+    implements $RegenerationCopyWith<$Res> {
+  _$RegenerationCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? idRegeneration = null,
+    Object? idCyclePlacette = null,
+    Object? sousPlacette = null,
+    Object? codeEssence = null,
+    Object? recouvrement = null,
+    Object? classe1 = null,
+    Object? classe2 = null,
+    Object? classe3 = null,
+    Object? taillis = null,
+    Object? abroutissement = null,
+    Object? idNomenclatureAbroutissement = freezed,
+    Object? observation = freezed,
+  }) {
+    return _then(_value.copyWith(
+      idRegeneration: null == idRegeneration
+          ? _value.idRegeneration
+          : idRegeneration // ignore: cast_nullable_to_non_nullable
+              as int,
+      idCyclePlacette: null == idCyclePlacette
+          ? _value.idCyclePlacette
+          : idCyclePlacette // ignore: cast_nullable_to_non_nullable
+              as int,
+      sousPlacette: null == sousPlacette
+          ? _value.sousPlacette
+          : sousPlacette // ignore: cast_nullable_to_non_nullable
+              as int,
+      codeEssence: null == codeEssence
+          ? _value.codeEssence
+          : codeEssence // ignore: cast_nullable_to_non_nullable
+              as String,
+      recouvrement: null == recouvrement
+          ? _value.recouvrement
+          : recouvrement // ignore: cast_nullable_to_non_nullable
+              as double,
+      classe1: null == classe1
+          ? _value.classe1
+          : classe1 // ignore: cast_nullable_to_non_nullable
+              as int,
+      classe2: null == classe2
+          ? _value.classe2
+          : classe2 // ignore: cast_nullable_to_non_nullable
+              as int,
+      classe3: null == classe3
+          ? _value.classe3
+          : classe3 // ignore: cast_nullable_to_non_nullable
+              as int,
+      taillis: null == taillis
+          ? _value.taillis
+          : taillis // ignore: cast_nullable_to_non_nullable
+              as bool,
+      abroutissement: null == abroutissement
+          ? _value.abroutissement
+          : abroutissement // ignore: cast_nullable_to_non_nullable
+              as bool,
+      idNomenclatureAbroutissement: freezed == idNomenclatureAbroutissement
+          ? _value.idNomenclatureAbroutissement
+          : idNomenclatureAbroutissement // ignore: cast_nullable_to_non_nullable
+              as int?,
+      observation: freezed == observation
+          ? _value.observation
+          : observation // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_RegenerationCopyWith<$Res>
+    implements $RegenerationCopyWith<$Res> {
+  factory _$$_RegenerationCopyWith(
+          _$_Regeneration value, $Res Function(_$_Regeneration) then) =
+      __$$_RegenerationCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int idRegeneration,
+      int idCyclePlacette,
+      int sousPlacette,
+      String codeEssence,
+      double recouvrement,
+      int classe1,
+      int classe2,
+      int classe3,
+      bool taillis,
+      bool abroutissement,
+      int? idNomenclatureAbroutissement,
+      String? observation});
+}
+
+/// @nodoc
+class __$$_RegenerationCopyWithImpl<$Res>
+    extends _$RegenerationCopyWithImpl<$Res, _$_Regeneration>
+    implements _$$_RegenerationCopyWith<$Res> {
+  __$$_RegenerationCopyWithImpl(
+      _$_Regeneration _value, $Res Function(_$_Regeneration) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? idRegeneration = null,
+    Object? idCyclePlacette = null,
+    Object? sousPlacette = null,
+    Object? codeEssence = null,
+    Object? recouvrement = null,
+    Object? classe1 = null,
+    Object? classe2 = null,
+    Object? classe3 = null,
+    Object? taillis = null,
+    Object? abroutissement = null,
+    Object? idNomenclatureAbroutissement = freezed,
+    Object? observation = freezed,
+  }) {
+    return _then(_$_Regeneration(
+      idRegeneration: null == idRegeneration
+          ? _value.idRegeneration
+          : idRegeneration // ignore: cast_nullable_to_non_nullable
+              as int,
+      idCyclePlacette: null == idCyclePlacette
+          ? _value.idCyclePlacette
+          : idCyclePlacette // ignore: cast_nullable_to_non_nullable
+              as int,
+      sousPlacette: null == sousPlacette
+          ? _value.sousPlacette
+          : sousPlacette // ignore: cast_nullable_to_non_nullable
+              as int,
+      codeEssence: null == codeEssence
+          ? _value.codeEssence
+          : codeEssence // ignore: cast_nullable_to_non_nullable
+              as String,
+      recouvrement: null == recouvrement
+          ? _value.recouvrement
+          : recouvrement // ignore: cast_nullable_to_non_nullable
+              as double,
+      classe1: null == classe1
+          ? _value.classe1
+          : classe1 // ignore: cast_nullable_to_non_nullable
+              as int,
+      classe2: null == classe2
+          ? _value.classe2
+          : classe2 // ignore: cast_nullable_to_non_nullable
+              as int,
+      classe3: null == classe3
+          ? _value.classe3
+          : classe3 // ignore: cast_nullable_to_non_nullable
+              as int,
+      taillis: null == taillis
+          ? _value.taillis
+          : taillis // ignore: cast_nullable_to_non_nullable
+              as bool,
+      abroutissement: null == abroutissement
+          ? _value.abroutissement
+          : abroutissement // ignore: cast_nullable_to_non_nullable
+              as bool,
+      idNomenclatureAbroutissement: freezed == idNomenclatureAbroutissement
+          ? _value.idNomenclatureAbroutissement
+          : idNomenclatureAbroutissement // ignore: cast_nullable_to_non_nullable
+              as int?,
+      observation: freezed == observation
+          ? _value.observation
+          : observation // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_Regeneration extends _Regeneration {
+  const _$_Regeneration(
+      {required this.idRegeneration,
+      required this.idCyclePlacette,
+      required this.sousPlacette,
+      required this.codeEssence,
+      required this.recouvrement,
+      required this.classe1,
+      required this.classe2,
+      required this.classe3,
+      required this.taillis,
+      required this.abroutissement,
+      this.idNomenclatureAbroutissement,
+      this.observation})
+      : super._();
+
+  @override
+  final int idRegeneration;
+  @override
+  final int idCyclePlacette;
+  @override
+  final int sousPlacette;
+  @override
+  final String codeEssence;
+  @override
+  final double recouvrement;
+  @override
+  final int classe1;
+  @override
+  final int classe2;
+  @override
+  final int classe3;
+  @override
+  final bool taillis;
+  @override
+  final bool abroutissement;
+  @override
+  final int? idNomenclatureAbroutissement;
+  @override
+  final String? observation;
+
+  @override
+  String toString() {
+    return 'Regeneration(idRegeneration: $idRegeneration, idCyclePlacette: $idCyclePlacette, sousPlacette: $sousPlacette, codeEssence: $codeEssence, recouvrement: $recouvrement, classe1: $classe1, classe2: $classe2, classe3: $classe3, taillis: $taillis, abroutissement: $abroutissement, idNomenclatureAbroutissement: $idNomenclatureAbroutissement, observation: $observation)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Regeneration &&
+            (identical(other.idRegeneration, idRegeneration) ||
+                other.idRegeneration == idRegeneration) &&
+            (identical(other.idCyclePlacette, idCyclePlacette) ||
+                other.idCyclePlacette == idCyclePlacette) &&
+            (identical(other.sousPlacette, sousPlacette) ||
+                other.sousPlacette == sousPlacette) &&
+            (identical(other.codeEssence, codeEssence) ||
+                other.codeEssence == codeEssence) &&
+            (identical(other.recouvrement, recouvrement) ||
+                other.recouvrement == recouvrement) &&
+            (identical(other.classe1, classe1) || other.classe1 == classe1) &&
+            (identical(other.classe2, classe2) || other.classe2 == classe2) &&
+            (identical(other.classe3, classe3) || other.classe3 == classe3) &&
+            (identical(other.taillis, taillis) || other.taillis == taillis) &&
+            (identical(other.abroutissement, abroutissement) ||
+                other.abroutissement == abroutissement) &&
+            (identical(other.idNomenclatureAbroutissement,
+                    idNomenclatureAbroutissement) ||
+                other.idNomenclatureAbroutissement ==
+                    idNomenclatureAbroutissement) &&
+            (identical(other.observation, observation) ||
+                other.observation == observation));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      idRegeneration,
+      idCyclePlacette,
+      sousPlacette,
+      codeEssence,
+      recouvrement,
+      classe1,
+      classe2,
+      classe3,
+      taillis,
+      abroutissement,
+      idNomenclatureAbroutissement,
+      observation);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_RegenerationCopyWith<_$_Regeneration> get copyWith =>
+      __$$_RegenerationCopyWithImpl<_$_Regeneration>(this, _$identity);
+}
+
+abstract class _Regeneration extends Regeneration {
+  const factory _Regeneration(
+      {required final int idRegeneration,
+      required final int idCyclePlacette,
+      required final int sousPlacette,
+      required final String codeEssence,
+      required final double recouvrement,
+      required final int classe1,
+      required final int classe2,
+      required final int classe3,
+      required final bool taillis,
+      required final bool abroutissement,
+      final int? idNomenclatureAbroutissement,
+      final String? observation}) = _$_Regeneration;
+  const _Regeneration._() : super._();
+
+  @override
+  int get idRegeneration;
+  @override
+  int get idCyclePlacette;
+  @override
+  int get sousPlacette;
+  @override
+  String get codeEssence;
+  @override
+  double get recouvrement;
+  @override
+  int get classe1;
+  @override
+  int get classe2;
+  @override
+  int get classe3;
+  @override
+  bool get taillis;
+  @override
+  bool get abroutissement;
+  @override
+  int? get idNomenclatureAbroutissement;
+  @override
+  String? get observation;
+  @override
+  @JsonKey(ignore: true)
+  _$$_RegenerationCopyWith<_$_Regeneration> get copyWith =>
+      throw _privateConstructorUsedError;
+}

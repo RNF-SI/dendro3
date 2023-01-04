@@ -1,0 +1,34 @@
+import 'package:dendro3/domain/model/bmSup30Mesure.dart'; // import 'package:clean_architecture_bmSup30Mesure_app/domain/model/bmSup30Mesure_id.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'bmSup30Mesure_list.freezed.dart';
+
+@freezed
+class BmSup30MesureList with _$BmSup30MesureList {
+  const factory BmSup30MesureList({required List<BmSup30Mesure> values}) =
+      _BmSup30MesureList;
+
+  const BmSup30MesureList._();
+
+  operator [](final int index) => values[index];
+
+  int get length => values.length;
+
+  BmSup30MesureList addBmSup30Mesure(final BmSup30Mesure bmSup30Mesure) =>
+      copyWith(values: [...values, bmSup30Mesure]);
+
+  BmSup30MesureList updateBmSup30Mesure(final BmSup30Mesure newBmSup30Mesure) {
+    return copyWith(
+        values: values
+            .map((bmSup30Mesure) => newBmSup30Mesure.idBmSup30Mesure ==
+                    bmSup30Mesure.idBmSup30Mesure
+                ? newBmSup30Mesure
+                : bmSup30Mesure)
+            .toList());
+  }
+
+  BmSup30MesureList removeBmSup30MesureById(final int id) => copyWith(
+      values: values
+          .where((bmSup30Mesure) => bmSup30Mesure.idBmSup30Mesure != id)
+          .toList());
+}

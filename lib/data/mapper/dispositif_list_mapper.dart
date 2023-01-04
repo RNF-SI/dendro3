@@ -10,6 +10,14 @@ class DispositifListMapper {
     return DispositifList(values: values);
   }
 
+  static DispositifList transformFromApiToModel(
+      final DispositifListEntity entities) {
+    final values = entities
+        .map((entity) => DispositifMapper.transformFromApiToModel(entity))
+        .toList();
+    return DispositifList(values: values);
+  }
+
   static DispositifListEntity transformToMap(final DispositifList model) =>
       model.values
           .map((value) => DispositifMapper.transformToMap(value))
