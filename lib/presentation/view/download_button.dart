@@ -12,19 +12,10 @@ class DownloadButton extends HookConsumerWidget {
   const DownloadButton({
     super.key,
     required this.dispInfo,
-    // this.downloadProgress = 0.0,
-    // required this.onDownload,
-    // required this.onCancel,
-    // required this.onOpen,
-    // this.transitionDuration = const Duration(milliseconds: 500),
   });
 
   // final DownloadStatus status;
   final DispositifInfo dispInfo;
-  // final double downloadProgress;
-  // final VoidCallback onDownload;
-  // final VoidCallback onCancel;
-  // final VoidCallback onOpen;
   final Duration transitionDuration = const Duration(milliseconds: 500);
 
   bool get _isDownloading =>
@@ -37,17 +28,11 @@ class DownloadButton extends HookConsumerWidget {
       dispInfo.downloadStatus == DownloadStatus.downloaded;
 
   void _onPressed(WidgetRef ref) {
-    // ref.watch(userDispositifListViewModelStateNotifierProvider)
-    // ref
-    //     .read(userDispositifListViewModelStateNotifierProvider.notifier)
-    //     .downloadDispositif(dispInfo);
-
     switch (dispInfo.downloadStatus) {
       case DownloadStatus.notDownloaded:
         ref
             .read(userDispositifListViewModelStateNotifierProvider.notifier)
             .downloadDispositif(dispInfo);
-        // onDownload();
         break;
       case DownloadStatus.fetchingDownload:
         // do nothing.
@@ -73,11 +58,6 @@ class DownloadButton extends HookConsumerWidget {
         _controller.reverse();
       }
     });
-
-    // var _count = ref.watch(currentCount);
-    // useValueChanged(_count, (_, __) async {
-    //   _controller.forward();
-    // });
 
     return AnimatedBuilder(
         animation: _controller,

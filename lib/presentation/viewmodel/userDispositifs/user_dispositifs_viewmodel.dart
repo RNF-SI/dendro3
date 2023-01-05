@@ -14,15 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/presentation/state/state.dart' as CustomAsyncState;
 import 'package:dendro3/domain/model/dispositif_list.dart';
 
-// class DispositifInfo {
-//   final DispositifList userDispositifs;
-//   final DispositifList downloadedDispositifs;
-//   const DispositifInfo(this.userDispositifs, this.downloadedDispositifs);
-// }
-
 final userDispositifListProvider =
     Provider.autoDispose<CustomAsyncState.State<DispositifInfoList>>((ref) {
-  // final filterKind = ref.watch(filterKindViewModelStateNotifierProvider);
   final userDispositifListState =
       ref.watch(userDispositifListViewModelStateNotifierProvider);
 
@@ -30,14 +23,6 @@ final userDispositifListProvider =
     init: () => const CustomAsyncState.State.init(),
     success: (dispositifInfoList) {
       return CustomAsyncState.State.success(dispositifInfoList);
-      // switch (filterKind) {
-      //   case FilterKind.all:
-      //     return CustomAsyncState.State.success(todoList);
-      //   case FilterKind.completed:
-      //     return CustomAsyncState.State.success(todoList.filterByCompleted());
-      //   case FilterKind.incomplete:
-      //     return CustomAsyncState.State.success(todoList.filterByIncomplete());
-      // }
     },
     loading: () => const CustomAsyncState.State.loading(),
     error: (exception) => CustomAsyncState.State.error(exception),
@@ -85,8 +70,6 @@ class UserDispositifsViewModel
       // Si c'est une liste, alors on a bien une connexion internet
       // On affiche tous les dispositif
       if (dispositifsList[0].values is List) {
-        // final userDispositifList = dispositifsList[0];
-
         var downloadStatus = DownloadStatus.notDownloaded;
         dispositifsList[0].values.asMap().forEach((index, disp0) {
           downloadStatus = DownloadStatus.notDownloaded;
@@ -117,9 +100,7 @@ class UserDispositifsViewModel
   }
 
   downloadDispositif(final DispositifInfo dispositifInfo) async {
-    // state = const AsyncValue.loading();
     final id = dispositifInfo.dispositif.id;
-    // state = CustomAsyncState.State.loading();
     try {
       var newDispositifInfo =
           dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
@@ -132,7 +113,6 @@ class UserDispositifsViewModel
           state.data!.updateDispositifInfo(newDispositifInfo));
     } on Exception catch (e) {
       state = CustomAsyncState.State.error(e);
-      // state = AsyncValue.error(e, stack);
     }
   }
 
@@ -142,27 +122,6 @@ class UserDispositifsViewModel
           dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
       state = CustomAsyncState.State.success(
           state.data!.updateDispositifInfo(newDispositifInfo));
-      // = DownloadStatus.downloading ;
-      // _downloadStatus = DownloadStatus.notDownloaded;
-      // _progress = 0.0;
-      // notifyListeners();
     }
-
-    // state = const AsyncValue.loading();
-    // final id = dispositifInfo.dispositif.id;
-    // // state = CustomAsyncState.State.loading();
-    // try {
-    //   var newDispositifInfo =
-    //       dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
-    //   state = CustomAsyncState.State.success(
-    //       state.data!.updateDispositifInfo(newDispositifInfo));
-    //   newDispositifInfo =
-    //       dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloaded);
-    //   await _downloadDispositifDataUseCase.execute(id);
-    //   state = CustomAsyncState.State.success(
-    //       state.data!.updateDispositifInfo(newDispositifInfo));
-    // } catch (e, stack) {
-    //   // state = AsyncValue.error(e, stack);
-    // }
   }
 }
