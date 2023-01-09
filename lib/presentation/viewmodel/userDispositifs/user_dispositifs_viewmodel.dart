@@ -11,27 +11,27 @@ import 'package:dendro3/presentation/model/dispositifInfo_list.dart';
 import 'package:dendro3/presentation/state/download_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dendro3/presentation/state/state.dart' as CustomAsyncState;
+import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 import 'package:dendro3/domain/model/dispositif_list.dart';
 
 final userDispositifListProvider =
-    Provider.autoDispose<CustomAsyncState.State<DispositifInfoList>>((ref) {
+    Provider.autoDispose<custom_async_state.State<DispositifInfoList>>((ref) {
   final userDispositifListState =
       ref.watch(userDispositifListViewModelStateNotifierProvider);
 
   return userDispositifListState.when(
-    init: () => const CustomAsyncState.State.init(),
+    init: () => const custom_async_state.State.init(),
     success: (dispositifInfoList) {
-      return CustomAsyncState.State.success(dispositifInfoList);
+      return custom_async_state.State.success(dispositifInfoList);
     },
-    loading: () => const CustomAsyncState.State.loading(),
-    error: (exception) => CustomAsyncState.State.error(exception),
+    loading: () => const custom_async_state.State.loading(),
+    error: (exception) => custom_async_state.State.error(exception),
   );
 });
 
 final userDispositifListViewModelStateNotifierProvider =
     StateNotifierProvider.autoDispose<UserDispositifsViewModel,
-        CustomAsyncState.State<DispositifInfoList>>((ref) {
+        custom_async_state.State<DispositifInfoList>>((ref) {
   return UserDispositifsViewModel(
     const AsyncValue<DispositifInfoList>.data(DispositifInfoList(values: [])),
     ref.watch(initLocalPSDRFDataBaseUseCaseProvider),
@@ -42,7 +42,7 @@ final userDispositifListViewModelStateNotifierProvider =
 });
 
 class UserDispositifsViewModel
-    extends StateNotifier<CustomAsyncState.State<DispositifInfoList>> {
+    extends StateNotifier<custom_async_state.State<DispositifInfoList>> {
   final InitLocalPSDRFDataBaseUseCase _initLocalPSDRFDataBaseUseCase;
   final GetUserDispositifListFromAPIUseCase
       _getUserDispositifsListFromAPIUseCase;
@@ -55,13 +55,13 @@ class UserDispositifsViewModel
       this._getUserDispositifsListFromAPIUseCase,
       this._getUserDispositifsListFromDBUseCase,
       this._downloadDispositifDataUseCase)
-      : super(const CustomAsyncState.State.init()) {
+      : super(const custom_async_state.State.init()) {
     _init();
   }
 
   Future<void> _init() async {
     var dispositifInfoList = const DispositifInfoList(values: []);
-    state = const CustomAsyncState.State.loading();
+    state = const custom_async_state.State.loading();
     try {
       var dispositifsList = await Future.wait([
         _getUserDispositifsListFromAPIUseCase.execute(3),
@@ -82,7 +82,7 @@ class UserDispositifsViewModel
                   dispositif: disp0, downloadStatus: downloadStatus));
         });
 
-        state = CustomAsyncState.State.success(dispositifInfoList);
+        state = custom_async_state.State.success(dispositifInfoList);
       } else {
         // Si c'est autre chose, il s'agit d'une erreur(pas internet)
         // On affiche tous les dispositifs en local
@@ -92,10 +92,10 @@ class UserDispositifsViewModel
                   dispositif: disp0,
                   downloadStatus: DownloadStatus.downloaded));
         });
-        state = CustomAsyncState.State.success(dispositifInfoList);
+        state = custom_async_state.State.success(dispositifInfoList);
       }
     } on Exception catch (e) {
-      state = CustomAsyncState.State.error(e);
+      state = custom_async_state.State.error(e);
     }
   }
 
@@ -104,15 +104,15 @@ class UserDispositifsViewModel
     try {
       var newDispositifInfo =
           dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
-      state = CustomAsyncState.State.success(
+      state = custom_async_state.State.success(
           state.data!.updateDispositifInfo(newDispositifInfo));
       newDispositifInfo =
           dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloaded);
       await _downloadDispositifDataUseCase.execute(id);
-      state = CustomAsyncState.State.success(
+      state = custom_async_state.State.success(
           state.data!.updateDispositifInfo(newDispositifInfo));
     } on Exception catch (e) {
-      state = CustomAsyncState.State.error(e);
+      state = custom_async_state.State.error(e);
     }
   }
 
@@ -120,7 +120,7 @@ class UserDispositifsViewModel
     if (dispositifInfo.downloadStatus == DownloadStatus.downloading) {
       final newDispositifInfo =
           dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
-      state = CustomAsyncState.State.success(
+      state = custom_async_state.State.success(
           state.data!.updateDispositifInfo(newDispositifInfo));
     }
   }

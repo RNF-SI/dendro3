@@ -1,4 +1,5 @@
 import 'package:dendro3/data/data_module.dart';
+import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase.dart';
@@ -9,6 +10,8 @@ import 'package:dendro3/domain/usecase/get_dispositif_list_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_list_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_list_from_api_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
+import 'package:dendro3/domain/usecase/get_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
@@ -20,6 +23,8 @@ import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'usecase/delete_dispositif_usecase_impl.dart';
 
 final initLocalPSDRFDataBaseUseCaseProvider =
     Provider<InitLocalPSDRFDataBaseUseCase>((ref) =>
@@ -48,6 +53,13 @@ final downloadDispositifDataUseCaseProvider =
     Provider<DownloadDispositifDataUseCase>((ref) =>
         DownloadDispositifDataUseCaseImpl(
             ref.watch(dispositifsRepositoryProvider)));
+
+final getDispositifUseCaseProvider = Provider<GetDispositifUseCase>((ref) =>
+    GetDispositifUseCaseImpl(ref.watch(dispositifsRepositoryProvider)));
+
+final deleteDispositifUseCaseProvider = Provider<DeleteDispositifUseCase>(
+    (ref) =>
+        DeleteDispositifUseCaseImpl(ref.watch(dispositifsRepositoryProvider)));
 
 final loginUseCaseProvider = Provider<LoginUseCase>(
     (ref) => LoginUseCaseImpl(ref.watch(authenticationRepositoryProvider)));

@@ -5,6 +5,7 @@ import 'package:dendro3/data/datasource/implementation/database/placettes_databa
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
+import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -87,5 +88,15 @@ class DispositifsDatabaseImpl implements DispositifsDatabase {
   Future<DispositifListEntity> getUserDispositifs(final int id) async {
     final db = await database;
     return db.query(_tableName);
+  }
+
+  @override
+  Future<DispositifEntity> getDispositif(final int id) async {
+    final db = await database;
+    DispositifListEntity dispList = await db.query(_tableName,
+        where: '$_columnId = ?', whereArgs: [id], limit: 1);
+
+    final placettesObj = await PlacettesDatabaseImpl.getDispPlacettes(db, id);
+    return {...dispList[0], 'placettes': placettesObj};
   }
 }

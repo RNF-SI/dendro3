@@ -29,6 +29,20 @@ class DispositifMapper {
             : null);
   }
 
+  static Dispositif transformFromDBToModel(final DispositifEntity entity) {
+    return Dispositif(
+        id: entity['id_dispositif'],
+        name: entity['name'],
+        idOrganisme: entity['id_organisme'],
+        alluvial: entity['alluvial'] == 1 ? true : false,
+        placettes: entity.containsKey('placettes')
+            ? PlacetteListMapper.transformFromDBToModel(entity['placettes'])
+            : null,
+        cycles: entity.containsKey('cycles')
+            ? CycleListMapper.transformFromApiToModel(entity['cycles'])
+            : null);
+  }
+
   static DispositifEntity transformToMap(final Dispositif model) {
     return {
       'id_dispositif': model.id,

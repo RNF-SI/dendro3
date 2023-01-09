@@ -1,10 +1,12 @@
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/state/download_status.dart';
+import 'package:dendro3/presentation/view/dispositif_page.dart';
 import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @immutable
@@ -27,7 +29,7 @@ class DownloadButton extends HookConsumerWidget {
   bool get _isDownloaded =>
       dispInfo.downloadStatus == DownloadStatus.downloaded;
 
-  void _onPressed(WidgetRef ref) {
+  void _onPressed(BuildContext context, WidgetRef ref) {
     switch (dispInfo.downloadStatus) {
       case DownloadStatus.notDownloaded:
         ref
@@ -43,10 +45,13 @@ class DownloadButton extends HookConsumerWidget {
             .stopDownloadDispositif(dispInfo);
         break;
       case DownloadStatus.downloaded:
-        ref
-            .read(userDispositifListViewModelStateNotifierProvider.notifier)
-            .stopDownloadDispositif(dispInfo);
-        break;
+        Navigator.push(context, MaterialPageRoute<void>(
+          builder: (BuildContext context) {
+            return DispositifPage(
+                dispositifId: dispInfo.dispositif.id,
+                dispositifName: dispInfo.dispositif.name);
+          },
+        ));
     }
   }
 
@@ -64,7 +69,7 @@ class DownloadButton extends HookConsumerWidget {
         builder: (context, child) {
           return GestureDetector(
             onTap: () {
-              _onPressed(ref);
+              _onPressed(context, ref);
             },
             child: Stack(
               children: [

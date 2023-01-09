@@ -58,6 +58,14 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
   }
 
   @override
+  Future<Dispositif> getDispositif(
+    final int dispositifId,
+  ) async {
+    final dispositifEntityFromDB = await database.getDispositif(dispositifId);
+    return DispositifMapper.transformFromDBToModel(dispositifEntityFromDB);
+  }
+
+  @override
   Future<Dispositif> createDispositif(
     final String name,
     final int idOrganisme,

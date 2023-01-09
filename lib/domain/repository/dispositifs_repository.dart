@@ -26,4 +26,8 @@ abstract class DispositifsRepository {
     final bool alluvial,
   );
   Future<void> deleteDispositif(final int id);
+
+  Future<Dispositif> getDispositif(
+    final int id,
+  );
 }

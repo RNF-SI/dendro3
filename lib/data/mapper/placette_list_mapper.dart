@@ -17,6 +17,13 @@ class PlacetteListMapper {
     return PlacetteList(values: values);
   }
 
+  static PlacetteList transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => PlacetteMapper.transformFromDBToModel(entity))
+        .toList();
+    return PlacetteList(values: values);
+  }
+
   static PlacetteListEntity transformToMap(final PlacetteList model) =>
       model.values
           .map((value) => PlacetteMapper.transformToMap(value))

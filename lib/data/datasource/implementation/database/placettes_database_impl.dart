@@ -71,6 +71,12 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
         .toList();
   }
 
+  static Future<PlacetteListEntity> getDispPlacettes(
+      Database db, final int dispositifId) async {
+    return await db.query(_tableName,
+        where: 'id_dispositif = ?', whereArgs: [dispositifId]);
+  }
+
   // @override
   // Future<void> updatePlacette(final PlacetteEntity placette) async {
   //   final db = await database;

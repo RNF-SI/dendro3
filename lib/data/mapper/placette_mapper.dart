@@ -53,6 +53,45 @@ class PlacetteMapper {
             : null);
   }
 
+  static Placette transformFromDBToModel(final PlacetteEntity entity) {
+    return Placette(
+        idPlacette: entity['id_placette'],
+        idDispositif: entity['id_dispositif'],
+        idPlacetteOrig: entity['id_placette_orig'],
+        strate: entity['strate'],
+        pente: entity['pente'],
+        poidsPlacette: entity['poids_placette'],
+        correctionPente: entity['correction_pente'] == 't' ? true : false,
+        exposition: entity['exposition'],
+        profondeurApp: entity['profondeur_app'],
+        profondeurHydr: entity['profondeur_hydr'],
+        texture: entity['texture'],
+        habitat: entity['habitat'],
+        station: entity['station'],
+        typologie: entity['typologie'],
+        groupe: entity['groupe'],
+        groupe1: entity['groupe1'],
+        groupe2: entity['groupe2'],
+        refHabitat: entity['ref_habitat'],
+        precisionHabitat: entity['precision_habitat'],
+        refStation: entity['ref_station'],
+        refTypologie: entity['ref_typologie'],
+        descriptifGroupe: entity['descriptif_groupe'],
+        descriptifGroupe1: entity['descriptif_groupe1'],
+        descriptifGroupe2: entity['descriptif_groupe2'],
+        precisionGps: entity['precision_gps'],
+        cheminement: entity['cheminement'],
+        arbres: entity.containsKey('arbres')
+            ? ArbreListMapper.transformFromApiToModel(entity['arbres'])
+            : null,
+        bmsSup30: entity.containsKey('bmsSup30')
+            ? BmSup30ListMapper.transformFromApiToModel(entity['bmsSup30'])
+            : null,
+        reperes: entity.containsKey('reperes')
+            ? RepereListMapper.transformFromApiToModel(entity['reperes'])
+            : null);
+  }
+
   static PlacetteEntity transformToMap(final Placette model) {
     return {
       'id_placette': model.idPlacette,
