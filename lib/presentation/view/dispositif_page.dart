@@ -1,5 +1,6 @@
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
+import 'package:dendro3/presentation/view/placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -191,13 +192,45 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      placette.idPlacetteOrig,
-                      style: Theme.of(context).textTheme.headline6,
-                      overflow: TextOverflow.ellipsis,
+                    RichText(
+                      text: TextSpan(
+                        // Note: Styles for TextSpans must be explicitly defined.
+                        // Child text spans will inherit styles from parent
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: "Placette ${placette.idPlacetteOrig}"),
+                          TextSpan(
+                            text: "(${placette.idPlacette})",
+                            style: const TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.black,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 4),
                   ],
+                ),
+              ),
+              SizedBox(
+                width: 96,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (BuildContext context) {
+                        return PlacettePage(
+                          placette: placette,
+                        );
+                      },
+                    ));
+                  },
+                  icon: const Icon(
+                    Icons.visibility,
+                  ),
                 ),
               ),
             ],
