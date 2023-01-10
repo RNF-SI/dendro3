@@ -4,6 +4,7 @@ import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.d
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:math' as math;
 
 class PlacettePage extends ConsumerWidget {
   PlacettePage({Key? key, required this.placette}) : super(key: key);
@@ -70,6 +71,7 @@ class PlacettePage extends ConsumerWidget {
             ),
           ],
         ),
+        floatingActionButton: PlacetteFAB(),
       ),
     );
   }
@@ -139,4 +141,44 @@ Widget __buildPropertyTextWidget(String property, dynamic value) {
       ),
     ),
   );
+}
+
+class PlacetteFAB extends ConsumerStatefulWidget {
+  const PlacetteFAB({Key? key}) : super(key: key);
+
+  @override
+  PlacetteFABState createState() => PlacetteFABState();
+}
+
+class PlacetteFABState extends ConsumerState<PlacetteFAB> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // bool opened = false;
+  double targetValue = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        setState(() {
+          targetValue = targetValue == 45.0 ? 0 : 45.0;
+        });
+      },
+      child: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0, end: targetValue),
+        duration: const Duration(milliseconds: 200),
+        builder: (BuildContext context, double angle, Widget? child) {
+          return Transform.rotate(
+            angle: angle * math.pi / 180,
+            child: const Icon(
+              Icons.add,
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
