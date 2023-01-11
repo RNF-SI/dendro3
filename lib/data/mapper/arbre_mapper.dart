@@ -21,7 +21,7 @@ class ArbreMapper {
         codeEssence: entity['code_essence'],
         azimut: entity['azimut'],
         distance: entity['distance'],
-        taillis: entity['taillis'],
+        taillis: entity['taillis'] == true ? true : false,
         observation: entity['observation'],
         arbresMesures: entity.containsKey('arbres_mesures')
             ? ArbreMesureListMapper.transformFromApiToModel(

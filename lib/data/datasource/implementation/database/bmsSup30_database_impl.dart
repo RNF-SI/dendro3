@@ -5,6 +5,8 @@ import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dar
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
+import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -48,6 +50,20 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
                   batch, bmSup30Mesure)
             })
         .toList();
+  }
+
+  static Future<List<BmSup30Entity>> getPlacetteBmSup30(
+      Database db, final int placetteId) async {
+    BmSup30ListEntity bmSup30List = await db
+        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+
+    var bmSup30MesureObj;
+    return Future.wait(bmSup30List.map((BmSup30Entity bmSup30Entity) async {
+      bmSup30MesureObj =
+          await BmsSup30MesuresDatabaseImpl.getbmSup30bmsSup30Mesures(
+              db, bmSup30Entity["id_bm_sup_30"]);
+      return {...bmSup30Entity, 'arbres_mesures': bmSup30MesureObj};
+    }).toList());
   }
 
   // @override

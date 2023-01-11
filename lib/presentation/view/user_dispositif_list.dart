@@ -23,8 +23,7 @@ class UserDispositifList extends ConsumerWidget {
         child: Text('Uh oh... Something went wrong...',
             style: TextStyle(color: Colors.white)),
       ),
-      orElse: () =>
-          const Expanded(child: Center(child: CircularProgressIndicator())),
+      orElse: () => const Center(child: CircularProgressIndicator()),
     );
   }
 

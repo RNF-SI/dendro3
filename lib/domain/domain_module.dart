@@ -12,6 +12,8 @@ import 'package:dendro3/domain/usecase/get_dispositif_list_from_api_usecase.dart
 import 'package:dendro3/domain/usecase/get_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
+import 'package:dendro3/domain/usecase/get_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
@@ -63,3 +65,6 @@ final deleteDispositifUseCaseProvider = Provider<DeleteDispositifUseCase>(
 
 final loginUseCaseProvider = Provider<LoginUseCase>(
     (ref) => LoginUseCaseImpl(ref.watch(authenticationRepositoryProvider)));
+
+final getPlacetteUseCaseProvider = Provider<GetPlacetteUseCase>(
+    (ref) => GetPlacetteUseCaseImpl(ref.watch(placettesRepositoryProvider)));

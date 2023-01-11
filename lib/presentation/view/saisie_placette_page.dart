@@ -1,6 +1,7 @@
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -116,7 +117,31 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
           ),
         ],
       ),
-      body: Text("It's rainy here"),
+      // body: null,
+      body: __buildAsyncPlacetteListWidget(
+          context, ref, widget.placette.idPlacette),
     );
   }
+}
+
+Widget __buildAsyncPlacetteListWidget(
+    final BuildContext context, WidgetRef ref, int placetteId) {
+  final _viewModel = ref.watch(saisiePlacetteViewModelProvider(placetteId));
+
+  return _viewModel.maybeWhen(
+    success: (data) => _buildPlacetteArrayWidget(context),
+    error: (_) => const Center(
+      child: Text('Uh oh... Something went wrong...',
+          style: TextStyle(color: Colors.white)),
+    ),
+    orElse: () => const Center(child: CircularProgressIndicator()),
+  );
+}
+
+Widget _buildPlacetteArrayWidget(final BuildContext context) {
+  // if (placetteList.length == 0) {
+  return const Center(child: Text('Pas de Placette'));
+  // } else {
+  // return const Center(child: Text('Ca marche!'));
+  // }
 }

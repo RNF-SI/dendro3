@@ -24,6 +24,12 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  static Future<BmSup30MesureListEntity> getbmSup30bmsSup30Mesures(
+      Database db, final int bmsSup30Id) async {
+    return await db
+        .query(_tableName, where: 'id_bm_sup_30 = ?', whereArgs: [bmsSup30Id]);
+  }
+
   // @override
   // Future<void> updateBmSup30(final BmSup30Entity bmSup30) async {
   //   final db = await database;

@@ -2,7 +2,9 @@ import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_d
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
+import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:dendro3/domain/model/arbre.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -41,6 +43,21 @@ class ArbresDatabaseImpl implements ArbresDatabase {
                   batch, arbreMesure)
             })
         .toList();
+  }
+
+  static Future<List<ArbreEntity>> getPlacetteArbres(
+      Database db, final int placetteId) async {
+    ArbreListEntity arbreList = await db
+        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+
+    var arbreMesureObj;
+
+    return Future.wait(arbreList.map((ArbreEntity arbreEntity) async {
+      ArbreMesureListEntity arbreMesureObj =
+          await ArbresMesuresDatabaseImpl.getArbreArbresMesures(
+              db, arbreEntity["id_arbre"]);
+      return {...arbreEntity, 'arbres_mesures': arbreMesureObj};
+    }).toList());
   }
 
   // @override

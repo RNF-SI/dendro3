@@ -24,7 +24,7 @@ class BmSup30MesureMapper {
       longueur: entity['longueur'],
       ratioHauteur: entity['ratio_hauteur'],
       contact: entity['contact'],
-      chablis: entity['chablis'],
+      chablis: entity['chablis'] == true ? true : false,
       stadeDurete: entity['stade_durete'],
       stadeEcorce: entity['stade_ecorce'],
       observation: entity['observation'],

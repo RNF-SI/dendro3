@@ -82,8 +82,12 @@ class DispositifPage extends ConsumerWidget {
   }
 }
 
-showAlertDialog(BuildContext context, WidgetRef ref, int dispositifId,
-    String dispositifName) {
+showAlertDialog(
+  BuildContext context,
+  WidgetRef ref,
+  int dispositifId,
+  String dispositifName,
+) {
   // set up the buttons
   Widget annuleButton = TextButton(
     child: const Text("Annuler"),
@@ -150,8 +154,7 @@ Widget __buildAsyncPlacetteListWidget(
       child: Text('Uh oh... Something went wrong...',
           style: TextStyle(color: Colors.white)),
     ),
-    orElse: () =>
-        const Expanded(child: Center(child: CircularProgressIndicator())),
+    orElse: () => const Center(child: CircularProgressIndicator()),
   );
 }
 
