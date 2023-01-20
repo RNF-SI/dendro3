@@ -1,5 +1,6 @@
 import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/bmsSup30_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/corCyclesPlacettes_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
@@ -84,11 +85,19 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
     PlacetteListEntity placetteList = await db.query(_tableName,
         where: '$_columnId = ?', whereArgs: [placetteId], limit: 1);
 
+    final corCyclePlacetteObj =
+        await CorCyclesPlacettesDatabaseImpl.getPlacetteCorCyclesPlacettes(
+            db, placetteId);
     final arbresObj =
         await ArbresDatabaseImpl.getPlacetteArbres(db, placetteId);
     final bmsObj =
         await BmsSup30DatabaseImpl.getPlacetteBmSup30(db, placetteId);
-    return {...placetteList[0], 'arbres': arbresObj, 'bmsSup30': bmsObj};
+    return {
+      ...placetteList[0],
+      'arbres': arbresObj,
+      'bmsSup30': bmsObj,
+      'corCyclesPlacettes': corCyclePlacetteObj,
+    };
   }
 
   // @override

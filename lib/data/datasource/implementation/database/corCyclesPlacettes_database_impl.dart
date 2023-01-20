@@ -58,6 +58,11 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
         .toList();
   }
 
+  static Future<List<CorCyclePlacetteEntity>> getPlacetteCorCyclesPlacettes(
+      Database db, final int placetteId) async {
+    return await db
+        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+  }
   // @override
   // Future<void> updatePlacette(final PlacetteEntity placette) async {
   //   final db = await database;

@@ -1,6 +1,7 @@
 import 'package:dendro3/data/entity/placettes_entity.dart';
 import 'package:dendro3/data/mapper/arbre_list_mapper.dart';
 import 'package:dendro3/data/mapper/bmSup30_list_mapper.dart';
+import 'package:dendro3/data/mapper/corCyclePlacette_list_mapper.dart';
 import 'package:dendro3/data/mapper/repere_list_mapper.dart';
 import 'package:dendro3/domain/model/placette.dart';
 
@@ -42,6 +43,10 @@ class PlacetteMapper {
         descriptifGroupe2: entity['descriptif_groupe2'],
         precisionGps: entity['precision_gps'],
         cheminement: entity['cheminement'],
+        corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
+            ? CorCyclePlacetteListMapper.transformFromApiToModel(
+                entity['corCyclesPlacettes'])
+            : null,
         arbres: entity.containsKey('arbres')
             ? ArbreListMapper.transformFromApiToModel(entity['arbres'])
             : null,
@@ -81,6 +86,10 @@ class PlacetteMapper {
         descriptifGroupe2: entity['descriptif_groupe2'],
         precisionGps: entity['precision_gps'],
         cheminement: entity['cheminement'],
+        corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
+            ? CorCyclePlacetteListMapper.transformFromApiToModel(
+                entity['corCyclesPlacettes'])
+            : null,
         arbres: entity.containsKey('arbres')
             ? ArbreListMapper.transformFromApiToModel(entity['arbres'])
             : null,
@@ -120,6 +129,9 @@ class PlacetteMapper {
       'descriptif_groupe2': model.descriptifGroupe2,
       'precision_gps': model.precisionGps,
       'cheminement': model.cheminement,
+      'corCyclesPlacettes': model.corCyclesPlacettes != null
+          ? CorCyclePlacetteListMapper.transformToMap(model.corCyclesPlacettes!)
+          : null,
       'arbres': model.arbres != null
           ? ArbreListMapper.transformToMap(model.arbres!)
           : null,

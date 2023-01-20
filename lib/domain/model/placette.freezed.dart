@@ -42,6 +42,8 @@ mixin _$Placette {
   String? get descriptifGroupe2 => throw _privateConstructorUsedError;
   String? get precisionGps => throw _privateConstructorUsedError;
   String? get cheminement => throw _privateConstructorUsedError;
+  CorCyclePlacetteList? get corCyclesPlacettes =>
+      throw _privateConstructorUsedError;
   ArbreList? get arbres => throw _privateConstructorUsedError;
   BmSup30List? get bmsSup30 => throw _privateConstructorUsedError;
   RepereList? get reperes => throw _privateConstructorUsedError;
@@ -83,10 +85,12 @@ abstract class $PlacetteCopyWith<$Res> {
       String? descriptifGroupe2,
       String? precisionGps,
       String? cheminement,
+      CorCyclePlacetteList? corCyclesPlacettes,
       ArbreList? arbres,
       BmSup30List? bmsSup30,
       RepereList? reperes});
 
+  $CorCyclePlacetteListCopyWith<$Res>? get corCyclesPlacettes;
   $ArbreListCopyWith<$Res>? get arbres;
   $BmSup30ListCopyWith<$Res>? get bmsSup30;
   $RepereListCopyWith<$Res>? get reperes;
@@ -131,6 +135,7 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
     Object? descriptifGroupe2 = freezed,
     Object? precisionGps = freezed,
     Object? cheminement = freezed,
+    Object? corCyclesPlacettes = freezed,
     Object? arbres = freezed,
     Object? bmsSup30 = freezed,
     Object? reperes = freezed,
@@ -240,6 +245,10 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
           ? _value.cheminement
           : cheminement // ignore: cast_nullable_to_non_nullable
               as String?,
+      corCyclesPlacettes: freezed == corCyclesPlacettes
+          ? _value.corCyclesPlacettes
+          : corCyclesPlacettes // ignore: cast_nullable_to_non_nullable
+              as CorCyclePlacetteList?,
       arbres: freezed == arbres
           ? _value.arbres
           : arbres // ignore: cast_nullable_to_non_nullable
@@ -253,6 +262,19 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
           : reperes // ignore: cast_nullable_to_non_nullable
               as RepereList?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CorCyclePlacetteListCopyWith<$Res>? get corCyclesPlacettes {
+    if (_value.corCyclesPlacettes == null) {
+      return null;
+    }
+
+    return $CorCyclePlacetteListCopyWith<$Res>(_value.corCyclesPlacettes!,
+        (value) {
+      return _then(_value.copyWith(corCyclesPlacettes: value) as $Val);
+    });
   }
 
   @override
@@ -326,10 +348,13 @@ abstract class _$$_PlacetteCopyWith<$Res> implements $PlacetteCopyWith<$Res> {
       String? descriptifGroupe2,
       String? precisionGps,
       String? cheminement,
+      CorCyclePlacetteList? corCyclesPlacettes,
       ArbreList? arbres,
       BmSup30List? bmsSup30,
       RepereList? reperes});
 
+  @override
+  $CorCyclePlacetteListCopyWith<$Res>? get corCyclesPlacettes;
   @override
   $ArbreListCopyWith<$Res>? get arbres;
   @override
@@ -375,6 +400,7 @@ class __$$_PlacetteCopyWithImpl<$Res>
     Object? descriptifGroupe2 = freezed,
     Object? precisionGps = freezed,
     Object? cheminement = freezed,
+    Object? corCyclesPlacettes = freezed,
     Object? arbres = freezed,
     Object? bmsSup30 = freezed,
     Object? reperes = freezed,
@@ -484,6 +510,10 @@ class __$$_PlacetteCopyWithImpl<$Res>
           ? _value.cheminement
           : cheminement // ignore: cast_nullable_to_non_nullable
               as String?,
+      corCyclesPlacettes: freezed == corCyclesPlacettes
+          ? _value.corCyclesPlacettes
+          : corCyclesPlacettes // ignore: cast_nullable_to_non_nullable
+              as CorCyclePlacetteList?,
       arbres: freezed == arbres
           ? _value.arbres
           : arbres // ignore: cast_nullable_to_non_nullable
@@ -530,6 +560,7 @@ class _$_Placette extends _Placette {
       this.descriptifGroupe2,
       this.precisionGps,
       this.cheminement,
+      this.corCyclesPlacettes,
       this.arbres,
       this.bmsSup30,
       this.reperes})
@@ -588,6 +619,8 @@ class _$_Placette extends _Placette {
   @override
   final String? cheminement;
   @override
+  final CorCyclePlacetteList? corCyclesPlacettes;
+  @override
   final ArbreList? arbres;
   @override
   final BmSup30List? bmsSup30;
@@ -596,7 +629,7 @@ class _$_Placette extends _Placette {
 
   @override
   String toString() {
-    return 'Placette(idPlacette: $idPlacette, idDispositif: $idDispositif, idPlacetteOrig: $idPlacetteOrig, strate: $strate, pente: $pente, poidsPlacette: $poidsPlacette, correctionPente: $correctionPente, exposition: $exposition, profondeurApp: $profondeurApp, profondeurHydr: $profondeurHydr, texture: $texture, habitat: $habitat, station: $station, typologie: $typologie, groupe: $groupe, groupe1: $groupe1, groupe2: $groupe2, refHabitat: $refHabitat, precisionHabitat: $precisionHabitat, refStation: $refStation, refTypologie: $refTypologie, descriptifGroupe: $descriptifGroupe, descriptifGroupe1: $descriptifGroupe1, descriptifGroupe2: $descriptifGroupe2, precisionGps: $precisionGps, cheminement: $cheminement, arbres: $arbres, bmsSup30: $bmsSup30, reperes: $reperes)';
+    return 'Placette(idPlacette: $idPlacette, idDispositif: $idDispositif, idPlacetteOrig: $idPlacetteOrig, strate: $strate, pente: $pente, poidsPlacette: $poidsPlacette, correctionPente: $correctionPente, exposition: $exposition, profondeurApp: $profondeurApp, profondeurHydr: $profondeurHydr, texture: $texture, habitat: $habitat, station: $station, typologie: $typologie, groupe: $groupe, groupe1: $groupe1, groupe2: $groupe2, refHabitat: $refHabitat, precisionHabitat: $precisionHabitat, refStation: $refStation, refTypologie: $refTypologie, descriptifGroupe: $descriptifGroupe, descriptifGroupe1: $descriptifGroupe1, descriptifGroupe2: $descriptifGroupe2, precisionGps: $precisionGps, cheminement: $cheminement, corCyclesPlacettes: $corCyclesPlacettes, arbres: $arbres, bmsSup30: $bmsSup30, reperes: $reperes)';
   }
 
   @override
@@ -648,6 +681,8 @@ class _$_Placette extends _Placette {
                 other.precisionGps == precisionGps) &&
             (identical(other.cheminement, cheminement) ||
                 other.cheminement == cheminement) &&
+            (identical(other.corCyclesPlacettes, corCyclesPlacettes) ||
+                other.corCyclesPlacettes == corCyclesPlacettes) &&
             (identical(other.arbres, arbres) || other.arbres == arbres) &&
             (identical(other.bmsSup30, bmsSup30) ||
                 other.bmsSup30 == bmsSup30) &&
@@ -683,6 +718,7 @@ class _$_Placette extends _Placette {
         descriptifGroupe2,
         precisionGps,
         cheminement,
+        corCyclesPlacettes,
         arbres,
         bmsSup30,
         reperes
@@ -723,6 +759,7 @@ abstract class _Placette extends Placette {
       final String? descriptifGroupe2,
       final String? precisionGps,
       final String? cheminement,
+      final CorCyclePlacetteList? corCyclesPlacettes,
       final ArbreList? arbres,
       final BmSup30List? bmsSup30,
       final RepereList? reperes}) = _$_Placette;
@@ -780,6 +817,8 @@ abstract class _Placette extends Placette {
   String? get precisionGps;
   @override
   String? get cheminement;
+  @override
+  CorCyclePlacetteList? get corCyclesPlacettes;
   @override
   ArbreList? get arbres;
   @override

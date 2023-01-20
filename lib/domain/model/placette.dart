@@ -1,5 +1,6 @@
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
+import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -34,6 +35,7 @@ class Placette with _$Placette {
       String? descriptifGroupe2,
       String? precisionGps,
       String? cheminement,
+      CorCyclePlacetteList? corCyclesPlacettes,
       ArbreList? arbres,
       BmSup30List? bmsSup30,
       RepereList? reperes}) = _Placette;
