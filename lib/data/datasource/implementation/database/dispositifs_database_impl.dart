@@ -97,6 +97,7 @@ class DispositifsDatabaseImpl implements DispositifsDatabase {
         where: '$_columnId = ?', whereArgs: [id], limit: 1);
 
     final placettesObj = await PlacettesDatabaseImpl.getDispPlacettes(db, id);
-    return {...dispList[0], 'placettes': placettesObj};
+    final cycleObj = await CyclesDatabaseImpl.getDispCycles(db, id);
+    return {...dispList[0], 'placettes': placettesObj, 'cycles': cycleObj};
   }
 }
