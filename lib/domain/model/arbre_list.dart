@@ -1,3 +1,4 @@
+import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/arbre.dart'; // import 'package:clean_architecture_arbre_app/domain/model/arbre_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -25,4 +26,14 @@ class ArbreList with _$ArbreList {
 
   ArbreList removeArbreById(final int id) =>
       copyWith(values: values.where((arbre) => arbre.idArbre != id).toList());
+
+  List<Map<String, dynamic>> getObjectMapped({
+    DisplayedColumnType displayedColumnType = DisplayedColumnType.all,
+    DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
+  }) =>
+      values.map((value) {
+        return value.getValuesMappedFromDisplayedColumnType(
+            displayedColumnType: displayedColumnType,
+            displayedMesureColumnType: displayedMesureColumnType);
+      }).toList();
 }

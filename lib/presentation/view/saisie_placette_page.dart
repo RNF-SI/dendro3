@@ -1,11 +1,15 @@
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
+import 'package:data_table_2/data_table_2.dart';
 
 class SaisiePlacettePage extends ConsumerStatefulWidget {
   SaisiePlacettePage({Key? key, required this.placette}) : super(key: key);
@@ -129,19 +133,11 @@ Widget __buildAsyncPlacetteListWidget(
   final _viewModel = ref.watch(saisiePlacetteViewModelProvider(placetteId));
 
   return _viewModel.maybeWhen(
-    success: (data) => _buildPlacetteArrayWidget(context),
+    success: (data) => SaisieDataTable(data: data.arbres!),
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
           style: TextStyle(color: Colors.white)),
     ),
     orElse: () => const Center(child: CircularProgressIndicator()),
   );
-}
-
-Widget _buildPlacetteArrayWidget(final BuildContext context) {
-  // if (placetteList.length == 0) {
-  return const Center(child: Text('Pas de Placette'));
-  // } else {
-  // return const Center(child: Text('Ca marche!'));
-  // }
 }

@@ -1,3 +1,4 @@
+import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart'; // import 'package:clean_architecture_arbreMesure_app/domain/model/arbreMesure_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -31,4 +32,12 @@ class ArbreMesureList with _$ArbreMesureList {
       values: values
           .where((arbreMesure) => arbreMesure.idArbreMesure != id)
           .toList());
+
+  List<Map<String, dynamic>> getValuesMappedFromDisplayedColumnType({
+    DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
+  }) =>
+      values
+          .map((value) => value.getValuesMappedFromDisplayedColumnType(
+              displayedMesureColumnType: displayedMesureColumnType))
+          .toList();
 }
