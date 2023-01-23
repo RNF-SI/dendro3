@@ -272,6 +272,7 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                       builder: (BuildContext context) {
                         return PlacettePage(
                           placette: placette,
+                          dispCycleList: cycleList,
                         );
                       },
                     ));

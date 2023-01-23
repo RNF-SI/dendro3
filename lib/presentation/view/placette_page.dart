@@ -1,3 +1,5 @@
+import 'package:dendro3/domain/model/cycle.dart';
+import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
@@ -8,9 +10,11 @@ import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 
 class PlacettePage extends ConsumerWidget {
-  PlacettePage({Key? key, required this.placette}) : super(key: key);
+  PlacettePage({Key? key, required this.placette, required this.dispCycleList})
+      : super(key: key);
 
   Placette placette;
+  CycleList dispCycleList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,7 +82,10 @@ class PlacettePage extends ConsumerWidget {
             ActionButton(
               onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
                 builder: (BuildContext context) {
-                  return SaisiePlacettePage(placette: placette);
+                  return SaisiePlacettePage(
+                    placette: placette,
+                    dispCycleList: dispCycleList,
+                  );
                 },
               )),
               icon: const Icon(Icons.add),

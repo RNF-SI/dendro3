@@ -1,5 +1,6 @@
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
@@ -12,9 +13,14 @@ import 'dart:math' as math;
 import 'package:data_table_2/data_table_2.dart';
 
 class SaisiePlacettePage extends ConsumerStatefulWidget {
-  SaisiePlacettePage({Key? key, required this.placette}) : super(key: key);
+  SaisiePlacettePage({
+    Key? key,
+    required this.placette,
+    required this.dispCycleList,
+  }) : super(key: key);
 
   Placette placette;
+  CycleList dispCycleList;
 
   @override
   SaisiePlacettePageState createState() => SaisiePlacettePageState();
@@ -123,17 +129,24 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
       ),
       // body: null,
       body: __buildAsyncPlacetteListWidget(
-          context, ref, widget.placette.idPlacette),
+          context, ref, widget.placette.idPlacette, widget.dispCycleList),
     );
   }
 }
 
 Widget __buildAsyncPlacetteListWidget(
-    final BuildContext context, WidgetRef ref, int placetteId) {
+  final BuildContext context,
+  WidgetRef ref,
+  int placetteId,
+  CycleList dispCycleList,
+) {
   final _viewModel = ref.watch(saisiePlacetteViewModelProvider(placetteId));
 
   return _viewModel.maybeWhen(
-    success: (data) => SaisieDataTable(data: data.arbres!),
+    success: (data) => SaisieDataTable(
+      data: data.arbres!,
+      dispCycleList: dispCycleList,
+    ),
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
           style: TextStyle(color: Colors.white)),

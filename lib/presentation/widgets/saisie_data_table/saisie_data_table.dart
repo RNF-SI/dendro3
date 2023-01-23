@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/cycle.dart';
+import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
@@ -12,9 +14,10 @@ import 'dart:math' as math;
 import 'package:data_table_2/data_table_2.dart';
 
 class SaisieDataTable extends ConsumerStatefulWidget {
-  SaisieDataTable({super.key, required this.data});
+  SaisieDataTable({super.key, required this.data, required this.dispCycleList});
 
   final ArbreList data;
+  final CycleList dispCycleList;
 
   @override
   SaisieDataTableState createState() => SaisieDataTableState();
@@ -26,6 +29,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   final List<bool> _extendedList = <bool>[true, false];
   final List<bool> _reducedList = <bool>[true, false, false];
   final List<bool> _mesureList = <bool>[true, false, false];
+  final List<bool> _cycleSelectedList = <bool>[];
 
   @override
   void initState() {
@@ -37,6 +41,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final rowList = ref.watch(rowsProvider(widget.data));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
+    final List<bool> _cycleSelectedList = widget.dispCycleList!.values
+        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
+        .toList();
+
     return Column(
       children: [
         Container(
@@ -156,6 +164,31 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             Text('Sans Mesure'),
           ],
         ),
+        Visibility(
+          visible: [0, 1]
+              .contains(_mesureList.indexWhere((mesure) => mesure == true)),
+          child: ToggleButtons(
+            isSelected: _cycleSelectedList,
+            onPressed: (int index) {
+              setState(() {
+                _cycleSelectedList[index] = !_cycleSelectedList[index];
+                // TODO: Ajout logique de changement des row en fct du cycle
+              });
+            },
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            selectedBorderColor: Colors.blue[700],
+            selectedColor: Colors.white,
+            fillColor: Colors.blue[200],
+            color: Colors.blue[400],
+            constraints: const BoxConstraints(
+              minHeight: 40.0,
+              minWidth: 80.0,
+            ),
+            children: <Widget>[
+              ..._generateCircleAvatars(widget.dispCycleList!),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -186,4 +219,18 @@ List<DataRow> _createRows(List<Map<String, dynamic>> valueList) {
       cells: cellList,
     );
   }).toList();
+}
+
+List<Widget> _generateCircleAvatars(CycleList cycleList) {
+  var list = cycleList.values
+      .map<Widget>((data) => CircleAvatar(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            radius: 10,
+            child: Text(
+              data.numCycle.toString(),
+            ),
+          ))
+      .toList();
+  return list;
 }
