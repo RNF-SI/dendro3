@@ -1,3 +1,6 @@
+import 'package:dendro3/domain/model/cycle.dart';
+import 'package:dendro3/domain/model/cycle_list.dart';
+import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/view/placette_page.dart';
@@ -5,6 +8,7 @@ import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.d
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 
 class DispositifPage extends ConsumerWidget {
   DispositifPage(
@@ -70,12 +74,11 @@ class DispositifPage extends ConsumerWidget {
           ),
         ),
         body: TabBarView(
-          children: [
-            __buildAsyncPlacetteListWidget(context, ref, dispositifId),
-            const Center(
-              child: Text("It's rainy here"),
-            ),
-          ],
+          children: __buildAsyncPages(context, ref, dispositifId),
+          // [
+          //   __buildAsyncPlacetteListWidget(context, ref, dispositifId),
+          //   __buildAsyncCycleInfoWidget(context, ref, dispositifId),
+          // ],
         ),
       ),
     );
@@ -144,11 +147,25 @@ showAlertDialog(
   );
 }
 
-Widget __buildAsyncPlacetteListWidget(
-    final BuildContext context, WidgetRef ref, int dispositifId) {
+List<Widget> __buildAsyncPages(
+  final BuildContext context,
+  WidgetRef ref,
+  int dispositifId,
+) {
   final _viewModel = ref.watch(dispositifViewModelProvider(dispositifId));
 
-  return _viewModel.maybeWhen(
+  return [
+    __buildAsyncPlacetteListWidget(context, ref, _viewModel),
+    __buildAsyncCycleInfoWidget(context, ref, _viewModel),
+  ];
+}
+
+Widget __buildAsyncPlacetteListWidget(
+  final BuildContext context,
+  WidgetRef ref,
+  custom_async_state.State<Dispositif> stateDisp,
+) {
+  return stateDisp.maybeWhen(
     success: (data) => _buildPlacetteListWidget(context, data.placettes!),
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
@@ -159,7 +176,9 @@ Widget __buildAsyncPlacetteListWidget(
 }
 
 Widget _buildPlacetteListWidget(
-    final BuildContext context, final PlacetteList placetteList) {
+  final BuildContext context,
+  final PlacetteList placetteList,
+) {
   if (placetteList.length == 0) {
     return const Center(child: Text('Pas de Placette'));
   } else {
@@ -242,4 +261,169 @@ class PlacetteItemCardWidget extends ConsumerWidget {
       ),
     );
   }
+}
+
+Widget __buildAsyncCycleInfoWidget(
+  final BuildContext context,
+  WidgetRef ref,
+  custom_async_state.State<Dispositif> stateDisp,
+) {
+  return stateDisp.maybeWhen(
+    success: (data) => ChiffresWidget(cycleList: data.cycles),
+    error: (_) => const Center(
+      child: Text('Uh oh... Something went wrong...',
+          style: TextStyle(color: Colors.white)),
+    ),
+    orElse: () => const Center(child: CircularProgressIndicator()),
+  );
+}
+
+class ChiffresWidget extends StatefulWidget {
+  const ChiffresWidget({
+    Key? key,
+    required this.cycleList,
+  }) : super(key: key);
+
+  final CycleList? cycleList;
+
+  @override
+  State<StatefulWidget> createState() => _ChiffresWidgetState();
+}
+// (final BuildContext context, final WidgetRef ref,
+//     final CycleList cycleList) {
+//     final List<bool> cycleSelected = <bool>[true, false, false];
+//   return ToggleButtons(
+//   isSelected: cycleSelected,
+//   onPressed: (int index) {
+//     setState(() {
+//       for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+//         if (buttonIndex == index) {
+//           isSelected[buttonIndex] = true;
+//         } else {
+//           isSelected[buttonIndex] = false;
+//         }
+//       }
+//     });
+//   },
+//   children: const <Widget>[
+//     Icon(Icons.ac_unit),
+//     Icon(Icons.call),
+//     Icon(Icons.cake),
+//   ],
+// ),
+// // __buildGridText(cycleList[0]);
+//   // ListView.builder(
+//   //   padding: const EdgeInsets.all(8),
+//   //   itemCount: cycleList.length,
+//   //   shrinkWrap: true,
+//   //   itemBuilder: (final BuildContext context, final int index) {
+//   //     return __buildGridText(cycleList[index]);
+//   //   },
+//   // );
+// }
+
+class _ChiffresWidgetState extends State<ChiffresWidget> {
+  _ChiffresWidgetState();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<bool> cycleSelected = widget.cycleList!.values
+        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
+        .toList();
+    return Column(children: [
+      ToggleButtons(
+        isSelected: cycleSelected,
+        onPressed: (int index) {
+          setState(() {
+            for (int i = 0; i < cycleSelected.length; i++) {
+              cycleSelected[i] = i == index;
+            }
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        selectedBorderColor: Colors.blue[700],
+        selectedColor: Colors.white,
+        fillColor: Colors.blue[200],
+        color: Colors.blue[400],
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 80.0,
+        ),
+        children: <Widget>[
+          ..._generateCircleAvatars(widget.cycleList!),
+        ],
+      ),
+      __buildGridText(widget.cycleList![
+          cycleSelected.indexWhere((selected) => selected == true)]),
+    ]);
+  }
+}
+
+List<Widget> _generateCircleAvatars(CycleList cycleList) {
+  var list = cycleList.values
+      .map<Widget>((data) => CircleAvatar(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            radius: 10,
+            child: Text(
+              data.numCycle.toString(),
+            ),
+          ))
+      .toList();
+  return list;
+}
+
+Widget __buildGridText(Cycle cycle) {
+  return Expanded(
+    child: SizedBox(
+      height: 200.0,
+      child: GridView.count(
+          // Create a grid with 2 columns. If you change the scrollDirection to
+          // horizontal, this produces 2 rows.
+          crossAxisCount: 2,
+          childAspectRatio: (1 / .2),
+          children: [
+            __buildPropertyTextWidget('idCycle', cycle.idCycle),
+            __buildPropertyTextWidget('idDispositif', cycle.idDispositif),
+            __buildPropertyTextWidget('numCycle', cycle.numCycle),
+            __buildPropertyTextWidget('coeff', cycle.coeff),
+            __buildPropertyTextWidget('dateDebut',
+                '${cycle.dateDebut.day}/${cycle.dateDebut.month}/${cycle.dateDebut.year}'),
+            __buildPropertyTextWidget('dateFin',
+                '${cycle.dateFin.day}/${cycle.dateFin.month}/${cycle.dateFin.year}'),
+            __buildPropertyTextWidget('diamLim', cycle.diamLim),
+            __buildPropertyTextWidget('monitor', cycle.monitor),
+          ]),
+    ),
+  );
+}
+
+Widget __buildPropertyTextWidget(String property, dynamic value) {
+  return Center(
+    child: RichText(
+      text: TextSpan(
+        // Note: Styles for TextSpans must be explicitly defined.
+        // Child text spans will inherit styles from parent
+        style: const TextStyle(
+          fontSize: 10.0,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          TextSpan(text: "$property :"),
+          TextSpan(
+            text: value.toString(),
+            style: const TextStyle(
+                fontSize: 14.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
+    ),
+  );
 }
