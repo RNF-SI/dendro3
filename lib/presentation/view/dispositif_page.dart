@@ -289,38 +289,6 @@ class ChiffresWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ChiffresWidgetState();
 }
-// (final BuildContext context, final WidgetRef ref,
-//     final CycleList cycleList) {
-//     final List<bool> cycleSelected = <bool>[true, false, false];
-//   return ToggleButtons(
-//   isSelected: cycleSelected,
-//   onPressed: (int index) {
-//     setState(() {
-//       for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
-//         if (buttonIndex == index) {
-//           isSelected[buttonIndex] = true;
-//         } else {
-//           isSelected[buttonIndex] = false;
-//         }
-//       }
-//     });
-//   },
-//   children: const <Widget>[
-//     Icon(Icons.ac_unit),
-//     Icon(Icons.call),
-//     Icon(Icons.cake),
-//   ],
-// ),
-// // __buildGridText(cycleList[0]);
-//   // ListView.builder(
-//   //   padding: const EdgeInsets.all(8),
-//   //   itemCount: cycleList.length,
-//   //   shrinkWrap: true,
-//   //   itemBuilder: (final BuildContext context, final int index) {
-//   //     return __buildGridText(cycleList[index]);
-//   //   },
-//   // );
-// }
 
 class _ChiffresWidgetState extends State<ChiffresWidget> {
   _ChiffresWidgetState();
