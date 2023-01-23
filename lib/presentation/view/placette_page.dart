@@ -1,3 +1,5 @@
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
+import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
@@ -64,15 +66,23 @@ class PlacettePage extends ConsumerWidget {
                 icon: Icon(Icons.summarize),
                 text: 'Résumé',
               ),
-              Tab(icon: Icon(Icons.onetwothree), text: 'Cycles'),
+              Tab(
+                icon: Icon(Icons.onetwothree),
+                text: 'Cycles',
+              ),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            __buildPlacetteResumeWidget(context, ref, placette),
-            const Center(
-              child: Text("It's rainy here"),
+            __buildPlacetteResumeWidget(
+              context,
+              ref,
+              placette,
+            ),
+            PlacetteCycleWidget(
+              corCyclePlacette: placette.corCyclesPlacettes,
+              dispCycleList: dispCycleList,
             ),
           ],
         ),
@@ -163,6 +173,132 @@ Widget __buildPropertyTextWidget(String property, dynamic value) {
           )
         ],
       ),
+    ),
+  );
+}
+
+class PlacetteCycleWidget extends StatefulWidget {
+  const PlacetteCycleWidget({
+    Key? key,
+    required this.corCyclePlacette,
+    required this.dispCycleList,
+  }) : super(key: key);
+
+  final CorCyclePlacetteList? corCyclePlacette;
+  final CycleList? dispCycleList;
+
+  @override
+  State<StatefulWidget> createState() => _PlacetteCycleWidgetState();
+}
+
+class _PlacetteCycleWidgetState extends State<PlacetteCycleWidget> {
+  _PlacetteCycleWidgetState();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<bool> corCycleSelected = widget.corCyclePlacette!.values
+        .map<bool>((CorCyclePlacette data) => false)
+        .toList();
+    corCycleSelected[0] = true;
+    return Column(children: [
+      ToggleButtons(
+        isSelected: corCycleSelected,
+        onPressed: (int index) {
+          setState(() {
+            for (int i = 0; i < corCycleSelected.length; i++) {
+              corCycleSelected[i] = i == index;
+            }
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        selectedBorderColor: Colors.blue[700],
+        selectedColor: Colors.white,
+        fillColor: Colors.blue[200],
+        color: Colors.blue[400],
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 80.0,
+        ),
+        children: <Widget>[
+          ..._generateCircleAvatars(
+            widget.dispCycleList!,
+            widget.corCyclePlacette!,
+          ),
+        ],
+      ),
+      __buildGridText(widget.corCyclePlacette![
+          corCycleSelected.indexWhere((selected) => selected == true)]),
+    ]);
+  }
+}
+
+List<Widget> _generateCircleAvatars(
+  CycleList dispCycleList,
+  CorCyclePlacetteList corCyclePlacetteList,
+) {
+  var list = corCyclePlacetteList.values
+      .map<Widget>((data) => CircleAvatar(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            radius: 10,
+            child: Text(
+              dispCycleList.values
+                  .firstWhere((dispCycle) => dispCycle.idCycle == data.idCycle)
+                  .numCycle
+                  .toString(),
+            ),
+          ))
+      .toList();
+  return list;
+}
+
+Widget __buildGridText(CorCyclePlacette corCyclePlacette) {
+  return Expanded(
+    child: SizedBox(
+      height: 200.0,
+      child: GridView.count(
+          // Create a grid with 2 columns. If you change the scrollDirection to
+          // horizontal, this produces 2 rows.
+          crossAxisCount: 2,
+          childAspectRatio: (1 / .2),
+          children: [
+            __buildPropertyTextWidget(
+                'idCyclePlacette', corCyclePlacette.idCyclePlacette),
+            __buildPropertyTextWidget('idCycle', corCyclePlacette.idCycle),
+            __buildPropertyTextWidget(
+                'idPlacette', corCyclePlacette.idPlacette),
+            __buildPropertyTextWidget(
+                'dateReleve',
+                corCyclePlacette.dateReleve != null
+                    ? '${corCyclePlacette.dateReleve!.day}/${corCyclePlacette.dateReleve!.month}/${corCyclePlacette.dateReleve!.year}'
+                    : null),
+            __buildPropertyTextWidget(
+                'dateIntervention', corCyclePlacette.dateIntervention),
+            __buildPropertyTextWidget('annee', corCyclePlacette.annee),
+            __buildPropertyTextWidget(
+                'natureIntervention', corCyclePlacette.natureIntervention),
+            __buildPropertyTextWidget(
+                'gestionPlacette', corCyclePlacette.gestionPlacette),
+            __buildPropertyTextWidget(
+                'idNomenclatureCastor', corCyclePlacette.idNomenclatureCastor),
+            __buildPropertyTextWidget('idNomenclatureFrottis',
+                corCyclePlacette.idNomenclatureFrottis),
+            __buildPropertyTextWidget(
+                'idNomenclatureBoutis', corCyclePlacette.idNomenclatureBoutis),
+            __buildPropertyTextWidget(
+                'recouvHerbesBasses', corCyclePlacette.recouvHerbesBasses),
+            __buildPropertyTextWidget(
+                'recouvHerbesHautes', corCyclePlacette.recouvHerbesHautes),
+            __buildPropertyTextWidget(
+                'recouvBuissons', corCyclePlacette.recouvBuissons),
+            __buildPropertyTextWidget(
+                'recouvArbres', corCyclePlacette.recouvArbres),
+          ]),
     ),
   );
 }
