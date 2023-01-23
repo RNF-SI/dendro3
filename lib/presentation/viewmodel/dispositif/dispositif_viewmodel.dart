@@ -55,6 +55,7 @@ class DispositifViewModel
       state = custom_async_state.State.error(e);
     } catch (e) {
       print(e);
+      state = custom_async_state.State.error(Exception(e));
     }
   }
 

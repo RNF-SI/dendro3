@@ -166,7 +166,8 @@ Widget __buildAsyncPlacetteListWidget(
   custom_async_state.State<Dispositif> stateDisp,
 ) {
   return stateDisp.maybeWhen(
-    success: (data) => _buildPlacetteListWidget(context, data.placettes!),
+    success: (data) =>
+        _buildPlacetteListWidget(context, data.placettes!, data.cycles!),
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
           style: TextStyle(color: Colors.white)),
@@ -178,6 +179,7 @@ Widget __buildAsyncPlacetteListWidget(
 Widget _buildPlacetteListWidget(
   final BuildContext context,
   final PlacetteList placetteList,
+  final CycleList cycleList,
 ) {
   if (placetteList.length == 0) {
     return const Center(child: Text('Pas de Placette'));
@@ -187,7 +189,8 @@ Widget _buildPlacetteListWidget(
       itemCount: placetteList.length,
       shrinkWrap: true,
       itemBuilder: (final BuildContext context, final int index) {
-        return PlacetteItemCardWidget(placette: placetteList[index]);
+        return PlacetteItemCardWidget(
+            placette: placetteList[index], cycleList: cycleList);
       },
     );
   }
@@ -197,9 +200,11 @@ class PlacetteItemCardWidget extends ConsumerWidget {
   const PlacetteItemCardWidget({
     Key? key,
     required this.placette,
+    required this.cycleList,
   }) : super(key: key);
 
   final Placette placette;
+  final CycleList cycleList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -223,7 +228,9 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                           color: Colors.black,
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: "Placette ${placette.idPlacetteOrig}"),
+                          TextSpan(
+                            text: "Placette ${placette.idPlacetteOrig}",
+                          ),
                           TextSpan(
                             text: "(${placette.idPlacette})",
                             style: const TextStyle(
@@ -239,7 +246,26 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                 ),
               ),
               SizedBox(
-                width: 96,
+                width: 20,
+                child: Row(
+                  children: placette.corCyclesPlacettes!.values
+                      .map<Widget>(
+                        (data) => CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          radius: 10,
+                          child: Text(cycleList.values
+                              .firstWhere((Cycle cycle) =>
+                                  cycle.idCycle == data.idCycle)
+                              .numCycle
+                              .toString()),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+              SizedBox(
+                width: 76,
                 child: IconButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute<void>(
