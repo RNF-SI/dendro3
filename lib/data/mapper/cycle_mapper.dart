@@ -19,8 +19,12 @@ class CycleMapper {
         idDispositif: entity['id_dispositif'],
         numCycle: entity['num_cycle'],
         coeff: entity['coeff'],
-        dateDebut: DateTime.parse(entity['date_debut']),
-        dateFin: DateTime.parse(entity['date_fin']),
+        dateDebut: entity['date_debut'] != null
+            ? DateTime.parse(entity['date_debut'])
+            : null,
+        dateFin: entity['date_fin'] != null
+            ? DateTime.parse(entity['date_fin'])
+            : null,
         diamLim: entity['diam_lim'],
         monitor: entity['monitor'],
         corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
@@ -36,8 +40,10 @@ class CycleMapper {
       'id_dispositif': model.idDispositif,
       'num_cycle': model.numCycle,
       'coeff': model.coeff,
-      'date_debut': formatter.format(model.dateDebut),
-      'date_fin': formatter.format(model.dateFin),
+      'date_debut':
+          model.dateDebut == null ? null : formatter.format(model.dateDebut!),
+      'date_fin':
+          model.dateFin == null ? null : formatter.format(model.dateFin!),
       'diam_lim': model.diamLim,
       'monitor': model.monitor,
       'corCyclesPlacettes': model.corCyclesPlacettes != null

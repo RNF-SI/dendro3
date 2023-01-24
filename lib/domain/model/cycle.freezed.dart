@@ -19,10 +19,10 @@ mixin _$Cycle {
   int get idCycle => throw _privateConstructorUsedError;
   int get idDispositif => throw _privateConstructorUsedError;
   int get numCycle => throw _privateConstructorUsedError;
-  int get coeff => throw _privateConstructorUsedError;
-  DateTime get dateDebut => throw _privateConstructorUsedError;
-  DateTime get dateFin => throw _privateConstructorUsedError;
-  double get diamLim => throw _privateConstructorUsedError;
+  int? get coeff => throw _privateConstructorUsedError;
+  DateTime? get dateDebut => throw _privateConstructorUsedError;
+  DateTime? get dateFin => throw _privateConstructorUsedError;
+  double? get diamLim => throw _privateConstructorUsedError;
   String? get monitor => throw _privateConstructorUsedError;
   CorCyclePlacetteList? get corCyclesPlacettes =>
       throw _privateConstructorUsedError;
@@ -40,10 +40,10 @@ abstract class $CycleCopyWith<$Res> {
       {int idCycle,
       int idDispositif,
       int numCycle,
-      int coeff,
-      DateTime dateDebut,
-      DateTime dateFin,
-      double diamLim,
+      int? coeff,
+      DateTime? dateDebut,
+      DateTime? dateFin,
+      double? diamLim,
       String? monitor,
       CorCyclePlacetteList? corCyclesPlacettes});
 
@@ -66,10 +66,10 @@ class _$CycleCopyWithImpl<$Res, $Val extends Cycle>
     Object? idCycle = null,
     Object? idDispositif = null,
     Object? numCycle = null,
-    Object? coeff = null,
-    Object? dateDebut = null,
-    Object? dateFin = null,
-    Object? diamLim = null,
+    Object? coeff = freezed,
+    Object? dateDebut = freezed,
+    Object? dateFin = freezed,
+    Object? diamLim = freezed,
     Object? monitor = freezed,
     Object? corCyclesPlacettes = freezed,
   }) {
@@ -86,22 +86,22 @@ class _$CycleCopyWithImpl<$Res, $Val extends Cycle>
           ? _value.numCycle
           : numCycle // ignore: cast_nullable_to_non_nullable
               as int,
-      coeff: null == coeff
+      coeff: freezed == coeff
           ? _value.coeff
           : coeff // ignore: cast_nullable_to_non_nullable
-              as int,
-      dateDebut: null == dateDebut
+              as int?,
+      dateDebut: freezed == dateDebut
           ? _value.dateDebut
           : dateDebut // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      dateFin: null == dateFin
+              as DateTime?,
+      dateFin: freezed == dateFin
           ? _value.dateFin
           : dateFin // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      diamLim: null == diamLim
+              as DateTime?,
+      diamLim: freezed == diamLim
           ? _value.diamLim
           : diamLim // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       monitor: freezed == monitor
           ? _value.monitor
           : monitor // ignore: cast_nullable_to_non_nullable
@@ -137,10 +137,10 @@ abstract class _$$_CycleCopyWith<$Res> implements $CycleCopyWith<$Res> {
       {int idCycle,
       int idDispositif,
       int numCycle,
-      int coeff,
-      DateTime dateDebut,
-      DateTime dateFin,
-      double diamLim,
+      int? coeff,
+      DateTime? dateDebut,
+      DateTime? dateFin,
+      double? diamLim,
       String? monitor,
       CorCyclePlacetteList? corCyclesPlacettes});
 
@@ -160,10 +160,10 @@ class __$$_CycleCopyWithImpl<$Res> extends _$CycleCopyWithImpl<$Res, _$_Cycle>
     Object? idCycle = null,
     Object? idDispositif = null,
     Object? numCycle = null,
-    Object? coeff = null,
-    Object? dateDebut = null,
-    Object? dateFin = null,
-    Object? diamLim = null,
+    Object? coeff = freezed,
+    Object? dateDebut = freezed,
+    Object? dateFin = freezed,
+    Object? diamLim = freezed,
     Object? monitor = freezed,
     Object? corCyclesPlacettes = freezed,
   }) {
@@ -180,22 +180,22 @@ class __$$_CycleCopyWithImpl<$Res> extends _$CycleCopyWithImpl<$Res, _$_Cycle>
           ? _value.numCycle
           : numCycle // ignore: cast_nullable_to_non_nullable
               as int,
-      coeff: null == coeff
+      coeff: freezed == coeff
           ? _value.coeff
           : coeff // ignore: cast_nullable_to_non_nullable
-              as int,
-      dateDebut: null == dateDebut
+              as int?,
+      dateDebut: freezed == dateDebut
           ? _value.dateDebut
           : dateDebut // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      dateFin: null == dateFin
+              as DateTime?,
+      dateFin: freezed == dateFin
           ? _value.dateFin
           : dateFin // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      diamLim: null == diamLim
+              as DateTime?,
+      diamLim: freezed == diamLim
           ? _value.diamLim
           : diamLim // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       monitor: freezed == monitor
           ? _value.monitor
           : monitor // ignore: cast_nullable_to_non_nullable
@@ -215,10 +215,10 @@ class _$_Cycle extends _Cycle {
       {required this.idCycle,
       required this.idDispositif,
       required this.numCycle,
-      required this.coeff,
-      required this.dateDebut,
-      required this.dateFin,
-      required this.diamLim,
+      this.coeff,
+      this.dateDebut,
+      this.dateFin,
+      this.diamLim,
       this.monitor,
       this.corCyclesPlacettes})
       : super._();
@@ -230,13 +230,13 @@ class _$_Cycle extends _Cycle {
   @override
   final int numCycle;
   @override
-  final int coeff;
+  final int? coeff;
   @override
-  final DateTime dateDebut;
+  final DateTime? dateDebut;
   @override
-  final DateTime dateFin;
+  final DateTime? dateFin;
   @override
-  final double diamLim;
+  final double? diamLim;
   @override
   final String? monitor;
   @override
@@ -283,10 +283,10 @@ abstract class _Cycle extends Cycle {
       {required final int idCycle,
       required final int idDispositif,
       required final int numCycle,
-      required final int coeff,
-      required final DateTime dateDebut,
-      required final DateTime dateFin,
-      required final double diamLim,
+      final int? coeff,
+      final DateTime? dateDebut,
+      final DateTime? dateFin,
+      final double? diamLim,
       final String? monitor,
       final CorCyclePlacetteList? corCyclesPlacettes}) = _$_Cycle;
   const _Cycle._() : super._();
@@ -298,13 +298,13 @@ abstract class _Cycle extends Cycle {
   @override
   int get numCycle;
   @override
-  int get coeff;
+  int? get coeff;
   @override
-  DateTime get dateDebut;
+  DateTime? get dateDebut;
   @override
-  DateTime get dateFin;
+  DateTime? get dateFin;
   @override
-  double get diamLim;
+  double? get diamLim;
   @override
   String? get monitor;
   @override

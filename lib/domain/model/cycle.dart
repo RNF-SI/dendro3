@@ -10,10 +10,10 @@ class Cycle with _$Cycle {
       {required int idCycle,
       required int idDispositif,
       required int numCycle,
-      required int coeff,
-      required DateTime dateDebut,
-      required DateTime dateFin,
-      required double diamLim,
+      int? coeff,
+      DateTime? dateDebut,
+      DateTime? dateFin,
+      double? diamLim,
       String? monitor,
       CorCyclePlacetteList? corCyclesPlacettes}) = _Cycle;
 
