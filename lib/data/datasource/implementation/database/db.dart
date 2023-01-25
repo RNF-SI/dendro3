@@ -28,7 +28,13 @@ class DB {
           }
         });
       },
+      // onConfigure: _onConfigure,
       version: _databaseVersion,
     );
   }
+
+  // ToDo: add Foreign Key in futures dev
+  // static Future _onConfigure(Database db) async {
+  //   await db.execute('PRAGMA foreign_keys = ON');
+  // }
 }
