@@ -446,8 +446,10 @@ class _ChiffresWidgetState extends State<ChiffresWidget> {
           ..._generateCircleAvatars(widget.cycleList!),
         ],
       ),
-      __buildGridText(widget.cycleList![
-          cycleSelected.indexWhere((selected) => selected == true)]),
+      ...__buildGridText(
+        widget.cycleList![
+            cycleSelected.indexWhere((selected) => selected == true)],
+      ),
     ]);
   }
 }
@@ -466,9 +468,9 @@ List<Widget> _generateCircleAvatars(CycleList cycleList) {
   return list;
 }
 
-Widget __buildGridText(Cycle cycle) {
-  return Expanded(
-    child: SizedBox(
+List<Widget> __buildGridText(Cycle cycle) {
+  return [
+    SizedBox(
       height: 200.0,
       child: GridView.count(
           // Create a grid with 2 columns. If you change the scrollDirection to
@@ -494,7 +496,15 @@ Widget __buildGridText(Cycle cycle) {
             __buildPropertyTextWidget('monitor', cycle.monitor),
           ]),
     ),
-  );
+    Tooltip(
+      message: "Calculé en fonction de DateFin.\n"
+          "Avertissez le responsable PSDRF \npour actualiser.",
+      triggerMode: TooltipTriggerMode.tap,
+      child: cycle.dateFin == null
+          ? const Text("Ce cycle est en cours")
+          : const Text("Ce cycle est terminé"),
+    )
+  ];
 }
 
 Widget __buildPropertyTextWidget(String property, dynamic value) {
