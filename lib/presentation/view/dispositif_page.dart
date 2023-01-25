@@ -39,7 +39,7 @@ class DispositifPage extends ConsumerWidget {
               onSelected: (value) async {
                 switch (value) {
                   case 'start_new_cycle':
-                    return showNewCycleDialog(context, ref);
+                    return showNewCycleDialog(context, ref, dispositifId);
                   case 'open_remove_dialog':
                     return showAlertDialog(
                         context, ref, dispInfo, dispositifId, dispositifName);
@@ -185,12 +185,23 @@ showAlertDialog(
 showNewCycleDialog(
   BuildContext context,
   WidgetRef ref,
+  int dispositifId,
 ) {
   // set up the buttons
   Widget comprisButton = TextButton(
     child: const Text("Compris"),
     onPressed: () {
       Navigator.of(context).pop();
+    },
+  );
+  Widget actualiserButton = TextButton(
+    child: const Text("Actualiser les cycles"),
+    onPressed: () async {
+      await ref
+          .read(dispositifViewModelProvider(dispositifId).notifier)
+          .actualiserCyclesDispositif(
+              context, () => {Navigator.of(context).pop()}, dispositifId);
+      // context.go("/home");
     },
   );
 
@@ -207,15 +218,16 @@ showNewCycleDialog(
         ),
         children: <TextSpan>[
           TextSpan(
-              text:
-                  "Pour commencer un nouveau cycle il faut d'abord en informer"
-                  " le responsable PSDRF à RNF. Les informations seront alors mises à"
-                  " jours et la saisie sera possible."),
+            text: "Pour commencer un nouveau cycle il faut d'abord en informer"
+                " le responsable PSDRF à RNF. Vous pouvez ensuite importer le nouveau cycle"
+                " depuis la base de données distante en cliquant sur 'Actualiser les cycles'.",
+          ),
         ],
       ),
     ),
     actions: [
       comprisButton,
+      actualiserButton,
     ],
   );
 

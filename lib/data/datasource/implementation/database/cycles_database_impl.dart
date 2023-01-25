@@ -9,6 +9,7 @@ import 'package:sqflite/sqflite.dart';
 
 class CyclesDatabaseImpl implements CyclesDatabase {
   static const _tableName = 't_cycles';
+  static const _columnId = 'id_cycle';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -50,17 +51,17 @@ class CyclesDatabaseImpl implements CyclesDatabase {
         where: 'id_dispositif = ?', whereArgs: [dispositifId]);
   }
 
-  // @override
-  // Future<void> updateCycle(final CycleEntity cycle) async {
-  //   final db = await database;
-  //   final int id = cycle['id'];
-  //   await db.update(
-  //     _tableName,
-  //     cycle,
-  //     where: '$_columnId = ?',
-  //     whereArgs: [id],
-  //   );
-  // }
+  @override
+  Future<void> updateCycle(final CycleEntity cycle) async {
+    final db = await database;
+    final int id = cycle['id_cycle'];
+    await db.update(
+      _tableName,
+      cycle,
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
 
   // @override
   // Future<void> deleteCycle(final int id) async {

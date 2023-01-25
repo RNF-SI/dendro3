@@ -1,10 +1,16 @@
+import 'package:dendro3/data/datasource/implementation/api/cycles_api_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
+import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
+import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
+import 'package:dendro3/data/repository/cycles_repository_impl.dart';
 import 'package:dendro3/data/repository/dispositifs_repository_impl.dart';
 import 'package:dendro3/data/repository/global_database_repository_impl.dart';
 import 'package:dendro3/data/repository/placettes_repository_impl.dart';
+import 'package:dendro3/domain/repository/cycles_repository.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
 import 'package:dendro3/data/repository/authentication_repository_impl.dart';
 import 'package:dendro3/domain/repository/authentication_repository.dart';
@@ -42,3 +48,10 @@ final placettesProvider =
     Provider<PlacettesDatabase>((_) => PlacettesDatabaseImpl());
 final placettesRepositoryProvider = Provider<PlacettesRepository>(
     (ref) => PlacettesRepositoryImpl(ref.watch(placettesProvider)));
+
+final cyclesDatabaseProvider =
+    Provider<CyclesDatabase>((_) => CyclesDatabaseImpl());
+final cyclesApiProvider = Provider<CyclesApi>((_) => CyclesApiImpl());
+final cyclesRepositoryProvider = Provider<CyclesRepository>((ref) =>
+    CyclesRepositoryImpl(
+        ref.watch(cyclesDatabaseProvider), ref.watch(cyclesApiProvider)));

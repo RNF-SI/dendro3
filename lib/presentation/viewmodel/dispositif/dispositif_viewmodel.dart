@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
+import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
@@ -32,17 +33,20 @@ final dispositifViewModelProvider = StateNotifierProvider.autoDispose
     ref,
     dispositifId,
     ref.watch(getDispositifUseCaseProvider),
+    ref.watch(actualiserCyclesDispositifUseCaseProvider),
   );
 });
 
 class DispositifViewModel
     extends StateNotifier<custom_async_state.State<Dispositif>> {
   final GetDispositifUseCase _getDispositifUseCase;
+  final ActualiserCyclesDispositifUseCase _actualiserCyclesDispositifUseCase;
 
   DispositifViewModel(
     this.ref,
     int dispositifId,
     this._getDispositifUseCase,
+    this._actualiserCyclesDispositifUseCase,
   ) : super(const custom_async_state.State.init()) {
     _init(dispositifId);
   }
@@ -68,6 +72,20 @@ class DispositifViewModel
       ref
           .read(userDispositifListViewModelStateNotifierProvider.notifier)
           .deleteDispositif(dispositifInfo);
+
+      onSuccess.call();
+    } on Exception catch (e) {
+      state = custom_async_state.State.error(e);
+    } catch (e) {
+      print(e);
+      state = custom_async_state.State.error(Exception(e));
+    }
+  }
+
+  actualiserCyclesDispositif(
+      BuildContext context, VoidCallback onSuccess, int dispositifId) async {
+    try {
+      await _actualiserCyclesDispositifUseCase.execute(dispositifId);
 
       onSuccess.call();
     } on Exception catch (e) {

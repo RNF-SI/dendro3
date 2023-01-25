@@ -1,4 +1,6 @@
 import 'package:dendro3/data/data_module.dart';
+import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
+import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
@@ -68,3 +70,8 @@ final loginUseCaseProvider = Provider<LoginUseCase>(
 
 final getPlacetteUseCaseProvider = Provider<GetPlacetteUseCase>(
     (ref) => GetPlacetteUseCaseImpl(ref.watch(placettesRepositoryProvider)));
+
+final actualiserCyclesDispositifUseCaseProvider =
+    Provider<ActualiserCyclesDispositifUseCase>((ref) =>
+        ActualiserCyclesDispositifUseCaseImpl(
+            ref.watch(cyclesRepositoryProvider)));
