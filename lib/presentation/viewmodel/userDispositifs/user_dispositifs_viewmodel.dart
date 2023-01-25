@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
+import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
@@ -38,6 +39,7 @@ final userDispositifListViewModelStateNotifierProvider =
     ref.watch(getUserDispositifListFromAPIUseCaseProvider),
     ref.watch(getUserDispositifListFromDBUseCaseProvider),
     ref.watch(downloadDispositifDataUseCaseProvider),
+    ref.watch(deleteDispositifUseCaseProvider),
   );
 });
 
@@ -48,14 +50,16 @@ class UserDispositifsViewModel
       _getUserDispositifsListFromAPIUseCase;
   final GetUserDispositifListFromDBUseCase _getUserDispositifsListFromDBUseCase;
   final DownloadDispositifDataUseCase _downloadDispositifDataUseCase;
+  final DeleteDispositifUseCase _deleteDispositifUseCase;
 
   UserDispositifsViewModel(
-      AsyncValue<DispositifInfoList> userDispList,
-      this._initLocalPSDRFDataBaseUseCase,
-      this._getUserDispositifsListFromAPIUseCase,
-      this._getUserDispositifsListFromDBUseCase,
-      this._downloadDispositifDataUseCase)
-      : super(const custom_async_state.State.init()) {
+    AsyncValue<DispositifInfoList> userDispList,
+    this._initLocalPSDRFDataBaseUseCase,
+    this._getUserDispositifsListFromAPIUseCase,
+    this._getUserDispositifsListFromDBUseCase,
+    this._downloadDispositifDataUseCase,
+    this._deleteDispositifUseCase,
+  ) : super(const custom_async_state.State.init()) {
     _init();
   }
 
@@ -96,6 +100,9 @@ class UserDispositifsViewModel
       }
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);
+    } catch (e) {
+      print(e);
+      state = custom_async_state.State.error(Exception(e));
     }
   }
 
@@ -113,6 +120,9 @@ class UserDispositifsViewModel
           state.data!.updateDispositifInfo(newDispositifInfo));
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);
+    } catch (e) {
+      print(e);
+      state = custom_async_state.State.error(Exception(e));
     }
   }
 
@@ -122,6 +132,23 @@ class UserDispositifsViewModel
           dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
       state = custom_async_state.State.success(
           state.data!.updateDispositifInfo(newDispositifInfo));
+    }
+  }
+
+  deleteDispositif(final DispositifInfo dispositifInfo) async {
+    try {
+      if (dispositifInfo.downloadStatus == DownloadStatus.downloaded) {
+        await _deleteDispositifUseCase.execute(dispositifInfo.dispositif.id);
+        final newDispositifInfo = dispositifInfo.copyWith(
+            downloadStatus: DownloadStatus.notDownloaded);
+        state = custom_async_state.State.success(
+            state.data!.updateDispositifInfo(newDispositifInfo));
+      }
+    } on Exception catch (e) {
+      state = custom_async_state.State.error(e);
+    } catch (e) {
+      print(e);
+      state = custom_async_state.State.error(Exception(e));
     }
   }
 }

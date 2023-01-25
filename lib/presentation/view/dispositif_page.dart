@@ -3,6 +3,7 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
+import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/view/placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,15 @@ import 'package:go_router/go_router.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 
 class DispositifPage extends ConsumerWidget {
-  DispositifPage(
-      {Key? key, required this.dispositifId, required this.dispositifName})
-      : super(key: key);
+  DispositifPage({
+    Key? key,
+    required this.dispInfo,
+  })  : dispositifId = dispInfo.dispositif.id,
+        dispositifName = dispInfo.dispositif.name,
+        super(key: key);
 
   late final DispositifViewModel _viewModel;
+  final DispositifInfo dispInfo;
   final int dispositifId;
   final String dispositifName;
 
@@ -33,15 +38,34 @@ class DispositifPage extends ConsumerWidget {
             PopupMenuButton<String>(
               onSelected: (value) async {
                 switch (value) {
+                  case 'start_new_cycle':
+                    return showNewCycleDialog(context, ref);
                   case 'open_remove_dialog':
                     return showAlertDialog(
-                        context, ref, dispositifId, dispositifName);
+                        context, ref, dispInfo, dispositifId, dispositifName);
                   default:
                     throw UnimplementedError();
                 }
               },
               itemBuilder: (context) => [
-                // popupmenu item 1
+                PopupMenuItem(
+                  value: 'start_new_cycle',
+                  child: Row(
+                    children: const [
+                      Icon(Icons.onetwothree, color: Colors.green),
+                      SizedBox(
+                        // sized box with width 10
+                        width: 10,
+                      ),
+                      Text(
+                        "Commencer un nouveau cycle",
+                        style: TextStyle(
+                          color: Colors.green,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 PopupMenuItem(
                   value: 'open_remove_dialog',
                   child: Row(
@@ -51,14 +75,18 @@ class DispositifPage extends ConsumerWidget {
                         // sized box with width 10
                         width: 10,
                       ),
-                      Text("Supprimer localement",
-                          style: TextStyle(color: Colors.red))
+                      Text(
+                        "Supprimer localement",
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      )
                     ],
                   ),
                 ),
                 // popupmenu item 2
               ],
-              offset: Offset(0, 50),
+              offset: const Offset(0, 50),
               color: Colors.white,
               elevation: 2,
             ),
@@ -88,6 +116,7 @@ class DispositifPage extends ConsumerWidget {
 showAlertDialog(
   BuildContext context,
   WidgetRef ref,
+  DispositifInfo dispositifInfo,
   int dispositifId,
   String dispositifName,
 ) {
@@ -103,14 +132,20 @@ showAlertDialog(
     onPressed: () async {
       await ref
           .read(dispositifViewModelProvider(dispositifId).notifier)
-          .deleteDispositif(context, () => {context.go("/home")}, dispositifId);
+          .deleteDispositif(
+              context,
+              () => {
+                    Navigator.of(context).pop(),
+                    Navigator.of(context).pop(),
+                  },
+              dispositifInfo);
       // context.go("/home");
     },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Attention"),
+    title: const Text("Attention"),
     content: RichText(
       text: TextSpan(
         // Note: Styles for TextSpans must be explicitly defined.
@@ -135,6 +170,52 @@ showAlertDialog(
     actions: [
       annuleButton,
       continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showNewCycleDialog(
+  BuildContext context,
+  WidgetRef ref,
+) {
+  // set up the buttons
+  Widget comprisButton = TextButton(
+    child: const Text("Compris"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Information"),
+    content: RichText(
+      text: const TextSpan(
+        // Note: Styles for TextSpans must be explicitly defined.
+        // Child text spans will inherit styles from parent
+        style: TextStyle(
+          fontSize: 14.0,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+              text:
+                  "Pour commencer un nouveau cycle il faut d'abord en informer"
+                  " le responsable PSDRF à RNF. Les informations seront alors mises à"
+                  " jours et la saisie sera possible."),
+        ],
+      ),
+    ),
+    actions: [
+      comprisButton,
     ],
   );
 
@@ -387,10 +468,16 @@ Widget __buildGridText(Cycle cycle) {
             __buildPropertyTextWidget('idDispositif', cycle.idDispositif),
             __buildPropertyTextWidget('numCycle', cycle.numCycle),
             __buildPropertyTextWidget('coeff', cycle.coeff),
-            __buildPropertyTextWidget('dateDebut',
-                '${cycle.dateDebut.day}/${cycle.dateDebut.month}/${cycle.dateDebut.year}'),
-            __buildPropertyTextWidget('dateFin',
-                '${cycle.dateFin.day}/${cycle.dateFin.month}/${cycle.dateFin.year}'),
+            __buildPropertyTextWidget(
+                'dateDebut',
+                cycle.dateDebut != null
+                    ? '${cycle.dateDebut!.day}/${cycle.dateDebut!.month}/${cycle.dateDebut!.year}'
+                    : null),
+            __buildPropertyTextWidget(
+                'dateFin',
+                cycle.dateFin != null
+                    ? '${cycle.dateFin!.day}/${cycle.dateFin!.month}/${cycle.dateFin!.year}'
+                    : null),
             __buildPropertyTextWidget('diamLim', cycle.diamLim),
             __buildPropertyTextWidget('monitor', cycle.monitor),
           ]),

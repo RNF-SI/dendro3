@@ -17,13 +17,14 @@ final _router = GoRouter(
       path: '/login',
       builder: (context, state) => LoginPage(),
     ),
-    GoRoute(
-      name: 'dispositif',
-      path: '/dispositif/:dispositifId',
-      builder: (context, state) => DispositifPage(
-          dispositifId: int.parse(state.params['dispositifId']!),
-          dispositifName: state.queryParams['dispositifName']!),
-    ),
+    // GoRoute(
+    //   name: 'dispositif',
+    //   path: '/dispositif/:dispositifId',
+    //   builder: (context, state) => DispositifPage(
+    //       dispInfo: state.queryParams['dispositifInfo']!,
+    //       dispositifId: int.parse(state.params['dispositifId']!),
+    //       dispositifName: state.queryParams['dispositifName']!),
+    // ),
     GoRoute(
       name: 'dispositifs',
       path: '/dispositifs',

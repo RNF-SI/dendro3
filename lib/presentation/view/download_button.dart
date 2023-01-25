@@ -48,8 +48,8 @@ class DownloadButton extends HookConsumerWidget {
         Navigator.push(context, MaterialPageRoute<void>(
           builder: (BuildContext context) {
             return DispositifPage(
-                dispositifId: dispInfo.dispositif.id,
-                dispositifName: dispInfo.dispositif.name);
+              dispInfo: dispInfo,
+            );
           },
         ));
     }
