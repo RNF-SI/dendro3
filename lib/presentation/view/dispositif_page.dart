@@ -413,16 +413,18 @@ class ChiffresWidget extends StatefulWidget {
 class _ChiffresWidgetState extends State<ChiffresWidget> {
   _ChiffresWidgetState();
 
+  late List<bool> cycleSelected;
+
   @override
   void initState() {
+    cycleSelected = widget.cycleList!.values
+        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
+        .toList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<bool> cycleSelected = widget.cycleList!.values
-        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
-        .toList();
     return Column(children: [
       ToggleButtons(
         isSelected: cycleSelected,
