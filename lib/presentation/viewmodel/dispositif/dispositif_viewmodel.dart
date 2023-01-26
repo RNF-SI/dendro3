@@ -86,7 +86,7 @@ class DispositifViewModel
       BuildContext context, VoidCallback onSuccess, int dispositifId) async {
     try {
       await _actualiserCyclesDispositifUseCase.execute(dispositifId);
-
+      await _init(dispositifId);
       onSuccess.call();
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);
