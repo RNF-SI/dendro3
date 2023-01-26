@@ -6,5 +6,7 @@ abstract class CyclesDatabase {
   //     final CycleEntity cycleEntity);
   // Future<void> updateCycle(final CycleEntity cycleEntity);
   // Future<void> deleteCycle(final int id);
+  Future<CycleListEntity> getDispositifCycles(final int dispId);
+  Future<void> addCycle(final CycleEntity cycleEntity);
   Future<void> updateCycle(final CycleEntity cycleEntity);
 }

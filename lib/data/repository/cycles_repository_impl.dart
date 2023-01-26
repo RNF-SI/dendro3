@@ -22,8 +22,16 @@ class CyclesRepositoryImpl implements CyclesRepository {
   @override
   Future<void> updateDispositifCycles(final int id) async {
     final cycleListEntity = await api.getDispositifCycles(id);
+    final localCycleListEntity = await database.getDispositifCycles(id);
     cycleListEntity.forEach((cycleEnt) async {
-      await database.updateCycle(cycleEnt);
+      if (localCycleListEntity
+          .map((cycle) => cycle['id_cycle'])
+          .toList()
+          .contains(cycleEnt['id_cycle'])) {
+        await database.updateCycle(cycleEnt);
+      } else {
+        await database.addCycle(cycleEnt);
+      }
     });
   }
 }
