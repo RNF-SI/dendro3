@@ -23,14 +23,15 @@ class CyclesRepositoryImpl implements CyclesRepository {
   Future<void> updateDispositifCycles(final int id) async {
     final cycleListEntity = await api.getDispositifCycles(id);
     final localCycleListEntity = await database.getDispositifCycles(id);
-    cycleListEntity.forEach((cycleEnt) async {
+    // Add/update local cycles
+    cycleListEntity.forEach((cycle) async {
       if (localCycleListEntity
-          .map((cycle) => cycle['id_cycle'])
+          .map((localCycle) => localCycle['id_cycle'])
           .toList()
-          .contains(cycleEnt['id_cycle'])) {
-        await database.updateCycle(cycleEnt);
+          .contains(cycle['id_cycle'])) {
+        await database.updateCycle(cycle);
       } else {
-        await database.addCycle(cycleEnt);
+        await database.addCycle(cycle);
       }
     });
   }
