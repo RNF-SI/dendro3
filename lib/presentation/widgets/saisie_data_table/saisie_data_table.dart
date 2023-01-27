@@ -33,16 +33,18 @@ class SaisieDataTable extends ConsumerStatefulWidget {
 class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   final ScrollController _controller = ScrollController();
   double? arrayWidth;
-  final List<bool> _extendedList = <bool>[true, false];
-  final List<bool> _reducedList = <bool>[true, false, false];
-  final List<bool> _mesureList = <bool>[true, false, false];
+  late List<bool> _extendedList;
+  late List<bool> _reducedList;
+  late List<bool> _mesureList;
   late List<bool> _cycleSelectedList;
 
   @override
   void initState() {
-    _cycleSelectedList = widget.dispCycleList!.values
-        .map<bool>((Cycle cycle) => cycle.numCycle == 1 ? true : false)
-        .toList();
+    _extendedList = <bool>[true, false];
+    _reducedList = <bool>[true, false, false];
+    _mesureList = <bool>[true, false, false];
+    _cycleSelectedList =
+        widget.dispCycleList!.values.map<bool>((Cycle cycle) => true).toList();
     super.initState();
   }
 

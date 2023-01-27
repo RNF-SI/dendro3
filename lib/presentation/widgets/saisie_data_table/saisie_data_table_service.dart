@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const columnWidth = 100;
 
-final displayedColumnTypeProvider = StateProvider<DisplayedColumnType>(
+final displayedColumnTypeProvider =
+    StateProvider.autoDispose<DisplayedColumnType>(
   // We return the default mesureColumn type, here name.
   (ref) => DisplayedColumnType.all,
 );
-final displayedMesureColumnTypeProvider = StateProvider<DisplayedColumnType>(
+final displayedMesureColumnTypeProvider =
+    StateProvider.autoDispose<DisplayedColumnType>(
   // We return the default mesureColumn type, here name.
   (ref) => DisplayedColumnType.all,
 );
@@ -20,7 +22,6 @@ final rowsProvider = StateProvider.autoDispose
     .family<List<Map<String, dynamic>>, ArbreList>((ref, arbreList) {
   final columnType = ref.watch(displayedColumnTypeProvider);
   final mesureColumnType = ref.watch(displayedMesureColumnTypeProvider);
-
   var nestedObj = arbreList.getObjectMapped(
     displayedColumnType: columnType,
     displayedMesureColumnType: mesureColumnType,
@@ -45,7 +46,7 @@ final rowsProvider = StateProvider.autoDispose
   return objLisseList;
 });
 
-final displayedCycleProvider = StateProvider<List<int>>(
+final displayedCycleProvider = StateProvider.autoDispose<List<int>>(
   // We return the default mesureColumn type, here name.
   (ref) => [],
 );
@@ -54,7 +55,14 @@ final cycleRowsProvider = Provider.autoDispose
     .family<List<Map<String, dynamic>>, List<Map<String, dynamic>>>(
         (ref, list) {
   List<int> rowsCycle = ref.watch(displayedCycleProvider);
-  return list.where((item) => rowsCycle.contains(item['idCycle'])).toList();
+  final mesureColumnType =
+      ref.read(displayedMesureColumnTypeProvider.notifier).state;
+
+  if (mesureColumnType == DisplayedColumnType.none) {
+    return list;
+  } else {
+    return list.where((item) => rowsCycle.contains(item['idCycle'])).toList();
+  }
 });
 
 final columnsProvider = Provider.autoDispose
