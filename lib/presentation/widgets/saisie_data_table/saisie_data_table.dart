@@ -18,11 +18,11 @@ import 'package:data_table_2/data_table_2.dart';
 class SaisieDataTable extends ConsumerStatefulWidget {
   SaisieDataTable(
       {super.key,
-      required this.data,
+      required this.itemList,
       required this.dispCycleList,
       required this.corCyclePlacetteList});
 
-  final ArbreList data;
+  final ArbreList itemList;
   final CycleList dispCycleList;
   final CorCyclePlacetteList corCyclePlacetteList;
 
@@ -41,14 +41,14 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   @override
   void initState() {
     _cycleSelectedList = widget.dispCycleList!.values
-        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
+        .map<bool>((Cycle cycle) => cycle.numCycle == 1 ? true : false)
         .toList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final rowList = ref.watch(rowsProvider(widget.data));
+    final rowList = ref.watch(rowsProvider(widget.itemList));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 

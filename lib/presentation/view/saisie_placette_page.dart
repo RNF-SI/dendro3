@@ -145,7 +145,7 @@ Widget __buildAsyncPlacetteListWidget(
 
   return _viewModel.maybeWhen(
     success: (data) => SaisieDataTable(
-      data: data.arbres!,
+      itemList: data.arbres!,
       dispCycleList: dispCycleList,
       corCyclePlacetteList: placette.corCyclesPlacettes!,
     ),
