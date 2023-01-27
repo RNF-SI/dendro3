@@ -49,6 +49,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   @override
   Widget build(BuildContext context) {
     final rowList = ref.watch(rowsProvider(widget.itemList));
+    final cycleRowList = ref.watch(cycleRowsProvider(rowList));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 
@@ -79,7 +80,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             minWidth: _extendedList[0] ? null : arrayWidth,
             columns: _createColumns(columnNameList),
 
-            rows: _createRows(rowList),
+            rows: _createRows(cycleRowList),
           ),
         ),
         ToggleButtons(
@@ -177,10 +178,18 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           child: ToggleButtons(
             isSelected: _cycleSelectedList,
             onPressed: (int index) {
-              setState(() {
-                _cycleSelectedList[index] = !_cycleSelectedList[index];
-                // TODO: Ajout logique de changement des row en fct du cycle
-              });
+              _cycleSelectedList[index] = !_cycleSelectedList[index];
+
+              List<int> cycleArray = [];
+              for (var i = 0; i < _cycleSelectedList.length; i++) {
+                if (_cycleSelectedList[i]) {
+                  // Ajouter la valeur du cycle correspondantes aux boutons cliqués
+                  cycleArray.add(widget.dispCycleList.values
+                      .firstWhere((cycle) => cycle.numCycle == i + 1)
+                      .idCycle);
+                }
+                ref.read(displayedCycleProvider.notifier).state = cycleArray;
+              }
             },
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             selectedBorderColor: Colors.blue[700],

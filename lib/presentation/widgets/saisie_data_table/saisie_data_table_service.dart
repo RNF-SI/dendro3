@@ -14,6 +14,8 @@ final displayedMesureColumnTypeProvider = StateProvider<DisplayedColumnType>(
   (ref) => DisplayedColumnType.all,
 );
 
+// Permet de récupérer les objets Lisser en fonction
+// des columns qu'on veut afficher (boutons)
 final rowsProvider = StateProvider.autoDispose
     .family<List<Map<String, dynamic>>, ArbreList>((ref, arbreList) {
   final columnType = ref.watch(displayedColumnTypeProvider);
@@ -41,6 +43,18 @@ final rowsProvider = StateProvider.autoDispose
     objLisseList.add(objLisse);
   }
   return objLisseList;
+});
+
+final displayedCycleProvider = StateProvider<List<int>>(
+  // We return the default mesureColumn type, here name.
+  (ref) => [],
+);
+
+final cycleRowsProvider = Provider.autoDispose
+    .family<List<Map<String, dynamic>>, List<Map<String, dynamic>>>(
+        (ref, list) {
+  List<int> rowsCycle = ref.watch(displayedCycleProvider);
+  return list.where((item) => rowsCycle.contains(item['idCycle'])).toList();
 });
 
 final columnsProvider = Provider.autoDispose
