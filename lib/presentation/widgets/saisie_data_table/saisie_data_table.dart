@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
+import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
@@ -14,10 +16,15 @@ import 'dart:math' as math;
 import 'package:data_table_2/data_table_2.dart';
 
 class SaisieDataTable extends ConsumerStatefulWidget {
-  SaisieDataTable({super.key, required this.data, required this.dispCycleList});
+  SaisieDataTable(
+      {super.key,
+      required this.data,
+      required this.dispCycleList,
+      required this.corCyclePlacetteList});
 
   final ArbreList data;
   final CycleList dispCycleList;
+  final CorCyclePlacetteList corCyclePlacetteList;
 
   @override
   SaisieDataTableState createState() => SaisieDataTableState();
@@ -29,10 +36,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   final List<bool> _extendedList = <bool>[true, false];
   final List<bool> _reducedList = <bool>[true, false, false];
   final List<bool> _mesureList = <bool>[true, false, false];
-  final List<bool> _cycleSelectedList = <bool>[];
+  late List<bool> _cycleSelectedList;
 
   @override
   void initState() {
+    _cycleSelectedList = widget.dispCycleList!.values
+        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
+        .toList();
     super.initState();
   }
 
@@ -41,9 +51,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final rowList = ref.watch(rowsProvider(widget.data));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
-    final List<bool> _cycleSelectedList = widget.dispCycleList!.values
-        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
-        .toList();
 
     return Column(
       children: [
@@ -185,7 +192,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               minWidth: 80.0,
             ),
             children: <Widget>[
-              ..._generateCircleAvatars(widget.dispCycleList!),
+              ..._generateCircleAvatars(
+                widget.dispCycleList!,
+                widget.corCyclePlacetteList,
+              ),
             ],
           ),
         ),
@@ -221,10 +231,16 @@ List<DataRow> _createRows(List<Map<String, dynamic>> valueList) {
   }).toList();
 }
 
-List<Widget> _generateCircleAvatars(CycleList cycleList) {
+List<Widget> _generateCircleAvatars(
+    CycleList cycleList, CorCyclePlacetteList corCyclePlacetteList) {
   var list = cycleList.values
       .map<Widget>((data) => CircleAvatar(
-            backgroundColor: Colors.blue,
+            backgroundColor: corCyclePlacetteList.values
+                    .map((CorCyclePlacette corCyclePlacette) =>
+                        corCyclePlacette.idCycle)
+                    .contains(data.idCycle)
+                ? Colors.green
+                : Colors.red,
             foregroundColor: Colors.white,
             radius: 10,
             child: Text(

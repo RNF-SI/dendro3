@@ -129,7 +129,7 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
       ),
       // body: null,
       body: __buildAsyncPlacetteListWidget(
-          context, ref, widget.placette.idPlacette, widget.dispCycleList),
+          context, ref, widget.placette, widget.dispCycleList),
     );
   }
 }
@@ -137,15 +137,17 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
 Widget __buildAsyncPlacetteListWidget(
   final BuildContext context,
   WidgetRef ref,
-  int placetteId,
+  Placette placette,
   CycleList dispCycleList,
 ) {
-  final _viewModel = ref.watch(saisiePlacetteViewModelProvider(placetteId));
+  final _viewModel =
+      ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
 
   return _viewModel.maybeWhen(
     success: (data) => SaisieDataTable(
       data: data.arbres!,
       dispCycleList: dispCycleList,
+      corCyclePlacetteList: placette.corCyclesPlacettes!,
     ),
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
