@@ -194,24 +194,26 @@ class PlacetteCycleWidget extends StatefulWidget {
 class _PlacetteCycleWidgetState extends State<PlacetteCycleWidget> {
   _PlacetteCycleWidgetState();
 
+  late List<bool> cycleSelected;
+
   @override
   void initState() {
+    cycleSelected =
+        widget.dispCycleList!.values.map<bool>((Cycle data) => false).toList();
+    cycleSelected[0] = true;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<bool> corCycleSelected = widget.corCyclePlacette!.values
-        .map<bool>((CorCyclePlacette data) => false)
-        .toList();
-    corCycleSelected[0] = true;
     return Column(children: [
       ToggleButtons(
-        isSelected: corCycleSelected,
+        isSelected: cycleSelected,
         onPressed: (int index) {
           setState(() {
-            for (int i = 0; i < corCycleSelected.length; i++) {
-              corCycleSelected[i] = i == index;
+            for (int i = 0; i < cycleSelected.length; i++) {
+              cycleSelected[i] = i == index;
             }
           });
         },
@@ -231,8 +233,17 @@ class _PlacetteCycleWidgetState extends State<PlacetteCycleWidget> {
           ),
         ],
       ),
-      __buildGridText(widget.corCyclePlacette![
-          corCycleSelected.indexWhere((selected) => selected == true)]),
+      // Afficher le grid seulement si le corcycle existe pour la placette
+      // Sinon Afficher un text et un bouton
+      widget.corCyclePlacette!.values
+              .map((CorCyclePlacette corCyclePla) => corCyclePla.idCycle)
+              .contains(widget
+                  .dispCycleList![
+                      cycleSelected.indexWhere((selected) => selected == true)]
+                  .idCycle)
+          ? __buildGridText(widget.corCyclePlacette![
+              cycleSelected.indexWhere((selected) => selected == true)])
+          : Text("Ce cycle n'a pas été réalisé pour cette placette"),
     ]);
   }
 }
@@ -241,16 +252,17 @@ List<Widget> _generateCircleAvatars(
   CycleList dispCycleList,
   CorCyclePlacetteList corCyclePlacetteList,
 ) {
-  var list = corCyclePlacetteList.values
+  var list = dispCycleList.values
       .map<Widget>((data) => CircleAvatar(
-            backgroundColor: Colors.blue,
+            backgroundColor: corCyclePlacetteList.values
+                    .map((CorCyclePlacette corCycle) => corCycle.idCycle)
+                    .contains(data.idCycle)
+                ? Colors.green
+                : Colors.red,
             foregroundColor: Colors.white,
             radius: 10,
             child: Text(
-              dispCycleList.values
-                  .firstWhere((dispCycle) => dispCycle.idCycle == data.idCycle)
-                  .numCycle
-                  .toString(),
+              data.numCycle.toString(),
             ),
           ))
       .toList();
