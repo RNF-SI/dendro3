@@ -1,3 +1,4 @@
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
@@ -339,19 +340,22 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                 ),
               ),
               SizedBox(
-                width: 20,
+                width: 50,
                 child: Row(
-                  children: placette.corCyclesPlacettes!.values
+                  children: cycleList.values
                       .map<Widget>(
                         (data) => CircleAvatar(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: placette.corCyclesPlacettes!.values
+                                  .map((CorCyclePlacette corCycle) =>
+                                      corCycle.idCycle)
+                                  .contains(data.idCycle)
+                              ? Colors.green
+                              : Colors.red,
                           foregroundColor: Colors.white,
                           radius: 10,
-                          child: Text(cycleList.values
-                              .firstWhere((Cycle cycle) =>
-                                  cycle.idCycle == data.idCycle)
-                              .numCycle
-                              .toString()),
+                          child: Text(
+                            data.numCycle.toString(),
+                          ),
                         ),
                       )
                       .toList(),
@@ -459,7 +463,7 @@ class _ChiffresWidgetState extends State<ChiffresWidget> {
 List<Widget> _generateCircleAvatars(CycleList cycleList) {
   var list = cycleList.values
       .map<Widget>((data) => CircleAvatar(
-            backgroundColor: Colors.blue,
+            backgroundColor: data.dateFin == null ? Colors.red : Colors.green,
             foregroundColor: Colors.white,
             radius: 10,
             child: Text(
