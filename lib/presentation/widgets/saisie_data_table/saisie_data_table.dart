@@ -34,22 +34,35 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   final ScrollController _controller = ScrollController();
   double? arrayWidth;
   late List<bool> _extendedList;
-  late List<bool> _reducedList;
-  late List<bool> _mesureList;
-  late List<bool> _cycleSelectedList;
-
   @override
   void initState() {
     _extendedList = <bool>[true, false];
-    _reducedList = <bool>[true, false, false];
-    _mesureList = <bool>[true, false, false];
-    _cycleSelectedList =
-        widget.dispCycleList!.values.map<bool>((Cycle cycle) => true).toList();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref
+          .watch(cycleSelectedProvider.notifier)
+          .setCycles(widget.dispCycleList!.values);
+      ref
+          .watch(reducedToggleProvider.notifier)
+          .setToggleList([true, false, false]);
+      ref
+          .watch(reducedMesureToggleProvider.notifier)
+          .setToggleList([true, false, false]);
+
+      ref.watch(cycleSelectedToggleProvider.notifier).setToggleList(
+          ref.watch(cycleSelectedProvider.notifier).convertCyclesToToggles());
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Cycle> cycleList = ref.watch(cycleSelectedProvider);
+    List<bool> reducedList = ref.watch(reducedToggleProvider);
+    List<bool> reducedMesureList = ref.watch(reducedMesureToggleProvider);
+    List<bool> cycleToggleSelectedList = ref.watch(cycleSelectedToggleProvider);
+
     final rowList = ref.watch(rowsProvider(widget.itemList));
     final cycleRowList = ref.watch(cycleRowsProvider(rowList));
     final columnNameList = ref.watch(columnsProvider(rowList));
@@ -110,19 +123,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         ToggleButtons(
           direction: Axis.horizontal,
           onPressed: (int index) {
-            for (int i = 0; i < _reducedList.length; i++) {
-              _reducedList[i] = i == index;
-            }
-            if (_reducedList[0] == true) {
-              ref.read(displayedColumnTypeProvider.notifier).state =
-                  DisplayedColumnType.all;
-            } else if (_reducedList[1] == true) {
-              ref.read(displayedColumnTypeProvider.notifier).state =
-                  DisplayedColumnType.reduced;
-            } else {
-              ref.read(displayedColumnTypeProvider.notifier).state =
-                  DisplayedColumnType.none;
-            }
+            ref.read(reducedToggleProvider.notifier).toggleChanged(index);
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           selectedBorderColor: Colors.blue[700],
@@ -133,7 +134,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             minHeight: 40.0,
             minWidth: 80.0,
           ),
-          isSelected: _reducedList,
+          isSelected:
+              reducedList.isNotEmpty ? reducedList : [false, false, false],
           children: <Widget>[
             Text('All'),
             Text('Reduced'),
@@ -144,19 +146,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         ToggleButtons(
           direction: Axis.horizontal,
           onPressed: (int index) {
-            for (int i = 0; i < _mesureList.length; i++) {
-              _mesureList[i] = i == index;
-            }
-            if (_mesureList[0] == true) {
-              ref.read(displayedMesureColumnTypeProvider.notifier).state =
-                  DisplayedColumnType.all;
-            } else if (_mesureList[1] == true) {
-              ref.read(displayedMesureColumnTypeProvider.notifier).state =
-                  DisplayedColumnType.reduced;
-            } else {
-              ref.read(displayedMesureColumnTypeProvider.notifier).state =
-                  DisplayedColumnType.none;
-            }
+            ref.read(reducedMesureToggleProvider.notifier).toggleChanged(index);
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           selectedBorderColor: Colors.green[700],
@@ -167,7 +157,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             minHeight: 40.0,
             minWidth: 80.0,
           ),
-          isSelected: _mesureList,
+          isSelected: reducedMesureList.isNotEmpty
+              ? reducedMesureList
+              : [false, false, false],
           children: <Widget>[
             Text('All'),
             Text('Mesure Reduced'),
@@ -175,23 +167,18 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           ],
         ),
         Visibility(
-          visible: [0, 1]
-              .contains(_mesureList.indexWhere((mesure) => mesure == true)),
+          visible: [
+            0,
+            1
+          ].contains(reducedMesureList.indexWhere((mesure) => mesure == true)),
           child: ToggleButtons(
-            isSelected: _cycleSelectedList,
+            isSelected: cycleToggleSelectedList.isNotEmpty
+                ? cycleToggleSelectedList
+                : [],
             onPressed: (int index) {
-              _cycleSelectedList[index] = !_cycleSelectedList[index];
-
-              List<int> cycleArray = [];
-              for (var i = 0; i < _cycleSelectedList.length; i++) {
-                if (_cycleSelectedList[i]) {
-                  // Ajouter la valeur du cycle correspondantes aux boutons cliqués
-                  cycleArray.add(widget.dispCycleList.values
-                      .firstWhere((cycle) => cycle.numCycle == i + 1)
-                      .idCycle);
-                }
-                ref.read(displayedCycleProvider.notifier).state = cycleArray;
-              }
+              ref
+                  .read(cycleSelectedToggleProvider.notifier)
+                  .cycleToggleChanged(index);
             },
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             selectedBorderColor: Colors.blue[700],
@@ -204,7 +191,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             ),
             children: <Widget>[
               ..._generateCircleAvatars(
-                widget.dispCycleList!,
+                cycleList,
                 widget.corCyclePlacetteList,
               ),
             ],
@@ -243,8 +230,8 @@ List<DataRow> _createRows(List<Map<String, dynamic>> valueList) {
 }
 
 List<Widget> _generateCircleAvatars(
-    CycleList cycleList, CorCyclePlacetteList corCyclePlacetteList) {
-  var list = cycleList.values
+    List<Cycle> cycleList, CorCyclePlacetteList corCyclePlacetteList) {
+  var list = cycleList
       .map<Widget>((data) => CircleAvatar(
             backgroundColor: corCyclePlacetteList.values
                     .map((CorCyclePlacette corCyclePlacette) =>
