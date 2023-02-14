@@ -48,14 +48,18 @@ class CyclesDatabaseImpl implements CyclesDatabase {
   static Future<CycleListEntity> getDispCycles(
       Database db, final int dispositifId) async {
     return await db.query(_tableName,
-        where: 'id_dispositif = ?', whereArgs: [dispositifId]);
+        where: 'id_dispositif = ?',
+        orderBy: "num_cycle ASC",
+        whereArgs: [dispositifId]);
   }
 
   @override
   Future<CycleListEntity> getDispositifCycles(final int dispositifId) async {
     final db = await database;
     return await db.query(_tableName,
-        where: 'id_dispositif = ?', whereArgs: [dispositifId]);
+        where: 'id_dispositif = ?',
+        orderBy: "num_cycle ASC",
+        whereArgs: [dispositifId]);
   }
 
   @override
