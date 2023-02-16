@@ -1,18 +1,28 @@
 import 'package:dendro3/data/datasource/interface/api/authentication_api.dart';
+import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
+import 'package:dendro3/data/entity/essences_entity.dart';
 import 'package:dendro3/data/mapper/dispositif_list_mapper.dart';
+import 'package:dendro3/data/mapper/essence_list_mapper.dart';
 import 'package:dendro3/data/mapper/user_mapper.dart';
+import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/user.dart';
 import 'package:dendro3/domain/repository/authentication_repository.dart';
 import 'package:dendro3/domain/repository/global_database_repository.dart';
 
 class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
   final GlobalDatabase database;
+  final GlobalApi api;
 
-  const GlobalDatabaseRepositoryImpl(this.database);
+  const GlobalDatabaseRepositoryImpl(this.database, this.api);
 
   @override
   Future<void> initDatabase() async {
-    final db = await database.initDatabase();
+    await database.initDatabase();
+    // Import essences only if table is empty
+    if (await database.checkBibEssenceEmpty()) {
+      EssenceListEntity bibEssences = await api.getBibEssences();
+      await database.insertEssences(bibEssences);
+    }
   }
 }

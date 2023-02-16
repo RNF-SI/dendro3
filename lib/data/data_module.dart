@@ -1,8 +1,10 @@
 import 'package:dendro3/data/datasource/implementation/api/cycles_api_impl.dart';
+import 'package:dendro3/data/datasource/implementation/api/global_api_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
+import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
@@ -25,10 +27,12 @@ import 'datasource/implementation/api/dispositifs_api_impl.dart';
 import 'datasource/interface/api/authentication_api.dart';
 import 'datasource/implementation/api/authentication_api_impl.dart';
 
+final globalApiProvider = Provider<GlobalApi>((_) => GlobalApiImpl());
 final globalDatabaseProvider =
     Provider<GlobalDatabase>((_) => GlobalDatabaseImpl());
 final globalDatabaseRepositoryProvider = Provider<GlobalDatabaseRepository>(
-    (ref) => GlobalDatabaseRepositoryImpl(ref.watch(globalDatabaseProvider)));
+    (ref) => GlobalDatabaseRepositoryImpl(
+        ref.watch(globalDatabaseProvider), ref.watch(globalApiProvider)));
 
 final dispositifsDatabaseProvider =
     Provider<DispositifsDatabase>((_) => DispositifsDatabaseImpl());

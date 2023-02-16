@@ -61,6 +61,14 @@ class UserDispositifsViewModel
     this._deleteDispositifUseCase,
   ) : super(const custom_async_state.State.init()) {
     _init();
+    // Creates db tables and insert liste data (ex:essences, etc.)
+    try {
+      _initLocalPSDRFDataBaseUseCase.execute();
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _init() async {
