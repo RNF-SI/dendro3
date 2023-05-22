@@ -10,6 +10,7 @@ import 'package:sqflite/sqflite.dart';
 
 class ArbresDatabaseImpl implements ArbresDatabase {
   static const _tableName = 't_arbres';
+  static const _columnId = 'id_arbre';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -20,6 +21,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   //   return db.query(_tableName);
   // }
 
+  // Function called to add an arbre and his arbre mesures
   static Future<void> insertArbre(Batch batch, final ArbreEntity arbre) async {
     final arbreInsertProperties = {
       for (var property in arbre.keys.where((k) =>
@@ -58,6 +60,34 @@ class ArbresDatabaseImpl implements ArbresDatabase {
               db, arbreEntity["id_arbre"]);
       return {...arbreEntity, 'arbres_mesures': arbreMesureObj};
     }).toList());
+  }
+
+  @override
+  // Function called when one arbre is added (not adding arbre mesure)
+  Future<ArbreEntity> addArbre(final ArbreEntity arbre) async {
+    final db = await database;
+    late final ArbreEntity arbreEntity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_arbre) FROM $_tableName'));
+
+      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
+          'SELECT MAX(id_arbre_orig) FROM $_tableName WHERE id_placette = ?',
+          [arbre['id_placette']]));
+
+      arbre['id_arbre'] = maxId! + 1;
+      arbre['id_arbre_orig'] = maxIdOrig! + 1;
+      await txn.insert(
+        _tableName,
+        arbre,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      arbreEntity = results.first;
+    });
+    return arbreEntity;
   }
 
   // @override

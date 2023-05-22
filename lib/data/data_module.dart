@@ -1,21 +1,29 @@
 import 'package:dendro3/data/datasource/implementation/api/cycles_api_impl.dart';
 import 'package:dendro3/data/datasource/implementation/api/global_api_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/essences_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
 import 'package:dendro3/data/datasource/interface/api/global_api.dart';
+import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
+import 'package:dendro3/data/datasource/interface/database/essences_database.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
+import 'package:dendro3/data/repository/arbre_repository_impl.dart';
 import 'package:dendro3/data/repository/cycles_repository_impl.dart';
 import 'package:dendro3/data/repository/dispositifs_repository_impl.dart';
+import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/data/repository/global_database_repository_impl.dart';
 import 'package:dendro3/data/repository/placettes_repository_impl.dart';
+import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:dendro3/domain/repository/cycles_repository.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
 import 'package:dendro3/data/repository/authentication_repository_impl.dart';
 import 'package:dendro3/domain/repository/authentication_repository.dart';
+import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/repository/global_database_repository.dart';
 import 'package:dendro3/domain/repository/placettes_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,3 +67,13 @@ final cyclesApiProvider = Provider<CyclesApi>((_) => CyclesApiImpl());
 final cyclesRepositoryProvider = Provider<CyclesRepository>((ref) =>
     CyclesRepositoryImpl(
         ref.watch(cyclesDatabaseProvider), ref.watch(cyclesApiProvider)));
+
+final essencesDatabaseProvider =
+    Provider<EssencesDatabase>((_) => EssencesDatabaseImpl());
+final essencesRepositoryProvider = Provider<EssencesRepository>(
+    (ref) => EssencesRepositoryImpl(ref.watch(essencesDatabaseProvider)));
+
+final arbresDatabaseProvider =
+    Provider<ArbresDatabase>((_) => ArbresDatabaseImpl());
+final arbresRepositoryProvider = Provider<ArbresRepository>(
+    (ref) => ArbresRepositoryImpl(ref.watch(arbresDatabaseProvider)));
