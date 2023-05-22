@@ -196,7 +196,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               ),
             ],
           ),
-        ),
+        )
       ],
     );
   }
