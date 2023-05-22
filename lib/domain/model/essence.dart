@@ -10,12 +10,16 @@ part 'essence.freezed.dart';
 class Essence with _$Essence {
   const factory Essence({
     required String codeEssence,
-    required int cdNom,
+    int? cdNom,
     required String nom,
-    required String nomLatin,
-    required String essReg,
-    required String couleur,
+    String? nomLatin,
+    String? essReg,
+    String? couleur,
   }) = _Essence;
 
   const Essence._();
+
+  bool essenceFilterByCodeEssence(String filter) {
+    return this.codeEssence.toString().contains(filter);
+  }
 }

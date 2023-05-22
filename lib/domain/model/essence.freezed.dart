@@ -17,11 +17,11 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$Essence {
   String get codeEssence => throw _privateConstructorUsedError;
-  int get cdNom => throw _privateConstructorUsedError;
+  int? get cdNom => throw _privateConstructorUsedError;
   String get nom => throw _privateConstructorUsedError;
-  String get nomLatin => throw _privateConstructorUsedError;
-  String get essReg => throw _privateConstructorUsedError;
-  String get couleur => throw _privateConstructorUsedError;
+  String? get nomLatin => throw _privateConstructorUsedError;
+  String? get essReg => throw _privateConstructorUsedError;
+  String? get couleur => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EssenceCopyWith<Essence> get copyWith => throw _privateConstructorUsedError;
@@ -34,11 +34,11 @@ abstract class $EssenceCopyWith<$Res> {
   @useResult
   $Res call(
       {String codeEssence,
-      int cdNom,
+      int? cdNom,
       String nom,
-      String nomLatin,
-      String essReg,
-      String couleur});
+      String? nomLatin,
+      String? essReg,
+      String? couleur});
 }
 
 /// @nodoc
@@ -55,37 +55,37 @@ class _$EssenceCopyWithImpl<$Res, $Val extends Essence>
   @override
   $Res call({
     Object? codeEssence = null,
-    Object? cdNom = null,
+    Object? cdNom = freezed,
     Object? nom = null,
-    Object? nomLatin = null,
-    Object? essReg = null,
-    Object? couleur = null,
+    Object? nomLatin = freezed,
+    Object? essReg = freezed,
+    Object? couleur = freezed,
   }) {
     return _then(_value.copyWith(
       codeEssence: null == codeEssence
           ? _value.codeEssence
           : codeEssence // ignore: cast_nullable_to_non_nullable
               as String,
-      cdNom: null == cdNom
+      cdNom: freezed == cdNom
           ? _value.cdNom
           : cdNom // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
               as String,
-      nomLatin: null == nomLatin
+      nomLatin: freezed == nomLatin
           ? _value.nomLatin
           : nomLatin // ignore: cast_nullable_to_non_nullable
-              as String,
-      essReg: null == essReg
+              as String?,
+      essReg: freezed == essReg
           ? _value.essReg
           : essReg // ignore: cast_nullable_to_non_nullable
-              as String,
-      couleur: null == couleur
+              as String?,
+      couleur: freezed == couleur
           ? _value.couleur
           : couleur // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -99,11 +99,11 @@ abstract class _$$_EssenceCopyWith<$Res> implements $EssenceCopyWith<$Res> {
   @useResult
   $Res call(
       {String codeEssence,
-      int cdNom,
+      int? cdNom,
       String nom,
-      String nomLatin,
-      String essReg,
-      String couleur});
+      String? nomLatin,
+      String? essReg,
+      String? couleur});
 }
 
 /// @nodoc
@@ -117,37 +117,37 @@ class __$$_EssenceCopyWithImpl<$Res>
   @override
   $Res call({
     Object? codeEssence = null,
-    Object? cdNom = null,
+    Object? cdNom = freezed,
     Object? nom = null,
-    Object? nomLatin = null,
-    Object? essReg = null,
-    Object? couleur = null,
+    Object? nomLatin = freezed,
+    Object? essReg = freezed,
+    Object? couleur = freezed,
   }) {
     return _then(_$_Essence(
       codeEssence: null == codeEssence
           ? _value.codeEssence
           : codeEssence // ignore: cast_nullable_to_non_nullable
               as String,
-      cdNom: null == cdNom
+      cdNom: freezed == cdNom
           ? _value.cdNom
           : cdNom // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
               as String,
-      nomLatin: null == nomLatin
+      nomLatin: freezed == nomLatin
           ? _value.nomLatin
           : nomLatin // ignore: cast_nullable_to_non_nullable
-              as String,
-      essReg: null == essReg
+              as String?,
+      essReg: freezed == essReg
           ? _value.essReg
           : essReg // ignore: cast_nullable_to_non_nullable
-              as String,
-      couleur: null == couleur
+              as String?,
+      couleur: freezed == couleur
           ? _value.couleur
           : couleur // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -157,25 +157,25 @@ class __$$_EssenceCopyWithImpl<$Res>
 class _$_Essence extends _Essence {
   const _$_Essence(
       {required this.codeEssence,
-      required this.cdNom,
+      this.cdNom,
       required this.nom,
-      required this.nomLatin,
-      required this.essReg,
-      required this.couleur})
+      this.nomLatin,
+      this.essReg,
+      this.couleur})
       : super._();
 
   @override
   final String codeEssence;
   @override
-  final int cdNom;
+  final int? cdNom;
   @override
   final String nom;
   @override
-  final String nomLatin;
+  final String? nomLatin;
   @override
-  final String essReg;
+  final String? essReg;
   @override
-  final String couleur;
+  final String? couleur;
 
   @override
   String toString() {
@@ -211,25 +211,25 @@ class _$_Essence extends _Essence {
 abstract class _Essence extends Essence {
   const factory _Essence(
       {required final String codeEssence,
-      required final int cdNom,
+      final int? cdNom,
       required final String nom,
-      required final String nomLatin,
-      required final String essReg,
-      required final String couleur}) = _$_Essence;
+      final String? nomLatin,
+      final String? essReg,
+      final String? couleur}) = _$_Essence;
   const _Essence._() : super._();
 
   @override
   String get codeEssence;
   @override
-  int get cdNom;
+  int? get cdNom;
   @override
   String get nom;
   @override
-  String get nomLatin;
+  String? get nomLatin;
   @override
-  String get essReg;
+  String? get essReg;
   @override
-  String get couleur;
+  String? get couleur;
   @override
   @JsonKey(ignore: true)
   _$$_EssenceCopyWith<_$_Essence> get copyWith =>
