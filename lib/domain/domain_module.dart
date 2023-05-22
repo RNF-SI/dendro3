@@ -1,4 +1,6 @@
 import 'package:dendro3/data/data_module.dart';
+import 'package:dendro3/data/repository/essences_repository_impl.dart';
+import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
@@ -14,6 +16,8 @@ import 'package:dendro3/domain/usecase/get_dispositif_list_from_api_usecase.dart
 import 'package:dendro3/domain/usecase/get_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_essences_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
@@ -22,6 +26,8 @@ import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/create_arbre_usecase.dart';
+import 'package:dendro3/domain/usecase/create_arbre_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
@@ -75,3 +81,9 @@ final actualiserCyclesDispositifUseCaseProvider =
     Provider<ActualiserCyclesDispositifUseCase>((ref) =>
         ActualiserCyclesDispositifUseCaseImpl(
             ref.watch(cyclesRepositoryProvider)));
+
+final getEssencesUseCaseProvider = Provider<GetEssencesUseCase>(
+    (ref) => GetEssencesUseCaseImpl(ref.watch(essencesRepositoryProvider)));
+
+final createArbreUseCaseProvider = Provider<CreateArbreUseCase>(
+    (ref) => CreateArbreUseCaseImpl(ref.watch(arbresRepositoryProvider)));
