@@ -13,6 +13,21 @@ class ArbreMapper {
   //   );
   // }
 
+  // Function concentratingh only on arbre properties (and not on arbreMesures)
+  static Arbre transformToModel(final ArbreEntity entity) {
+    return Arbre(
+      idArbre: entity['id_arbre'],
+      idArbreOrig: entity['id_arbre_orig'],
+      idPlacette: entity['id_placette'],
+      codeEssence: entity['code_essence'],
+      azimut: entity['azimut'],
+      distance: entity['distance'],
+      taillis: entity['taillis'] == true ? true : false,
+      observation: entity['observation'],
+    );
+  }
+
+  // Function also converting arbreMesures
   static Arbre transformFromApiToModel(final ArbreEntity entity) {
     return Arbre(
         idArbre: entity['id_arbre'],
@@ -45,16 +60,24 @@ class ArbreMapper {
     };
   }
 
-  // static ArbreEntity transformToNewEntityMap(
-  //   final String name,
-  //   final int idOrganisme,
-  //   final bool alluvial,
-  // ) {
-  //   return {
-  //     'id': null,
-  //     'name': name,
-  //     'idOrganisme': idOrganisme,
-  //     'alluvial': alluvial ? 1 : 0,
-  //   };
-  // }
+  static ArbreEntity transformToNewEntityMap(
+    // final int idArbreOrig,
+    final int idPlacette,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final bool? taillis,
+    final String? observation,
+  ) {
+    return {
+      'id_arbre': null,
+      'id_arbre_orig': null,
+      'id_placette': idPlacette,
+      'code_essence': codeEssence,
+      'azimut': azimut,
+      'distance': distance,
+      'taillis': taillis,
+      'observation': observation,
+    };
+  }
 }

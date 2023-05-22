@@ -9,4 +9,11 @@ class EssenceListMapper {
         .toList();
     return EssenceList(values: values);
   }
+
+  static EssenceList transformToModel(final EssenceListEntity entities) {
+    final values = entities
+        .map((entity) => EssenceMapper.transformToModel(entity))
+        .toList();
+    return EssenceList(values: values);
+  }
 }
