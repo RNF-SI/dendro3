@@ -24,7 +24,11 @@ class DB {
         List<String> scripts = script.split(";");
         scripts.forEach((v) {
           if (v.isNotEmpty) {
-            db.execute(v.trim());
+            try {
+              db.execute(v.trim());
+            } catch (e) {
+              print(e);
+            }
           }
         });
       },
