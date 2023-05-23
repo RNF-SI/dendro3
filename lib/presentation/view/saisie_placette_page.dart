@@ -3,6 +3,8 @@ import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
+import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
+import 'package:dendro3/presentation/viewmodel/arbrelist/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
@@ -142,12 +144,29 @@ Widget __buildAsyncPlacetteListWidget(
 ) {
   final _viewModel =
       ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
+  final arbreListViewModel =
+      ref.watch(arbreListViewModelStateNotifierProvider(placette.idPlacette));
 
   return _viewModel.maybeWhen(
-    success: (data) => SaisieDataTable(
-      itemList: data.arbres!,
-      dispCycleList: dispCycleList,
-      corCyclePlacetteList: placette.corCyclesPlacettes!,
+    success: (data) => Column(
+      children: [
+        SaisieDataTable(
+          itemList: data.arbres!,
+          dispCycleList: dispCycleList,
+          corCyclePlacetteList: placette.corCyclesPlacettes!,
+        ),
+        // Button for adding a new row
+        ElevatedButton(
+          onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return FormSaisiePlacettePage(
+                placette: placette,
+              );
+            },
+          )),
+          child: const Text('Ajouter un Arbre'),
+        ),
+      ],
     ),
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',

@@ -345,3 +345,59 @@ CREATE TABLE cor_dispositifs_roles (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+
+-- Create table des nomenclatures du PSDRF
+CREATE TABLE t_nomenclatures (
+  id_nomenclature integer NOT NULL PRIMARY KEY,
+  id_type integer NOT NULL,
+  cd_nomenclature text NOT NULL,
+  mnemonique text,
+  label_default text NOT NULL,
+  definition_default text,
+  label_fr text NOT NULL,
+  definition_fr text,
+  label_en text,
+  definition_en text,
+  label_es text,
+  definition_es text,
+  label_de text,
+  definition_de text,
+  label_it text,
+  definition_it text,
+  source text,
+  statut character varying(20),
+  id_broader integer,
+  hierarchy text,
+  active boolean NOT NULL DEFAULT true,
+  CONSTRAINT unique_id_type_cd_nomenclature UNIQUE (id_type, cd_nomenclature),
+  CONSTRAINT fk_t_nomenclatures_id_broader FOREIGN KEY (id_broader)
+      REFERENCES t_nomenclatures (id_nomenclature) MATCH SIMPLE
+      ON UPDATE NO ACTION
+      ON DELETE NO ACTION,
+  CONSTRAINT fk_t_nomenclatures_id_type FOREIGN KEY (id_type)
+      REFERENCES bib_nomenclatures_types (id_type) MATCH SIMPLE
+      ON UPDATE CASCADE
+      ON DELETE NO ACTION
+);
+
+-- Create table des nomenclatures du PSDRF
+CREATE TABLE bib_nomenclatures_types(
+    id_type integer NOT NULL,
+    mnemonique character varying(255),
+    label_default character varying(255) NOT NULL,
+    definition_default text,
+    label_fr character varying(255) NOT NULL,
+    definition_fr text,
+    label_en character varying(255),
+    definition_en text,
+    label_es character varying(255),
+    definition_es text,
+    label_de character varying(255),
+    definition_de text,
+    label_it character varying(255),
+    definition_it text,
+    source character varying(50),
+    statut character varying(20),
+    CONSTRAINT pk_bib_nomenclatures_types PRIMARY KEY (id_type),
+    CONSTRAINT unique_bib_nomenclatures_types_mnemonique UNIQUE (mnemonique)
+);
