@@ -144,6 +144,8 @@ Widget __buildAsyncPlacetteListWidget(
 ) {
   final _viewModel =
       ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
+
+  // TODO: Utilisé arbreListViewModel
   final arbreListViewModel =
       ref.watch(arbreListViewModelStateNotifierProvider(placette.idPlacette));
 
