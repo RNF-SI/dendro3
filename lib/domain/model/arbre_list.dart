@@ -14,6 +14,10 @@ class ArbreList with _$ArbreList {
 
   int get length => values.length;
 
+  static ArbreList empty() {
+    return const ArbreList(values: []);
+  }
+
   ArbreList addArbre(final Arbre arbre) => copyWith(values: [...values, arbre]);
 
   ArbreList updateArbre(final Arbre newArbre) {
