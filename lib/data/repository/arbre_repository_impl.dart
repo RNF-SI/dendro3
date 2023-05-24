@@ -34,6 +34,7 @@ class ArbresRepositoryImpl implements ArbresRepository {
       taillis,
       observation,
     ));
+
     return ArbreMapper.transformToModel(arbreEntity);
   }
 }

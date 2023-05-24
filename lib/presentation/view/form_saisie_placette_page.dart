@@ -1,6 +1,7 @@
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/placette.dart';
@@ -25,12 +26,14 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final Placette placette;
   final Arbre? arbre;
   final ArbreMesure? arbreMesure;
+  final Cycle? cycle;
 
   FormSaisiePlacettePage({
     Key? key,
     required this.placette,
     this.arbre,
     this.arbreMesure,
+    this.cycle,
     // required this.placette,
     // required this.dispCycleList,
   }) : super(key: key);
@@ -58,6 +61,7 @@ class FormSaisiePlacettePageState
     // TODO: implement initState
     super.initState();
     _viewModel = ref.read(formSaisieViewModelProvider({
+      'cycle': widget.cycle,
       'placette': widget.placette,
       'arbre': widget.arbre,
       'arbreMesure': widget.arbreMesure,
@@ -331,374 +335,391 @@ class FormSaisiePlacettePageState
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              // Text('diametre1'),
-              // TextFormField(
-              //   keyboardType: TextInputType.numberWithOptions(decimal: true),
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-              //     DecimalTextInputFormatter(decimalRange: 1),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le diametre1",
-              //   ),
+              Text('diametre1'),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                  DecimalTextInputFormatter(decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le diametre1",
+                ),
 
-              //   // The validator receives the text that the user has entered.
-              //   validator: (value) {
-              //     // Vérifier si la valeur en grade est entre 0 et 400
-              //     if (int.parse(value!) < 0 || int.parse(value) > 400) {
-              //       return 'La valeur doit être entre 0 et 400 gr';
-              //     }
-              //     return null;
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  // Vérifier si la valeur en grade est entre 0 et 400
+                  if (int.parse(value!) < 0 || int.parse(value) > 400) {
+                    return 'La valeur doit être entre 0 et 400 gr';
+                  }
+                  return null;
+                },
+                onChanged: (value) => _viewModel.setDiametre1(value),
+              ),
+
+              Text('diametre2'),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                  DecimalTextInputFormatter(decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le diametre2",
+                ),
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                onChanged: (value) => _viewModel.setDiametre2(value),
+              ),
+              Text('type'),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le type",
+                ),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+                onChanged: (value) => _viewModel.setType(value),
+              ),
+              Text('hauteurTotale'),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                  DecimalTextInputFormatter(decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer la hauteurTotale",
+                ),
+                onChanged: (value) => _viewModel.setHauteurTotale(value),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+              ),
+              Text('hauteurBranche'),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                  DecimalTextInputFormatter(decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer la hauteurBranche",
+                ),
+                onChanged: (value) => _viewModel.setHauteurBranche(value),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+              ),
+              Text('stadeDurete'),
+              // GestureDetector(
+              //   child: InputDecorator(
+              //     child: Text(stadeD.toString()),
+              //     decoration: InputDecoration(labelText: 'Test'),
+              //   ),
+              //   onTap: () {
+              //     _showIntegerDialogStadeDurete();
               //   },
               // ),
-
-              // Text('diametre2'),
-              // TextFormField(
-              //   keyboardType: TextInputType.numberWithOptions(decimal: true),
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-              //     DecimalTextInputFormatter(decimalRange: 1),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le diametre2",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return 'Please enter some text';
-              //     }
-              //     return null;
-              //   },
+              // NumberPicker(
+              //   value: _currentValue,
+              //   minValue: 0,
+              //   maxValue: 100,
+              //   onChanged: (value) => setState(() => _currentValue = value),
               // ),
-              // Text('type'),
-              // TextFormField(
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le type",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('hauteurTotale'),
-              // TextFormField(
-              //   keyboardType: TextInputType.numberWithOptions(decimal: true),
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-              //     DecimalTextInputFormatter(decimalRange: 1),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer la hauteurTotale",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('hauteurBranche'),
-              // TextFormField(
-              //   keyboardType: TextInputType.numberWithOptions(decimal: true),
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-              //     DecimalTextInputFormatter(decimalRange: 1),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer la hauteurBranche",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('stadeDurete'),
-              // // GestureDetector(
-              // //   child: InputDecorator(
-              // //     child: Text(stadeD.toString()),
-              // //     decoration: InputDecoration(labelText: 'Test'),
-              // //   ),
-              // //   onTap: () {
-              // //     _showIntegerDialogStadeDurete();
-              // //   },
-              // // ),
-              // // NumberPicker(
-              // //   value: _currentValue,
-              // //   minValue: 0,
-              // //   maxValue: 100,
-              // //   onChanged: (value) => setState(() => _currentValue = value),
-              // // ),
-              // // TextFormField(
-              // //   keyboardType: TextInputType.numberWithOptions(decimal: false),
-              // //   inputFormatters: [
-              // //     FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
-              // //     LengthLimitingTextInputFormatter(1),
-              // //     // DecimalTextInputFormatter(de, decimalRange: 1),
-              // //   ],
-              // //   decoration: const InputDecoration(
-              // //     hintText:
-              // //         "Veuillez entrer le stadeDurete (valeur entre 1 et 5)",
-              // //   ),
-              // //   // The validator receives the text that the user has entered.
-              // //   validator: (value) {
-              // //     if (![1, 2, 3, 4, 5].contains(value) || value != null) {
-              // //       return 'La valeur doit être entre 1 et 5';
-              // //     }
-              // //     return null;
-              // //   },
-              // // ),
-
-              // DropdownButtonFormField(
-              //   value: _selectedValue,
-              //   hint: Text(
-              //     'choose one',
-              //   ),
-              //   isExpanded: true,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _selectedValue = value!;
-              //     });
-              //   },
-              //   // onSaved: (value) {
-              //   //   setState(() {
-              //   //     _selectedValue = value;
-              //   //   });
-              //   // },
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return "can't empty";
-              //   //   } else {
-              //   //     return null;
-              //   //   }
-              //   // },
-              //   items: ['', '1', '2', '3', '4', '5'].map((String val) {
-              //     return DropdownMenuItem(
-              //       value: val,
-              //       child: Text(
-              //         val,
-              //       ),
-              //     );
-              //   }).toList(),
-              // ),
-
-              // Text('stadeEcorce'),
-              // // TextFormField(
-              // //   keyboardType: TextInputType.numberWithOptions(decimal: false),
-              // //   inputFormatters: [
-              // //     FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
-              // //     LengthLimitingTextInputFormatter(1),
-              // //     // DecimalTextInputFormatter(de, decimalRange: 1),
-              // //   ],
-              // //   decoration: const InputDecoration(
-              // //     hintText:
-              // //         "Veuillez entrer le stadeEcorce (valeur entre 1 et 4)",
-              // //   ),
-              // //   // The validator receives the text that the user has entered.
-              // //   validator: (value) {
-              // //     if (![1, 2, 3, 4].contains(value) || value != null) {
-              // //       return 'La valeur doit être entre 1 et 4';
-              // //     }
-              // //     return null;
-              // //   },
-              // // ),
-
-              // DropdownButtonFormField(
-              //   value: _selectedValue,
-              //   hint: Text(
-              //     'choose one',
-              //   ),
-              //   isExpanded: true,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _selectedValue = value!;
-              //     });
-              //   },
-              //   // onSaved: (value) {
-              //   //   setState(() {
-              //   //     _selectedValue = value;
-              //   //   });
-              //   // },
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return "can't empty";
-              //   //   } else {
-              //   //     return null;
-              //   //   }
-              //   // },
-              //   items: ['', '1', '2', '3', '4'].map((String val) {
-              //     return DropdownMenuItem(
-              //       value: val,
-              //       child: Text(
-              //         val,
-              //       ),
-              //     );
-              //   }).toList(),
-              // ),
-
-              // Text('liane'),
-              // TextFormField(
-              //   inputFormatters: [
-              //     LengthLimitingTextInputFormatter(25),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer la liane (25 char max)",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('diametreLiane'),
-              // TextFormField(
-              //   keyboardType: TextInputType.numberWithOptions(decimal: true),
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-              //     DecimalTextInputFormatter(decimalRange: 1),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le diametreLiane",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('coupe'),
-              // TextFormField(
-              //   inputFormatters: [
-              //     // FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
-              //     LengthLimitingTextInputFormatter(1),
-              //     // DecimalTextInputFormatter(de, decimalRange: 1),
-              //   ],
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer la coupe",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('limite'),
-              // CheckboxFormField(
-              //   title: Text('Limites'),
-
-              //   // decoration: const InputDecoration(
-              //   //   hintText: "Veuillez entrer le taillis",
-              //   // ),
-              //   // The validator receives the text that the user has entered.
-              //   onSaved: (value) {
-              //     // if (value == null) {
-              //     //   return 'Please enter some text';
-              //     // }
-              //     // return null;
-              //   },
-              // ),
-              // // TextFormField(
-              // //   decoration: const InputDecoration(
-              // //     hintText: "Veuillez entrer le limite",
-              // //   ),
-              // //   // The validator receives the text that the user has entered.
-              // //   validator: (value) {
-              // //     if (value == null || value.isEmpty) {
-              // //       return 'Please enter some text';
-              // //     }
-              // //     return null;
-              // //   },
-              // // ),
-              // Text('idNomenclatureCodeSanitaire'),
               // TextFormField(
               //   keyboardType: TextInputType.numberWithOptions(decimal: false),
               //   inputFormatters: [
               //     FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
+              //     LengthLimitingTextInputFormatter(1),
               //     // DecimalTextInputFormatter(de, decimalRange: 1),
               //   ],
               //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le idNomenclatureCodeSanitaire",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   // validator: (value) {
-              //   //   if (value == null || value.isEmpty) {
-              //   //     return 'Please enter some text';
-              //   //   }
-              //   //   return null;
-              //   // },
-              // ),
-              // Text('codeEcolo'),
-              // TextFormField(
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le codeEcolo",
+              //     hintText:
+              //         "Veuillez entrer le stadeDurete (valeur entre 1 et 5)",
               //   ),
               //   // The validator receives the text that the user has entered.
               //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return 'Please enter some text';
+              //     if (![1, 2, 3, 4, 5].contains(value) || value != null) {
+              //       return 'La valeur doit être entre 1 et 5';
               //     }
               //     return null;
               //   },
+              //   onChanged: (value) => _viewModel.setStadeDurete(value),
               // ),
-              // Text('refCodeEcolo'),
-              // TextFormField(
-              //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le refCodeEcolo",
-              //   ),
-              //   // The validator receives the text that the user has entered.
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return 'Please enter some text';
-              //     }
-              //     return null;
-              //   },
-              // ),
-              // Text('ratioHauteur'),
-              // CheckboxFormField(
-              //   title: Text('ratioHauteur'),
 
-              //   // decoration: const InputDecoration(
-              //   //   hintText: "Veuillez entrer le taillis",
-              //   // ),
+              DropdownButtonFormField(
+                value: _selectedValue,
+                hint: Text(
+                  'choose one',
+                ),
+                isExpanded: true,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedValue = value!;
+                    _viewModel.setStadeDurete(int.parse(value));
+                  });
+                },
+                // onSaved: (value) {
+                //   setState(() {
+                //     _selectedValue = value;
+                //   });
+                // },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return "can't empty";
+                //   } else {
+                //     return null;
+                //   }
+                // },
+                items: ['', '1', '2', '3', '4', '5'].map((String val) {
+                  return DropdownMenuItem(
+                    value: val,
+                    child: Text(
+                      val,
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              Text('stadeEcorce'),
+              // TextFormField(
+              //   keyboardType: TextInputType.numberWithOptions(decimal: false),
+              //   inputFormatters: [
+              //     FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
+              //     LengthLimitingTextInputFormatter(1),
+              //     // DecimalTextInputFormatter(de, decimalRange: 1),
+              //   ],
+              //   decoration: const InputDecoration(
+              //     hintText:
+              //         "Veuillez entrer le stadeEcorce (valeur entre 1 et 4)",
+              //   ),
               //   // The validator receives the text that the user has entered.
-              //   onSaved: (value) {
-              //     // if (value == null) {
-              //     //   return 'Please enter some text';
-              //     // }
-              //     // return null;
+              //   validator: (value) {
+              //     if (![1, 2, 3, 4].contains(value) || value != null) {
+              //       return 'La valeur doit être entre 1 et 4';
+              //     }
+              //     return null;
               //   },
               // ),
-              // // TextFormField(
-              // //   decoration: const InputDecoration(
-              // //     hintText: "Veuillez entrer le ratioHauteur",
-              // //   ),
-              // //   // The validator receives the text that the user has entered.
-              // //   validator: (value) {
-              // //     if (value == null || value.isEmpty) {
-              // //       return 'Please enter some text';
-              // //     }
-              // //     return null;
-              // //   },
-              // // ),
-              // Text('observation'),
+
+              DropdownButtonFormField(
+                value: _selectedValue,
+                hint: Text(
+                  'choose one',
+                ),
+                isExpanded: true,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedValue = value!;
+                    _viewModel.setStadeEcorce(int.parse(value));
+                  });
+                },
+                // onSaved: (value) {
+                //   setState(() {
+                //     _selectedValue = value;
+                //   });
+                // },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return "can't empty";
+                //   } else {
+                //     return null;
+                //   }
+                // },
+                items: ['', '1', '2', '3', '4'].map((String val) {
+                  return DropdownMenuItem(
+                    value: val,
+                    child: Text(
+                      val,
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              Text('liane'),
+              TextFormField(
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(25),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer la liane (25 char max)",
+                ),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+              ),
+              Text('diametreLiane'),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                  DecimalTextInputFormatter(decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le diametreLiane",
+                ),
+                onChanged: (value) => _viewModel.setDiametreLiane(value),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+              ),
+              Text('coupe'),
+              TextFormField(
+                inputFormatters: [
+                  // FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
+                  LengthLimitingTextInputFormatter(1),
+                  // DecimalTextInputFormatter(de, decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer la coupe",
+                ),
+                onChanged: (value) => _viewModel.setCoupe(value),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+              ),
+              Text('limite'),
+              CheckboxFormField(
+                title: Text('Limites'),
+
+                // decoration: const InputDecoration(
+                //   hintText: "Veuillez entrer le taillis",
+                // ),
+                // The validator receives the text that the user has entered.
+                onSaved: (value) {
+                  _viewModel.setLimite(value!);
+                  // if (value == null) {
+                  //   return 'Please enter some text';
+                  // }
+                  // return null;
+                },
+              ),
               // TextFormField(
               //   decoration: const InputDecoration(
-              //     hintText: "Veuillez entrer le observation",
+              //     hintText: "Veuillez entrer le limite",
               //   ),
-              //   // The valida
+              //   // The validator receives the text that the user has entered.
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Please enter some text';
+              //     }
+              //     return null;
+              //   },
               // ),
+              Text('idNomenclatureCodeSanitaire'),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(decimal: false),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[1-9]")),
+                  // DecimalTextInputFormatter(de, decimalRange: 1),
+                ],
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le idNomenclatureCodeSanitaire",
+                ),
+                onChanged: (value) =>
+                    _viewModel.setIdNomenclatureCodeSanitaire(int.parse(value)),
+                // The validator receives the text that the user has entered.
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter some text';
+                //   }
+                //   return null;
+                // },
+              ),
+              Text('codeEcolo'),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le codeEcolo",
+                ),
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                onChanged: (value) => _viewModel.setCodeEcolo(value),
+              ),
+              Text('refCodeEcolo'),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le refCodeEcolo",
+                ),
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                onChanged: (value) => _viewModel.setRefCodeEcolo(value),
+              ),
+              Text('ratioHauteur'),
+              CheckboxFormField(
+                title: Text('ratioHauteur'),
+
+                // decoration: const InputDecoration(
+                //   hintText: "Veuillez entrer le taillis",
+                // ),
+                // The validator receives the text that the user has entered.
+                onSaved: (value) {
+                  _viewModel.setRatioHauteur(value!);
+                  // if (value == null) {
+                  //   return 'Please enter some text';
+                  // }
+                  // return null;
+                },
+              ),
+              // TextFormField(
+              //   decoration: const InputDecoration(
+              //     hintText: "Veuillez entrer le ratioHauteur",
+              //   ),
+              //   // The validator receives the text that the user has entered.
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Please enter some text';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              Text('observation'),
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Veuillez entrer le observation",
+                ),
+                onChanged: (value) => _viewModel.setObservation(value),
+                // The valida
+              ),
             ],
           ),
         ),

@@ -8,9 +8,33 @@ import 'package:sqflite/sqflite.dart';
 
 class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   static const _tableName = 't_arbres_mesures';
+  static const _columnId = 'id_arbre_mesure';
 
   Future<Database> get database async {
     return await DB.instance.database;
+  }
+
+  @override
+  Future<ArbreMesureEntity> addArbreMesure(
+      final ArbreMesureEntity arbreMesure) async {
+    final db = await database;
+    late final ArbreEntity arbreEntity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_arbre_mesure) FROM $_tableName'));
+
+      arbreMesure['id_arbre_mesure'] = maxId! + 1;
+      await txn.insert(
+        _tableName,
+        arbreMesure,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      arbreEntity = results.first;
+    });
+    return arbreEntity;
   }
 
   // @override

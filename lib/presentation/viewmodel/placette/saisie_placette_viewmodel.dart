@@ -28,56 +28,38 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final saisiePlacetteViewModelProvider = StateNotifierProvider.autoDispose
     .family<SaisiePlacetteViewModel, custom_async_state.State<Placette>, int>(
         (ref, placetteId) {
-  final container = ref.container;
   return SaisiePlacetteViewModel(
     placetteId,
     ref.watch(getPlacetteUseCaseProvider),
-    container,
+    ref,
   );
 });
 
 class SaisiePlacetteViewModel
     extends StateNotifier<custom_async_state.State<Placette>> {
   final GetPlacetteUseCase _getPlacetteUseCase;
-  final ProviderContainer _container;
-  // late ArbreList arbreListe;
+
   late Placette placette;
 
-  SaisiePlacetteViewModel(
-      int placetteId, this._getPlacetteUseCase, this._container)
+  SaisiePlacetteViewModel(int placetteId, this._getPlacetteUseCase, Ref ref)
       : super(const custom_async_state.State.init()) {
     // SaisiePlacetteViewModel(
     //     int placetteId, this._getPlacetteUseCase, this._container)
     //     : super(const custom_async_state.State.init()) {
 
-    // var arbreListStateNotifier = _ref.read(arbreListViewModelStateNotifierProvider);
-    //     arbreListStateNotifier.addListener((state) {
-    //   // Handle ArbreList updates here
-    // });
-
-    // final arbreListStateNotifier =
-    //     _container.read(arbreListViewModelStateNotifierProvider.notifier);
-    // arbreListStateNotifier.addListener((state) {
-    //   // Gérer les mises à jour d'ArbreList ici
-    //   _handleArbreListUpdates(state);
-    // });
-
-    // final arbreListStateNotifier = _ref.watch(arbreListViewModelStateNotifierProvider.notifier);
-    // arbreListStateNotifier.addListener((state) {
-    //   // Handle ArbreList updates here
-    // });
-
-    _init(placetteId);
+    _init(ref, placetteId);
   }
 
-  Future<void> _init(int placetteId) async {
+  Future<void> _init(Ref ref, int placetteId) async {
     state = const custom_async_state.State.loading();
     try {
       var placette = await _getPlacetteUseCase.execute(placetteId);
 
-      // arbreListe = placette.arbres;
-
       state = custom_async_state.State.success(placette);
+
+      final arbreListViewModel =
+          ref.read(arbreListViewModelStateNotifierProvider.notifier);
+      arbreListViewModel.setArbreList(placette.arbres!);
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);
     } catch (e) {
@@ -96,17 +78,4 @@ class SaisiePlacetteViewModel
   Placette getPlacetteState() {
     return placette;
   }
-
-  // ArbreList getArbreList() {
-  //   if (placette.arbres == null) {
-  //     return [];
-  //   } else {
-  //     return placette.arbres;
-  //   }
-  // }
-  // ArbreList getArbreListState() {
-  //   final arbreListStateNotifier =
-  //       _container.read(arbreListViewModelStateNotifierProvider.notifier);
-  //   return arbreListStateNotifier.state;
-  // }
 }

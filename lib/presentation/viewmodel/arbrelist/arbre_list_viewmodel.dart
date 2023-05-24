@@ -1,52 +1,39 @@
-// import 'package:clean_architecture_todo_app/domain/domain_module.dart';
-// import 'package:clean_architecture_todo_app/domain/model/todo.dart';
-// import 'package:clean_architecture_todo_app/domain/model/todo_id.dart';
-// import 'package:clean_architecture_todo_app/domain/model/todo_list.dart';
-// import 'package:clean_architecture_todo_app/domain/usecase/create_todo_usecase.dart';
-// import 'package:clean_architecture_todo_app/domain/usecase/delete_todo_usecase.dart';
-// import 'package:clean_architecture_todo_app/domain/usecase/get_todo_list_usecase.dart';
-// import 'package:clean_architecture_todo_app/domain/usecase/update_todo_usecase.dart';
-// import 'package:clean_architecture_todo_app/presentation/state/state.dart';
-// import 'package:clean_architecture_todo_app/presentation/viewmodel/todolist/filter_kind_viewmodel.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
-import 'package:dendro3/domain/usecase/create_arbre_usecase.dart';
+import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final arbreListViewModelStateNotifierProvider = StateNotifierProvider
-    .autoDispose
-    .family<ArbreListViewModel, State<ArbreList>, int>((ref, placetteId) {
-  final placetteViewModel =
-      ref.watch(saisiePlacetteViewModelProvider(placetteId));
-  final arbreListe = placetteViewModel.data?.arbres ?? ArbreList.empty();
+final arbreListProvider = Provider<ArbreList>((ref) {
+  final state = ref.watch(arbreListViewModelStateNotifierProvider);
+  return state.data ?? ArbreList.empty();
+});
 
+final arbreListViewModelStateNotifierProvider =
+    StateNotifierProvider<ArbreListViewModel, State<ArbreList>>((ref) {
   return ArbreListViewModel(
     // ref.watch(getArbreListUseCaseProvider),
-    ref.watch(createArbreUseCaseProvider),
+    ref.watch(createArbreAndMesureUseCaseProvider),
     // ref.watch(updateArbreUseCaseProvider),
     // ref.watch(deleteArbreUseCaseProvider),
-    arbreListe,
+    // arbreListe,
   );
 });
 
 class ArbreListViewModel extends StateNotifier<State<ArbreList>> {
   // final GetArbreListUseCase _getArbreListUseCase;
-  final CreateArbreUseCase _createArbreUseCase;
+  final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
   // final UpdateArbreUseCase _updateArbreUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
 
   ArbreListViewModel(
-      // this._getArbreListUseCase,
-      this._createArbreUseCase,
-      // this._updateArbreUseCase,
-      // this._deleteArbreUseCase,
-      final ArbreList arbreListe)
-      : super(State.success(arbreListe)) {
-    state = State.success(arbreListe);
-    // _getArbreList();
-  }
+    // this._getArbreListUseCase,
+    this._createArbreAndMesureUseCase,
+    // this._updateArbreUseCase,
+    // this._deleteArbreUseCase,
+    // final ArbreList arbreListe
+  ) : super(const State.init()) {}
 
   // completeArbre(final Arbre todo) {
   //   final newArbre = todo.copyWith(isCompleted: true);
@@ -70,6 +57,7 @@ class ArbreListViewModel extends StateNotifier<State<ArbreList>> {
 
   addArbre(
     // final int idArbreOrig,
+    // Propriétés arbre
     final int idPlacette,
     final String codeEssence,
     final double azimut,
@@ -77,13 +65,32 @@ class ArbreListViewModel extends StateNotifier<State<ArbreList>> {
     final bool taillis,
     final String observation,
 
+    // Propriétés arbreMesure
+    final int? idCycle,
+    double? diametre1,
+    double? diametre2,
+    String? type,
+    double? hauteurTotale,
+    double? hauteurBranche,
+    int? stadeDurete,
+    int? stadeEcorce,
+    String? liane,
+    double? diametreLiane,
+    String? coupe,
+    final bool limite,
+    int? idNomenclatureCodeSanitaire,
+    String? codeEcolo,
+    final String refCodeEcolo,
+    bool? ratioHauteur,
+    String? observationMesure,
+
     // final String title,
     // final String description,
     // final bool isCompleted,
     // final DateTime dueDate,
   ) async {
     try {
-      final newArbre = await _createArbreUseCase.execute(
+      final newArbre = await _createArbreAndMesureUseCase.execute(
         // idArbreOrig,
         idPlacette,
         codeEssence,
@@ -91,12 +98,37 @@ class ArbreListViewModel extends StateNotifier<State<ArbreList>> {
         distance,
         taillis,
         observation,
+        idCycle,
+        diametre1,
+        diametre2,
+        type,
+        hauteurTotale,
+        hauteurBranche,
+        stadeDurete,
+        stadeEcorce,
+        liane,
+        diametreLiane,
+        coupe,
+        limite,
+        idNomenclatureCodeSanitaire,
+        codeEcolo,
+        refCodeEcolo,
+        ratioHauteur,
+        observationMesure,
       );
-      final aa = state.data!.addArbre(newArbre);
+      // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.addArbre(newArbre));
     } on Exception catch (e) {
       state = State.error(e);
     }
+  }
+
+  void setArbreList(ArbreList arbreList) {
+    state = State.success(arbreList);
+  }
+
+  ArbreList getArbreList() {
+    return state.data!;
   }
 
   // updateArbre(final Arbre newArbre) async {

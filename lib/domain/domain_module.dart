@@ -26,8 +26,8 @@ import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
-import 'package:dendro3/domain/usecase/create_arbre_usecase.dart';
-import 'package:dendro3/domain/usecase/create_arbre_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
@@ -85,5 +85,7 @@ final actualiserCyclesDispositifUseCaseProvider =
 final getEssencesUseCaseProvider = Provider<GetEssencesUseCase>(
     (ref) => GetEssencesUseCaseImpl(ref.watch(essencesRepositoryProvider)));
 
-final createArbreUseCaseProvider = Provider<CreateArbreUseCase>(
-    (ref) => CreateArbreUseCaseImpl(ref.watch(arbresRepositoryProvider)));
+final createArbreAndMesureUseCaseProvider =
+    Provider<CreateArbreAndMesureUseCase>((ref) =>
+        CreateArbreAndMesureUseCaseImpl(ref.watch(arbresRepositoryProvider),
+            ref.watch(arbresMesuresRepositoryProvider)));

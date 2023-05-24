@@ -60,16 +60,69 @@ class ArbreMesureMapper {
     };
   }
 
-  // static ArbreMesureEntity transformToNewEntityMap(
-  //   final String name,
-  //   final int idOrganisme,
-  //   final bool alluvial,
-  // ) {
-  //   return {
-  //     'id': null,
-  //     'name': name,
-  //     'idOrganisme': idOrganisme,
-  //     'alluvial': alluvial ? 1 : 0,
-  //   };
-  // }
+  static ArbreMesureEntity transformToNewEntityMap(
+    final int? idArbre,
+    final int? idCycle,
+    double? diametre1,
+    double? diametre2,
+    String? type,
+    double? hauteurTotale,
+    double? hauteurBranche,
+    int? stadeDurete,
+    int? stadeEcorce,
+    String? liane,
+    double? diametreLiane,
+    String? coupe,
+    final bool limite,
+    int? idNomenclatureCodeSanitaire,
+    String? codeEcolo,
+    final String refCodeEcolo,
+    bool? ratioHauteur,
+    String? observationMesure,
+  ) {
+    return {
+      'id_arbre': idArbre,
+      'id_cycle': idCycle,
+      'diametre1': diametre1,
+      'diametre2': diametre2,
+      'type': type,
+      'hauteur_totale': hauteurTotale,
+      'hauteur_branche': hauteurBranche,
+      'stade_durete': stadeDurete,
+      'stade_ecorce': stadeEcorce,
+      'liane': liane,
+      'diametre_liane': diametreLiane,
+      'coupe': coupe,
+      'limite': limite,
+      'id_nomenclature_code_sanitaire': idNomenclatureCodeSanitaire,
+      'code_ecolo': codeEcolo,
+      'ref_code_ecolo': refCodeEcolo,
+      'ratio_hauteur': ratioHauteur,
+      'observation': observationMesure,
+    };
+  }
+
+  // Function concentratingh only on arbre properties (and not on arbreMesures)
+  static ArbreMesure transformToModel(final ArbreMesureEntity entity) {
+    return ArbreMesure(
+        idArbreMesure: entity['id_arbre_mesure'],
+        idArbre: entity['id_arbre'],
+        idCycle: entity['id_cycle'],
+        diametre1: entity['diametre1'],
+        diametre2: entity['diametre2'],
+        type: entity['type'],
+        hauteurTotale: entity['hauteur_totale'],
+        hauteurBranche: entity['hauteur_branche'],
+        stadeDurete: entity['stade_durete'],
+        stadeEcorce: entity['stade_ecorce'],
+        liane: entity['liane'],
+        diametreLiane: entity['diametre_liane'],
+        coupe: entity['coupe'],
+        limite: entity['limite'] == true ? true : false,
+        idNomenclatureCodeSanitaire: entity['id_nomenclature_code_sanitaire'],
+        codeEcolo: entity['code_ecolo'],
+        refCodeEcolo: entity['ref_code_ecolo'],
+        ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
+        observation: entity['observation']);
+  }
 }

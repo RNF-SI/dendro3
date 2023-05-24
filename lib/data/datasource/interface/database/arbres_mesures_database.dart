@@ -1,6 +1,9 @@
-import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 
 abstract class ArbresMesuresDatabase {
+  Future<ArbreMesureEntity> addArbreMesure(
+      final ArbreMesureEntity arbreMesureEntity);
+
   // Future<ArbreMesureListEntity> allArbresMesures();
   // Future<ArbreMesureEntity> insertArbreMesure(
   //     final ArbreMesureEntity arbreMesureEntity);

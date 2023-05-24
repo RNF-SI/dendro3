@@ -145,31 +145,32 @@ Widget __buildAsyncPlacetteListWidget(
   final _viewModel =
       ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
 
-  // TODO: Utilisé arbreListViewModel
-  final arbreListViewModel =
-      ref.watch(arbreListViewModelStateNotifierProvider(placette.idPlacette));
-
   return _viewModel.maybeWhen(
-    success: (data) => Column(
-      children: [
-        SaisieDataTable(
-          itemList: data.arbres!,
-          dispCycleList: dispCycleList,
-          corCyclePlacetteList: placette.corCyclesPlacettes!,
-        ),
-        // Button for adding a new row
-        ElevatedButton(
-          onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
-            builder: (BuildContext context) {
-              return FormSaisiePlacettePage(
-                placette: placette,
-              );
-            },
-          )),
-          child: const Text('Ajouter un Arbre'),
-        ),
-      ],
-    ),
+    success: (data) {
+      return Column(
+        children: [
+          SaisieDataTable(
+            placetteId: placette.idPlacette,
+            itemList: data.arbres!,
+            // itemList: arbreListViewModel.data!,
+            dispCycleList: dispCycleList,
+            corCyclePlacetteList: placette.corCyclesPlacettes!,
+          ),
+          // Button for adding a new row
+          ElevatedButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return FormSaisiePlacettePage(
+                  placette: placette,
+                  cycle: dispCycleList.values[0],
+                );
+              },
+            )),
+            child: const Text('Ajouter un Arbre'),
+          ),
+        ],
+      );
+    },
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
           style: TextStyle(color: Colors.white)),

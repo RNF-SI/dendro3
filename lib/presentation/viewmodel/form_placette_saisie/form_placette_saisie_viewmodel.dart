@@ -1,13 +1,16 @@
+import 'dart:ffi';
+
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbre_id.dart';
+import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/domain/usecase/create_arbre_usecase.dart';
+import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/viewmodel/arbrelist/arbre_list_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
@@ -26,20 +29,15 @@ import 'package:dendro3/presentation/state/state.dart';
 
 final formSaisieViewModelProvider = Provider.autoDispose
     .family<FormSaisieViewModel, Map<String, dynamic>>((ref, arbreInfoObj) {
-  // final arbreListViewModel = ref.watch(arbreListViewModelStateNotifierProvider(
-  //     arbreInfoObj['placette'].idPlacette));
-
-  final arbreListViewModel = ref.watch(arbreListViewModelStateNotifierProvider(
-          arbreInfoObj['placette'].idPlacette)
-      .notifier);
+  final arbreListViewModel =
+      ref.watch(arbreListViewModelStateNotifierProvider.notifier);
   return FormSaisieViewModel(
       ref,
+      arbreInfoObj['cycle'],
       arbreInfoObj['placette'],
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
       ref.watch(getEssencesUseCaseProvider),
-      // ref.read(arbreListViewModelStateNotifierProvider(
-      //     arbreInfoObj['placette'].idPlacette))
       arbreListViewModel);
 }
         // ref.watch(insertArbreUseCaseProvider))
@@ -59,6 +57,7 @@ class FormSaisieViewModel {
   Essence? _initialEssence = null;
   Essence? initialEssence = null;
   Placette placette;
+  Cycle cycle;
 
   late ArbreId _idArbre;
   // var _idArbreOrig;
@@ -72,27 +71,28 @@ class FormSaisieViewModel {
 
   // late ArbreMesureId idArbreMesure='';
   // var _idArbre = '';
-  var _idCycle = '';
-  var _diametre1 = '';
-  var _diametre2 = '';
+  int? _idCycle;
+  double? _diametre1;
+  double? _diametre2;
   var _type = '';
-  var _hauteurTotale = '';
-  var _hauteurBranche = '';
-  var _stadeDurete = '';
-  var _stadeEcorce = '';
+  double? _hauteurTotale;
+  double? _hauteurBranche;
+  int? _stadeDurete;
+  int? _stadeEcorce;
   var _liane = '';
-  var _diametreLiane = '';
+  double? _diametreLiane;
   var _coupe = '';
-  var _limite = '';
-  var _idNomenclatureCodeSanitaire = '';
+  bool _limite = false;
+  int? _idNomenclatureCodeSanitaire;
   var _codeEcolo = '';
   var _refCodeEcolo = '';
-  var _ratioHauteur = '';
+  bool _ratioHauteur = false;
   var _observationMesure = '';
   var _isNewArbreMesure = false;
 
   FormSaisieViewModel(
     this.ref,
+    this.cycle,
     this.placette,
     final Arbre? arbre,
     final ArbreMesure? arbreMesure,
@@ -100,11 +100,10 @@ class FormSaisieViewModel {
     this._arbreListViewModel,
     // this._insertArbreUseCase,
   ) {
-    // _arbreListViewModel =
-    //     ref.read(arbreListViewModelStateNotifierProvider(42).notifier);
     _getEssences();
     // _essences = await _getEssencesUseCase.execute();
     _initArbre(arbre);
+    _initArbreMesure(arbreMesure);
   }
 
   Future<void> _getEssences() async {
@@ -160,6 +159,32 @@ class FormSaisieViewModel {
     }
   }
 
+  _initArbreMesure(final ArbreMesure? arbreMesure) {
+    _idCycle = cycle.idCycle;
+    if (arbreMesure == null) {
+      _isNewArbreMesure = true;
+    } else {
+      // Init ArbreInfos
+      _idCycle = arbreMesure.idCycle;
+      _diametre1 = arbreMesure.diametre1;
+      _diametre2 = arbreMesure.diametre2;
+      _type = arbreMesure.type!;
+      _hauteurTotale = arbreMesure.hauteurTotale;
+      _hauteurBranche = arbreMesure.hauteurBranche;
+      _stadeDurete = arbreMesure.stadeDurete!;
+      _stadeEcorce = arbreMesure.stadeEcorce!;
+      _liane = arbreMesure.liane!;
+      _diametreLiane = arbreMesure.diametreLiane;
+      _coupe = arbreMesure.coupe!;
+      _limite = arbreMesure.limite ?? false;
+      _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire!;
+      _codeEcolo = arbreMesure.codeEcolo!;
+      _refCodeEcolo = arbreMesure.refCodeEcolo!;
+      _ratioHauteur = arbreMesure.ratioHauteur ?? false;
+      _observationMesure = arbreMesure.observation!;
+    }
+  }
+
   Future<void> createOrUpdateArbre() async {
     if (_isNewArbre) {
       _arbreListViewModel.addArbre(
@@ -169,6 +194,23 @@ class FormSaisieViewModel {
         _distance!,
         _taillis,
         _observation,
+        _idCycle,
+        _diametre1,
+        _diametre2,
+        _type,
+        _hauteurTotale,
+        _hauteurBranche,
+        _stadeDurete,
+        _stadeEcorce,
+        _liane,
+        _diametreLiane,
+        _coupe,
+        _limite,
+        _idNomenclatureCodeSanitaire,
+        _codeEcolo,
+        _refCodeEcolo,
+        _ratioHauteur,
+        _observationMesure,
       );
     } else {
       // final newTodo = Todo(
@@ -230,10 +272,31 @@ class FormSaisieViewModel {
   bool shouldShowDeleteTodoIcon() => !_isNewArbre;
 
   setCodeEssence(final String value) => _codeEssence = value;
+  // setters Arbre
   setAzimut(final String value) => _azimut = double.parse(value);
   setDistance(final String value) => _distance = double.parse(value);
   setTaillis(final bool value) => _taillis = value;
   setObservation(final String value) => _observation = value;
+
+  // setters ArbreMesure
+  setDiametre1(final String value) => _diametre1 = double.parse(value);
+  setDiametre2(final String value) => _diametre2 = double.parse(value);
+  setType(final String value) => _type = value;
+  setHauteurTotale(final String value) => _hauteurTotale = double.parse(value);
+  setHauteurBranche(final String value) =>
+      _hauteurBranche = double.parse(value);
+  setStadeDurete(final int value) => _stadeDurete = value;
+  setStadeEcorce(final int value) => _stadeEcorce = value;
+  setLiane(final String value) => _liane = value;
+  setDiametreLiane(final String value) => _diametreLiane = double.parse(value);
+  setCoupe(final String value) => _coupe = value;
+  setLimite(final bool value) => _limite = value;
+  setIdNomenclatureCodeSanitaire(final int value) =>
+      _idNomenclatureCodeSanitaire = value;
+  setCodeEcolo(final String value) => _codeEcolo = value;
+  setRefCodeEcolo(final String value) => _refCodeEcolo = value;
+  setRatioHauteur(final bool value) => _ratioHauteur = value;
+  setObservationMesure(final String value) => _observationMesure = value;
 
   String? validateAzimut() {
     if (_azimut == null) {
