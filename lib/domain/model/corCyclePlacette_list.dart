@@ -14,6 +14,8 @@ class CorCyclePlacetteList with _$CorCyclePlacetteList {
 
   int get length => values.length;
 
+  static CorCyclePlacetteList empty() => const CorCyclePlacetteList(values: []);
+
   CorCyclePlacetteList addCorCyclePlacette(
           final CorCyclePlacette corCyclePlacette) =>
       copyWith(values: [...values, corCyclePlacette]);

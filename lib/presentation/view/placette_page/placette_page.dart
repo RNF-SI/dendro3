@@ -4,6 +4,8 @@ import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
+import 'package:dendro3/presentation/lib/utils.dart';
+import 'package:dendro3/presentation/view/placette_page/placette_page_cycles.dart';
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -119,200 +121,35 @@ Widget __buildPlacetteResumeWidget(
       crossAxisCount: 2,
       childAspectRatio: (1 / .2),
       children: [
-        __buildPropertyTextWidget('idPlacette', placette.idPlacette),
-        __buildPropertyTextWidget('idDispositif', placette.idDispositif),
-        __buildPropertyTextWidget('idPlacetteOrig', placette.idPlacetteOrig),
-        __buildPropertyTextWidget('strate', placette.strate),
-        __buildPropertyTextWidget('pente', placette.pente),
-        __buildPropertyTextWidget('poidsPlacette', placette.poidsPlacette),
-        __buildPropertyTextWidget('correctionPente', placette.correctionPente),
-        __buildPropertyTextWidget('exposition', placette.exposition),
-        __buildPropertyTextWidget('profondeurApp', placette.profondeurApp),
-        __buildPropertyTextWidget('profondeurHydr', placette.profondeurHydr),
-        __buildPropertyTextWidget('texture', placette.texture),
-        __buildPropertyTextWidget('habitat', placette.habitat),
-        __buildPropertyTextWidget('station', placette.station),
-        __buildPropertyTextWidget('typologie', placette.typologie),
-        __buildPropertyTextWidget('groupe', placette.groupe),
-        __buildPropertyTextWidget('groupe1', placette.groupe1),
-        __buildPropertyTextWidget('groupe2', placette.groupe2),
-        __buildPropertyTextWidget('refHabitat', placette.refHabitat),
-        __buildPropertyTextWidget(
-            'precisionHabitat', placette.precisionHabitat),
-        __buildPropertyTextWidget('refStation', placette.refStation),
-        __buildPropertyTextWidget('refTypologie', placette.refTypologie),
-        __buildPropertyTextWidget(
-            'descriptifGroupe', placette.descriptifGroupe),
-        __buildPropertyTextWidget(
+        buildPropertyTextWidget('idPlacette', placette.idPlacette),
+        buildPropertyTextWidget('idDispositif', placette.idDispositif),
+        buildPropertyTextWidget('idPlacetteOrig', placette.idPlacetteOrig),
+        buildPropertyTextWidget('strate', placette.strate),
+        buildPropertyTextWidget('pente', placette.pente),
+        buildPropertyTextWidget('poidsPlacette', placette.poidsPlacette),
+        buildPropertyTextWidget('correctionPente', placette.correctionPente),
+        buildPropertyTextWidget('exposition', placette.exposition),
+        buildPropertyTextWidget('profondeurApp', placette.profondeurApp),
+        buildPropertyTextWidget('profondeurHydr', placette.profondeurHydr),
+        buildPropertyTextWidget('texture', placette.texture),
+        buildPropertyTextWidget('habitat', placette.habitat),
+        buildPropertyTextWidget('station', placette.station),
+        buildPropertyTextWidget('typologie', placette.typologie),
+        buildPropertyTextWidget('groupe', placette.groupe),
+        buildPropertyTextWidget('groupe1', placette.groupe1),
+        buildPropertyTextWidget('groupe2', placette.groupe2),
+        buildPropertyTextWidget('refHabitat', placette.refHabitat),
+        buildPropertyTextWidget('precisionHabitat', placette.precisionHabitat),
+        buildPropertyTextWidget('refStation', placette.refStation),
+        buildPropertyTextWidget('refTypologie', placette.refTypologie),
+        buildPropertyTextWidget('descriptifGroupe', placette.descriptifGroupe),
+        buildPropertyTextWidget(
             'descriptifGroupe1', placette.descriptifGroupe1),
-        __buildPropertyTextWidget(
+        buildPropertyTextWidget(
             'descriptifGroupe2', placette.descriptifGroupe2),
-        __buildPropertyTextWidget('precisionGps', placette.precisionGps),
-        __buildPropertyTextWidget('cheminement', placette.cheminement)
+        buildPropertyTextWidget('precisionGps', placette.precisionGps),
+        buildPropertyTextWidget('cheminement', placette.cheminement)
       ]);
-}
-
-Widget __buildPropertyTextWidget(String property, dynamic value) {
-  return Center(
-    child: RichText(
-      text: TextSpan(
-        // Note: Styles for TextSpans must be explicitly defined.
-        // Child text spans will inherit styles from parent
-        style: const TextStyle(
-          fontSize: 10.0,
-          color: Colors.black,
-        ),
-        children: <TextSpan>[
-          TextSpan(text: "$property :"),
-          TextSpan(
-            text: value.toString(),
-            style: const TextStyle(
-                fontSize: 14.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
-    ),
-  );
-}
-
-class PlacetteCycleWidget extends StatefulWidget {
-  const PlacetteCycleWidget({
-    Key? key,
-    required this.corCyclePlacette,
-    required this.dispCycleList,
-  }) : super(key: key);
-
-  final CorCyclePlacetteList? corCyclePlacette;
-  final CycleList? dispCycleList;
-
-  @override
-  State<StatefulWidget> createState() => _PlacetteCycleWidgetState();
-}
-
-class _PlacetteCycleWidgetState extends State<PlacetteCycleWidget> {
-  _PlacetteCycleWidgetState();
-
-  late List<bool> cycleSelected;
-
-  @override
-  void initState() {
-    cycleSelected =
-        widget.dispCycleList!.values.map<bool>((Cycle data) => false).toList();
-    cycleSelected[0] = true;
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      ToggleButtons(
-        isSelected: cycleSelected,
-        onPressed: (int index) {
-          setState(() {
-            for (int i = 0; i < cycleSelected.length; i++) {
-              cycleSelected[i] = i == index;
-            }
-          });
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        selectedBorderColor: Colors.blue[700],
-        selectedColor: Colors.white,
-        fillColor: Colors.blue[200],
-        color: Colors.blue[400],
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 80.0,
-        ),
-        children: <Widget>[
-          ..._generateCircleAvatars(
-            widget.dispCycleList!,
-            widget.corCyclePlacette!,
-          ),
-        ],
-      ),
-      // Afficher le grid seulement si le corcycle existe pour la placette
-      // Sinon Afficher un text et un bouton
-      widget.corCyclePlacette!.values
-              .map((CorCyclePlacette corCyclePla) => corCyclePla.idCycle)
-              .contains(widget
-                  .dispCycleList![
-                      cycleSelected.indexWhere((selected) => selected == true)]
-                  .idCycle)
-          ? __buildGridText(widget.corCyclePlacette![
-              cycleSelected.indexWhere((selected) => selected == true)])
-          : Text("Ce cycle n'a pas été réalisé pour cette placette"),
-    ]);
-  }
-}
-
-List<Widget> _generateCircleAvatars(
-  CycleList dispCycleList,
-  CorCyclePlacetteList corCyclePlacetteList,
-) {
-  var list = dispCycleList.values
-      .map<Widget>((data) => CircleAvatar(
-            backgroundColor: corCyclePlacetteList.values
-                    .map((CorCyclePlacette corCycle) => corCycle.idCycle)
-                    .contains(data.idCycle)
-                ? Colors.green
-                : Colors.red,
-            foregroundColor: Colors.white,
-            radius: 10,
-            child: Text(
-              data.numCycle.toString(),
-            ),
-          ))
-      .toList();
-  return list;
-}
-
-Widget __buildGridText(CorCyclePlacette corCyclePlacette) {
-  return Expanded(
-    child: SizedBox(
-      height: 200.0,
-      child: GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 2,
-          childAspectRatio: (1 / .2),
-          children: [
-            __buildPropertyTextWidget(
-                'idCyclePlacette', corCyclePlacette.idCyclePlacette),
-            __buildPropertyTextWidget('idCycle', corCyclePlacette.idCycle),
-            __buildPropertyTextWidget(
-                'idPlacette', corCyclePlacette.idPlacette),
-            __buildPropertyTextWidget(
-                'dateReleve',
-                corCyclePlacette.dateReleve != null
-                    ? '${corCyclePlacette.dateReleve!.day}/${corCyclePlacette.dateReleve!.month}/${corCyclePlacette.dateReleve!.year}'
-                    : null),
-            __buildPropertyTextWidget(
-                'dateIntervention', corCyclePlacette.dateIntervention),
-            __buildPropertyTextWidget('annee', corCyclePlacette.annee),
-            __buildPropertyTextWidget(
-                'natureIntervention', corCyclePlacette.natureIntervention),
-            __buildPropertyTextWidget(
-                'gestionPlacette', corCyclePlacette.gestionPlacette),
-            __buildPropertyTextWidget(
-                'idNomenclatureCastor', corCyclePlacette.idNomenclatureCastor),
-            __buildPropertyTextWidget('idNomenclatureFrottis',
-                corCyclePlacette.idNomenclatureFrottis),
-            __buildPropertyTextWidget(
-                'idNomenclatureBoutis', corCyclePlacette.idNomenclatureBoutis),
-            __buildPropertyTextWidget(
-                'recouvHerbesBasses', corCyclePlacette.recouvHerbesBasses),
-            __buildPropertyTextWidget(
-                'recouvHerbesHautes', corCyclePlacette.recouvHerbesHautes),
-            __buildPropertyTextWidget(
-                'recouvBuissons', corCyclePlacette.recouvBuissons),
-            __buildPropertyTextWidget(
-                'recouvArbres', corCyclePlacette.recouvArbres),
-          ]),
-    ),
-  );
 }
 
 @immutable

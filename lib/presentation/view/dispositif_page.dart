@@ -5,12 +5,13 @@ import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
-import 'package:dendro3/presentation/view/placette_page.dart';
+import 'package:dendro3/presentation/view/placette_page/placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
+import 'package:dendro3/presentation/lib/utils.dart';
 
 class DispositifPage extends ConsumerWidget {
   DispositifPage({
@@ -484,22 +485,22 @@ List<Widget> __buildGridText(Cycle cycle) {
           crossAxisCount: 2,
           childAspectRatio: (1 / .2),
           children: [
-            __buildPropertyTextWidget('idCycle', cycle.idCycle),
-            __buildPropertyTextWidget('idDispositif', cycle.idDispositif),
-            __buildPropertyTextWidget('numCycle', cycle.numCycle),
-            __buildPropertyTextWidget('coeff', cycle.coeff),
-            __buildPropertyTextWidget(
+            buildPropertyTextWidget('idCycle', cycle.idCycle),
+            buildPropertyTextWidget('idDispositif', cycle.idDispositif),
+            buildPropertyTextWidget('numCycle', cycle.numCycle),
+            buildPropertyTextWidget('coeff', cycle.coeff),
+            buildPropertyTextWidget(
                 'dateDebut',
                 cycle.dateDebut != null
                     ? '${cycle.dateDebut!.day}/${cycle.dateDebut!.month}/${cycle.dateDebut!.year}'
                     : null),
-            __buildPropertyTextWidget(
+            buildPropertyTextWidget(
                 'dateFin',
                 cycle.dateFin != null
                     ? '${cycle.dateFin!.day}/${cycle.dateFin!.month}/${cycle.dateFin!.year}'
                     : null),
-            __buildPropertyTextWidget('diamLim', cycle.diamLim),
-            __buildPropertyTextWidget('monitor', cycle.monitor),
+            buildPropertyTextWidget('diamLim', cycle.diamLim),
+            buildPropertyTextWidget('monitor', cycle.monitor),
           ]),
     ),
     Tooltip(
@@ -511,29 +512,4 @@ List<Widget> __buildGridText(Cycle cycle) {
           : const Text("Ce cycle est terminé"),
     )
   ];
-}
-
-Widget __buildPropertyTextWidget(String property, dynamic value) {
-  return Center(
-    child: RichText(
-      text: TextSpan(
-        // Note: Styles for TextSpans must be explicitly defined.
-        // Child text spans will inherit styles from parent
-        style: const TextStyle(
-          fontSize: 10.0,
-          color: Colors.black,
-        ),
-        children: <TextSpan>[
-          TextSpan(text: "$property :"),
-          TextSpan(
-            text: value.toString(),
-            style: const TextStyle(
-                fontSize: 14.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
-    ),
-  );
 }
