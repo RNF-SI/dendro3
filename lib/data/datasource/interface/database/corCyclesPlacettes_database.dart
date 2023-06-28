@@ -2,8 +2,8 @@ import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 
 abstract class CorCyclesPlacettesDatabase {
   // Future<CorCyclePlacetteListEntity> allCorCyclesPlacettes();
-  // Future<CorCyclePlacetteEntity> insertCorCyclePlacette(
-  //     final CorCyclePlacetteEntity corCyclePlacetteEntity);
+  Future<CorCyclePlacetteEntity> addCorCyclePlacette(
+      final CorCyclePlacetteEntity corCyclePlacetteEntity);
   // Future<void> updateCorCyclePlacette(final CorCyclePlacetteEntity corCyclePlacetteEntity);
   // Future<void> deleteCorCyclePlacette(final int id);
 }

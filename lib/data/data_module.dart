@@ -2,6 +2,7 @@ import 'package:dendro3/data/datasource/implementation/api/cycles_api_impl.dart'
 import 'package:dendro3/data/datasource/implementation/api/global_api_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/corCyclesPlacettes_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/essences_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -10,19 +11,23 @@ import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
 import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
+import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
 import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
 import 'package:dendro3/data/datasource/interface/database/essences_database.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
 import 'package:dendro3/data/repository/arbre_repository_impl.dart';
 import 'package:dendro3/data/repository/arbres_mesures_repository_impl.dart';
+import 'package:dendro3/data/repository/cor_cycles_placettes_repository_impl.dart';
 import 'package:dendro3/data/repository/cycles_repository_impl.dart';
 import 'package:dendro3/data/repository/dispositifs_repository_impl.dart';
 import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/data/repository/global_database_repository_impl.dart';
 import 'package:dendro3/data/repository/placettes_repository_impl.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
+import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/cycles_repository.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
 import 'package:dendro3/data/repository/authentication_repository_impl.dart';
@@ -87,3 +92,10 @@ final arbresMesuresDatabaseProvider =
 final arbresMesuresRepositoryProvider = Provider<ArbresMesuresRepository>(
     (ref) =>
         ArbresMesuresRepositoryImpl(ref.watch(arbresMesuresDatabaseProvider)));
+
+final CorCyclePlacetteDatabaseProvider = Provider<CorCyclesPlacettesDatabase>(
+    (_) => CorCyclesPlacettesDatabaseImpl());
+final corCyclePlacetteRepositoryProvider =
+    Provider<CorCyclesPlacettesRepository>((ref) =>
+        CorCyclesPlacettesRepositoryImpl(
+            ref.watch(CorCyclePlacetteDatabaseProvider)));

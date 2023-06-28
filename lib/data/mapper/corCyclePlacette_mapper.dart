@@ -14,6 +14,27 @@ class CorCyclePlacetteMapper {
   //   );
   // }
 
+  static CorCyclePlacette transformToModel(
+      final CorCyclePlacetteEntity entity) {
+    return CorCyclePlacette(
+      idCyclePlacette: entity['id_cycle_placette'],
+      idCycle: entity['id_cycle'],
+      idPlacette: entity['id_placette'],
+      dateReleve: entity['date_releve'],
+      dateIntervention: entity['date_intervention'],
+      annee: entity['annee'],
+      natureIntervention: entity['nature_intervention'],
+      gestionPlacette: entity['gestion_placette'],
+      idNomenclatureCastor: entity['id_nomenclature_castor'],
+      idNomenclatureFrottis: entity['id_nomenclature_frottis'],
+      idNomenclatureBoutis: entity['id_nomenclature_boutis'],
+      recouvHerbesBasses: entity['recouv_herbes_basses'],
+      recouvHerbesHautes: entity['recouv_herbes_hautes'],
+      recouvBuissons: entity['recouv_buissons'],
+      recouvArbres: entity['recouv_arbres'],
+    );
+  }
+
   static CorCyclePlacette transformFromApiToModel(
       final CorCyclePlacetteEntity entity) {
     return CorCyclePlacette(
@@ -69,16 +90,39 @@ class CorCyclePlacetteMapper {
     };
   }
 
-  // static CorCyclePlacetteEntity transformToNewEntityMap(
-  //   final String name,
-  //   final int idOrganisme,
-  //   final bool alluvial,
-  // ) {
-  //   return {
-  //     'id': null,
-  //     'name': name,
-  //     'idOrganisme': idOrganisme,
-  //     'alluvial': alluvial ? 1 : 0,
-  //   };
-  // }
+  static CorCyclePlacetteEntity transformToNewEntityMap(
+    // final int id_cor_cycle_placette,
+    final int id_cycle,
+    final int id_placette,
+    final DateTime date_releve,
+    final String date_intervention,
+    final int annee,
+    final String nature_intervention,
+    final String gestion_placette,
+    final int id_nomenclature_castor,
+    final int id_nomenclature_frottis,
+    final int id_nomenclature_boutis,
+    final double recouv_herbes_basses,
+    final double recouv_herbes_hautes,
+    final double recouv_buissons,
+    final double recouv_arbres,
+  ) {
+    return {
+      'id_cor_cycle_placette': null,
+      'id_cycle': id_cycle,
+      'id_placette': id_placette,
+      'date_releve': date_releve,
+      'date_intervention': date_intervention,
+      'annee': annee,
+      'nature_intervention': nature_intervention,
+      'gestion_placette': gestion_placette,
+      'id_nomenclature_castor': id_nomenclature_castor,
+      'id_nomenclature_frottis': id_nomenclature_frottis,
+      'id_nomenclature_boutis': id_nomenclature_boutis,
+      'recouv_herbes_basses': recouv_herbes_basses,
+      'recouv_herbes_hautes': recouv_herbes_hautes,
+      'recouv_buissons': recouv_buissons,
+      'recouv_arbres': recouv_arbres,
+    };
+  }
 }
