@@ -83,7 +83,8 @@ class PlacettePage extends ConsumerWidget {
               placette,
             ),
             PlacetteCycleWidget(
-              corCyclePlacette: placette.corCyclesPlacettes,
+              placette: placette,
+              corCyclePlacetteList: placette.corCyclesPlacettes!,
               dispCycleList: dispCycleList,
             ),
           ],

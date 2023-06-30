@@ -2,28 +2,34 @@ import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
+import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
+import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
+import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PlacetteCycleWidget extends StatefulWidget {
+class PlacetteCycleWidget extends ConsumerStatefulWidget {
   const PlacetteCycleWidget({
     Key? key,
-    required this.corCyclePlacette,
+    required this.placette,
+    required this.corCyclePlacetteList,
     required this.dispCycleList,
   }) : super(key: key);
 
-  final CorCyclePlacetteList? corCyclePlacette;
+  final Placette placette;
+  final CorCyclePlacetteList corCyclePlacetteList;
   final CycleList? dispCycleList;
 
   @override
-  State<StatefulWidget> createState() => _PlacetteCycleWidgetState();
+  PlacetteCycleWidgetState createState() => PlacetteCycleWidgetState();
 }
 
-class _PlacetteCycleWidgetState extends State<PlacetteCycleWidget> {
-  _PlacetteCycleWidgetState();
+class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
+  PlacetteCycleWidgetState();
 
   late List<bool> cycleSelected;
+  late final CorCyclePlacetteListViewModel corCyclePlacetteListViewModel;
 
   @override
   void initState() {
@@ -58,21 +64,24 @@ class _PlacetteCycleWidgetState extends State<PlacetteCycleWidget> {
         children: <Widget>[
           ..._generateCircleAvatars(
             widget.dispCycleList!,
-            widget.corCyclePlacette!,
+            widget.corCyclePlacetteList!,
           ),
         ],
       ),
       // Afficher le grid seulement si le corcycle existe pour la placette
       // Sinon Afficher un text et un bouton
-      widget.corCyclePlacette!.values
+      widget.corCyclePlacetteList!.values
               .map((CorCyclePlacette corCyclePla) => corCyclePla.idCycle)
               .contains(widget
                   .dispCycleList![
                       cycleSelected.indexWhere((selected) => selected == true)]
                   .idCycle)
-          ? __buildGridText(widget.corCyclePlacette![
+          ? __buildGridText(widget.corCyclePlacetteList![
               cycleSelected.indexWhere((selected) => selected == true)])
-          : NoCycleWidget(),
+          : NoCycleWidget(
+              placette: widget.placette,
+              cycle: widget.dispCycleList![
+                  cycleSelected.indexWhere((selected) => selected == true)]),
     ]);
   }
 }
@@ -143,24 +152,32 @@ Widget __buildGridText(CorCyclePlacette corCyclePlacette) {
   );
 }
 
-class NoCycleWidget extends StatefulWidget {
-  @override
-  _NoCycleWidgetState createState() => _NoCycleWidgetState();
-}
+class NoCycleWidget extends ConsumerWidget {
+  NoCycleWidget({Key? key, required this.placette, required this.cycle})
+      : super(key: key);
 
-class _NoCycleWidgetState extends State<NoCycleWidget> {
-  String selectedText = "Ce cycle n'a pas été réalisé pour cette placette";
+  Placette placette;
+  Cycle cycle;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        Text(selectedText),
+        Text("Ce cycle n'a pas été réalisé pour cette placette"),
         ElevatedButton(
-          child: Text('Commencer le cycle'),
-          onPressed: () {
-            // Add your code here that you want to execute when the button is pressed.
-          },
+          child: Text("Button"),
+          onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return FormSaisiePlacettePage(
+                type: 'corCyclePlacette',
+                placette: placette,
+                cycle: cycle,
+
+                // placette: placette,
+                // cycle: dispCycleList.values[0],
+              );
+            },
+          )),
         ),
       ],
     );
