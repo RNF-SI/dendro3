@@ -161,6 +161,7 @@ Widget __buildAsyncPlacetteListWidget(
             onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
               builder: (BuildContext context) {
                 return FormSaisiePlacettePage(
+                  type: "arbre",
                   placette: placette,
                   cycle: dispCycleList.values[0],
                 );
