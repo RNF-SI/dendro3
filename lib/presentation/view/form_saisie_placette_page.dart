@@ -13,7 +13,6 @@ import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart'
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/form_placette_saisie/form_placette_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/arbre_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/cor_cycle_placette_saisie_viewmodel.dart';
@@ -88,8 +87,6 @@ class FormSaisiePlacettePageState
   // }
   @override
   Widget build(BuildContext context) {
-    // final _viewModel = ref.watch(formSaisieViewModelProvider);
-
     // Build a Form widget using the _formKey created above.
     return Scaffold(
       appBar: AppBar(

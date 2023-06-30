@@ -16,15 +16,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // import '../../../domain/model/arbre_list.dart';
 
-// final saisiePlacetteViewModelProvider = StateNotifierProvider.autoDispose
-//     .family<SaisiePlacetteViewModel, custom_async_state.State<Placette>, int>(
-//         (ref, placetteId) {
-//   return SaisiePlacetteViewModel(
-//     placetteId,
-//     ref.watch(getPlacetteUseCaseProvider),
-//   );
-// });
-
 final saisiePlacetteViewModelProvider = StateNotifierProvider.autoDispose
     .family<SaisiePlacetteViewModel, custom_async_state.State<Placette>, int>(
         (ref, placetteId) {
