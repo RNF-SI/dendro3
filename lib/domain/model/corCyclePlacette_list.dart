@@ -1,10 +1,11 @@
 import 'package:dendro3/domain/model/corCyclePlacette.dart'; // import 'package:clean_architecture_corCyclePlacette_app/domain/model/corCyclePlacette_id.dart';
+import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'corCyclePlacette_list.freezed.dart';
 
 @freezed
-class CorCyclePlacetteList with _$CorCyclePlacetteList {
+class CorCyclePlacetteList with _$CorCyclePlacetteList implements ViewModelObject {
   const factory CorCyclePlacetteList({required List<CorCyclePlacette> values}) =
       _CorCyclePlacetteList;
 
@@ -16,9 +17,14 @@ class CorCyclePlacetteList with _$CorCyclePlacetteList {
 
   static CorCyclePlacetteList empty() => const CorCyclePlacetteList(values: []);
 
-  CorCyclePlacetteList addCorCyclePlacette(
-          final CorCyclePlacette corCyclePlacette) =>
-      copyWith(values: [...values, corCyclePlacette]);
+
+  @override
+  CorCyclePlacetteList addItemToList(final dynamic item) {
+    if (item is CorCyclePlacette) {
+      return copyWith(values: [...values, item]);
+    }
+    throw ArgumentError('Item must be of type CorCyclePlacette');
+  }
 
   CorCyclePlacetteList updateCorCyclePlacette(
       final CorCyclePlacette newCorCyclePlacette) {

@@ -1,11 +1,12 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/arbre.dart'; // import 'package:clean_architecture_arbre_app/domain/model/arbre_id.dart';
+import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'arbre_list.freezed.dart';
 
 @freezed
-class ArbreList with _$ArbreList {
+class ArbreList with _$ArbreList implements ViewModelObject {
   const factory ArbreList({required List<Arbre> values}) = _ArbreList;
 
   const ArbreList._();
@@ -18,7 +19,13 @@ class ArbreList with _$ArbreList {
     return const ArbreList(values: []);
   }
 
-  ArbreList addArbre(final Arbre arbre) => copyWith(values: [...values, arbre]);
+  @override
+  ArbreList addItemToList(final dynamic item) {
+    if (item is Arbre) {
+      return copyWith(values: [...values, item]);
+    }
+    throw ArgumentError('Item must be of type Arbre');
+  }
 
   ArbreList updateArbre(final Arbre newArbre) {
     return copyWith(
