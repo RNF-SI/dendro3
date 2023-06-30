@@ -6,6 +6,7 @@ import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/view/placette_page/placette_page.dart';
+import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -366,6 +367,11 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                 width: 76,
                 child: IconButton(
                   onPressed: () {
+                    final corCyclePlacetteListViewModel = ref.read(
+                        corCyclePlacetteListViewModelStateNotifierProvider
+                            .notifier);
+                    corCyclePlacetteListViewModel
+                        .setCorCyclePlacetteList(placette.corCyclesPlacettes!);
                     Navigator.push(context, MaterialPageRoute<void>(
                       builder: (BuildContext context) {
                         return PlacettePage(

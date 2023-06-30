@@ -1,8 +1,10 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
-import 'package:dendro3/domain/model/arbre_list.dart';
-import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
+// import 'package:dendro3/domain/model/arbre_list.dart';
+// import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
+import 'package:dendro3/presentation/viewmodel/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +18,7 @@ final corCyclePlacetteListViewModelStateNotifierProvider =
         State<CorCyclePlacetteList>>((ref) {
   return CorCyclePlacetteListViewModel(
       // ref.watch(getArbreListUseCaseProvider),
+      ref.watch(createCorCyclePlacetteUseCaseProvider)
       // ref.watch(createArbreAndMesureUseCaseProvider),
       // ref.watch(updateArbreUseCaseProvider),
       // ref.watch(deleteArbreUseCaseProvider),
@@ -24,20 +27,19 @@ final corCyclePlacetteListViewModelStateNotifierProvider =
 });
 
 class CorCyclePlacetteListViewModel
-    extends StateNotifier<State<CorCyclePlacetteList>> {
+    extends BaseListViewModel<State<CorCyclePlacetteList>> {
   // final GetArbreListUseCase _getArbreListUseCase;
-//   final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
+  final CreateCorCyclePlacetteUseCase _createCorCyclePlacetteUseCase;
   // final UpdateArbreUseCase _updateArbreUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
 
   CorCyclePlacetteListViewModel(
-      // this._getArbreListUseCase,
-      // this._createArbreAndMesureUseCase,
-      // this._updateArbreUseCase,
-      // this._deleteArbreUseCase,
-      // final ArbreList arbreListe
-      )
-      : super(const State.init()) {}
+    // this._getArbreListUseCase,
+    this._createCorCyclePlacetteUseCase,
+    // this._updateArbreUseCase,
+    // this._deleteArbreUseCase,
+    // final ArbreList arbreListe
+  ) : super(const State.init()) {}
 
   // completeArbre(final Arbre todo) {
   //   final newArbre = todo.copyWith(isCompleted: true);
@@ -58,6 +60,33 @@ class CorCyclePlacetteListViewModel
   //     state = State.error(e);
   //   }
   // }
+
+  @override
+  addItem(
+    final Map item,
+  ) async {
+    try {
+      final newCorCyclePlacette = await _createCorCyclePlacetteUseCase.execute(
+        item['idCycle'],
+        item['idPlacette'],
+        item['dateReleve'],
+        item['dateIntervention'],
+        item['annee'],
+        item['natureIntervention'],
+        item['gestionPlacette'],
+        item['idNomenclatureCastor'],
+        item['idNomenclatureFrottis'],
+        item['idNomenclatureBoutis'],
+        item['recouvHerbesBasses'],
+        item['recouvHerbesHautes'],
+        item['recouvBuissons'],
+        item['recouvArbres'],
+      );
+      state = State.success(state.data!.addItemToList(newCorCyclePlacette));
+    } on Exception catch (e) {
+      state = State.error(e);
+    }
+  }
 
 //   addArbre(
 //     // final int idArbreOrig,
@@ -84,13 +113,21 @@ class CorCyclePlacetteListViewModel
 //     }
 //   }
 
-  void setCorCyclePlacette(CorCyclePlacetteList corCyclePlacetteList) {
-    state = State.success(corCyclePlacetteList);
+  // Create a new corCyclePlacette
+  startCycleForPlacette() {
+    // try {
+    //   final newCorCyclePlacette = await _createCorCyclePlacetteUseCase.execute(
+    //     // idArbreOrig,
+    //     // idPlacette,
+    //     // codeEssence,
+    //     // azimut,
+    //   );
+    // }
   }
 
-//   void setArbreList(ArbreList arbreList) {
-//     state = State.success(arbreList);
-//   }
+  void setCorCyclePlacetteList(CorCyclePlacetteList corCyclePlacetteList) {
+    state = State.success(corCyclePlacetteList);
+  }
 
 //   ArbreList getArbreList() {
 //     return state.data!;
