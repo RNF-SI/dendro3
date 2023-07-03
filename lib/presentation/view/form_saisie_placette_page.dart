@@ -100,30 +100,31 @@ class FormSaisiePlacettePageState
         child: ListView(
           children: [
             _buildFormWidget(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  final currentState = _formKey.currentState;
-                  if (currentState != null && currentState.validate()) {
-                    _viewModel.createObject();
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Ajouter'),
-              ),
-            ),
           ],
         ),
         // ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.all(4.0),
+        child: ElevatedButton(
+          onPressed: () {
+            final currentState = _formKey.currentState;
+            if (currentState != null && currentState.validate()) {
+              _viewModel.createObject();
+              Navigator.pop(context);
+            }
+          },
+          child: const Text('Ajouter'),
+        ),
       ),
     );
   }
 
   Widget _buildFormWidget() {
+    Widget formWidget;
     var formFields = _viewModel.getFormConfig().map<Widget>((field) {
       if (field is TextFieldConfig) {
-        return TextFormField(
+        formWidget = TextFormField(
           initialValue: field.initialValue,
           enabled: field.isEditable,
           validator: field.validator,
@@ -137,7 +138,7 @@ class FormSaisiePlacettePageState
         );
       } else if (field is DropdownSearchConfig) {
         // Text('Code Essence'),
-        return DropdownSearch<dynamic>(
+        formWidget = DropdownSearch<dynamic>(
           popupProps: PopupProps.menu(
             showSearchBox: true,
           ),
@@ -149,7 +150,7 @@ class FormSaisiePlacettePageState
           dropdownDecoratorProps: const DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
               disabledBorder: InputBorder.none,
-              hintText: 'Veuillez entre le code essence',
+              hintText: 'Veuillez entrer le code essence',
               hintStyle: TextStyle(
                 color: Colors.black,
                 fontSize: 12,
@@ -164,7 +165,7 @@ class FormSaisiePlacettePageState
 
         // return DropdownSearch<Essence> or whatever the widget should be
       } else if (field is DropdownFieldConfig) {
-        return DropdownButtonFormField(
+        formWidget = DropdownButtonFormField(
           value: field.value,
           hint: Text(
             'choose one',
@@ -181,14 +182,14 @@ class FormSaisiePlacettePageState
           }).toList(),
         );
       } else if (field is CheckboxFieldConfig) {
-        return CheckboxFormField(
+        formWidget = CheckboxFormField(
           title: Text(field.fieldName),
           initialValue: field.initialValue,
           onSaved: field.onSaved,
         );
         // return CheckboxFormField or whatever the widget should be
       } else if (field is DateFieldConfig) {
-        return DateTimeFormField(
+        formWidget = DateTimeFormField(
           decoration: const InputDecoration(
             hintStyle: TextStyle(color: Colors.black45),
             errorStyle: TextStyle(color: Colors.redAccent),
@@ -205,6 +206,18 @@ class FormSaisiePlacettePageState
       } else {
         throw UnimplementedError('Unknown field type: ${field.runtimeType}');
       }
+      return Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text(field.fieldName),
+          ),
+          Expanded(
+            flex: 2,
+            child: formWidget,
+          ),
+        ],
+      );
     }).toList();
 
     return Form(
