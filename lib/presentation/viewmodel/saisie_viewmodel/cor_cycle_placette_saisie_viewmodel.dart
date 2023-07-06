@@ -19,8 +19,8 @@ import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart'
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
-import 'package:dendro3/presentation/viewmodel/arbrelist/arbre_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
 import 'package:flutter/material.dart';

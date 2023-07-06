@@ -5,7 +5,7 @@ import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
-import 'package:dendro3/presentation/viewmodel/arbrelist/arbre_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
@@ -22,11 +22,11 @@ class SaisieDataTable extends ConsumerStatefulWidget {
   SaisieDataTable(
       {super.key,
       required this.placetteId,
-      required this.itemList,
+      // required this.itemList,
       required this.dispCycleList,
       required this.corCyclePlacetteList});
 
-  final ArbreList itemList;
+  // final ArbreList itemList;
   final int placetteId;
   final CycleList dispCycleList;
   final CorCyclePlacetteList corCyclePlacetteList;
