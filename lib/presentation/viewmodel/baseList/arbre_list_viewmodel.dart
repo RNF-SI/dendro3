@@ -2,7 +2,7 @@ import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
-import 'package:dendro3/presentation/viewmodel/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

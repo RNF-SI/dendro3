@@ -4,9 +4,10 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
-import 'package:dendro3/presentation/viewmodel/arbrelist/arbre_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -147,11 +148,14 @@ Widget __buildAsyncPlacetteListWidget(
 
   return _viewModel.maybeWhen(
     success: (data) {
+      final saisissableObjectListNotifier =
+          ref.watch(displayableListProvider(data.arbres!).notifier);
+
       return Column(
         children: [
           SaisieDataTable(
             placetteId: placette.idPlacette,
-            itemList: data.arbres!,
+            // itemList: saisissableObjectListNotifier.getDisplayableList(),
             // itemList: arbreListViewModel.data!,
             dispCycleList: dispCycleList,
             corCyclePlacetteList: placette.corCyclesPlacettes!,
@@ -169,6 +173,32 @@ Widget __buildAsyncPlacetteListWidget(
             )),
             child: const Text('Ajouter un Arbre'),
           ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  // height: 1,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text("Button1"),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8.0),
+                  // height: 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      saisissableObjectListNotifier
+                          .setDisplayableList(data.bmsSup30!);
+                    },
+                    child: Text("Button2"),
+                  ),
+                ),
+              )
+            ],
+          )
         ],
       );
     },
