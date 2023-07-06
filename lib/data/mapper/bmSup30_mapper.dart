@@ -51,16 +51,43 @@ class BmSup30Mapper {
     };
   }
 
-  // static BmSup30Entity transformToNewEntityMap(
-  //   final String name,
-  //   final int idOrganisme,
-  //   final bool alluvial,
-  // ) {
-  //   return {
-  //     'id': null,
-  //     'name': name,
-  //     'idOrganisme': idOrganisme,
-  //     'alluvial': alluvial ? 1 : 0,
-  //   };
-  // }
+  static BmSup30Entity transformToNewEntityMap(
+    final int idPlacette,
+    final int idArbre,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final double? orientation,
+    final double? azimutSouche,
+    final double? distanceSouche,
+    final String? observation,
+  ) {
+    return {
+      'id_placette': idPlacette,
+      'id_arbre': idArbre,
+      'code_essence': codeEssence,
+      'azimut': azimut,
+      'distance': distance,
+      'orientation': orientation,
+      'azimut_souche': azimutSouche,
+      'distance_souche': distanceSouche,
+      'observation': observation,
+    };
+  }
+
+  static BmSup30 transformToModel(final BmSup30Entity entity) {
+    return BmSup30(
+      idBmSup30: entity['id_bm_sup_30'],
+      idBmSup30Orig: entity['id_bm_sup_30_orig'],
+      idPlacette: entity['id_placette'],
+      idArbre: entity['id_arbre'],
+      codeEssence: entity['code_essence'],
+      azimut: entity['azimut'],
+      distance: entity['distance'],
+      orientation: entity[' orientation'],
+      azimutSouche: entity[' azimut_souche'],
+      distanceSouche: entity[' distance_souche'],
+      observation: entity[' observation'],
+    );
+  }
 }

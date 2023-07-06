@@ -12,6 +12,7 @@ import 'package:sqflite/sqflite.dart';
 
 class BmsSup30DatabaseImpl implements BmsSup30Database {
   static const _tableName = 't_bm_sup_30';
+  static const _columnId = 'id_bm_sup_30';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -64,6 +65,34 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
               db, bmSup30Entity["id_bm_sup_30"]);
       return {...bmSup30Entity, 'arbres_mesures': bmSup30MesureObj};
     }).toList());
+  }
+
+  @override
+  // called when one bms is added
+  Future<BmSup30Entity> addBmSup30(BmSup30Entity bmSup30) async {
+    final db = await database;
+    late final BmSup30Entity bmSup30Entity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_bm_sup_30) FROM $_tableName'));
+
+      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
+          'SELECT MAX(id_bm_sup_30_orig) FROM $_tableName WHERE id_placette = ?',
+          [bmSup30['id_placette']]));
+
+      bmSup30['id_bm_sup_30'] = maxId! + 1;
+      bmSup30['id_bm_sup_30_orig'] = maxIdOrig! + 1;
+      await txn.insert(
+        _tableName,
+        bmSup30,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      bmSup30Entity = results.first;
+    });
+    return bmSup30Entity;
   }
 
   // @override
