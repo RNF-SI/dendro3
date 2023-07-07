@@ -87,25 +87,27 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             border: Border(),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
-          child: DataTable2(
-            columnSpacing: 12,
-            fixedLeftColumns: 1,
+          child: columnNameList.isEmpty
+              ? Text('An error occurred: columnNameList is null.')
+              : DataTable2(
+                  columnSpacing: 12,
+                  fixedLeftColumns: 1,
 
-            // fixedLeftColumns: 1,
-            scrollController: _controller,
-            dividerThickness: 0,
-            // dataRowHeight: 300,
-            showCheckboxColumn: false,
-            // bottomMargin: 10,
+                  // fixedLeftColumns: 1,
+                  scrollController: _controller,
+                  dividerThickness: 0,
+                  // dataRowHeight: 300,
+                  showCheckboxColumn: false,
+                  // bottomMargin: 10,
 
-            // scrollController: _controller,
-            // horizontalMargin: 10,
-            // columnSpacing: 30, //defaultPadding,
-            minWidth: _extendedList[0] ? null : arrayWidth,
-            columns: _createColumns(columnNameList),
+                  // scrollController: _controller,
+                  // horizontalMargin: 10,
+                  // columnSpacing: 30, //defaultPadding,
+                  minWidth: _extendedList[0] ? null : arrayWidth,
+                  columns: _createColumns(columnNameList),
 
-            rows: _createRows(cycleRowList),
-          ),
+                  rows: _createRows(cycleRowList),
+                ),
         ),
         ToggleButtons(
           direction: Axis.horizontal,

@@ -174,6 +174,9 @@ final cycleRowsProvider = Provider.autoDispose
 
 final columnsProvider = Provider.autoDispose
     .family<List<String>, List<Map<String, dynamic>>>((ref, list) {
+  if (list.isEmpty) {
+    return [];
+  }
   return list[0].keys.toList();
 });
 
