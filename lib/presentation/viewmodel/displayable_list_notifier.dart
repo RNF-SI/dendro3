@@ -3,6 +3,7 @@ import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,6 +28,9 @@ class DisplayableListNotifier extends StateNotifier<DisplayableList> {
         break;
       case 'Regenerations':
         state = ref.watch(regenerationListProvider);
+        break;
+      case 'Reperes':
+        state = ref.watch(repereListProvider);
         break;
       default:
     }

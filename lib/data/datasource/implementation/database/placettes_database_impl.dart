@@ -100,11 +100,14 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
         await ArbresDatabaseImpl.getPlacetteArbres(db, placetteId);
     final bmsObj =
         await BmsSup30DatabaseImpl.getPlacetteBmSup30(db, placetteId);
+    final reperesObj =
+        await ReperesDatabaseImpl.getPlacetteReperes(db, placetteId);
     return {
       ...placetteList[0],
       'arbres': arbresObj,
       'bmsSup30': bmsObj,
       'corCyclesPlacettes': corCyclePlacetteObj,
+      'reperes': reperesObj
     };
   }
 

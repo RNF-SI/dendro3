@@ -23,6 +23,11 @@ class ReperesDatabaseImpl implements ReperesDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  static Future<List<RepereEntity>> getPlacetteReperes(
+      Database db, int placetteId) async {
+    return await db
+        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+  }
   // @override
   // Future<void> updateRepere(final RepereEntity repere) async {
   //   final db = await database;
