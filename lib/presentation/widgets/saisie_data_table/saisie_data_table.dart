@@ -3,9 +3,11 @@ import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
+import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
@@ -68,9 +70,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<bool> reducedMesureList = ref.watch(reducedMesureToggleProvider);
     List<bool> cycleToggleSelectedList = ref.watch(cycleSelectedToggleProvider);
 
-    final ArbreList arbres = ref.watch(arbreListProvider);
+    final DisplayableList items = ref.watch(displayableListProvider);
 
-    final rowList = ref.watch(rowsProvider(arbres));
+    final rowList = ref.watch(rowsProvider(items));
     final cycleRowList = ref.watch(cycleRowsProvider(rowList));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));

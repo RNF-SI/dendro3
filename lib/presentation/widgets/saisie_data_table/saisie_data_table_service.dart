@@ -1,6 +1,7 @@
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/cycle.dart';
+import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -112,10 +113,10 @@ final displayedMesureColumnTypeProvider =
 // Permet de récupérer les objets Lisser en fonction
 // des columns qu'on veut afficher (boutons)
 final rowsProvider = StateProvider.autoDispose
-    .family<List<Map<String, dynamic>>, ArbreList>((ref, arbreList) {
+    .family<List<Map<String, dynamic>>, DisplayableList>((ref, itemList) {
   final columnType = ref.watch(displayedColumnTypeProvider);
   final mesureColumnType = ref.watch(displayedMesureColumnTypeProvider);
-  var nestedObj = arbreList.getObjectMapped(
+  var nestedObj = itemList.getObjectMapped(
     displayedColumnType: columnType,
     displayedMesureColumnType: mesureColumnType,
   );

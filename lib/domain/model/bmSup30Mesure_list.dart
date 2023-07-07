@@ -1,3 +1,4 @@
+import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart'; // import 'package:clean_architecture_bmSup30Mesure_app/domain/model/bmSup30Mesure_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -31,4 +32,12 @@ class BmSup30MesureList with _$BmSup30MesureList {
       values: values
           .where((bmSup30Mesure) => bmSup30Mesure.idBmSup30Mesure != id)
           .toList());
+
+  List<Map<String, dynamic>> getValuesMappedFromDisplayedColumnType({
+    DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
+  }) =>
+      values
+          .map((value) => value.getValuesMappedFromDisplayedColumnType(
+              displayedMesureColumnType: displayedMesureColumnType))
+          .toList();
 }

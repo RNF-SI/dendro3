@@ -1,5 +1,7 @@
+import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
+import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -42,4 +44,15 @@ class BmSup30List
     }
     throw ArgumentError('Item must be of type Arbre');
   }
+
+  @override
+  List<Map<String, dynamic>> getObjectMapped(
+          {DisplayedColumnType displayedColumnType = DisplayedColumnType.all,
+          DisplayedColumnType displayedMesureColumnType =
+              DisplayedColumnType.all}) =>
+      values.map((value) {
+        return value.getValuesMappedFromDisplayedColumnType(
+            displayedColumnType: displayedColumnType,
+            displayedMesureColumnType: displayedMesureColumnType);
+      }).toList();
 }

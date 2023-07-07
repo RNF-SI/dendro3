@@ -1,22 +1,29 @@
-import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
-import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 
-final displayableListProvider = StateNotifierProvider.family<
-    DisplayableListNotifier,
-    DisplayableList,
-    DisplayableList>((ref, initialState) {
-  return DisplayableListNotifier(initialState);
+final displayableListProvider =
+    StateNotifierProvider<DisplayableListNotifier, DisplayableList>((ref) {
+  return DisplayableListNotifier(ref);
 });
 
 class DisplayableListNotifier extends StateNotifier<DisplayableList> {
-  DisplayableListNotifier(DisplayableList initialState) : super(initialState);
+  DisplayableListNotifier(Ref ref) : super(ref.watch(arbreListProvider));
 
-  void setDisplayableList(DisplayableList newList) {
-    state = newList;
+  void setDisplayableList(WidgetRef ref, String type) {
+    switch (type) {
+      case 'Arbres':
+        state = ref.watch(arbreListProvider);
+
+        break;
+      case 'BmsSup30':
+        state = ref.watch(bmSup30ListProvider);
+
+        break;
+      default:
+    }
   }
 
   DisplayableList getDisplayableList() {

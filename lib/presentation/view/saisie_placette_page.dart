@@ -148,15 +148,13 @@ Widget __buildAsyncPlacetteListWidget(
 
   return _viewModel.maybeWhen(
     success: (data) {
-      final saisissableObjectListNotifier =
-          ref.watch(displayableListProvider(data.arbres!).notifier);
+      final displayableListNotifier =
+          ref.watch(displayableListProvider.notifier);
 
       return Column(
         children: [
           SaisieDataTable(
             placetteId: placette.idPlacette,
-            // itemList: saisissableObjectListNotifier.getDisplayableList(),
-            // itemList: arbreListViewModel.data!,
             dispCycleList: dispCycleList,
             corCyclePlacetteList: placette.corCyclesPlacettes!,
           ),
@@ -179,8 +177,10 @@ Widget __buildAsyncPlacetteListWidget(
                 child: Container(
                   // height: 1,
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Button1"),
+                    onPressed: () {
+                      displayableListNotifier.setDisplayableList(ref, 'Arbres');
+                    },
+                    child: Text("Arbres"),
                   ),
                 ),
               ),
@@ -190,10 +190,10 @@ Widget __buildAsyncPlacetteListWidget(
                   // height: 1,
                   child: ElevatedButton(
                     onPressed: () {
-                      saisissableObjectListNotifier
-                          .setDisplayableList(data.bmsSup30!);
+                      displayableListNotifier.setDisplayableList(
+                          ref, 'BmsSup30');
                     },
-                    child: Text("Button2"),
+                    child: Text("BmsSup30"),
                   ),
                 ),
               )

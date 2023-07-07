@@ -63,7 +63,7 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       bmSup30MesureObj =
           await BmsSup30MesuresDatabaseImpl.getbmSup30bmsSup30Mesures(
               db, bmSup30Entity["id_bm_sup_30"]);
-      return {...bmSup30Entity, 'arbres_mesures': bmSup30MesureObj};
+      return {...bmSup30Entity, 'bm_sup_30_mesures': bmSup30MesureObj};
     }).toList());
   }
 
