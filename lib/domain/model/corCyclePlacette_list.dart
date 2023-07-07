@@ -1,11 +1,15 @@
 import 'package:dendro3/domain/model/corCyclePlacette.dart'; // import 'package:clean_architecture_corCyclePlacette_app/domain/model/corCyclePlacette_id.dart';
+import 'package:dendro3/domain/model/transect.dart';
+import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'corCyclePlacette_list.freezed.dart';
 
 @freezed
-class CorCyclePlacetteList with _$CorCyclePlacetteList implements ViewModelObject {
+class CorCyclePlacetteList
+    with _$CorCyclePlacetteList
+    implements ViewModelObject {
   const factory CorCyclePlacetteList({required List<CorCyclePlacette> values}) =
       _CorCyclePlacetteList;
 
@@ -16,7 +20,6 @@ class CorCyclePlacetteList with _$CorCyclePlacetteList implements ViewModelObjec
   int get length => values.length;
 
   static CorCyclePlacetteList empty() => const CorCyclePlacetteList(values: []);
-
 
   @override
   CorCyclePlacetteList addItemToList(final dynamic item) {
@@ -41,4 +44,11 @@ class CorCyclePlacetteList with _$CorCyclePlacetteList implements ViewModelObjec
       values: values
           .where((corCyclePlacette) => corCyclePlacette.idCyclePlacette != id)
           .toList());
+
+  TransectList get allTransects {
+    return TransectList(
+        values: values
+            .expand<Transect>((placette) => placette.transects?.values ?? [])
+            .toList());
+  }
 }

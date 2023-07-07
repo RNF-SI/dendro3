@@ -23,6 +23,12 @@ class TransectsDatabaseImpl implements TransectsDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  static getCorCyclePlacetteTransects(
+      Database db, final int corCyclePlacetteId) async {
+    return await db.query(_tableName,
+        where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
+  }
+
   // @override
   // Future<void> updateTransect(final TransectEntity transect) async {
   //   final db = await database;

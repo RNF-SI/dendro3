@@ -5,6 +5,7 @@ import 'package:dendro3/data/datasource/implementation/database/regenerations_da
 import 'package:dendro3/data/datasource/implementation/database/transects_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
+import 'package:dendro3/data/entity/transects_entity.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -62,8 +63,18 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
 
   static Future<List<CorCyclePlacetteEntity>> getPlacetteCorCyclesPlacettes(
       Database db, final int placetteId) async {
-    return await db
+    CorCyclePlacetteListEntity corCyclePlacetteList = await db
         .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+
+    var transectObj;
+
+    return Future.wait(corCyclePlacetteList
+        .map((CorCyclePlacetteEntity corCyclePlacetteEntity) async {
+      TransectListEntity transectObj =
+          await TransectsDatabaseImpl.getCorCyclePlacetteTransects(
+              db, corCyclePlacetteEntity["id_cycle_placette"]);
+      return {...corCyclePlacetteEntity, 'transects': transectObj};
+    }).toList());
   }
 
   @override

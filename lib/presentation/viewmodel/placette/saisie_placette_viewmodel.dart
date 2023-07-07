@@ -10,6 +10,7 @@ import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -56,6 +57,11 @@ class SaisiePlacetteViewModel
       final bmsListViewModel =
           ref.read(bmSup30ListViewModelStateNotifierProvider.notifier);
       bmsListViewModel.setBmSup30List(placette.bmsSup30!);
+
+      final transectListViewModel =
+          ref.read(transectListViewModelStateNotifierProvider.notifier);
+      transectListViewModel
+          .setTransectList(placette.corCyclesPlacettes!.allTransects);
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);
     } catch (e) {

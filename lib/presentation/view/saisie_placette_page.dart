@@ -196,7 +196,20 @@ Widget __buildAsyncPlacetteListWidget(
                     child: Text("BmsSup30"),
                   ),
                 ),
-              )
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8.0),
+                  // height: 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      displayableListNotifier.setDisplayableList(
+                          ref, 'Transects');
+                    },
+                    child: Text("Transects"),
+                  ),
+                ),
+              ),
             ],
           )
         ],
