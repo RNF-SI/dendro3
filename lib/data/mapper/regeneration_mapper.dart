@@ -21,8 +21,8 @@ class RegenerationMapper {
         classe1: entity['classe1'],
         classe2: entity['classe2'],
         classe3: entity['classe3'],
-        taillis: entity['taillis'],
-        abroutissement: entity['abroutissement'],
+        taillis: entity['taillis'] == true ? true : false,
+        abroutissement: entity['abroutissement'] == true ? true : false,
         idNomenclatureAbroutissement: entity['id_nomenclature_abroutissement'],
         observation: entity['observation']);
   }
@@ -37,8 +37,8 @@ class RegenerationMapper {
       'classe1': model.classe1,
       'classe2': model.classe2,
       'classe3': model.classe3,
-      'taillis': model.taillis,
-      'abroutissement': model.abroutissement,
+      'taillis': model.taillis == true ? true : false,
+      'abroutissement': model.abroutissement == true ? true : false,
       'id_nomenclature_abroutissement': model.idNomenclatureAbroutissement,
       'observation': model.observation,
     };

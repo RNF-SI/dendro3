@@ -24,6 +24,11 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  static getCorCyclePlacetteRegenerations(
+      Database db, final int corCyclePlacetteId) async {
+    return await db.query(_tableName,
+        where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
+  }
   // @override
   // Future<void> updateRegeneration(final RegenerationEntity regeneration) async {
   //   final db = await database;

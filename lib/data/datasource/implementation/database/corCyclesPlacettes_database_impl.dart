@@ -5,6 +5,7 @@ import 'package:dendro3/data/datasource/implementation/database/regenerations_da
 import 'package:dendro3/data/datasource/implementation/database/transects_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
+import 'package:dendro3/data/entity/regenerations_entity.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:path/path.dart';
@@ -73,7 +74,14 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       TransectListEntity transectObj =
           await TransectsDatabaseImpl.getCorCyclePlacetteTransects(
               db, corCyclePlacetteEntity["id_cycle_placette"]);
-      return {...corCyclePlacetteEntity, 'transects': transectObj};
+      RegenerationListEntity regenerationObj =
+          await RegenerationsDatabaseImpl.getCorCyclePlacetteRegenerations(
+              db, corCyclePlacetteEntity["id_cycle_placette"]);
+      return {
+        ...corCyclePlacetteEntity,
+        'transects': transectObj,
+        'regenerations': regenerationObj
+      };
     }).toList());
   }
 

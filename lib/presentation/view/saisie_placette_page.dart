@@ -210,6 +210,19 @@ Widget __buildAsyncPlacetteListWidget(
                   ),
                 ),
               ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8.0),
+                  // height: 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      displayableListNotifier.setDisplayableList(
+                          ref, 'Regenerations');
+                    },
+                    child: Text("Regenerations"),
+                  ),
+                ),
+              ),
             ],
           )
         ],

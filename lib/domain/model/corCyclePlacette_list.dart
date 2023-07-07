@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/model/corCyclePlacette.dart'; // import 'package:clean_architecture_corCyclePlacette_app/domain/model/corCyclePlacette_id.dart';
+import 'package:dendro3/domain/model/regeneration.dart';
+import 'package:dendro3/domain/model/regeneration_list.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
@@ -49,6 +51,14 @@ class CorCyclePlacetteList
     return TransectList(
         values: values
             .expand<Transect>((placette) => placette.transects?.values ?? [])
+            .toList());
+  }
+
+  RegenerationList get allRegenerations {
+    return RegenerationList(
+        values: values
+            .expand<Regeneration>(
+                (placette) => placette.regenerations?.values ?? [])
             .toList());
   }
 }
