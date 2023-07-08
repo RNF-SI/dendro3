@@ -39,7 +39,13 @@ class TransectsDatabaseImpl implements TransectsDatabase {
       int? maxId = Sqflite.firstIntValue(
           await txn.rawQuery('SELECT MAX(id_transect) FROM $_tableName'));
 
+      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
+          'SELECT MAX(id_transect_orig) FROM $_tableName WHERE id_cycle_placette = ?',
+          [transect['id_cycle_placette']]));
+
       transect['id_transect'] = maxId! + 1;
+      transect['id_transect_orig'] = maxIdOrig! + 1;
+
       await txn.insert(
         _tableName,
         transect,
