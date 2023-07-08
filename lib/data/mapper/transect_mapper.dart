@@ -56,6 +56,68 @@ class TransectMapper {
     };
   }
 
+  static TransectEntity transformToNewEntityMap(
+    int idCyclePlacette,
+    String codeEssence,
+    String refTransect,
+    double? distance,
+    double? orientation,
+    double? azimutSouche,
+    double? distanceSouche,
+    double diametre,
+    double? diametre130,
+    bool? ratioHauteur,
+    bool contact,
+    double angle,
+    bool chablis,
+    int stadeDurete,
+    int stadeEcorce,
+    String? observation,
+  ) {
+    return {
+      'id_transect': null,
+      'id_cycle_placette': idCyclePlacette,
+      'id_transect_orig': null,
+      'code_essence': codeEssence,
+      'ref_transect': refTransect,
+      'distance': distance,
+      'orientation': orientation,
+      'azimut_souche': azimutSouche,
+      'distance_souche': distanceSouche,
+      'diametre': diametre,
+      'diametre_130': diametre130,
+      'ratio_hauteur': ratioHauteur == true ? true : false,
+      'contact': contact == true ? true : false,
+      'angle': angle,
+      'chablis': chablis == true ? true : false,
+      'stade_durete': stadeDurete,
+      'stade_ecorce': stadeEcorce,
+      'observation': observation
+    };
+  }
+
+  static Transect transformToModel(TransectEntity transectsEntity) {
+    return Transect(
+        idTransect: transectsEntity['id_transect'],
+        idCyclePlacette: transectsEntity['id_cycle_placette'],
+        idTransectOrig: transectsEntity['id_transect_orig'],
+        codeEssence: transectsEntity['code_essence'],
+        refTransect: transectsEntity['ref_transect'],
+        distance: transectsEntity['distance'],
+        orientation: transectsEntity['orientation'],
+        azimutSouche: transectsEntity['azimut_souche'],
+        distanceSouche: transectsEntity['distance_souche'],
+        diametre: transectsEntity['diametre'],
+        diametre130: transectsEntity['diametre_130'],
+        ratioHauteur: transectsEntity['ratio_hauteur'] == true ? true : false,
+        contact: transectsEntity['contact'] == true ? true : false,
+        angle: transectsEntity['angle'],
+        chablis: transectsEntity['chablis'] == true ? true : false,
+        stadeDurete: transectsEntity['stade_durete'],
+        stadeEcorce: transectsEntity['stade_ecorce'],
+        observation: transectsEntity['observation']);
+  }
+
   // static TransectEntity transformToNewEntityMap(
   //   final String name,
   //   final int idOrganisme,

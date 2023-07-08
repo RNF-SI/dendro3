@@ -44,6 +44,50 @@ class RegenerationMapper {
     };
   }
 
+  static RegenerationEntity transformToNewEntityMap(
+      final int idCyclePlacette,
+      final int sousPlacette,
+      final String codeEssence,
+      final double recouvrement,
+      final int classe1,
+      final int classe2,
+      final int classe3,
+      final bool taillis,
+      final bool abroutissement,
+      int? idNomenclatureAbroutissement,
+      String? observation) {
+    return {
+      'id_regeneration': null,
+      'id_cycle_placette': idCyclePlacette,
+      'sous_placette': sousPlacette,
+      'code_essence': codeEssence,
+      'recouvrement': recouvrement,
+      'classe1': classe1,
+      'classe2': classe2,
+      'classe3': classe3,
+      'taillis': taillis == true ? true : false,
+      'abroutissement': abroutissement == true ? true : false,
+      'id_nomenclature_abroutissement': idNomenclatureAbroutissement,
+      'observation': observation,
+    };
+  }
+
+  static Regeneration transformToModel(RegenerationEntity regenerationsEntity) {
+    return Regeneration(
+        idRegeneration: regenerationsEntity['id_regeneration'],
+        idCyclePlacette: regenerationsEntity['id_cycle_placette'],
+        sousPlacette: regenerationsEntity['sous_placette'],
+        codeEssence: regenerationsEntity['code_essence'],
+        recouvrement: regenerationsEntity['recouvrement'],
+        classe1: regenerationsEntity['classe'],
+        classe2: regenerationsEntity['classe'],
+        classe3: regenerationsEntity['classe'],
+        taillis: regenerationsEntity['taillis'],
+        abroutissement: regenerationsEntity['abroutissement'],
+        idNomenclatureAbroutissement:
+            regenerationsEntity['id_nomenclature_abroutissement'],
+        observation: regenerationsEntity['observation']);
+  }
   // static RegenerationEntity transformToNewEntityMap(
   //   final String name,
   //   final int idOrganisme,
