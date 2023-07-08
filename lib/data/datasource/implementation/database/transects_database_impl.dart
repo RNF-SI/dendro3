@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class TransectsDatabaseImpl implements TransectsDatabase {
   static const _tableName = 't_transects';
+  static const _columnId = 'id_transects';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -27,6 +28,29 @@ class TransectsDatabaseImpl implements TransectsDatabase {
       Database db, final int corCyclePlacetteId) async {
     return await db.query(_tableName,
         where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
+  }
+
+  @override
+  // Function called when one transect is added
+  Future<TransectEntity> addTransect(final TransectEntity transect) async {
+    final db = await database;
+    late final TransectEntity transectEntity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_transect) FROM $_tableName'));
+
+      transect['id_transect'] = maxId! + 1;
+      await txn.insert(
+        _tableName,
+        transect,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      transectEntity = results.first;
+    });
+    return transectEntity;
   }
 
   // @override

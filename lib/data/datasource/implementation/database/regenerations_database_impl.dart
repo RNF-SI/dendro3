@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   static const _tableName = 't_regenerations';
+  static const _columnId = 'id_regeneration';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -29,6 +30,31 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     return await db.query(_tableName,
         where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
   }
+
+  @override
+  // Function called when one regeneration is added
+  Future<RegenerationEntity> addRegeneration(
+      final RegenerationEntity regeneration) async {
+    final db = await database;
+    late final RegenerationEntity regenerationEntity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_regeneration) FROM $_tableName'));
+
+      regeneration['id_regeneration'] = maxId! + 1;
+      await txn.insert(
+        _tableName,
+        regeneration,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      regenerationEntity = results.first;
+    });
+    return regenerationEntity;
+  }
+
   // @override
   // Future<void> updateRegeneration(final RegenerationEntity regeneration) async {
   //   final db = await database;

@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class ReperesDatabaseImpl implements ReperesDatabase {
   static const _tableName = 't_reperes';
+  static const _columnId = 'id_reperes';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -27,6 +28,29 @@ class ReperesDatabaseImpl implements ReperesDatabase {
       Database db, int placetteId) async {
     return await db
         .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+  }
+
+  @override
+  // Function called when one repere is added
+  Future<RepereEntity> addRepere(final RepereEntity repere) async {
+    final db = await database;
+    late final RepereEntity repereEntity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_repere) FROM $_tableName'));
+
+      repere['id_repere'] = maxId! + 1;
+      await txn.insert(
+        _tableName,
+        repere,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      repereEntity = results.first;
+    });
+    return repereEntity;
   }
   // @override
   // Future<void> updateRepere(final RepereEntity repere) async {
