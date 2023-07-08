@@ -1,5 +1,6 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/repere.dart';
+import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'displayable_list.dart';
@@ -7,7 +8,7 @@ import 'displayable_list.dart';
 part 'repere_list.freezed.dart';
 
 @freezed
-class RepereList with _$RepereList implements DisplayableList {
+class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   const factory RepereList({required List<Repere> values}) = _RepereList;
 
   const RepereList._();
@@ -44,4 +45,12 @@ class RepereList with _$RepereList implements DisplayableList {
             displayedColumnType: displayedColumnType,
             displayedMesureColumnType: displayedMesureColumnType);
       }).toList();
+
+  @override
+  addItemToList(final dynamic item) {
+    if (item is Repere) {
+      return copyWith(values: [...values, item]);
+    }
+    throw ArgumentError('Item must be of type Repere');
+  }
 }

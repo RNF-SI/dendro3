@@ -1,12 +1,15 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
+import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'regeneration_list.freezed.dart';
 
 @freezed
-class RegenerationList with _$RegenerationList implements DisplayableList {
+class RegenerationList
+    with _$RegenerationList
+    implements ViewModelObject, DisplayableList {
   const factory RegenerationList({required List<Regeneration> values}) =
       _RegenerationList;
 
@@ -48,4 +51,12 @@ class RegenerationList with _$RegenerationList implements DisplayableList {
             displayedColumnType: displayedColumnType,
             displayedMesureColumnType: displayedMesureColumnType);
       }).toList();
+
+  @override
+  addItemToList(final dynamic item) {
+    if (item is Regeneration) {
+      return copyWith(values: [...values, item]);
+    }
+    throw ArgumentError('Item must be of type Repere');
+  }
 }
