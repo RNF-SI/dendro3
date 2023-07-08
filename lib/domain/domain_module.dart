@@ -7,6 +7,12 @@ import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/create_regeneration_usecase.dart';
+import 'package:dendro3/domain/usecase/create_regeneration_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/create_repere_usecase.dart';
+import 'package:dendro3/domain/usecase/create_repere_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/create_transect_usecase.dart';
+import 'package:dendro3/domain/usecase/create_transect_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
@@ -103,3 +109,13 @@ final createCorCyclePlacetteUseCaseProvider =
     Provider<CreateCorCyclePlacetteUseCase>((ref) =>
         CreateCorCyclePlacetteUseCaseImpl(
             ref.watch(corCyclePlacetteRepositoryProvider)));
+
+final createRepereUseCaseProvider = Provider<CreateRepereUseCase>(
+    (ref) => CreateRepereUseCaseImpl(ref.watch(repereRepositoryProvider)));
+
+final createRegenerationUseCaseProvider = Provider<CreateRegenerationUseCase>(
+    (ref) => CreateRegenerationUseCaseImpl(
+        ref.watch(regenerationRepositoryProvider)));
+
+final createTransectUseCaseProvider = Provider<CreateTransectUseCase>(
+    (ref) => CreateTransectUseCaseImpl(ref.watch(transectRepositoryProvider)));

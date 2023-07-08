@@ -9,6 +9,9 @@ import 'package:dendro3/data/datasource/implementation/database/cycles_database_
 import 'package:dendro3/data/datasource/implementation/database/essences_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/regenerations_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/transects_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
 import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
@@ -20,6 +23,9 @@ import 'package:dendro3/data/datasource/interface/database/cycles_database.dart'
 import 'package:dendro3/data/datasource/interface/database/essences_database.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
+import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
+import 'package:dendro3/data/datasource/interface/database/reperes_database.dart';
+import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/repository/arbre_repository_impl.dart';
 import 'package:dendro3/data/repository/arbres_mesures_repository_impl.dart';
 import 'package:dendro3/data/repository/bmSup30_repository_impl.dart';
@@ -30,6 +36,9 @@ import 'package:dendro3/data/repository/dispositifs_repository_impl.dart';
 import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/data/repository/global_database_repository_impl.dart';
 import 'package:dendro3/data/repository/placettes_repository_impl.dart';
+import 'package:dendro3/data/repository/regenerations_repository_impl.dart';
+import 'package:dendro3/data/repository/reperes_repository_impl.dart';
+import 'package:dendro3/data/repository/transects_repository_impl.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
@@ -43,6 +52,9 @@ import 'package:dendro3/domain/repository/authentication_repository.dart';
 import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/repository/global_database_repository.dart';
 import 'package:dendro3/domain/repository/placettes_repository.dart';
+import 'package:dendro3/domain/repository/regenerations_repository.dart';
+import 'package:dendro3/domain/repository/reperes_repository.dart';
+import 'package:dendro3/domain/repository/transects_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'datasource/interface/database/dispositifs_database.dart';
@@ -118,3 +130,19 @@ final corCyclePlacetteRepositoryProvider =
     Provider<CorCyclesPlacettesRepository>((ref) =>
         CorCyclesPlacettesRepositoryImpl(
             ref.watch(CorCyclePlacetteDatabaseProvider)));
+
+final RepereDatabaseProvider =
+    Provider<ReperesDatabase>((_) => ReperesDatabaseImpl());
+final repereRepositoryProvider = Provider<ReperesRepository>(
+    (ref) => ReperesRepositoryImpl(ref.watch(RepereDatabaseProvider)));
+
+final RegenerationDatabaseProvider =
+    Provider<RegenerationsDatabase>((_) => RegenerationsDatabaseImpl());
+final regenerationRepositoryProvider = Provider<RegenerationsRepository>(
+    (ref) =>
+        RegenerationsRepositoryImpl(ref.watch(RegenerationDatabaseProvider)));
+
+final TransectDatabaseProvider =
+    Provider<TransectsDatabase>((_) => TransectsDatabaseImpl());
+final transectRepositoryProvider = Provider<TransectsRepository>(
+    (ref) => TransectsRepositoryImpl(ref.watch(TransectDatabaseProvider)));
