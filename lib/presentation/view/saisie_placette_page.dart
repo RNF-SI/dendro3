@@ -1,11 +1,9 @@
-import 'package:dendro3/domain/model/arbre.dart';
-import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/displayable_button.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -172,68 +170,36 @@ Widget __buildAsyncPlacetteListWidget(
           ),
           Row(
             children: [
-              Expanded(
-                child: Container(
-                  // height: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      displayableListNotifier.setDisplayableList(ref, 'Arbres');
-                    },
-                    child: Text("Arbres"),
-                  ),
-                ),
+              DisplayableButton(
+                onPressed: () {
+                  displayableListNotifier.setDisplayableList(ref, 'Arbres');
+                },
+                text: "Arbres",
               ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 8.0),
-                  // height: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      displayableListNotifier.setDisplayableList(
-                          ref, 'BmsSup30');
-                    },
-                    child: Text("BmsSup30"),
-                  ),
-                ),
+              DisplayableButton(
+                onPressed: () {
+                  displayableListNotifier.setDisplayableList(ref, 'BmsSup30');
+                },
+                text: "BmsSup30",
               ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 8.0),
-                  // height: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      displayableListNotifier.setDisplayableList(
-                          ref, 'Transects');
-                    },
-                    child: Text("Transects"),
-                  ),
-                ),
+              DisplayableButton(
+                onPressed: () {
+                  displayableListNotifier.setDisplayableList(ref, 'Transects');
+                },
+                text: "Transects",
               ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 8.0),
-                  // height: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      displayableListNotifier.setDisplayableList(
-                          ref, 'Regenerations');
-                    },
-                    child: Text("Regenerations"),
-                  ),
-                ),
+              DisplayableButton(
+                onPressed: () {
+                  displayableListNotifier.setDisplayableList(
+                      ref, 'Regenerations');
+                },
+                text: 'Regenerations',
               ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 8.0),
-                  // height: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      displayableListNotifier.setDisplayableList(
-                          ref, 'Reperes');
-                    },
-                    child: Text("Repères"),
-                  ),
-                ),
+              DisplayableButton(
+                onPressed: () {
+                  displayableListNotifier.setDisplayableList(ref, 'Reperes');
+                },
+                text: "Repères",
               ),
             ],
           )
