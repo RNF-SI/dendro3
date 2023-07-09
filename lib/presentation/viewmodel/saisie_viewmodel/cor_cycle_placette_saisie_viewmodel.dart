@@ -1,33 +1,14 @@
 import 'dart:ffi';
 
-import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:dendro3/domain/domain_module.dart';
-import 'package:dendro3/domain/model/arbre.dart';
-import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/arbre_id.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
-import 'package:dendro3/domain/model/essence.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
-import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
 import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
-import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:dendro3/presentation/state/state.dart';
 
 //TODO: à clean et revoir lorsque ce sera fini
 
