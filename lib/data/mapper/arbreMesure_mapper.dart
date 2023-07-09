@@ -32,7 +32,7 @@ class ArbreMesureMapper {
         idNomenclatureCodeSanitaire: entity['id_nomenclature_code_sanitaire'],
         codeEcolo: entity['code_ecolo'],
         refCodeEcolo: entity['ref_code_ecolo'],
-        ratioHauteur: entity['ratio_hauteur'],
+        ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
         observation: entity['observation']);
   }
 
