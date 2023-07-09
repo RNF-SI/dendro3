@@ -4,8 +4,6 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
-import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
@@ -150,6 +148,7 @@ Widget __buildAsyncPlacetteListWidget(
     success: (data) {
       final displayableListNotifier =
           ref.watch(displayableListProvider.notifier);
+      final displayTypeState = ref.watch(displayTypeProvider);
 
       return Column(
         children: [
@@ -169,7 +168,7 @@ Widget __buildAsyncPlacetteListWidget(
                 );
               },
             )),
-            child: const Text('Ajouter un Arbre'),
+            child: Text('Ajouter un $displayTypeState'),
           ),
           Row(
             children: [
