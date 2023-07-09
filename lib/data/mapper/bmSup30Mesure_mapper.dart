@@ -22,7 +22,7 @@ class BmSup30MesureMapper {
       diametreFin: entity['diametre_fin'],
       diametre130: entity['diametre_130'],
       longueur: entity['longueur'],
-      ratioHauteur: entity['ratio_hauteur'],
+      ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
       contact: entity['contact'],
       chablis: entity['chablis'] == true ? true : false,
       stadeDurete: entity['stade_durete'],
