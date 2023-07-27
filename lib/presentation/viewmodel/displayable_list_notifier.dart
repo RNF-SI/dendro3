@@ -18,7 +18,6 @@ class DisplayableListNotifier extends StateNotifier<DisplayableList> {
   DisplayableListNotifier(Ref ref) : super(ref.watch(arbreListProvider));
 
   void setDisplayableList(WidgetRef ref, String type) {
-    ref.watch(displayTypeProvider.notifier).state = type;
     switch (type) {
       case 'Arbres':
         state = ref.watch(arbreListProvider);
