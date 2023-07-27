@@ -320,8 +320,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   String? validateDistance() {
     if (_distance == null) {
       return 'Enter a distance.';
-    } else if (_distance! < 0 || _distance! > 40) {
-      return 'La valeur doit être entre 0 et 40';
+    } else if (_distance! < 0 || _distance! > 100) {
+      return 'La valeur doit être entre 0 et 100';
     } else {
       return null;
     }
@@ -444,9 +444,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         onChanged: (value) => setDiametre1(value),
         validator: (value) {
           // Vérifier si la valeur en grade est entre 0 et 400
-          if (int.parse(value!) < 0 || int.parse(value) > 400) {
-            return 'La valeur doit être entre 0 et 400 gr';
-          }
+          // if (int.parse(value!) < 0 || int.parse(value) > 400) {
+          //   return 'La valeur doit être entre 0 et 400 gr';
+          // }
           return null;
         },
         initialValue: '',
