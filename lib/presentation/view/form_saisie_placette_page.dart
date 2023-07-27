@@ -6,6 +6,7 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
+import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
@@ -15,6 +16,9 @@ import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/arbre_saisie_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/transect_saisie_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/regeneration_saisie_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/repere_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/cor_cycle_placette_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
@@ -90,7 +94,7 @@ class FormSaisiePlacettePageState
     // Build a Form widget using the _formKey created above.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter un $widget.type'),
+        title: Text('Ajouter un ${widget.type}'),
       ),
       body: Padding(
         // height: 100,
@@ -311,7 +315,7 @@ class CheckboxFormField extends FormField<bool> {
 
 ObjectSaisieViewModel getViewModel(ref, String type, widget) {
   switch (type) {
-    case 'arbre':
+    case 'Arbres':
       return ref.read(arbreSaisieViewModelProvider({
         'cycle': widget.cycle,
         'placette': widget.placette,
@@ -319,9 +323,27 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
         'arbreMesure': widget.saisisableObject2,
       }));
     // return ArbreViewModel();
-    case 'bms':
+    case 'BmsSup30':
+    // return ref.read(bmsSaisieViewModelProvider({
+    //   'cycle': widget.cycle,
+    //   'placette': widget.placette,
+    //   'bms': widget.saisisableObject1,
+    //   'bmsMesure': widget.saisisableObject2,
+    // }));
     // return BmsViewModel();
     // ...other types
+    case 'Transects':
+      return ref.read(transectSaisieViewModelProvider({
+        'transects': widget.saisisableObject1,
+      }));
+    case 'Regenerations':
+      return ref.read(regenerationSaisieViewModelProvider({
+        'regenerations': widget.saisisableObject1,
+      }));
+    case 'Repères':
+      return ref.read(repereSaisieViewModelProvider({
+        'reperes': widget.saisisableObject1,
+      }));
     case 'corCyclePlacette':
       return ref.read(corCyclePlacetteSaisieViewModelProvider({
         'cycle': widget.cycle,
