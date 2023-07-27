@@ -14,6 +14,7 @@ import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
@@ -52,7 +53,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   // Placette placette;
   // Cycle cycle;
 
-  var _codeEssence;
+  var _codeEssence = '';
 
   late TransectId idTransect;
 
@@ -184,7 +185,134 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
 
   @override
   List<FieldConfig> getFormConfig() {
-    return [];
+    return [
+      TextFieldConfig(
+        fieldName: 'refTransect',
+        initialValue: _refTransect.toString(),
+        hintText: 'Veuillez entrer le nom du transect',
+      ),
+      TextFieldConfig(
+        fieldName: 'Distance',
+        initialValue: initialDistanceValue(),
+        keyboardType: TextInputType.number,
+        onChanged: (value) => _distance = double.parse(value),
+        hintText: 'Veuillez entrer le code',
+      ),
+      TextFieldConfig(
+        fieldName: 'Orientation',
+        initialValue: initialOrientationValue(),
+        keyboardType: TextInputType.number,
+        onChanged: (value) => _orientation = double.parse(value),
+        hintText: 'Veuillez entrer le code',
+      ),
+      TextFieldConfig(
+        fieldName: 'AzimutSouche',
+        initialValue: initialAzimutSoucheValue(),
+        keyboardType: TextInputType.number,
+        onChanged: (value) => _azimutSouche = double.parse(value),
+        hintText: 'Veuillez entrer le code',
+      ),
+      TextFieldConfig(
+        fieldName: 'DistanceSouche',
+        initialValue: initialDistanceSoucheValue(),
+        keyboardType: TextInputType.number,
+        onChanged: (value) => _distanceSouche = double.parse(value),
+        hintText: 'Veuillez entrer le code',
+      ),
+
+      TextFieldConfig(
+        fieldName: 'Diametre',
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+          DecimalTextInputFormatter(decimalRange: 1),
+        ],
+        hintText: "Veuillez entrer le diametre",
+        onChanged: (value) => setDiametre(value),
+        validator: (value) {
+          // Vérifier si la valeur en grade est entre 0 et 400
+          // if (int.parse(value!) < 0 || int.parse(value) > 400) {
+          //   return 'La valeur doit être entre 0 et 400 gr';
+          // }
+          return null;
+        },
+        initialValue: '',
+      ),
+
+      TextFieldConfig(
+        fieldName: 'Diametre130',
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+          DecimalTextInputFormatter(decimalRange: 1),
+        ],
+        hintText: "Veuillez entrer le diametre",
+        onChanged: (value) => setDiametre130(value),
+        validator: (value) {
+          // Vérifier si la valeur en grade est entre 0 et 400
+          // if (int.parse(value!) < 0 || int.parse(value) > 400) {
+          //   return 'La valeur doit être entre 0 et 400 gr';
+          // }
+          return null;
+        },
+        initialValue: '',
+      ),
+
+      // TextFieldConfig(
+      //   fieldName: 'Diametre',
+      //   initialValue: initialDiametreValue(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _diametre = double.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
+      // TextFieldConfig(
+      //   fieldName: 'Diametre130',
+      //   initialValue: initialDiametre130Value(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _diametre130 = double.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
+      CheckboxFieldConfig(
+        fieldName: 'RatioHauteur',
+        initialValue: initialRatioHauteur(),
+        onSaved: (value) => _ratioHauteur = value == 'true',
+      ),
+      CheckboxFieldConfig(
+        fieldName: 'Contact',
+        initialValue: initialContact(),
+        onSaved: (value) => _contact = value == 'true',
+      ),
+      TextFieldConfig(
+        fieldName: 'Angle',
+        initialValue: initialAngleValue(),
+        keyboardType: TextInputType.number,
+        onChanged: (value) => _angle = double.parse(value),
+        hintText: 'Veuillez entrer le code',
+      ),
+      CheckboxFieldConfig(
+        fieldName: 'Chablis',
+        initialValue: initialChablis(),
+        onSaved: (value) => _chablis = value == 'true',
+      ),
+      DropdownFieldConfig<dynamic>(
+        fieldName: 'stadeDurete',
+        value: _stadeDurete,
+        items: ['', '1', '2', '3', '4', '5'],
+        onChanged: (value) => setStadeDurete(initialStadeDureteValue()),
+      ),
+      DropdownFieldConfig<dynamic>(
+        fieldName: 'stadeEcorce',
+        value: _stadeEcorce,
+        items: ['', '1', '2', '3', '4'],
+        onChanged: (value) => setStadeEcorce(initialStadeEcorceValue()),
+      ),
+      TextFieldConfig(
+        fieldName: 'observation',
+        hintText: "Veuillez entrer le observation",
+        onChanged: (value) => setObservation(value),
+        initialValue: '',
+      ),
+    ];
   }
 
   // fonction d'Initialisation
@@ -211,8 +339,8 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   setOrientation(final double value) => _orientation = value;
   setAzimutSouche(final double value) => _azimutSouche = value;
   setDistanceSouche(final double value) => _distanceSouche = value;
-  setDiametre(final double value) => _diametre = value;
-  setDiametre130(final double value) => _diametre130 = value;
+  setDiametre(final String value) => _diametre = double.parse(value);
+  setDiametre130(final String value) => _diametre130 = double.parse(value);
   setRatioHauteur(final bool value) => _ratioHauteur = value;
   setContact(final bool value) => _contact = value;
   setAngle(final double value) => _angle = value;
@@ -220,4 +348,31 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   setStadeDurete(final int value) => _stadeDurete = value;
   setStadeEcorce(final int value) => _stadeEcorce = value;
   setObservation(final String value) => _observation = value;
+
+  String initialDistanceValue() =>
+      _distance != null ? _distance.toString() : '';
+  String initialOrientationValue() =>
+      _orientation != null ? _orientation.toString() : '';
+
+  String initialAzimutSoucheValue() =>
+      _azimutSouche != null ? _azimutSouche.toString() : '';
+
+  String initialDistanceSoucheValue() =>
+      _distanceSouche != null ? _distanceSouche.toString() : '';
+
+  initialDiametreValue() {}
+
+  initialDiametre130Value() {}
+
+  bool initialRatioHauteur() => _ratioHauteur ?? false;
+
+  bool initialContact() => _contact ?? false;
+
+  String initialAngleValue() => _angle != null ? _angle.toString() : '';
+
+  bool initialChablis() => _chablis ?? false;
+
+  int initialStadeDureteValue() => _stadeDurete ?? 0;
+
+  int initialStadeEcorceValue() => _stadeEcorce ?? 0;
 }
