@@ -29,7 +29,7 @@ class PlacettePage extends ConsumerWidget {
         appBar: AppBar(
           title: Row(
             children: [
-              Text('Saisie Placette ${placette.idPlacetteOrig}'),
+              Text('Placette ${placette.idPlacetteOrig}'),
               const SizedBox(width: 8),
               Text(
                 '(DISP ${placette.idDispositif})',
