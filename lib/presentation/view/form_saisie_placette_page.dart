@@ -16,6 +16,7 @@ import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/arbre_saisie_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/bmSup30_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/transect_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/regeneration_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/repere_saisie_viewmodel.dart';
@@ -324,12 +325,12 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
       }));
     // return ArbreViewModel();
     case 'BmsSup30':
-    // return ref.read(bmsSaisieViewModelProvider({
-    //   'cycle': widget.cycle,
-    //   'placette': widget.placette,
-    //   'bms': widget.saisisableObject1,
-    //   'bmsMesure': widget.saisisableObject2,
-    // }));
+      return ref.read(bmsup30SaisieViewModelProvider({
+        'cycle': widget.cycle,
+        'placette': widget.placette,
+        'bms': widget.saisisableObject1,
+        'bmsMesure': widget.saisisableObject2,
+      }));
     // return BmsViewModel();
     // ...other types
     case 'Transects':
