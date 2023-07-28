@@ -6,6 +6,7 @@ class DropdownSearchConfig<T> extends FieldConfig {
   final bool Function(T, String) filterFn;
   final String Function(T)? itemAsString;
   final void Function(T)? onChanged;
+  final String? Function(dynamic)? validator;
 
   DropdownSearchConfig({
     required String fieldName,
@@ -15,6 +16,7 @@ class DropdownSearchConfig<T> extends FieldConfig {
     required this.asyncItems,
     this.selectedItem,
     this.itemAsString,
+    this.validator,
     this.onChanged,
     required this.filterFn,
   }) : super(
