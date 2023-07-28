@@ -107,7 +107,18 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Saisie Placette ${widget.placette.idPlacette}'),
+        title: Row(
+          children: [
+            Text('Saisie Placette ${widget.placette.idPlacetteOrig}'),
+            const SizedBox(width: 8),
+            Text(
+              '(DISP ${widget.placette.idDispositif})',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: (value) async {
