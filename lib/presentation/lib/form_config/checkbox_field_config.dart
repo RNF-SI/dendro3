@@ -7,7 +7,12 @@ class CheckboxFieldConfig extends FieldConfig {
 
   CheckboxFieldConfig({
     required String fieldName,
+    bool fieldRequired = false,
+    String fieldUnit = '',
     required this.initialValue,
     required this.onSaved,
-  }) : super(fieldName: fieldName);
+  }) : super(
+            fieldName: fieldName,
+            fieldRequired: fieldRequired,
+            fieldUnit: fieldUnit);
 }

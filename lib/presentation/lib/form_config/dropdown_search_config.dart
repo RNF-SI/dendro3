@@ -9,11 +9,16 @@ class DropdownSearchConfig<T> extends FieldConfig {
 
   DropdownSearchConfig({
     required String fieldName,
+    bool fieldRequired = false,
+    String fieldUnit = '',
     // required this.items,
     required this.asyncItems,
     this.selectedItem,
     this.itemAsString,
     this.onChanged,
     required this.filterFn,
-  }) : super(fieldName: fieldName);
+  }) : super(
+            fieldName: fieldName,
+            fieldRequired: fieldRequired,
+            fieldUnit: fieldUnit);
 }

@@ -15,6 +15,8 @@ class TextFieldConfig extends FieldConfig {
 
   TextFieldConfig({
     required String fieldName,
+    bool fieldRequired = false,
+    String fieldUnit = '',
     required this.initialValue,
     this.isEditable = true,
     this.validator,
@@ -24,5 +26,8 @@ class TextFieldConfig extends FieldConfig {
     // this.decoration,
     required this.hintText,
     this.onChanged,
-  }) : super(fieldName: fieldName);
+  }) : super(
+            fieldName: fieldName,
+            fieldRequired: fieldRequired,
+            fieldUnit: fieldUnit);
 }

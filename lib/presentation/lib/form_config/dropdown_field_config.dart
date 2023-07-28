@@ -7,8 +7,13 @@ class DropdownFieldConfig<T> extends FieldConfig {
 
   DropdownFieldConfig({
     required String fieldName,
+    fieldRequired = false,
+    String fieldUnit = '',
     required this.items,
     required this.value,
     this.onChanged,
-  }) : super(fieldName: fieldName);
+  }) : super(
+            fieldName: fieldName,
+            fieldRequired: fieldRequired,
+            fieldUnit: fieldUnit);
 }
