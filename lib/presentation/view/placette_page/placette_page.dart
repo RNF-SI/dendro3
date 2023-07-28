@@ -27,7 +27,18 @@ class PlacettePage extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Placette ${placette.idPlacetteOrig}'),
+          title: Row(
+            children: [
+              Text('Saisie Placette ${placette.idPlacetteOrig}'),
+              const SizedBox(width: 8),
+              Text(
+                '(DISP ${placette.idDispositif})',
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
           actions: <Widget>[
             PopupMenuButton<String>(
               onSelected: (value) async {
