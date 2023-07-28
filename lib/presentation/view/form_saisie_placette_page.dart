@@ -139,6 +139,7 @@ class FormSaisiePlacettePageState
             fillColor: Colors.grey,
             filled: true,
             hintText: field.hintText,
+            suffixText: field.fieldUnit,
           ),
         );
       } else if (field is DropdownSearchConfig) {
@@ -166,6 +167,7 @@ class FormSaisiePlacettePageState
           asyncItems: field.asyncItems,
           itemAsString: field.itemAsString,
           onChanged: field.onChanged,
+          validator: field.validator,
         );
 
         // return DropdownSearch<Essence> or whatever the widget should be
@@ -177,6 +179,7 @@ class FormSaisiePlacettePageState
           ),
           isExpanded: true,
           onChanged: field.onChanged,
+          validator: field.validator,
           items: field.items.map((String val) {
             return DropdownMenuItem(
               value: val,
@@ -215,7 +218,28 @@ class FormSaisiePlacettePageState
         children: [
           Expanded(
             flex: 1,
-            child: Text(field.fieldName),
+            child: Row(
+              children: [
+                Text(
+                  field.fieldName,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                if (field.fieldUnit != '')
+                  Text(
+                    ' ( ${field.fieldUnit})',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.grey,
+                      fontSize: 10,
+                    ),
+                  ),
+                if (field.fieldRequired)
+                  const Text(
+                    '*',
+                    style: TextStyle(color: Colors.red),
+                  ),
+              ],
+            ),
           ),
           Expanded(
             flex: 2,
