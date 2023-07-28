@@ -40,9 +40,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbreMesure'],
       ref.watch(getEssencesUseCaseProvider),
       arbreListViewModel);
-}
-        // ref.watch(insertArbreUseCaseProvider))
-        );
+});
 
 class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   // late final ListViewModel _baseListViewModel;
@@ -262,7 +260,6 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   String initialDistanceValue() =>
       _distance != null ? _distance.toString() : '';
   bool initialTaillisValue() => _taillis ?? true;
-  String initialObservationValue() => _observation ?? '';
 
   int initialStadeDureteValue() => _stadeDurete ?? 0;
   int initialStadeEcorceValue() => _stadeEcorce ?? 0;
@@ -307,9 +304,16 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setRatioHauteur(final bool value) => _ratioHauteur = value;
   setObservationMesure(final String value) => _observationMesure = value;
 
+  String? validateCodeEssence() {
+    if (_codeEssence == '') {
+      return 'Le champ code Essence est nécessaire.';
+    } else
+      return null;
+  }
+
   String? validateAzimut() {
     if (_azimut == null) {
-      return 'Enter a azimut.';
+      return 'Le champs azimut est nécessaire.';
     } else if (_azimut! < 0 || _azimut! > 400) {
       return 'La valeur doit être entre 0 et 400 gr';
     } else {
@@ -319,7 +323,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   String? validateDistance() {
     if (_distance == null) {
-      return 'Enter a distance.';
+      return 'Le champs distance est nécessaire.';
     } else if (_distance! < 0 || _distance! > 100) {
       return 'La valeur doit être entre 0 et 100';
     } else {
@@ -379,7 +383,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         // validator: ...,
       ),
       DropdownSearchConfig(
-        fieldName: 'Code Essence',
+        fieldName: 'Essence',
+        fieldRequired: true,
         asyncItems: (String filter) => getEssences(),
         selectedItem: initialEssence,
         filterFn: (dynamic essence, filter) =>
@@ -387,18 +392,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         itemAsString: (dynamic e) => e.codeEssence,
         onChanged: (dynamic? data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
+        validator: (dynamic? text) => validateCodeEssence(),
       ),
-
-      // TextFieldConfig(
-      //   fieldName: 'Azimut',
-      //   initialValue: initialAzimutValue(),
-      //   keyboardType: TextInputType.number,
-      //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      //   validator: (String? text) => validateAzimut(),
-      //   hintText: "Veuillez entrer l'azimut",
-      // ),
       TextFieldConfig(
         fieldName: 'Azimut',
+        fieldRequired: true,
+        fieldUnit: 'gr',
         initialValue: initialAzimutValue(),
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -409,6 +408,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
         fieldName: 'Distance',
+        fieldRequired: true,
+        fieldUnit: 'm',
         initialValue: initialDistanceValue(),
         keyboardType: TextInputType.number,
         inputFormatters: [
@@ -423,14 +424,6 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Taillis',
         initialValue: initialTaillisValue(),
         onSaved: (value) => setTaillis(value!),
-      ),
-      TextFieldConfig(
-        fieldName: 'Observation',
-        initialValue: initialObservationValue(),
-        hintText: "Veuillez entrer l'observation",
-        onChanged: (value) => setObservation(value),
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
       ),
 
       TextFieldConfig(
