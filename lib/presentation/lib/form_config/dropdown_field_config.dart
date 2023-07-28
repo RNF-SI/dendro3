@@ -11,6 +11,7 @@ class DropdownFieldConfig<T> extends FieldConfig {
     required String fieldName,
     fieldRequired = false,
     String fieldUnit = '',
+    String fieldInfo = '',
     required this.items,
     required this.value,
     this.validator,
@@ -18,5 +19,6 @@ class DropdownFieldConfig<T> extends FieldConfig {
   }) : super(
             fieldName: fieldName,
             fieldRequired: fieldRequired,
-            fieldUnit: fieldUnit);
+            fieldUnit: fieldUnit,
+            fieldInfo: fieldInfo);
 }

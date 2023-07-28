@@ -8,9 +8,11 @@ class DateFieldConfig extends FieldConfig {
     required String fieldName,
     fieldRequired = false,
     String fieldUnit = '',
+    String fieldInfo = '',
     required this.onDateSelected,
   }) : super(
             fieldName: fieldName,
             fieldRequired: fieldRequired,
-            fieldUnit: fieldUnit);
+            fieldUnit: fieldUnit,
+            fieldInfo: fieldInfo);
 }
