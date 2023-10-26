@@ -8,21 +8,23 @@ class DropdownSearchConfig<T> extends FieldConfig {
   final void Function(T)? onChanged;
   final String? Function(dynamic)? validator;
 
-  DropdownSearchConfig({
-    required String fieldName,
-    bool fieldRequired = false,
-    String fieldUnit = '',
-    String fieldInfo = '',
-    // required this.items,
-    required this.asyncItems,
-    this.selectedItem,
-    this.itemAsString,
-    this.validator,
-    this.onChanged,
-    required this.filterFn,
-  }) : super(
+  DropdownSearchConfig(
+      {required String fieldName,
+      bool fieldRequired = false,
+      String fieldUnit = '',
+      String fieldInfo = '',
+      // required this.items,
+      required this.asyncItems,
+      this.selectedItem,
+      this.itemAsString,
+      this.validator,
+      this.onChanged,
+      required this.filterFn,
+      final bool Function(Map<String, dynamic>)? isVisibleFn})
+      : super(
             fieldName: fieldName,
             fieldRequired: fieldRequired,
             fieldUnit: fieldUnit,
-            fieldInfo: fieldInfo);
+            fieldInfo: fieldInfo,
+            isVisibleFn: isVisibleFn);
 }

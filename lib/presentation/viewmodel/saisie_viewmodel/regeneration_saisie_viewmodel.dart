@@ -190,19 +190,28 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
       DropdownFieldConfig<dynamic>(
         fieldName: 'Classe ',
         value: _classe1,
-        items: ['', '1'],
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('1', '1'),
+        ],
         onChanged: (value) => setClasse1(initialClasse1()),
       ),
       DropdownFieldConfig<dynamic>(
         fieldName: 'Classe 2',
         value: _classe2,
-        items: ['0', '1'],
+        items: [
+          const MapEntry('0', '0'),
+          const MapEntry('1', '1'),
+        ],
         onChanged: (value) => setClasse2(initialClasse2()),
       ),
       DropdownFieldConfig<dynamic>(
         fieldName: 'Classe 3',
         value: _classe1,
-        items: ['', '3'],
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('3', '3'),
+        ],
         onChanged: (value) => setClasse1(initialClasse3()),
       ),
       CheckboxFieldConfig(

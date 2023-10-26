@@ -27,9 +27,11 @@ class TextFieldConfig extends FieldConfig {
     // this.decoration,
     required this.hintText,
     this.onChanged,
+    final bool Function(Map<String, dynamic>)? isVisibleFn,
   }) : super(
             fieldName: fieldName,
             fieldRequired: fieldRequired,
             fieldUnit: fieldUnit,
-            fieldInfo: fieldInfo);
+            fieldInfo: fieldInfo,
+            isVisibleFn: isVisibleFn);
 }

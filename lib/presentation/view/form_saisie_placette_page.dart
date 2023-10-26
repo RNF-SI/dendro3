@@ -88,6 +88,8 @@ class FormSaisiePlacettePageState
   //   if(distanceController.value!=null &&){
   late String _selectedValue = '1';
   List<String> listOfValue = ['1', '2', '3', '4', '5'];
+
+  Map<String, dynamic> formData = {};
   //   }
   // }
   @override
@@ -133,8 +135,14 @@ class FormSaisiePlacettePageState
           initialValue: field.initialValue,
           enabled: field.isEditable,
           validator: field.validator,
-          onChanged: field.onChanged,
+          onChanged: (value) {
+            setState(() {
+              formData[field.fieldName] = value;
+              field.onChanged;
+            });
+          },
           inputFormatters: field.inputFormatters,
+          keyboardType: field.keyboardType,
           decoration: InputDecoration(
             fillColor: Colors.grey,
             filled: true,
@@ -174,18 +182,16 @@ class FormSaisiePlacettePageState
       } else if (field is DropdownFieldConfig) {
         formWidget = DropdownButtonFormField(
           value: field.value,
-          hint: Text(
-            'choose one',
+          hint: const Text(
+            'Sélectionner un élément',
           ),
           isExpanded: true,
           onChanged: field.onChanged,
           validator: field.validator,
-          items: field.items.map((String val) {
+          items: field.items.map((MapEntry<String, String> entry) {
             return DropdownMenuItem(
-              value: val,
-              child: Text(
-                val,
-              ),
+              value: entry.key,
+              child: Text(entry.value),
             );
           }).toList(),
         );
@@ -214,38 +220,78 @@ class FormSaisiePlacettePageState
       } else {
         throw UnimplementedError('Unknown field type: ${field.runtimeType}');
       }
-      return Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Row(
-              children: [
-                Text(
-                  field.fieldName,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                if (field.fieldUnit != '')
+      return Visibility(
+        visible:
+            field.isVisibleFn != null ? field.isVisibleFn!(formData) : true,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   Text(
-                    ' ( ${field.fieldUnit})',
+                    field.fieldName.length > 18
+                        ? '${field.fieldName.substring(0, 18)}...'
+                        : field.fieldName,
                     style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey,
-                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
+                    overflow:
+                        TextOverflow.ellipsis, // Ajouter la propriété overflow
                   ),
-                if (field.fieldRequired)
-                  const Text(
-                    '*',
-                    style: TextStyle(color: Colors.red),
-                  ),
-              ],
+                  if (field.fieldUnit != '')
+                    Text(
+                      ' ( ${field.fieldUnit})',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                        fontSize: 10,
+                      ),
+                    ),
+                  if (field.fieldRequired)
+                    const Text(
+                      '*',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  if (field.fieldInfo != '')
+                    IconButton(
+                      padding: EdgeInsets.only(left: 0.0, right: 0.0),
+                      icon: const Icon(
+                        Icons.info_outline,
+                        color: Colors.grey,
+                        size: 12,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Information'),
+                              content: Text(field.fieldInfo),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: formWidget,
-          ),
-        ],
+            Expanded(
+              flex: 3,
+              child: formWidget,
+            ),
+          ],
+        ),
       );
     }).toList();
 

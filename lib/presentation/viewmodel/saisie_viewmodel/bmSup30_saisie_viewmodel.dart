@@ -481,13 +481,25 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       DropdownFieldConfig<dynamic>(
         fieldName: 'stadeDurete',
         value: _stadeDurete,
-        items: ['', '1', '2', '3', '4', '5'],
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('1', '1'),
+          const MapEntry('2', '2'),
+          const MapEntry('3', '3'),
+          const MapEntry('4', '4'),
+        ],
         onChanged: (value) => setStadeDurete(initialStadeDureteValue()),
       ),
       DropdownFieldConfig<dynamic>(
         fieldName: 'stadeEcorce',
         value: _stadeEcorce,
-        items: ['', '1', '2', '3', '4'],
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('1', '1'),
+          const MapEntry('2', '2'),
+          const MapEntry('3', '3'),
+          const MapEntry('4', '4'),
+        ],
         onChanged: (value) => setStadeEcorce(initialStadeEcorceValue()),
       ),
       TextFieldConfig(

@@ -91,6 +91,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   var _observationMesure = '';
   var _isNewArbreMesure = false;
 
+  bool isDiametre2Visible = false;
+
   ArbreSaisieViewModel(
     this.ref,
     this.cycle,
@@ -285,7 +287,15 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setObservation(final String value) => _observation = value;
 
   // setters ArbreMesure
-  setDiametre1(final String value) => _diametre1 = double.parse(value);
+  setDiametre1(final String value) {
+    _diametre1 = double.parse(value);
+    if (_diametre1! > 30) {
+      isDiametre2Visible = true;
+    } else {
+      isDiametre2Visible = false;
+    }
+  }
+
   setDiametre2(final String value) => _diametre2 = double.parse(value);
   setType(final String value) => _type = value;
   setHauteurTotale(final String value) => _hauteurTotale = double.parse(value);
@@ -330,6 +340,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       return null;
     }
   }
+
   // String? validateTitle() {
   //   if (_title.isEmpty) {
   //     return 'Enter a title.';
@@ -375,13 +386,13 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   @override
   List<FieldConfig> getFormConfig() {
     return [
-      TextFieldConfig(
-        fieldName: 'IdPlacette',
-        initialValue: initialIdPlacetteValue(),
-        isEditable: false,
-        hintText: 'Veuillez entrer le code',
-        // validator: ...,
-      ),
+      // TextFieldConfig(
+      //   fieldName: 'IdPlacette',
+      //   initialValue: initialIdPlacetteValue(),
+      //   isEditable: false,
+      //   hintText: 'Entrer le code',
+      //   // validator: ...,
+      // ),
       DropdownSearchConfig(
         fieldName: 'Essence',
         fieldRequired: true,
@@ -402,7 +413,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         validator: (String? text) => validateAzimut(),
-        hintText: "Veuillez entrer l'azimut",
+        hintText: "Entrer l'azimut",
         onChanged: (value) => setAzimut(value),
       ),
 
@@ -417,7 +428,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           DecimalTextInputFormatter(decimalRange: 1),
         ],
         validator: (String? text) => validateDistance(),
-        hintText: "Veuillez entrer la distance",
+        hintText: "Entrer la distance",
         onChanged: (value) => setDistance(value),
       ),
       CheckboxFieldConfig(
@@ -428,18 +439,29 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
         fieldName: 'Diametre1',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-          DecimalTextInputFormatter(decimalRange: 1),
+          FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}([.,]\d{0,1})?$')),
         ],
-        hintText: "Veuillez entrer le diametre1",
-        onChanged: (value) => setDiametre1(value),
+        fieldInfo: 'Diamètre apparent',
+        fieldUnit: 'cm',
+        fieldRequired: true,
+        hintText: "Entrer le diametre1",
+        onChanged: (value) {
+          setDiametre1(value);
+          // setState(() {});
+        },
         validator: (value) {
-          // Vérifier si la valeur en grade est entre 0 et 400
-          // if (int.parse(value!) < 0 || int.parse(value) > 400) {
-          //   return 'La valeur doit être entre 0 et 400 gr';
-          // }
+          if (value == null || value.isEmpty) {
+            return 'Veuillez entrer une valeur';
+          }
+          final double? parsedValue = double.tryParse(value);
+          if (parsedValue == null) {
+            return 'Veuillez entrer un nombre valide';
+          }
+          if (parsedValue < 7.5 || parsedValue > 300) {
+            return 'Entre 7.5 cm et 300 cm';
+          }
           return null;
         },
         initialValue: '',
@@ -448,33 +470,61 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'Diametre2',
         initialValue: '',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        hintText: "Veuillez entrer le diametre2",
+        isVisibleFn: (formData) =>
+            formData['Diametre1'] != null &&
+            double.tryParse(formData['Diametre1']) != null &&
+            double.tryParse(formData['Diametre1'])! > 30,
+        hintText: "Entrer le diametre2",
+        fieldUnit: 'cm',
+        fieldInfo:
+            'Diamètre perpendiculaire au diamètre1, mesuré uniquement si D1>30cm',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter some text';
+            return 'Veuillez entrer une valeur';
+          }
+          final double? parsedValue = double.tryParse(value);
+          if (parsedValue == null) {
+            return 'Veuillez entrer un nombre valide';
+          }
+          if (parsedValue < 7.5 || parsedValue > 300) {
+            return 'Entre 7.5 cm et 300 cm';
           }
           return null;
         },
         onChanged: (value) => setDiametre2(value),
       ),
-
-      TextFieldConfig(
-        fieldName: 'type',
-        initialValue: '',
-        hintText: "Veuillez entrer le type",
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
-          }
-          return null;
-        },
+      DropdownFieldConfig<dynamic>(
+        fieldName: 'Type',
+        value: _stadeDurete,
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('1', '1: arbre'),
+          const MapEntry('2', '2: chandelle'),
+          const MapEntry('3', '3: souche'),
+          const MapEntry('4', '4: souche anthropique'),
+          const MapEntry('5', '5: souche naturelle'),
+        ],
         onChanged: (value) => setType(value),
+        fieldInfo:
+            "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
       ),
+      // TextFieldConfig(
+      //   fieldName: 'type',
+      //   initialValue: '',
+      //   hintText: "Entrer le type",
+      //   validator: (value) {
+      //     if (value == null || value.isEmpty) {
+      //       return 'Please enter some text';
+      //     }
+      //     return null;
+      //   },
+      //   onChanged: (value) => setType(value),
+      // ),
 
       TextFieldConfig(
         fieldName: 'HauteurTotale',
@@ -484,7 +534,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        hintText: "Veuillez entrer la hauteurTotale",
+        hintText: "Entrer la hauteurTotale",
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
@@ -501,26 +551,39 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        hintText: "Veuillez entrer la hauteurBranche",
+        hintText: "Entrer la hauteurBranche",
         onChanged: (value) => setHauteurBranche(value),
       ),
       DropdownFieldConfig<dynamic>(
         fieldName: 'stadeDurete',
         value: _stadeDurete,
-        items: ['', '1', '2', '3', '4', '5'],
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('1', '1'),
+          const MapEntry('2', '2'),
+          const MapEntry('3', '3'),
+          const MapEntry('4', '4'),
+          const MapEntry('5', '5'),
+        ],
         onChanged: (value) => setStadeDurete(initialStadeDureteValue()),
       ),
       DropdownFieldConfig<dynamic>(
         fieldName: 'stadeEcorce',
         value: _stadeEcorce,
-        items: ['', '1', '2', '3', '4'],
+        items: [
+          const MapEntry('', ''),
+          const MapEntry('1', '1'),
+          const MapEntry('2', '2'),
+          const MapEntry('3', '3'),
+          const MapEntry('4', '4'),
+        ],
         onChanged: (value) => setStadeEcorce(initialStadeEcorceValue()),
       ),
 
       TextFieldConfig(
         fieldName: 'liane',
         inputFormatters: [LengthLimitingTextInputFormatter(25)],
-        hintText: "Veuillez entrer la liane (25 char max)",
+        hintText: "Entrer la liane (25 char max)",
         initialValue: '',
       ),
 
@@ -532,14 +595,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        hintText: "Veuillez entrer le diametreLiane",
+        hintText: "Entrer le diametreLiane",
         onChanged: (value) => setDiametreLiane(value),
       ),
 
       TextFieldConfig(
         fieldName: 'coupe',
         initialValue: '',
-        hintText: "Veuillez entrer la coupe",
+        hintText: "Entrer la coupe",
         inputFormatters: [LengthLimitingTextInputFormatter(1)],
         onChanged: (value) => setCoupe(value),
       ),
@@ -556,7 +619,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
         ],
-        hintText: "Veuillez entrer le idNomenclatureCodeSanitaire",
+        hintText: "Entrer le idNomenclatureCodeSanitaire",
         onChanged: (value) => setIdNomenclatureCodeSanitaire(int.parse(value)),
         initialValue: '',
       ),
@@ -571,13 +634,13 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return null;
         },
         onChanged: (value) => setCodeEcolo(value),
-        hintText: "Veuillez entrer le codeEcolo",
+        hintText: "Entrer le codeEcolo",
         initialValue: '',
       ),
 
       TextFieldConfig(
         fieldName: 'refCodeEcolo',
-        hintText: "Veuillez entrer le refCodeEcolo",
+        hintText: "Entrer le refCodeEcolo",
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
@@ -596,7 +659,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
         fieldName: 'observation',
-        hintText: "Veuillez entrer le observation",
+        hintText: "Entrer le observation",
         onChanged: (value) => setObservation(value),
         initialValue: '',
       ),
@@ -607,7 +670,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       //           DecimalTextInputFormatter(decimalRange: 1),
       //         ],
       //         decoration: const InputDecoration(
-      //           hintText: "Veuillez entrer le diametre1",
+      //           hintText: "Entrer le diametre1",
       //         ),
 
       //         // The validator receives the text that the user has entered.
