@@ -138,7 +138,7 @@ class FormSaisiePlacettePageState
           onChanged: (value) {
             setState(() {
               formData[field.fieldName] = value;
-              field.onChanged;
+              field.onChanged!(value);
             });
           },
           inputFormatters: field.inputFormatters,
@@ -174,7 +174,12 @@ class FormSaisiePlacettePageState
           selectedItem: field.selectedItem,
           asyncItems: field.asyncItems,
           itemAsString: field.itemAsString,
-          onChanged: field.onChanged,
+          onChanged: (value) {
+            setState(() {
+              formData[field.fieldName] = value;
+              field.onChanged!(value);
+            });
+          },
           validator: field.validator,
         );
 
@@ -186,7 +191,12 @@ class FormSaisiePlacettePageState
             'Sélectionner un élément',
           ),
           isExpanded: true,
-          onChanged: field.onChanged,
+          onChanged: (value) {
+            setState(() {
+              formData[field.fieldName] = value;
+              field.onChanged!(value);
+            });
+          },
           validator: field.validator,
           items: field.items.map((MapEntry<String, String> entry) {
             return DropdownMenuItem(

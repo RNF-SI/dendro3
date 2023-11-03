@@ -17,6 +17,7 @@ import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart'
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
+import 'package:dendro3/presentation/view/login_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
@@ -198,6 +199,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'taillis': _taillis,
         'observation': _observation,
         'idCycle': _idCycle,
+        'numCycle': cycle.numCycle,
         'diametre1': _diametre1,
         'diametre2': _diametre2,
         'type': _type,
@@ -207,7 +209,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': _coupe,
+        'coupe': '',
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -301,8 +303,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setHauteurTotale(final String value) => _hauteurTotale = double.parse(value);
   setHauteurBranche(final String value) =>
       _hauteurBranche = double.parse(value);
-  setStadeDurete(final int value) => _stadeDurete = value;
-  setStadeEcorce(final int value) => _stadeEcorce = value;
+  setStadeDurete(final String value) => _stadeDurete = int.parse(value);
+  setStadeEcorce(final String value) => _stadeEcorce = int.parse(value);
   setLiane(final String value) => _liane = value;
   setDiametreLiane(final String value) => _diametreLiane = double.parse(value);
   setCoupe(final String value) => _coupe = value;
@@ -500,14 +502,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       ),
       DropdownFieldConfig<dynamic>(
         fieldName: 'Type',
-        value: _stadeDurete,
+        value: _type,
         items: [
-          const MapEntry('', ''),
-          const MapEntry('1', '1: arbre'),
-          const MapEntry('2', '2: chandelle'),
-          const MapEntry('3', '3: souche'),
-          const MapEntry('4', '4: souche anthropique'),
-          const MapEntry('5', '5: souche naturelle'),
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('1', '1- arbre'),
+          const MapEntry('2', '2- chandelle'),
+          const MapEntry('3', '3- souche'),
+          const MapEntry('4', '4- souche anthropique'),
+          const MapEntry('5', '5- souche naturelle'),
         ],
         onChanged: (value) => setType(value),
         fieldInfo:
@@ -527,85 +529,114 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       // ),
 
       TextFieldConfig(
-        fieldName: 'HauteurTotale',
+        fieldName: 'Hauteur',
         initialValue: '',
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        hintText: "Entrer la hauteurTotale",
+        fieldUnit: 'm',
+        hintText: "Entrer la hauteur",
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
           }
+          final double? parsedValue = double.tryParse(value);
+          if (parsedValue! > 60) {
+            return 'Valeur supérieure à 60m';
+          } else if ((_type == '1' || _type == '2') && parsedValue < 1.3) {
+            return 'Le type +$_type implique une taille supérieure à 1.3m';
+          } else if ((_type == '3' || _type == '4' || _type == '5') &&
+              parsedValue >= 1.3) {}
           return null;
         },
         onChanged: (value) => setHauteurTotale(value),
       ),
-      TextFieldConfig(
-        fieldName: 'HauteurBranche',
-        initialValue: '',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-          DecimalTextInputFormatter(decimalRange: 1),
+      // TextFieldConfig(
+      //   fieldName: 'HauteurBranche',
+      //   initialValue: '',
+      //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+      //     DecimalTextInputFormatter(decimalRange: 1),
+      //   ],
+      //   hintText: "Entrer la hauteurBranche",
+      //   onChanged: (value) => setHauteurBranche(value),
+      // ),
+      DropdownFieldConfig<dynamic>(
+        fieldName: 'Stade Durete',
+        value: _stadeDurete != null ? _stadeDurete.toString() : '',
+        items: [
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('1', '1- Dur ou non altéré'),
+          const MapEntry('2', '2- Pourriture <1/4 du diamètre'),
+          const MapEntry('3', '3- Pourriture entre 1/4 et 1/2 du diamètre'),
+          const MapEntry('4', '4- Pourriture entre 1/2 et 3/4 du diamètre'),
+          const MapEntry('5', '5- Pourriture supérieure à 3/4.'),
         ],
-        hintText: "Entrer la hauteurBranche",
-        onChanged: (value) => setHauteurBranche(value),
+        isVisibleFn: (formData) =>
+            formData['Type'] != null && formData['Type'] != '',
+        onChanged: (value) => setStadeDurete(value),
       ),
       DropdownFieldConfig<dynamic>(
-        fieldName: 'stadeDurete',
-        value: _stadeDurete,
+        fieldName: 'Stade Ecorce',
+        value: _stadeEcorce != null ? _stadeEcorce.toString() : '',
         items: [
-          const MapEntry('', ''),
-          const MapEntry('1', '1'),
-          const MapEntry('2', '2'),
-          const MapEntry('3', '3'),
-          const MapEntry('4', '4'),
-          const MapEntry('5', '5'),
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('1', '1- Présente sur tout le billon'),
+          const MapEntry('2', '2- Présente sur plus de 50% de la surface'),
+          const MapEntry('3', '3- Présente sur moins de 50% de la surface'),
+          const MapEntry('4', '4- Absente du billon'),
         ],
-        onChanged: (value) => setStadeDurete(initialStadeDureteValue()),
+        isVisibleFn: (formData) =>
+            formData['Type'] != null && formData['Type'] != '',
+        onChanged: (value) => setStadeEcorce(value),
       ),
+
+      // TextFieldConfig(
+      //   fieldName: 'liane',
+      //   inputFormatters: [LengthLimitingTextInputFormatter(25)],
+      //   hintText: "Entrer la liane (25 char max)",
+      //   initialValue: '',
+      // ),
+
+      // TextFieldConfig(
+      //   fieldName: 'diametreLiane',
+      //   initialValue: '',
+      //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+      //     DecimalTextInputFormatter(decimalRange: 1),
+      //   ],
+      //   hintText: "Entrer le diametreLiane",
+      //   onChanged: (value) => setDiametreLiane(value),
+      // ),
+
       DropdownFieldConfig<dynamic>(
-        fieldName: 'stadeEcorce',
-        value: _stadeEcorce,
+        fieldName: 'Coupe',
+        value: _coupe,
+        fieldInfo:
+            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, modifier le champs 'coupe' du cycle précédent",
         items: [
-          const MapEntry('', ''),
-          const MapEntry('1', '1'),
-          const MapEntry('2', '2'),
-          const MapEntry('3', '3'),
-          const MapEntry('4', '4'),
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('C', 'chablis'),
+          const MapEntry('E', 'exploité'),
         ],
-        onChanged: (value) => setStadeEcorce(initialStadeEcorceValue()),
-      ),
-
-      TextFieldConfig(
-        fieldName: 'liane',
-        inputFormatters: [LengthLimitingTextInputFormatter(25)],
-        hintText: "Entrer la liane (25 char max)",
-        initialValue: '',
-      ),
-
-      TextFieldConfig(
-        fieldName: 'diametreLiane',
-        initialValue: '',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-          DecimalTextInputFormatter(decimalRange: 1),
-        ],
-        hintText: "Entrer le diametreLiane",
-        onChanged: (value) => setDiametreLiane(value),
-      ),
-
-      TextFieldConfig(
-        fieldName: 'coupe',
-        initialValue: '',
-        hintText: "Entrer la coupe",
-        inputFormatters: [LengthLimitingTextInputFormatter(1)],
+        isVisibleFn: (formData) =>
+            (formData['Type'] != null) &&
+            (formData['Type'] != '') &&
+            (cycle.numCycle != 1),
         onChanged: (value) => setCoupe(value),
       ),
+
+      // TextFieldConfig(
+      //   fieldName: 'Coupe',
+      //   initialValue: '',
+      //   hintText: "Entrer la coupe",
+      //   inputFormatters: [LengthLimitingTextInputFormatter(1)],
+      //   onChanged: (value) => setCoupe(value),
+      // ),
 
       CheckboxFieldConfig(
         fieldName: 'limite',
@@ -613,19 +644,19 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         onSaved: (value) => setLimite(value!),
       ),
 
-      TextFieldConfig(
-        fieldName: 'idNomenclatureCodeSanitaire',
-        keyboardType: TextInputType.numberWithOptions(decimal: false),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
-        ],
-        hintText: "Entrer le idNomenclatureCodeSanitaire",
-        onChanged: (value) => setIdNomenclatureCodeSanitaire(int.parse(value)),
-        initialValue: '',
-      ),
+      // TextFieldConfig(
+      //   fieldName: 'idNomenclatureCodeSanitaire',
+      //   keyboardType: TextInputType.numberWithOptions(decimal: false),
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
+      //   ],
+      //   hintText: "Entrer le idNomenclatureCodeSanitaire",
+      //   onChanged: (value) => setIdNomenclatureCodeSanitaire(int.parse(value)),
+      //   initialValue: '',
+      // ),
 
       TextFieldConfig(
-        fieldName: 'codeEcolo',
+        fieldName: 'Dendromicrohabitat',
         keyboardType: TextInputType.numberWithOptions(decimal: false),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -634,13 +665,13 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return null;
         },
         onChanged: (value) => setCodeEcolo(value),
-        hintText: "Entrer le codeEcolo",
+        hintText: "Entrer les Dendromicrohabitats",
         initialValue: '',
       ),
 
       TextFieldConfig(
-        fieldName: 'refCodeEcolo',
-        hintText: "Entrer le refCodeEcolo",
+        fieldName: 'Référentiel DMH',
+        hintText: "Entrer le Référentiel DMH",
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
@@ -651,11 +682,11 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         initialValue: '',
       ),
 
-      CheckboxFieldConfig(
-        fieldName: 'ratioHauteur',
-        initialValue: initialRatioHauteurValue(),
-        onSaved: (value) => setRatioHauteur(value!),
-      ),
+      // CheckboxFieldConfig(
+      //   fieldName: 'ratioHauteur',
+      //   initialValue: initialRatioHauteurValue(),
+      //   onSaved: (value) => setRatioHauteur(value!),
+      // ),
 
       TextFieldConfig(
         fieldName: 'observation',
