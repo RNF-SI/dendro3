@@ -24,5 +24,14 @@ class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
       EssenceListEntity bibEssences = await api.getBibEssences();
       await database.insertEssences(bibEssences);
     }
+    // Import nomenclatures types only if table is empty
+    if (await database.checkBibNomenclaturesTypesEmpty()) {
+      await database
+          .insertBibNomenclaturesTypes(await api.getBibNomenclaturesTypes());
+    }
+    // Import nomenclatures only if table is empty
+    if (await database.checkNomenclaturesEmpty()) {
+      await database.insertNomenclatures(await api.getNomenclatures());
+    }
   }
 }
