@@ -8,9 +8,11 @@ import 'package:dendro3/domain/model/arbre_id.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
+import 'package:dendro3/domain/model/nomenclature.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
@@ -40,6 +42,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
       ref.watch(getEssencesUseCaseProvider),
+      ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       arbreListViewModel);
 });
 
@@ -48,6 +51,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   late final ArbreListViewModel _arbreListViewModel;
   final GetEssencesUseCase _getEssencesUseCase;
+  final GetStadeDureteNomenclaturesUseCase _getStadeDureteNomenclaturesUseCase;
   // final InsertArbreUseCase _insertArbreUseCase;
   final Ref ref;
   // late TodoId _id;
@@ -101,6 +105,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     final Arbre? arbre,
     final ArbreMesure? arbreMesure,
     this._getEssencesUseCase,
+    this._getStadeDureteNomenclaturesUseCase,
     this._arbreListViewModel,
     // this._insertArbreUseCase,
   ) {
@@ -130,6 +135,18 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     try {
       var essences = await _getEssencesUseCase.execute();
       return essences.values.toList();
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<Nomenclature>> getStadeDureteNomenclatures() async {
+    try {
+      var nomenclatures = await _getStadeDureteNomenclaturesUseCase.execute();
+      return nomenclatures.values.toList();
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -303,7 +320,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setHauteurTotale(final String value) => _hauteurTotale = double.parse(value);
   setHauteurBranche(final String value) =>
       _hauteurBranche = double.parse(value);
-  setStadeDurete(final String value) => _stadeDurete = int.parse(value);
+  setStadeDurete(final int value) => _stadeDurete = value;
   setStadeEcorce(final String value) => _stadeEcorce = int.parse(value);
   setLiane(final String value) => _liane = value;
   setDiametreLiane(final String value) => _diametreLiane = double.parse(value);
@@ -564,21 +581,23 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       //   hintText: "Entrer la hauteurBranche",
       //   onChanged: (value) => setHauteurBranche(value),
       // ),
-      DropdownFieldConfig<dynamic>(
+
+      DropdownSearchConfig(
         fieldName: 'Stade Durete',
-        value: _stadeDurete != null ? _stadeDurete.toString() : '',
-        items: [
-          const MapEntry('', 'Sélectionnez une option'),
-          const MapEntry('1', '1- Dur ou non altéré'),
-          const MapEntry('2', '2- Pourriture <1/4 du diamètre'),
-          const MapEntry('3', '3- Pourriture entre 1/4 et 1/2 du diamètre'),
-          const MapEntry('4', '4- Pourriture entre 1/2 et 3/4 du diamètre'),
-          const MapEntry('5', '5- Pourriture supérieure à 3/4.'),
-        ],
+        fieldRequired: true,
+        asyncItems: (String filter) => getStadeDureteNomenclatures(),
+        // selectedItem: initialEssence,
+        filterFn: (dynamic essence, filter) {
+          return true;
+        },
+        itemAsString: (dynamic e) => e.labelDefault,
         isVisibleFn: (formData) =>
             formData['Type'] != null && formData['Type'] != '',
-        onChanged: (value) => setStadeDurete(value),
+        onChanged: (dynamic? data) =>
+            data == null ? '' : setStadeDurete(data.idNomenclature),
+        // validator: (dynamic? text) => validateCodeEssence(),
       ),
+
       DropdownFieldConfig<dynamic>(
         fieldName: 'Stade Ecorce',
         value: _stadeEcorce != null ? _stadeEcorce.toString() : '',

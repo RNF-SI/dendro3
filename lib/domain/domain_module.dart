@@ -30,6 +30,8 @@ import 'package:dendro3/domain/usecase/get_essences_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
+import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
@@ -94,6 +96,12 @@ final actualiserCyclesDispositifUseCaseProvider =
 
 final getEssencesUseCaseProvider = Provider<GetEssencesUseCase>(
     (ref) => GetEssencesUseCaseImpl(ref.watch(essencesRepositoryProvider)));
+
+final getStadeDureteNomenclaturesUseCaseProvider =
+    Provider<GetStadeDureteNomenclaturesUseCase>((ref) =>
+        GetStadeDureteNomenclaturesUseCaseImpl(
+            ref.watch(nomenclaturesRepositoryProvider),
+            ref.watch(nomenclaturesTypesRepositoryProvider)));
 
 final createArbreAndMesureUseCaseProvider =
     Provider<CreateArbreAndMesureUseCase>((ref) =>

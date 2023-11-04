@@ -8,6 +8,7 @@ import 'package:dendro3/data/datasource/implementation/database/corCyclesPlacett
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/essences_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/nomenclatures_types_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/regenerations_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
@@ -22,6 +23,7 @@ import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_da
 import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
 import 'package:dendro3/data/datasource/interface/database/essences_database.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
+import 'package:dendro3/data/datasource/interface/database/nomenclatures_types_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/datasource/interface/database/reperes_database.dart';
@@ -35,6 +37,8 @@ import 'package:dendro3/data/repository/cycles_repository_impl.dart';
 import 'package:dendro3/data/repository/dispositifs_repository_impl.dart';
 import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/data/repository/global_database_repository_impl.dart';
+import 'package:dendro3/data/repository/nomenclatures_repository_impl.dart';
+import 'package:dendro3/data/repository/nomenclatures_types_repository_impl.dart';
 import 'package:dendro3/data/repository/placettes_repository_impl.dart';
 import 'package:dendro3/data/repository/regenerations_repository_impl.dart';
 import 'package:dendro3/data/repository/reperes_repository_impl.dart';
@@ -51,18 +55,22 @@ import 'package:dendro3/data/repository/authentication_repository_impl.dart';
 import 'package:dendro3/domain/repository/authentication_repository.dart';
 import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/repository/global_database_repository.dart';
+import 'package:dendro3/domain/repository/nomenclatures_repository.dart';
+import 'package:dendro3/domain/repository/nomenclatures_types_repository.dart';
 import 'package:dendro3/domain/repository/placettes_repository.dart';
 import 'package:dendro3/domain/repository/regenerations_repository.dart';
 import 'package:dendro3/domain/repository/reperes_repository.dart';
 import 'package:dendro3/domain/repository/transects_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'datasource/implementation/database/nomenclatures_database_impl.dart';
 import 'datasource/interface/database/dispositifs_database.dart';
 import 'datasource/implementation/database/dispositifs_database_impl.dart';
 import 'datasource/interface/api/dispositifs_api.dart';
 import 'datasource/implementation/api/dispositifs_api_impl.dart';
 import 'datasource/interface/api/authentication_api.dart';
 import 'datasource/implementation/api/authentication_api_impl.dart';
+import 'datasource/interface/database/nomenclatures_database.dart';
 
 final globalApiProvider = Provider<GlobalApi>((_) => GlobalApiImpl());
 final globalDatabaseProvider =
@@ -101,6 +109,19 @@ final essencesDatabaseProvider =
     Provider<EssencesDatabase>((_) => EssencesDatabaseImpl());
 final essencesRepositoryProvider = Provider<EssencesRepository>(
     (ref) => EssencesRepositoryImpl(ref.watch(essencesDatabaseProvider)));
+
+final nomenclaturesDatabaseProvider =
+    Provider<NomenclaturesDatabase>((_) => NomenclaturesDatabaseImpl());
+final nomenclaturesRepositoryProvider = Provider<NomenclaturesRepository>(
+    (ref) =>
+        NomenclaturesRepositoryImpl(ref.watch(nomenclaturesDatabaseProvider)));
+
+final nomenclaturesTypesDatabaseProvider = Provider<NomenclaturesTypesDatabase>(
+    (_) => NomenclaturesTypesDatabaseImpl());
+final nomenclaturesTypesRepositoryProvider =
+    Provider<NomenclaturesTypesRepository>((ref) =>
+        NomenclaturesTypesRepositoryImpl(
+            ref.watch(nomenclaturesTypesDatabaseProvider)));
 
 final arbresDatabaseProvider =
     Provider<ArbresDatabase>((_) => ArbresDatabaseImpl());
