@@ -94,7 +94,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   bool _limite = false;
   int? _idNomenclatureCodeSanitaire;
   var _codeEcolo = '';
-  var _refCodeEcolo = '';
+  var _refCodeEcolo = 'efi';
   bool _ratioHauteur = false;
   var _observationMesure = '';
   var _isNewArbreMesure = false;
@@ -690,6 +690,17 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       //   initialValue: '',
       // ),
 
+      DropdownFieldConfig<dynamic>(
+        fieldName: 'Référentiel DMH',
+        value: _refCodeEcolo != null ? _refCodeEcolo : 'efi',
+        items: [
+          const MapEntry('efi', 'efi'),
+          const MapEntry('engref', 'engref'),
+          const MapEntry('prosilva', 'prosilva'),
+        ],
+        onChanged: (value) => setRefCodeEcolo(value),
+      ),
+
       TextFieldConfig(
         fieldName: 'Dendromicrohabitat',
         keyboardType: TextInputType.numberWithOptions(decimal: false),
@@ -704,18 +715,33 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         initialValue: '',
       ),
 
-      TextFieldConfig(
-        fieldName: 'Référentiel DMH',
-        hintText: "Entrer le Référentiel DMH",
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
-          }
-          return null;
-        },
-        onChanged: (value) => setRefCodeEcolo(value),
-        initialValue: '',
-      ),
+      // DropdownFieldConfig<dynamic>(
+      //   fieldName: 'Stade Ecorce',
+      //   value: _stadeEcorce != null ? _stadeEcorce.toString() : '',
+      //   items: [
+      //     const MapEntry('', 'Sélectionnez une option'),
+      //     const MapEntry('1', '1- Présente sur tout le billon'),
+      //     const MapEntry('2', '2- Présente sur plus de 50% de la surface'),
+      //     const MapEntry('3', '3- Présente sur moins de 50% de la surface'),
+      //     const MapEntry('4', '4- Absente du billon'),
+      //   ],
+      //   isVisibleFn: (formData) =>
+      //       formData['Type'] != null && formData['Type'] != '',
+      //   onChanged: (value) => setStadeEcorce(value),
+      // ),
+
+      // TextFieldConfig(
+      //   fieldName: 'Référentiel DMH',
+      //   hintText: "Entrer le Référentiel DMH",
+      //   validator: (value) {
+      //     if (value == null || value.isEmpty) {
+      //       return 'Please enter some text';
+      //     }
+      //     return null;
+      //   },
+      //   onChanged: (value) => setRefCodeEcolo(value),
+      //   initialValue: '',
+      // ),
 
       // CheckboxFieldConfig(
       //   fieldName: 'ratioHauteur',
