@@ -13,6 +13,7 @@ import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
+import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
@@ -43,6 +44,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbreMesure'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
+      ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
       arbreListViewModel);
 });
 
@@ -52,6 +54,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   late final ArbreListViewModel _arbreListViewModel;
   final GetEssencesUseCase _getEssencesUseCase;
   final GetStadeDureteNomenclaturesUseCase _getStadeDureteNomenclaturesUseCase;
+  final GetStadeEcorceNomenclaturesUseCase _getStadeEcorceNomenclaturesUseCase;
   // final InsertArbreUseCase _insertArbreUseCase;
   final Ref ref;
   // late TodoId _id;
@@ -106,6 +109,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     final ArbreMesure? arbreMesure,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
+    this._getStadeEcorceNomenclaturesUseCase,
     this._arbreListViewModel,
     // this._insertArbreUseCase,
   ) {
@@ -146,6 +150,18 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   Future<List<Nomenclature>> getStadeDureteNomenclatures() async {
     try {
       var nomenclatures = await _getStadeDureteNomenclaturesUseCase.execute();
+      return nomenclatures.values.toList();
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<Nomenclature>> getStadeEcorceNomenclatures() async {
+    try {
+      var nomenclatures = await _getStadeEcorceNomenclaturesUseCase.execute();
       return nomenclatures.values.toList();
     } on Exception catch (e) {
       print(e);
@@ -321,7 +337,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setHauteurBranche(final String value) =>
       _hauteurBranche = double.parse(value);
   setStadeDurete(final int value) => _stadeDurete = value;
-  setStadeEcorce(final String value) => _stadeEcorce = int.parse(value);
+  setStadeEcorce(final int value) => _stadeEcorce = value;
   setLiane(final String value) => _liane = value;
   setDiametreLiane(final String value) => _diametreLiane = double.parse(value);
   setCoupe(final String value) => _coupe = value;
@@ -597,20 +613,20 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             data == null ? '' : setStadeDurete(data.idNomenclature),
         // validator: (dynamic? text) => validateCodeEssence(),
       ),
-
-      DropdownFieldConfig<dynamic>(
+      DropdownSearchConfig(
         fieldName: 'Stade Ecorce',
-        value: _stadeEcorce != null ? _stadeEcorce.toString() : '',
-        items: [
-          const MapEntry('', 'Sélectionnez une option'),
-          const MapEntry('1', '1- Présente sur tout le billon'),
-          const MapEntry('2', '2- Présente sur plus de 50% de la surface'),
-          const MapEntry('3', '3- Présente sur moins de 50% de la surface'),
-          const MapEntry('4', '4- Absente du billon'),
-        ],
+        fieldRequired: true,
+        asyncItems: (String filter) => getStadeEcorceNomenclatures(),
+        // selectedItem: initialEssence,
+        filterFn: (dynamic essence, filter) {
+          return true;
+        },
+        itemAsString: (dynamic e) => e.labelDefault,
         isVisibleFn: (formData) =>
             formData['Type'] != null && formData['Type'] != '',
-        onChanged: (value) => setStadeEcorce(value),
+        onChanged: (dynamic? data) =>
+            data == null ? '' : setStadeEcorce(data.idNomenclature),
+        // validator: (dynamic? text) => validateCodeEssence(),
       ),
 
       // TextFieldConfig(

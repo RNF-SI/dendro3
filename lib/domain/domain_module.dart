@@ -32,6 +32,8 @@ import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
+import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
@@ -100,6 +102,12 @@ final getEssencesUseCaseProvider = Provider<GetEssencesUseCase>(
 final getStadeDureteNomenclaturesUseCaseProvider =
     Provider<GetStadeDureteNomenclaturesUseCase>((ref) =>
         GetStadeDureteNomenclaturesUseCaseImpl(
+            ref.watch(nomenclaturesRepositoryProvider),
+            ref.watch(nomenclaturesTypesRepositoryProvider)));
+
+final getStadeEcorceNomenclaturesUseCaseProvider =
+    Provider<GetStadeEcorceNomenclaturesUseCase>((ref) =>
+        GetStadeEcorceNomenclaturesUseCaseImpl(
             ref.watch(nomenclaturesRepositoryProvider),
             ref.watch(nomenclaturesTypesRepositoryProvider)));
 
