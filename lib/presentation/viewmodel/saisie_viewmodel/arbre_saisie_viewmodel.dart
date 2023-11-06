@@ -890,7 +890,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'observation',
         hintText: "Entrer le observation",
-        onChanged: (value) => setObservation(value),
+        onChanged: (value) => setObservationMesure(value),
         initialValue: '',
         validator: (value, formData) {
           return null;
