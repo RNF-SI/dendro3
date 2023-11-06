@@ -172,7 +172,8 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
       ),
       DropdownSearchConfig(
         fieldName: 'Code Essence',
-        asyncItems: (String filter) => getEssences(),
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getEssences(),
         selectedItem: initialEssence,
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),

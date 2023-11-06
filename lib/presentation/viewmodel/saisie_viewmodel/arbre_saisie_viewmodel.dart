@@ -9,7 +9,9 @@ import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/nomenclature.dart';
+import 'package:dendro3/domain/model/nomenclature_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
+import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
@@ -45,6 +47,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
+      ref.watch(getCodeEcoloNomenclaturesUseCaseProvider),
       arbreListViewModel);
 });
 
@@ -55,6 +58,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   final GetEssencesUseCase _getEssencesUseCase;
   final GetStadeDureteNomenclaturesUseCase _getStadeDureteNomenclaturesUseCase;
   final GetStadeEcorceNomenclaturesUseCase _getStadeEcorceNomenclaturesUseCase;
+  final GetCodeEcoloNomenclaturesUseCase _getCodeEcoloNomenclaturesUseCase;
   // final InsertArbreUseCase _insertArbreUseCase;
   final Ref ref;
   // late TodoId _id;
@@ -65,6 +69,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   late EssenceList _essences;
   Essence? _initialEssence = null;
   Essence? initialEssence = null;
+
+  late NomenclatureList _codeEcoloNomenclatures;
+
   Placette placette;
   Cycle cycle;
 
@@ -94,12 +101,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   bool _limite = false;
   int? _idNomenclatureCodeSanitaire;
   var _codeEcolo = '';
-  var _refCodeEcolo = 'efi';
+  var _refCodeEcolo = 'EFI';
   bool _ratioHauteur = false;
   var _observationMesure = '';
   var _isNewArbreMesure = false;
 
-  bool isDiametre2Visible = false;
+  List<Nomenclature> currentCodeEcoloNomenclature = [];
 
   ArbreSaisieViewModel(
     this.ref,
@@ -110,6 +117,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
+    this._getCodeEcoloNomenclaturesUseCase,
     this._arbreListViewModel,
     // this._insertArbreUseCase,
   ) {
@@ -169,6 +177,33 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       print(e);
     }
     return [];
+  }
+
+  Future<List<Nomenclature>> getCodeEcoloNomenclatures() async {
+    try {
+      var nomenclatures = await _getCodeEcoloNomenclaturesUseCase.execute();
+      return nomenclatures.values.toList();
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<Nomenclature>> getCodeEcoloNomenclaturesWithMnemonique(
+      formData) async {
+    final nomenclatures = await getCodeEcoloNomenclatures();
+    if (formData != null && formData.containsKey('Référentiel DMH')) {
+      return nomenclatures
+          .where((Nomenclature item) =>
+              item.mnemonique!.contains(formData!['Référentiel DMH']))
+          .toList();
+    } else {
+      return nomenclatures
+          .where((Nomenclature item) => item.mnemonique!.contains('EFI'))
+          .toList();
+    }
   }
 
   _initArbre(final Arbre? arbre) {
@@ -322,22 +357,19 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setObservation(final String value) => _observation = value;
 
   // setters ArbreMesure
-  setDiametre1(final String value) {
-    _diametre1 = double.parse(value);
-    if (_diametre1! > 30) {
-      isDiametre2Visible = true;
-    } else {
-      isDiametre2Visible = false;
-    }
+  setDiametre1(final String? value) {
+    _diametre1 = (value != null && value != '') ? double.parse(value!) : null;
   }
 
-  setDiametre2(final String value) => _diametre2 = double.parse(value);
+  setDiametre2(final String? value) =>
+      _diametre2 = (value != null && value != '') ? double.parse(value!) : null;
   setType(final String value) => _type = value;
-  setHauteurTotale(final String value) => _hauteurTotale = double.parse(value);
+  setHauteurTotale(final String? value) =>
+      _hauteurTotale = value != null ? double.parse(value) : null;
   setHauteurBranche(final String value) =>
       _hauteurBranche = double.parse(value);
-  setStadeDurete(final int value) => _stadeDurete = value;
-  setStadeEcorce(final int value) => _stadeEcorce = value;
+  setStadeDurete(final int? value) => _stadeDurete = value;
+  setStadeEcorce(final int? value) => _stadeEcorce = value;
   setLiane(final String value) => _liane = value;
   setDiametreLiane(final String value) => _diametreLiane = double.parse(value);
   setCoupe(final String value) => _coupe = value;
@@ -345,7 +377,10 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setIdNomenclatureCodeSanitaire(final int value) =>
       _idNomenclatureCodeSanitaire = value;
   setCodeEcolo(final String value) => _codeEcolo = value;
-  setRefCodeEcolo(final String value) => _refCodeEcolo = value;
+  setRefCodeEcolo(final String value) {
+    _refCodeEcolo = value;
+  }
+
   setRatioHauteur(final bool value) => _ratioHauteur = value;
   setObservationMesure(final String value) => _observationMesure = value;
 
@@ -431,14 +466,15 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       DropdownSearchConfig(
         fieldName: 'Essence',
         fieldRequired: true,
-        asyncItems: (String filter) => getEssences(),
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getEssences(),
         selectedItem: initialEssence,
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,
         onChanged: (dynamic? data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
-        validator: (dynamic? text) => validateCodeEssence(),
+        validator: (dynamic? text, formData) => validateCodeEssence(),
       ),
       TextFieldConfig(
         fieldName: 'Azimut',
@@ -447,7 +483,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         initialValue: initialAzimutValue(),
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        validator: (String? text) => validateAzimut(),
+        validator: (String? text, formData) => validateAzimut(),
         hintText: "Entrer l'azimut",
         onChanged: (value) => setAzimut(value),
       ),
@@ -462,7 +498,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        validator: (String? text) => validateDistance(),
+        validator: (String? text, formData) => validateDistance(),
         hintText: "Entrer la distance",
         onChanged: (value) => setDistance(value),
       ),
@@ -484,9 +520,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         hintText: "Entrer le diametre1",
         onChanged: (value) {
           setDiametre1(value);
+          if (_diametre1 != null && _diametre1! <= 30) {
+            setDiametre2(null);
+          }
           // setState(() {});
         },
-        validator: (value) {
+        validator: (value, formData) {
           if (value == null || value.isEmpty) {
             return 'Veuillez entrer une valeur';
           }
@@ -503,36 +542,38 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       ),
 
       TextFieldConfig(
-        fieldName: 'Diametre2',
-        initialValue: '',
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-          DecimalTextInputFormatter(decimalRange: 1),
-        ],
-        isVisibleFn: (formData) =>
-            formData['Diametre1'] != null &&
-            double.tryParse(formData['Diametre1']) != null &&
-            double.tryParse(formData['Diametre1'])! > 30,
-        hintText: "Entrer le diametre2",
-        fieldUnit: 'cm',
-        fieldInfo:
-            'Diamètre perpendiculaire au diamètre1, mesuré uniquement si D1>30cm',
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Veuillez entrer une valeur';
-          }
-          final double? parsedValue = double.tryParse(value);
-          if (parsedValue == null) {
-            return 'Veuillez entrer un nombre valide';
-          }
-          if (parsedValue < 7.5 || parsedValue > 300) {
-            return 'Entre 7.5 cm et 300 cm';
-          }
-          return null;
-        },
-        onChanged: (value) => setDiametre2(value),
-      ),
+          fieldName: 'Diametre2',
+          initialValue: '',
+          fieldRequired: true,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+            DecimalTextInputFormatter(decimalRange: 1),
+          ],
+          isVisibleFn: (formData) =>
+              formData['Diametre1'] != null &&
+              double.tryParse(formData['Diametre1']) != null &&
+              double.tryParse(formData['Diametre1'])! > 30,
+          hintText: "Entrer le diametre2",
+          fieldUnit: 'cm',
+          fieldInfo:
+              'Diamètre perpendiculaire au diamètre1, mesuré uniquement si D1>30cm',
+          validator: (value, formData) {
+            if (value == null || value.isEmpty) {
+              return 'Veuillez entrer une valeur';
+            }
+            final double? parsedValue = double.tryParse(value);
+            if (parsedValue == null) {
+              return 'Veuillez entrer un nombre valide';
+            }
+            if (parsedValue < 7.5 || parsedValue > 300) {
+              return 'Entre 7.5 cm et 300 cm';
+            }
+            return null;
+          },
+          onChanged: (value) {
+            setDiametre2(value);
+          }),
       DropdownFieldConfig<dynamic>(
         fieldName: 'Type',
         value: _type,
@@ -544,7 +585,17 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           const MapEntry('4', '4- souche anthropique'),
           const MapEntry('5', '5- souche naturelle'),
         ],
-        onChanged: (value) => setType(value),
+        validator: (value, formData) {
+          return null;
+        },
+        onChanged: (value) {
+          setType(value);
+          if (value == null || value == '') {
+            setStadeDurete(null);
+            setStadeEcorce(null);
+            setHauteurTotale(null);
+          }
+        },
         fieldInfo:
             "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
       ),
@@ -569,19 +620,30 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
+        fieldRequired: true,
+        isVisibleFn: (formData) =>
+            formData['Type'] != null && formData['Type'] != '',
         fieldUnit: 'm',
         hintText: "Entrer la hauteur",
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
+        validator: (value, formData) {
+          if ((value == null || value.isEmpty)) {
+            if (formData['Type'] != null || !formData['Type'].isEmpty) {
+              return 'Veuillez entrer une valeur';
+            }
+            return null;
           }
           final double? parsedValue = double.tryParse(value);
           if (parsedValue! > 60) {
             return 'Valeur supérieure à 60m';
-          } else if ((_type == '1' || _type == '2') && parsedValue < 1.3) {
-            return 'Le type +$_type implique une taille supérieure à 1.3m';
-          } else if ((_type == '3' || _type == '4' || _type == '5') &&
-              parsedValue >= 1.3) {}
+          } else if ((formData['Type'] == '1' || formData['Type'] == '2') &&
+              parsedValue < 1.3) {
+            return "Le type +$formData['Type'] implique une taille supérieure à 1.3m";
+          } else if ((formData['Type'] == '3' ||
+                  formData['Type'] == '4' ||
+                  formData['Type'] == '5') &&
+              parsedValue >= 1.3) {
+            return "Le type +$formData['Type'] implique une taille inférieure à 1.3m";
+          }
           return null;
         },
         onChanged: (value) => setHauteurTotale(value),
@@ -601,7 +663,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       DropdownSearchConfig(
         fieldName: 'Stade Durete',
         fieldRequired: true,
-        asyncItems: (String filter) => getStadeDureteNomenclatures(),
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getStadeDureteNomenclatures(),
         // selectedItem: initialEssence,
         filterFn: (dynamic essence, filter) {
           return true;
@@ -611,12 +674,20 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             formData['Type'] != null && formData['Type'] != '',
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
-        // validator: (dynamic? text) => validateCodeEssence(),
+        validator: (value, formData) {
+          if ((value == null || value == '')) {
+            if (formData['Type'] != null || !formData['Type'].isEmpty) {
+              return 'Veuillez entrer une valeur';
+            }
+          }
+          return null;
+        },
       ),
       DropdownSearchConfig(
         fieldName: 'Stade Ecorce',
         fieldRequired: true,
-        asyncItems: (String filter) => getStadeEcorceNomenclatures(),
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getStadeEcorceNomenclatures(),
         // selectedItem: initialEssence,
         filterFn: (dynamic essence, filter) {
           return true;
@@ -626,6 +697,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             formData['Type'] != null && formData['Type'] != '',
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
+        validator: (value, formData) {
+          if ((value == null || value == '')) {
+            if (formData['Type'] != null || !formData['Type'].isEmpty) {
+              return 'Veuillez entrer une valeur';
+            }
+          }
+          return null;
+        },
         // validator: (dynamic? text) => validateCodeEssence(),
       ),
 
@@ -658,6 +737,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           const MapEntry('C', 'chablis'),
           const MapEntry('E', 'exploité'),
         ],
+        validator: (value, formData) {
+          return null;
+        },
         isVisibleFn: (formData) =>
             (formData['Type'] != null) &&
             (formData['Type'] != '') &&
@@ -692,27 +774,83 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       DropdownFieldConfig<dynamic>(
         fieldName: 'Référentiel DMH',
-        value: _refCodeEcolo != null ? _refCodeEcolo : 'efi',
+        value: _refCodeEcolo != null ? _refCodeEcolo : 'EFI',
         items: [
-          const MapEntry('efi', 'efi'),
+          const MapEntry('EFI', 'EFI'),
           const MapEntry('engref', 'engref'),
           const MapEntry('prosilva', 'prosilva'),
+          const MapEntry('', '')
         ],
-        onChanged: (value) => setRefCodeEcolo(value),
-      ),
-
-      TextFieldConfig(
-        fieldName: 'Dendromicrohabitat',
-        keyboardType: TextInputType.numberWithOptions(decimal: false),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
+        onChanged: (value) {
+          if (value != _refCodeEcolo) {
+            setCodeEcolo('');
           }
+          setRefCodeEcolo(value);
+        },
+        validator: (value, formData) {
           return null;
         },
-        onChanged: (value) => setCodeEcolo(value),
-        hintText: "Entrer les Dendromicrohabitats",
-        initialValue: '',
+      ),
+
+      // TextFieldConfig(
+      //   fieldName: 'Dendromicrohabitat',
+      //   keyboardType: TextInputType.numberWithOptions(decimal: false),
+      //   validator: (value) {
+      //     if (value == null || value.isEmpty) {
+      //       return 'Please enter some text';
+      //     }
+      //     return null;
+      //   },
+      //   onChanged: (value) => setCodeEcolo(value),
+      //   hintText: "Entrer les Dendromicrohabitats",
+      //   initialValue: '',
+      // ),
+
+      DropdownSearchConfig(
+        fieldName: 'Dendromicrohabitat',
+        isMultiSelection: true,
+        asyncItems: (String filter, [Map<String, dynamic>? formData]) async {
+          // if (formData == null) {
+          //   return [];
+          // }
+          currentCodeEcoloNomenclature =
+              await getCodeEcoloNomenclaturesWithMnemonique(formData);
+          return currentCodeEcoloNomenclature;
+          // final nomenclatures = await getCodeEcoloNomenclatures();
+          // if (formData != null && formData.containsKey('Référentiel DMH')) {
+          //   return nomenclatures
+          //       .where((Nomenclature item) =>
+          //           item.mnemonique!.contains(formData!['Référentiel DMH']))
+          //       .toList();
+          // } else {
+          //   return nomenclatures
+          //       .where((Nomenclature item) => item.mnemonique!.contains('EFI'))
+          //       .toList();
+          // }
+          // return getCodeEcoloNomenclatures();
+        },
+        filterFn: (dynamic codeEcolo, filter) {
+          return codeEcolo.codeEcoloFilterByLabelDefault(filter);
+        },
+        // selectedItems: _codeEcolo != null && _codeEcolo != ''
+        //     ? _codeEcolo.split('-').map((s) => int.parse(s)).toList()
+        //     : [],
+        selectedItems: _codeEcolo != null && _codeEcolo.isNotEmpty
+            ? currentCodeEcoloNomenclature
+                .where((nomenclature) => _codeEcolo
+                    .split('-')
+                    .map((s) => int.parse(s))
+                    .contains(nomenclature.idNomenclature))
+                .toList()
+            : [],
+        itemAsString: (dynamic e) => e.labelDefault,
+        onChanged: (dynamic? data) => data == null
+            ? []
+            : setCodeEcolo(data
+                .map((item) => item.idNomenclature.toString())
+                .toList()
+                .join('-')),
+        // validator: (dynamic? text) => validateCodeEssence(),
       ),
 
       // DropdownFieldConfig<dynamic>(
@@ -754,6 +892,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         hintText: "Entrer le observation",
         onChanged: (value) => setObservation(value),
         initialValue: '',
+        validator: (value, formData) {
+          return null;
+        },
       ),
       //       TextFormField(
       //         keyboardType: TextInputType.numberWithOptions(decimal: true),

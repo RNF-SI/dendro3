@@ -16,6 +16,8 @@ import 'package:dendro3/domain/usecase/create_transect_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
+import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
@@ -108,6 +110,12 @@ final getStadeDureteNomenclaturesUseCaseProvider =
 final getStadeEcorceNomenclaturesUseCaseProvider =
     Provider<GetStadeEcorceNomenclaturesUseCase>((ref) =>
         GetStadeEcorceNomenclaturesUseCaseImpl(
+            ref.watch(nomenclaturesRepositoryProvider),
+            ref.watch(nomenclaturesTypesRepositoryProvider)));
+
+final getCodeEcoloNomenclaturesUseCaseProvider =
+    Provider<GetCodeEcoloNomenclaturesUseCase>((ref) =>
+        GetCodeEcoloNomenclaturesUseCaseImpl(
             ref.watch(nomenclaturesRepositoryProvider),
             ref.watch(nomenclaturesTypesRepositoryProvider)));
 

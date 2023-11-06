@@ -229,7 +229,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametre",
         onChanged: (value) => setDiametre(value),
-        validator: (value) {
+        validator: (value, formData) {
           // Vérifier si la valeur en grade est entre 0 et 400
           // if (int.parse(value!) < 0 || int.parse(value) > 400) {
           //   return 'La valeur doit être entre 0 et 400 gr';
@@ -248,7 +248,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametre",
         onChanged: (value) => setDiametre130(value),
-        validator: (value) {
+        validator: (value, formData) {
           // Vérifier si la valeur en grade est entre 0 et 400
           // if (int.parse(value!) < 0 || int.parse(value) > 400) {
           //   return 'La valeur doit être entre 0 et 400 gr';

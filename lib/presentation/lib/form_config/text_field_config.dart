@@ -5,7 +5,17 @@ import 'package:flutter/services.dart';
 class TextFieldConfig extends FieldConfig {
   final String initialValue;
   final bool isEditable;
-  final String? Function(String?)? validator;
+
+  // Fonction de validation par défaut
+  static String? defaultValidator(
+      String? value, Map<String, dynamic> formData) {
+    // Votre logique de validation par défaut
+    return null;
+  }
+
+  // Définir la fonction de validation avec la valeur par défaut
+  String? Function(String?, Map<String, dynamic>) validator;
+
   final TextInputType? keyboardType;
   final int? maxLines;
   final List<TextInputFormatter>? inputFormatters;
@@ -20,7 +30,7 @@ class TextFieldConfig extends FieldConfig {
     String fieldInfo = '',
     required this.initialValue,
     this.isEditable = true,
-    this.validator,
+    String? Function(String?, Map<String, dynamic>)? validator,
     this.keyboardType,
     this.maxLines,
     this.inputFormatters,
@@ -28,10 +38,12 @@ class TextFieldConfig extends FieldConfig {
     required this.hintText,
     this.onChanged,
     final bool Function(Map<String, dynamic>)? isVisibleFn,
-  }) : super(
-            fieldName: fieldName,
-            fieldRequired: fieldRequired,
-            fieldUnit: fieldUnit,
-            fieldInfo: fieldInfo,
-            isVisibleFn: isVisibleFn);
+  })  : validator = validator ?? defaultValidator,
+        super(
+          fieldName: fieldName,
+          fieldRequired: fieldRequired,
+          fieldUnit: fieldUnit,
+          fieldInfo: fieldInfo,
+          isVisibleFn: isVisibleFn,
+        );
 }

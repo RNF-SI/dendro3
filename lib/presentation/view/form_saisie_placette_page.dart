@@ -68,7 +68,7 @@ class FormSaisiePlacettePageState
   //     textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.green);
   late final ObjectSaisieViewModel _viewModel;
   final _formKey = GlobalKey<FormState>();
-
+  List<dynamic> _selectedDropdownItems = [];
   // final distanceController = TextEditingController();
   // Arbre arbre = Arbre();
 
@@ -128,16 +128,25 @@ class FormSaisiePlacettePageState
   }
 
   Widget _buildFormWidget() {
-    Widget formWidget;
+    late Widget formWidget;
     var formFields = _viewModel.getFormConfig().map<Widget>((field) {
       if (field is TextFieldConfig) {
         formWidget = TextFormField(
           initialValue: field.initialValue,
           enabled: field.isEditable,
-          validator: field.validator,
+          validator: (value) {
+            return field.validator!(value, formData);
+          },
           onChanged: (value) {
             setState(() {
               formData[field.fieldName] = value;
+              if (field.fieldName == 'Diametre1') {
+                if (value != Null &&
+                    value != '' &&
+                    double.parse(value!) <= 30) {
+                  formData['Diametre2'] = Null;
+                }
+              }
               field.onChanged!(value);
             });
           },
@@ -150,7 +159,7 @@ class FormSaisiePlacettePageState
             suffixText: field.fieldUnit,
           ),
         );
-      } else if (field is DropdownSearchConfig) {
+      } else if (field is DropdownSearchConfig && !field.isMultiSelection) {
         // Text('Code Essence'),
         formWidget = DropdownSearch<dynamic>(
           popupProps: PopupProps.menu(
@@ -180,10 +189,48 @@ class FormSaisiePlacettePageState
               field.onChanged!(value);
             });
           },
-          validator: field.validator,
+          validator: (value) {
+            return field.validator!(value, formData);
+          },
         );
 
         // return DropdownSearch<Essence> or whatever the widget should be
+      } else if (field is DropdownSearchConfig && field.isMultiSelection) {
+        _selectedDropdownItems = field.selectedItems!;
+        formWidget = DropdownSearch<dynamic>.multiSelection(
+            key: ValueKey(_selectedDropdownItems.length),
+            popupProps: PopupPropsMultiSelection.menu(
+              showSearchBox: true,
+            ),
+            clearButtonProps: ClearButtonProps(
+              color: Colors.red,
+              icon: Icon(Icons.close),
+            ),
+            filterFn: field.filterFn,
+            dropdownDecoratorProps: const DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                disabledBorder: InputBorder.none,
+                hintText: 'Veuillez entrer le code essence',
+                hintStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            selectedItems:
+                _selectedDropdownItems, // Use selectedItems for multiple selections
+            asyncItems: (String filter) => field.asyncItems(filter, formData),
+            itemAsString: field.itemAsString,
+            onChanged: (List<dynamic> values) {
+              setState(() {
+                formData[field.fieldName] =
+                    values; // Ensure formData can store a list
+                field.onChanged!(values);
+              });
+            },
+            validator: (value) {
+              return field.validator!(value, formData);
+            });
       } else if (field is DropdownFieldConfig) {
         formWidget = DropdownButtonFormField(
           value: field.value,
@@ -193,11 +240,26 @@ class FormSaisiePlacettePageState
           isExpanded: true,
           onChanged: (value) {
             setState(() {
+              if (field.fieldName == 'Référentiel DMH') {
+                if (formData[field.fieldName] != value) {
+                  _selectedDropdownItems = [];
+                  formData['Dendromicrohabitat'] = [];
+                }
+              }
               formData[field.fieldName] = value;
+              if (field.fieldName == 'Type') {
+                if (value == null || value == '') {
+                  formData['Hauteur'] = Null;
+                  formData['Stade Durete'] = Null;
+                  formData['Stade Ecorce'] = Null;
+                }
+              }
               field.onChanged!(value);
             });
           },
-          validator: field.validator,
+          validator: (value) {
+            return field.validator!(value, formData);
+          },
           items: field.items.map((MapEntry<String, String> entry) {
             return DropdownMenuItem(
               value: entry.key,

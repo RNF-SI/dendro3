@@ -301,7 +301,8 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       ),
       DropdownSearchConfig(
         fieldName: 'Code Essence',
-        asyncItems: (String filter) => getEssences(),
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getEssences(),
         selectedItem: initialEssence,
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
@@ -314,7 +315,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         initialValue: initialAzimutValue(),
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        validator: (String? text) => validateAzimut(),
+        validator: (String? text, formData) => validateAzimut(),
         hintText: "Veuillez entrer l'azimut",
         onChanged: (value) => setAzimut(value),
       ),
@@ -326,7 +327,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        validator: (String? text) => validateDistance(),
+        validator: (String? text, formData) => validateDistance(),
         hintText: "Veuillez entrer l'orientation",
         onChanged: (value) => setDistance(value),
       ),
@@ -338,7 +339,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        validator: (String? text) => validateAzimutSouche(),
+        validator: (String? text, formData) => validateAzimutSouche(),
         hintText: "Veuillez entrer l'azimut souche",
         onChanged: (value) => setAzimutSouche(value),
       ),
@@ -350,7 +351,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
-        validator: (String? text) => validateDistanceSouche(),
+        validator: (String? text, formData) => validateDistanceSouche(),
         hintText: "Veuillez entrer la distance souche",
         onChanged: (value) => setDistanceSouche(value),
       ),
@@ -371,7 +372,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametreini",
         onChanged: (value) => setDiametreIni(value),
-        validator: (value) {
+        validator: (value, formData) {
           // Vérifier si la valeur en grade est entre 0 et 400
           // if (int.parse(value!) < 0 || int.parse(value) > 400) {
           //   return 'La valeur doit être entre 0 et 400 gr';
@@ -389,7 +390,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametremed",
         onChanged: (value) => setDiametreMed(value),
-        validator: (value) {
+        validator: (value, formData) {
           // Vérifier si la valeur en grade est entre 0 et 400
           // if (int.parse(value!) < 0 || int.parse(value) > 400) {
           //   return 'La valeur doit être entre 0 et 400 gr';
@@ -407,7 +408,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametrefin",
         onChanged: (value) => setDiametreFin(value),
-        validator: (value) {
+        validator: (value, formData) {
           // Vérifier si la valeur en grade est entre 0 et 400
           // if (int.parse(value!) < 0 || int.parse(value) > 400) {
           //   return 'La valeur doit être entre 0 et 400 gr';
@@ -425,7 +426,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametre130",
         onChanged: (value) => setDiametre130(value),
-        validator: (value) {
+        validator: (value, formData) {
           // Vérifier si la valeur en grade est entre 0 et 400
           // if (int.parse(value!) < 0 || int.parse(value) > 400) {
           //   return 'La valeur doit être entre 0 et 400 gr';
@@ -443,7 +444,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           DecimalTextInputFormatter(decimalRange: 1),
         ],
         hintText: "Veuillez entrer le longueur",
-        validator: (value) {
+        validator: (value, formData) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
           }
@@ -465,7 +466,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           DecimalTextInputFormatter(decimalRange: 1),
         ],
         hintText: "Veuillez entrer le contact",
-        validator: (value) {
+        validator: (value, formData) {
           if (value == null || value.isEmpty) {
             return 'Please enter some text';
           }

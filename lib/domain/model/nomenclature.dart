@@ -33,4 +33,8 @@ class Nomenclature with _$Nomenclature {
   }) = _Nomenclature;
 
   const Nomenclature._();
+
+  bool codeEcoloFilterByLabelDefault(String filter) {
+    return this.labelDefault.contains(filter);
+  }
 }
