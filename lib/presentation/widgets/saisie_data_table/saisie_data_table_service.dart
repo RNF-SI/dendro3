@@ -80,9 +80,9 @@ final displayedColumnTypeProvider =
         (ref) {
   var reducedList = ref.watch(reducedToggleProvider);
   if (reducedList.isNotEmpty) {
-    if (reducedList[0] == true) {
+    if (reducedList[1] == true) {
       return DisplayedColumnType.all;
-    } else if (reducedList[1] == true) {
+    } else if (reducedList[0] == true) {
       return DisplayedColumnType.reduced;
     } else {
       return DisplayedColumnType.none;
@@ -98,9 +98,9 @@ final displayedMesureColumnTypeProvider =
         (ref) {
   var reducedList = ref.watch(reducedMesureToggleProvider);
   if (reducedList.isNotEmpty) {
-    if (reducedList[0] == true) {
+    if (reducedList[1] == true) {
       return DisplayedColumnType.all;
-    } else if (reducedList[1] == true) {
+    } else if (reducedList[0] == true) {
       return DisplayedColumnType.reduced;
     } else {
       return DisplayedColumnType.none;

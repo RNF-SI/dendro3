@@ -68,6 +68,7 @@ class Arbre with _$Arbre implements SaisisableObject {
       'codeEssence': codeEssence,
       'azimut': azimut,
       'distance': distance,
+      'taillis': taillis,
       'arbresMesures': arbresMesures!.getValuesMappedFromDisplayedColumnType(
           displayedMesureColumnType: displayedMesureColumnType),
     };

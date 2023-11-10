@@ -73,11 +73,7 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
     return {
       'idCycle': idCycle,
       'diametre1': diametre1,
-      'diametre2': diametre2,
-      'hauteurTotale': hauteurTotale,
-      'hauteurBranche': hauteurBranche,
-      'stadeDurete': stadeDurete,
-      'stadeEcorce': stadeEcorce,
+      'type': type,
     };
   }
 

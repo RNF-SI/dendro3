@@ -102,16 +102,17 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       children: [
         Container(
           height: 400,
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.only(right: 12),
           decoration: BoxDecoration(
             color: Colors.green,
-            border: Border(),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            // border: Border(),
+            // borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: columnNameList.isEmpty
               ? Text('An error occurred: columnNameList is null.')
               : DataTable2(
-                  columnSpacing: 12,
+                  columnSpacing: 10,
+                  horizontalMargin: 4,
                   fixedLeftColumns: 1,
 
                   // fixedLeftColumns: 1,
@@ -138,6 +139,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               for (int i = 0; i < _extendedList.length; i++) {
                 _extendedList[i] = i == index;
               }
+              ref.read(reducedToggleProvider.notifier).toggleChanged(index);
+              ref
+                  .read(reducedMesureToggleProvider.notifier)
+                  .toggleChanged(index);
             });
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -150,54 +155,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             minWidth: 80.0,
           ),
           isSelected: _extendedList,
-          children: <Widget>[Text('Compact'), Text('Extended')],
-        ),
-        // Toggle Button changeant l'affichage des colonnes globales
-        ToggleButtons(
-          direction: Axis.horizontal,
-          onPressed: (int index) {
-            ref.read(reducedToggleProvider.notifier).toggleChanged(index);
-          },
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          selectedBorderColor: Colors.blue[700],
-          selectedColor: Colors.white,
-          fillColor: Colors.blue[200],
-          color: Colors.blue[400],
-          constraints: const BoxConstraints(
-            minHeight: 40.0,
-            minWidth: 80.0,
-          ),
-          isSelected:
-              reducedList.isNotEmpty ? reducedList : [false, false, false],
-          children: <Widget>[
-            Text('All'),
-            Text('Reduced'),
-            Text('None'),
-          ],
-        ),
-        // Toggle Button changeant l'affichage des colonnes de mesures
-        ToggleButtons(
-          direction: Axis.horizontal,
-          onPressed: (int index) {
-            ref.read(reducedMesureToggleProvider.notifier).toggleChanged(index);
-          },
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          selectedBorderColor: Colors.green[700],
-          selectedColor: Colors.white,
-          fillColor: Colors.green[200],
-          color: Colors.green[400],
-          constraints: const BoxConstraints(
-            minHeight: 40.0,
-            minWidth: 80.0,
-          ),
-          isSelected: reducedMesureList.isNotEmpty
-              ? reducedMesureList
-              : [false, false, false],
-          children: <Widget>[
-            Text('All'),
-            Text('Mesure Reduced'),
-            Text('Sans Mesure'),
-          ],
+          children: <Widget>[Text('Synthese'), Text('Complet')],
         ),
         Visibility(
           visible: [
@@ -313,14 +271,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     // Ajouter d'abord la colonne "update"
     columns.add(
       DataColumn2(
-        label: InkWell(
-          child: Text(''), // Emoji "update"
-          onTap: () {
-            // Logique de mise à jour
-            print("Colonne de mise à jour cliquée");
-          },
-        ),
-        numeric: false,
+        label: SizedBox.shrink(), // Empty label for the update icon
       ),
     );
 
@@ -328,7 +279,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     columns.addAll(
       columnList.map(
         (columnStr) => DataColumn2(
-          label: Text(columnStr),
+          label: Text(
+            columnStr,
+            style: TextStyle(fontSize: 12),
+          ),
           numeric: true,
         ),
       ),
@@ -345,14 +299,22 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       // Ajouter une cellule pour la colonne "update" au début
       cellList.add(
         DataCell(
-          IconButton(
-            icon: Icon(Icons.select_all),
-            onPressed: () {
-              setState(() {
-                selectedItemDetails =
-                    getObjectFromType(value, items, widget.displayTypeState);
-              });
-            },
+          SizedBox(
+            width: 48, // Adjust the width as needed
+            height: 24,
+            child: IconButton(
+              padding: EdgeInsets.only(left: 12),
+              icon: Icon(
+                Icons.select_all,
+                size: 24,
+              ),
+              onPressed: () {
+                setState(() {
+                  selectedItemDetails =
+                      getObjectFromType(value, items, widget.displayTypeState);
+                });
+              },
+            ),
           ),
         ),
       );
@@ -360,7 +322,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       // Ajouter les autres cellules
       cellList.addAll(
         value.values.map<DataCell>((yo) {
-          return DataCell(Text(yo.toString()));
+          return DataCell(Text(
+            yo.toString(),
+            style: TextStyle(fontSize: 12),
+          ));
         }),
       );
 
