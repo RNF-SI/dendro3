@@ -42,9 +42,11 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final SaisisableObject? saisisableObject1;
   final SaisisableObject? saisisableObject2;
   final Cycle? cycle;
+  final String formType;
 
   FormSaisiePlacettePage({
     Key? key,
+    required this.formType,
     required this.type,
     required this.placette,
     this.saisisableObject1,
@@ -97,7 +99,9 @@ class FormSaisiePlacettePageState
     // Build a Form widget using the _formKey created above.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter un ${widget.type}'),
+        title: Text(widget.formType == 'edit'
+            ? 'Modifier un ${widget.type}'
+            : 'Ajouter un ${widget.type}'),
       ),
       body: Padding(
         // height: 100,
@@ -121,7 +125,9 @@ class FormSaisiePlacettePageState
               Navigator.pop(context);
             }
           },
-          child: const Text('Ajouter'),
+          child: widget.formType == 'edit'
+              ? const Text('Modifier')
+              : const Text('Ajout'),
         ),
       ),
     );

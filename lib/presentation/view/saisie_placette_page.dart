@@ -162,22 +162,10 @@ Widget __buildAsyncPlacetteListWidget(
       return Column(
         children: [
           SaisieDataTable(
-            placetteId: placette.idPlacette,
+            placette: placette,
             dispCycleList: dispCycleList,
-            corCyclePlacetteList: placette.corCyclesPlacettes!,
-          ),
-          // Button for adding a new row
-          ElevatedButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
-              builder: (BuildContext context) {
-                return FormSaisiePlacettePage(
-                  type: displayTypeState,
-                  placette: placette,
-                  cycle: dispCycleList.values[0],
-                );
-              },
-            )),
-            child: Text('Ajouter un $displayTypeState'),
+            // corCyclePlacetteList: placette.corCyclesPlacettes!,
+            displayTypeState: displayTypeState,
           ),
           Row(
             children: [

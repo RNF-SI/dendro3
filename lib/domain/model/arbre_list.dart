@@ -50,4 +50,9 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
             displayedColumnType: displayedColumnType,
             displayedMesureColumnType: displayedMesureColumnType);
       }).toList();
+
+  @override
+  Arbre getObjectFromId(final int id) {
+    return values.firstWhere((arbre) => arbre.idArbreOrig == id);
+  }
 }

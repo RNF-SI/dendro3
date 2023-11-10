@@ -169,6 +169,7 @@ class NoCycleWidget extends ConsumerWidget {
           onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
             builder: (BuildContext context) {
               return FormSaisiePlacettePage(
+                formType: "add",
                 type: 'corCyclePlacette',
                 placette: placette,
                 cycle: cycle,

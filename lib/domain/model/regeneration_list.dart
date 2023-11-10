@@ -59,4 +59,10 @@ class RegenerationList
     }
     throw ArgumentError('Item must be of type Repere');
   }
+
+  @override
+  getObjectFromId(final int id) {
+    return values
+        .firstWhere((regeneration) => regeneration.idRegeneration == id);
+  }
 }

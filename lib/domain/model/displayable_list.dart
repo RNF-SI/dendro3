@@ -7,4 +7,6 @@ abstract class DisplayableList {
     DisplayedColumnType displayedColumnType = DisplayedColumnType.all,
     DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
   });
+
+  getObjectFromId(final int id);
 }

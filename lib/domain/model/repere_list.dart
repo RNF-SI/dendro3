@@ -53,4 +53,9 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
     }
     throw ArgumentError('Item must be of type Repere');
   }
+
+  @override
+  getObjectFromId(final int id) {
+    return values.firstWhere((repere) => repere.idRepere == id);
+  }
 }

@@ -61,4 +61,8 @@ class TransectList
 
   // TransectList filterByIncomplete() => copyWith(
   //     values: values.where((transect) => !transect.isCompleted).toList());
+  @override
+  getObjectFromId(final int id) {
+    return values.firstWhere((transect) => transect.idTransectOrig == id);
+  }
 }

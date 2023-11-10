@@ -55,4 +55,9 @@ class BmSup30List
             displayedColumnType: displayedColumnType,
             displayedMesureColumnType: displayedMesureColumnType);
       }).toList();
+
+  @override
+  getObjectFromId(final int id) {
+    return values.firstWhere((bmSup30) => bmSup30.idBmSup30Orig == id);
+  }
 }
