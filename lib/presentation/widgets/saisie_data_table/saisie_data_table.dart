@@ -101,7 +101,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     return Column(
       children: [
         Container(
-          height: 400,
+          height: 300,
           padding: EdgeInsets.only(right: 12),
           decoration: BoxDecoration(
             color: Colors.green,
@@ -131,62 +131,110 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   rows: _createRows(cycleRowList, items),
                 ),
         ),
-        if (selectedItemDetails != null) _buildSelectedItemDetails(),
-        ToggleButtons(
-          direction: Axis.horizontal,
-          onPressed: (int index) {
-            setState(() {
-              for (int i = 0; i < _extendedList.length; i++) {
-                _extendedList[i] = i == index;
-              }
-              ref.read(reducedToggleProvider.notifier).toggleChanged(index);
-              ref
-                  .read(reducedMesureToggleProvider.notifier)
-                  .toggleChanged(index);
-            });
-          },
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          selectedBorderColor: Colors.red[700],
-          selectedColor: Colors.white,
-          fillColor: Colors.red[200],
-          color: Colors.red[400],
-          constraints: const BoxConstraints(
-            minHeight: 40.0,
-            minWidth: 80.0,
-          ),
-          isSelected: _extendedList,
-          children: <Widget>[Text('Synthese'), Text('Complet')],
-        ),
-        Visibility(
-          visible: [
-            0,
-            1
-          ].contains(reducedMesureList.indexWhere((mesure) => mesure == true)),
-          child: ToggleButtons(
-            isSelected: cycleToggleSelectedList.isNotEmpty
-                ? cycleToggleSelectedList
-                : [],
-            onPressed: (int index) {
-              ref
-                  .read(cycleSelectedToggleProvider.notifier)
-                  .cycleToggleChanged(index);
-            },
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            selectedBorderColor: Colors.blue[700],
-            selectedColor: Colors.white,
-            fillColor: Colors.blue[200],
-            color: Colors.blue[400],
-            constraints: const BoxConstraints(
-              minHeight: 40.0,
-              minWidth: 80.0,
-            ),
-            children: <Widget>[
-              ..._generateCircleAvatars(
-                cycleList,
-                widget.placette.corCyclesPlacettes!,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ToggleButtons(
+              direction: Axis.horizontal,
+              onPressed: (int index) {
+                setState(() {
+                  for (int i = 0; i < _extendedList.length; i++) {
+                    _extendedList[i] = i == index;
+                  }
+                  ref.read(reducedToggleProvider.notifier).toggleChanged(index);
+                  ref
+                      .read(reducedMesureToggleProvider.notifier)
+                      .toggleChanged(index);
+                });
+              },
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              selectedBorderColor: Colors.red[700],
+              selectedColor: Colors.white,
+              fillColor: Colors.red[200],
+              color: Colors.red[400],
+              constraints: const BoxConstraints(
+                minHeight: 40.0,
+                minWidth: 80.0,
               ),
-            ],
-          ),
+              isSelected: _extendedList,
+              children: <Widget>[Text('Synthese'), Text('Complet')],
+            ),
+            SizedBox(width: 10),
+            Visibility(
+              visible: [0, 1].contains(
+                  reducedMesureList.indexWhere((mesure) => mesure == true)),
+              child: ToggleButtons(
+                isSelected: cycleToggleSelectedList.isNotEmpty
+                    ? cycleToggleSelectedList
+                    : [],
+                onPressed: (int index) {
+                  ref
+                      .read(cycleSelectedToggleProvider.notifier)
+                      .cycleToggleChanged(index);
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                selectedBorderColor: Colors.blue[700],
+                selectedColor: Colors.white,
+                fillColor: Colors.blue[200],
+                color: Colors.blue[400],
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 80.0,
+                ),
+                children: <Widget>[
+                  ..._generateCircleAvatars(
+                    cycleList,
+                    widget.placette.corCyclesPlacettes!,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        if (selectedItemDetails != null) _buildSelectedItemDetails(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Visibility(
+              visible: selectedItemDetails != null,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Logic for updating an item
+                  Navigator.push(context, MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return FormSaisiePlacettePage(
+                        formType: "edit",
+                        type: widget.displayTypeState,
+                        placette: widget.placette,
+                        cycle:
+                            widget.dispCycleList.values[0], // Modify as needed
+                        // saisisableObject1: convertToSaisisObject1(
+                        //     selectedItemDetails!, widget.displayTypeState),
+                        // saisisableObject2: convertToSaisisObject2(
+                        //     selectedItemDetails!, widget.displayTypeState),
+                      );
+                    },
+                  ));
+                },
+                child: Text("Modifier l'${widget.displayTypeState}"),
+              ),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Logic for deleting an item
+              },
+              child: Text('Supprimer'),
+            ),
+            const SizedBox(width: 10),
+            // Button for deleting an item
+            ElevatedButton(
+              onPressed: () {
+                // Logic for deleting an item
+              },
+              child: Text('Nouvelle Mesure'),
+            ),
+          ],
         ),
         ElevatedButton(
           onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
@@ -200,37 +248,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             },
           )),
           child: Text('Ajouter un ${widget.displayTypeState}'),
-        ),
-        Visibility(
-          visible: selectedItemDetails != null,
-          child: ElevatedButton(
-            onPressed: () {
-              // Logic for updating an item
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return FormSaisiePlacettePage(
-                    formType: "edit",
-                    type: widget.displayTypeState,
-                    placette: widget.placette,
-                    cycle: widget.dispCycleList.values[0], // Modify as needed
-                    // saisisableObject1: convertToSaisisObject1(
-                    //     selectedItemDetails!, widget.displayTypeState),
-                    // saisisableObject2: convertToSaisisObject2(
-                    //     selectedItemDetails!, widget.displayTypeState),
-                  );
-                },
-              ));
-            },
-            child: Text("Modifier l'${widget.displayTypeState} sélectionné"),
-          ),
-        ),
-
-        // Button for deleting an item
-        ElevatedButton(
-          onPressed: () {
-            // Logic for deleting an item
-          },
-          child: Text('Supprimer'),
         ),
       ],
     );
@@ -300,7 +317,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       cellList.add(
         DataCell(
           SizedBox(
-            width: 48, // Adjust the width as needed
+            width: 32, // Adjust the width as needed
             height: 24,
             child: IconButton(
               padding: EdgeInsets.only(left: 12),

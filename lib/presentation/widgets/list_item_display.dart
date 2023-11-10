@@ -69,7 +69,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
     List<Widget> gridItems = currentItem.entries.map((entry) {
       return Container(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(1.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,20 +94,30 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_left),
+              padding: const EdgeInsets.only(
+                left: 5,
+                right: 5,
+              ), // Minimize padding around the icon
+              constraints: BoxConstraints(), // Remove additional constraints
+              icon: Icon(Icons.arrow_left, size: 20), // Adjust the icon size
               onPressed: _showPreviousItem,
             ),
             Expanded(
               child: GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 3,
+                crossAxisCount: 4,
                 childAspectRatio: 3,
                 children: gridItems,
               ),
             ),
             IconButton(
-              icon: Icon(Icons.arrow_right),
+              padding: const EdgeInsets.only(
+                left: 5,
+                right: 5,
+              ),
+              constraints: BoxConstraints(), // Remove additional constraints
+              icon: Icon(Icons.arrow_right, size: 20), // Adjust the icon size
               onPressed: _showNextItem,
             ),
           ],
