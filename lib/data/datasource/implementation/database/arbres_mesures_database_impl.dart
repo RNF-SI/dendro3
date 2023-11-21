@@ -1,6 +1,8 @@
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
+import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
+import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:path/path.dart';
@@ -37,11 +39,25 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     return arbreEntity;
   }
 
-  // @override
-  // Future<ArbreListEntity> allArbresMesures() async {
-  //   final db = await database;
-  //   return db.query(_tableName);
-  // }
+  @override
+  Future<ArbreMesureEntity> updateArbreMesure(
+      final ArbreMesureEntity arbre) async {
+    final db = await database;
+    late final ArbreMesureEntity arbreMesureEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        arbre,
+        where: '$_columnId = ?',
+        whereArgs: [arbre['id_arbre_mesure']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [arbre['id_arbre_mesure']]);
+      arbreMesureEntity = results.first;
+    });
+    return arbreMesureEntity;
+  }
 
   static Future<void> insertArbreMesure(
       Batch batch, final ArbreMesureEntity arbreMesure) async {
@@ -53,6 +69,46 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       Database db, final int arbreId) async {
     return await db
         .query(_tableName, where: 'id_arbre = ?', whereArgs: [arbreId]);
+  }
+
+  @override
+  Future<ArbreMesureEntity> getPreviousCycleMeasure(
+      final int idArbre, final int? idCycle, int? numCycle) async {
+    final db = await database;
+
+    if (idCycle == null) {
+      throw ArgumentError('idCycle cannot be null');
+    }
+
+    final cycle = await CyclesDatabaseImpl.getCycle(db, idCycle);
+    final lastCycle = await CyclesDatabaseImpl.getCycleFromDispAndNumCycle(
+        db, cycle['id_dispositif'], cycle['num_cycle'] - 1);
+    ArbreMesureListEntity arbreMesureList = await db.query(
+      _tableName,
+      where: 'id_cycle = ? AND id_arbre = ?',
+      whereArgs: [lastCycle['id_cycle'], idArbre],
+      limit: 1,
+    );
+    return arbreMesureList[0];
+  }
+
+  @override
+  Future<void> updateLastArbreMesureCoupe(
+    final int idArbre,
+    final int? idCycle,
+    final String? coupe,
+  ) async {
+    final db = await database;
+
+    if (idCycle == null) {
+      throw ArgumentError('idCycle cannot be null');
+    }
+    await db.update(
+      _tableName,
+      {'coupe': coupe},
+      where: 'id_arbre_mesure = ?',
+      whereArgs: [idArbre],
+    );
   }
 
   // @override

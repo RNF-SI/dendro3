@@ -80,4 +80,26 @@ class ArbreMapper {
       'observation': observation,
     };
   }
+
+  static ArbreEntity transformToEntityMap(
+    final int idArbre,
+    final int idArbreOrig,
+    final int idPlacette,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final bool? taillis,
+    final String? observation,
+  ) {
+    return {
+      'id_arbre': idArbre,
+      'id_arbre_orig': idArbreOrig,
+      'id_placette': idPlacette,
+      'code_essence': codeEssence,
+      'azimut': azimut,
+      'distance': distance,
+      'taillis': taillis,
+      'observation': observation,
+    };
+  }
 }

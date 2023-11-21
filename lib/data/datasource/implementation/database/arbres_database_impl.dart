@@ -90,6 +90,26 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     return arbreEntity;
   }
 
+  @override
+  // Function called when one arbre is updated (not updating arbre mesure)
+  Future<ArbreEntity> updateArbre(final ArbreEntity arbre) async {
+    final db = await database;
+    late final ArbreEntity arbreEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        arbre,
+        where: '$_columnId = ?',
+        whereArgs: [arbre['id_arbre']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [arbre['id_arbre']]);
+      arbreEntity = results.first;
+    });
+    return arbreEntity;
+  }
+
   // @override
   // Future<void> updateArbre(final ArbreEntity arbre) async {
   //   final db = await database;

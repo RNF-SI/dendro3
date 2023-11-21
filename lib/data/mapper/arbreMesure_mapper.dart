@@ -102,6 +102,50 @@ class ArbreMesureMapper {
     };
   }
 
+  static ArbreMesureEntity transformToEntityMap(
+    final int? idArbreMesure,
+    final int? idArbre,
+    final int? idCycle,
+    double? diametre1,
+    double? diametre2,
+    String? type,
+    double? hauteurTotale,
+    double? hauteurBranche,
+    int? stadeDurete,
+    int? stadeEcorce,
+    String? liane,
+    double? diametreLiane,
+    String? coupe,
+    final bool limite,
+    int? idNomenclatureCodeSanitaire,
+    String? codeEcolo,
+    final String refCodeEcolo,
+    bool? ratioHauteur,
+    String? observationMesure,
+  ) {
+    return {
+      'id_arbre_mesure': idArbreMesure,
+      'id_arbre': idArbre,
+      'id_cycle': idCycle,
+      'diametre1': diametre1,
+      'diametre2': diametre2,
+      'type': type,
+      'hauteur_totale': hauteurTotale,
+      'hauteur_branche': hauteurBranche,
+      'stade_durete': stadeDurete,
+      'stade_ecorce': stadeEcorce,
+      'liane': liane,
+      'diametre_liane': diametreLiane,
+      'coupe': coupe,
+      'limite': limite,
+      'id_nomenclature_code_sanitaire': idNomenclatureCodeSanitaire,
+      'code_ecolo': codeEcolo,
+      'ref_code_ecolo': refCodeEcolo,
+      'ratio_hauteur': ratioHauteur,
+      'observation': observationMesure,
+    };
+  }
+
   // Function concentratingh only on arbre properties (and not on arbreMesures)
   static ArbreMesure transformToModel(final ArbreMesureEntity entity) {
     return ArbreMesure(
