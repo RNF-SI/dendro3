@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 abstract class BaseListViewModel<T> extends StateNotifier<T> {
   BaseListViewModel(T state) : super(state);
   Future<void> addItem(Map item);
+  Future<void> updateItem(Map item);
   // Future<void> updateItem(Object item);
   // add any other operations you need
 }

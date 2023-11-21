@@ -66,4 +66,10 @@ class RegenerationListViewModel
       state = State.error(e);
     }
   }
+
+  @override
+  updateItem(
+    final Map item,
+    // final int idArbreOrig,
+  ) async {}
 }

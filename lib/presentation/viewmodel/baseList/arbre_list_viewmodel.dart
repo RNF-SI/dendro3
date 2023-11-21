@@ -1,6 +1,7 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
@@ -16,7 +17,7 @@ final arbreListViewModelStateNotifierProvider =
   return ArbreListViewModel(
     // ref.watch(getArbreListUseCaseProvider),
     ref.watch(createArbreAndMesureUseCaseProvider),
-    // ref.watch(updateArbreUseCaseProvider),
+    ref.watch(updateArbreAndMesureUseCaseProvider),
     // ref.watch(deleteArbreUseCaseProvider),
     // arbreListe,
   );
@@ -25,13 +26,13 @@ final arbreListViewModelStateNotifierProvider =
 class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   // final GetArbreListUseCase _getArbreListUseCase;
   final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
-  // final UpdateArbreUseCase _updateArbreUseCase;
+  final UpdateArbreAndMesureUseCase _updateArbreAndMesureUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
 
   ArbreListViewModel(
     // this._getArbreListUseCase,
     this._createArbreAndMesureUseCase,
-    // this._updateArbreUseCase,
+    this._updateArbreAndMesureUseCase,
     // this._deleteArbreUseCase,
     // final ArbreList arbreListe
   ) : super(const State.init()) {}
@@ -104,6 +105,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["taillis"],
         item["observation"],
         item["idCycle"],
+        item["numCycle"],
         item["diametre1"],
         item["diametre2"],
         item["type"],
@@ -127,6 +129,60 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       state = State.error(e);
     }
   }
+
+  @override
+  updateItem(
+    final Map item,
+    // final int idArbreOrig,
+  ) async {
+    try {
+      final newArbre = await _updateArbreAndMesureUseCase.execute(
+        // idArbreOrig,
+        item["idArbre"],
+        item["idArbreOrig"],
+        item["idPlacette"],
+        item["codeEssence"],
+        item["azimut"],
+        item["distance"],
+        item["taillis"],
+        item["observation"],
+        item["idArbreMesure"],
+        item["idCycle"],
+        item["numCycle"],
+        item["diametre1"],
+        item["diametre2"],
+        item["type"],
+        item["hauteurTotale"],
+        item["hauteurBranche"],
+        item["stadeDurete"],
+        item["stadeEcorce"],
+        item["liane"],
+        item["diametreLiane"],
+        item["coupe"],
+        item["limite"],
+        item["idNomenclatureCodeSanitaire"],
+        item["codeEcolo"],
+        item["refCodeEcolo"],
+        item["ratioHauteur"],
+        item["observationMesure"],
+      );
+      // final aa = state.data!.addArbre(newArbre);
+      state = State.success(state.data!.updateItemInList(newArbre));
+    } on Exception catch (e) {
+      state = State.error(e);
+    }
+  }
+
+  // void setCoupeOfLastCycle(final String value){
+  //   try{
+  //     await _changeCoupeLastMesure.execute(
+  //         value
+  //     );
+  //     // final aa = state.data!.addArbre(newArbre);
+  //   } on Exception catch (e) {
+  //     state = State.error(e);
+  //   }
+  // }
 
   void setArbreList(ArbreList arbreList) {
     state = State.success(arbreList);

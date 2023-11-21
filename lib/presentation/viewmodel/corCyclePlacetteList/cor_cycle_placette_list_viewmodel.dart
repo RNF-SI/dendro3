@@ -88,6 +88,12 @@ class CorCyclePlacetteListViewModel
     }
   }
 
+  @override
+  updateItem(
+    final Map item,
+    // final int idArbreOrig,
+  ) async {}
+
 //   addArbre(
 //     // final int idArbreOrig,
 //     // Propriétés arbre

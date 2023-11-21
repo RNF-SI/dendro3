@@ -93,6 +93,12 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     }
   }
 
+  @override
+  updateItem(
+    final Map item,
+    // final int idArbreOrig,
+  ) async {}
+
   void setBmSup30List(BmSup30List bmsup30List) {
     state = State.success(bmsup30List);
   }

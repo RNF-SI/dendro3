@@ -58,4 +58,10 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
       state = State.error(e);
     }
   }
+
+  @override
+  updateItem(
+    final Map item,
+    // final int idArbreOrig,
+  ) async {}
 }
