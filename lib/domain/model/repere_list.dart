@@ -55,6 +55,17 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   }
 
   @override
+  updateItemInList(final dynamic item) {
+    if (item is Repere) {
+      return copyWith(
+          values: values
+              .map((repere) => item.idRepere == repere.idRepere ? item : repere)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type Repere');
+  }
+
+  @override
   getObjectFromId(final int id) {
     return values.firstWhere((repere) => repere.idRepere == id);
   }

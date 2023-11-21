@@ -38,11 +38,24 @@ class BmSup30List
   BmSup30List removeBmSup30ById(final int id) => copyWith(
       values: values.where((bmSup30) => bmSup30.idBmSup30 != id).toList());
 
+  @override
   BmSup30List addItemToList(final dynamic item) {
     if (item is BmSup30) {
       return copyWith(values: [...values, item]);
     }
     throw ArgumentError('Item must be of type Arbre');
+  }
+
+  @override
+  BmSup30List updateItemInList(final dynamic item) {
+    if (item is BmSup30) {
+      return copyWith(
+          values: values
+              .map((bmSup30) =>
+                  item.idBmSup30 == bmSup30.idBmSup30 ? item : bmSup30)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type BmSup30');
   }
 
   @override

@@ -56,6 +56,18 @@ class TransectList
     throw ArgumentError('Item must be of type Transect');
   }
 
+  @override
+  updateItemInList(final dynamic item) {
+    if (item is Transect) {
+      return copyWith(
+          values: values
+              .map((transect) =>
+                  item.idTransect == transect.idTransect ? item : transect)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type Transect');
+  }
+
   // TransectList filterByCompleted() => copyWith(
   //     values: values.where((transect) => transect.isCompleted).toList());
 

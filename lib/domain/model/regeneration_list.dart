@@ -61,6 +61,20 @@ class RegenerationList
   }
 
   @override
+  updateItemInList(final dynamic item) {
+    if (item is Regeneration) {
+      return copyWith(
+          values: values
+              .map((regeneration) =>
+                  regeneration.idRegeneration == item.idRegeneration
+                      ? item
+                      : regeneration)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type Repere');
+  }
+
+  @override
   getObjectFromId(final int id) {
     return values
         .firstWhere((regeneration) => regeneration.idRegeneration == id);

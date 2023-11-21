@@ -31,6 +31,20 @@ class CorCyclePlacetteList
     throw ArgumentError('Item must be of type CorCyclePlacette');
   }
 
+  @override
+  CorCyclePlacetteList updateItemInList(final dynamic item) {
+    if (item is CorCyclePlacette) {
+      return copyWith(
+          values: values
+              .map((corCyclePlacette) =>
+                  corCyclePlacette.idCyclePlacette == item.idCyclePlacette
+                      ? item
+                      : corCyclePlacette)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type CorCyclePlacette');
+  }
+
   CorCyclePlacetteList updateCorCyclePlacette(
       final CorCyclePlacette newCorCyclePlacette) {
     return copyWith(

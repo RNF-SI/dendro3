@@ -29,6 +29,17 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
     throw ArgumentError('Item must be of type Arbre');
   }
 
+  @override
+  ArbreList updateItemInList(final dynamic item) {
+    if (item is Arbre) {
+      return copyWith(
+          values: values
+              .map((arbre) => item.idArbre == arbre.idArbre ? item : arbre)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type Arbre');
+  }
+
   ArbreList updateArbre(final Arbre newArbre) {
     return copyWith(
         values: values
