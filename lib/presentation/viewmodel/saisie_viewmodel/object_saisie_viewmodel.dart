@@ -8,6 +8,8 @@ abstract class ObjectSaisieViewModel {
   //   fetchData();
   // }
   Future<void> createObject();
+  Future<void> updateObject();
+
   List<FieldConfig> getFormConfig();
   // // Methods that can be overridden by subclasses if required
   // void initData(final object) {}

@@ -102,6 +102,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
     });
   }
 
+  Future<void> updateObject() async {}
+
   @override
   List<FieldConfig> getFormConfig() {
     return [

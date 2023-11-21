@@ -193,6 +193,8 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     } else {}
   }
 
+  Future<void> updateObject() async {}
+
   String initialIdPlacetteValue() => _idPlacette.toString();
   String initialIdArbreValue() => _idArbre.toString();
   String initialAzimutValue() => _azimut != null ? _azimut.toString() : '';
@@ -303,7 +305,11 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Code Essence',
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
             getEssences(),
-        selectedItem: initialEssence,
+        selectedItem: () {
+          return _essences.values
+              .where((element) => element.codeEssence == _codeEssence)
+              .first;
+        },
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,

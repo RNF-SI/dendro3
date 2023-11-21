@@ -66,17 +66,27 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   // var _description = '';
   // var _isCompleted = false;
   // var _dueDate = DateTime.now();
-  late EssenceList _essences;
-  Essence? _initialEssence = null;
-  Essence? initialEssence = null;
+  // Essence? _initialEssence = null;
+  // Essence? initialEssence = null;
 
-  late NomenclatureList _codeEcoloNomenclatures;
+  EssenceList? _essences;
+  Future<List<Essence>>? essenceFuture;
+
+  NomenclatureList? _codeEcoloNomenclatures;
+  List<Nomenclature>? currentCodeEcoloNomenclature;
+  Future<List<Nomenclature>>? codeEcoloFuture;
+
+  NomenclatureList? stadeDureteNomenclatures;
+  Future<List<Nomenclature>>? stadeDureteFuture;
+
+  NomenclatureList? stadeEcorceNomenclatures;
+  Future<List<Nomenclature>>? stadeEcorceFuture;
 
   Placette placette;
   Cycle cycle;
 
-  late ArbreId _idArbre;
-  // var _idArbreOrig;
+  late int? _idArbre;
+  int? _idArbreOrig;
   var _idPlacette;
   var _codeEssence = '';
   double? _azimut;
@@ -87,6 +97,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   // late ArbreMesureId idArbreMesure='';
   // var _idArbre = '';
+  late int? _idArbreMesure;
   int? _idCycle;
   double? _diametre1;
   double? _diametre2;
@@ -106,7 +117,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   var _observationMesure = '';
   var _isNewArbreMesure = false;
 
-  List<Nomenclature> currentCodeEcoloNomenclature = [];
+  bool isLoadingEssences = true;
 
   ArbreSaisieViewModel(
     this.ref,
@@ -121,21 +132,20 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this._arbreListViewModel,
     // this._insertArbreUseCase,
   ) {
-    _getEssences();
     // _essences = await _getEssencesUseCase.execute();
     _initArbre(arbre);
     _initArbreMesure(arbreMesure);
+    // _getEssences();
+    // _getEssences();
+    essenceFuture = getAndSetInitialEssence();
+    codeEcoloFuture = getCodeEcoloNomenclaturesWithMnemonique(null);
+    stadeEcorceFuture = getStadeEcorceNomenclatures();
+    stadeDureteFuture = getStadeDureteNomenclatures();
   }
 
   Future<void> _getEssences() async {
     try {
       _essences = await _getEssencesUseCase.execute();
-      _initialEssence = _essences.values
-          .where((element) => element.codeEssence == _codeEssence)
-          .first;
-      initialEssence = _essences.values
-          .where((element) => element.codeEssence == _codeEssence)
-          .first;
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -143,10 +153,16 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
-  Future<List<Essence>> getEssences() async {
+  Future<List<Essence>> getAndSetInitialEssence() async {
     try {
-      var essences = await _getEssencesUseCase.execute();
-      return essences.values.toList();
+      if (_essences == null) {
+        await _getEssences();
+      }
+
+      // Assuming _essences is a Map or similar collection
+      List<Essence> essenceList = _essences!.values.toList();
+
+      return essenceList;
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -157,8 +173,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   Future<List<Nomenclature>> getStadeDureteNomenclatures() async {
     try {
-      var nomenclatures = await _getStadeDureteNomenclaturesUseCase.execute();
-      return nomenclatures.values.toList();
+      stadeDureteNomenclatures ??=
+          await _getStadeDureteNomenclaturesUseCase.execute();
+      return stadeDureteNomenclatures!.values.toList();
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -169,8 +186,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   Future<List<Nomenclature>> getStadeEcorceNomenclatures() async {
     try {
-      var nomenclatures = await _getStadeEcorceNomenclaturesUseCase.execute();
-      return nomenclatures.values.toList();
+      stadeEcorceNomenclatures ??=
+          await _getStadeEcorceNomenclaturesUseCase.execute();
+      return stadeEcorceNomenclatures!.values.toList();
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -179,45 +197,65 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     return [];
   }
 
-  Future<List<Nomenclature>> getCodeEcoloNomenclatures() async {
+  Future<void> getCodeEcoloNomenclatures() async {
     try {
-      var nomenclatures = await _getCodeEcoloNomenclaturesUseCase.execute();
-      return nomenclatures.values.toList();
+      _codeEcoloNomenclatures =
+          await _getCodeEcoloNomenclaturesUseCase.execute();
     } on Exception catch (e) {
       print(e);
     } catch (e) {
       print(e);
     }
-    return [];
   }
 
-  Future<List<Nomenclature>> getCodeEcoloNomenclaturesWithMnemonique(
-      formData) async {
-    final nomenclatures = await getCodeEcoloNomenclatures();
+  List<Nomenclature> getCurrentCodeEcoloNomenclatures(formData) {
+    // try {
+    List<Nomenclature>? listNomenclature;
     if (formData != null && formData.containsKey('Référentiel DMH')) {
-      return nomenclatures
+      listNomenclature = _codeEcoloNomenclatures!.values
+          .toList()
           .where((Nomenclature item) =>
               item.mnemonique!.contains(formData!['Référentiel DMH']))
           .toList();
     } else {
-      return nomenclatures
+      listNomenclature = _codeEcoloNomenclatures!.values
+          .toList()
           .where((Nomenclature item) => item.mnemonique!.contains('EFI'))
           .toList();
     }
+    currentCodeEcoloNomenclature = listNomenclature;
+    return listNomenclature;
+    // return currentCodeEcoloNomenclature!;
+    // } on Exception catch (e) {
+    //   print(e);
+    // } catch (e) {
+    //   print(e);
+    // }
+  }
+
+  Future<List<Nomenclature>> getCodeEcoloNomenclaturesWithMnemonique(
+      formData) async {
+    if (_codeEcoloNomenclatures == null) {
+      await getCodeEcoloNomenclatures();
+    }
+    return getCurrentCodeEcoloNomenclatures(formData);
+    // return currentCodeEcoloNomenclature;
   }
 
   _initArbre(final Arbre? arbre) {
     _idPlacette = placette.idPlacette;
     if (arbre == null) {
+      _idArbre = null;
       _isNewArbre = true;
     } else {
       // Init ArbreInfos
-      // _idArbreOrig = arbre.idArbreOrig;
+      _idArbre = arbre.idArbre;
+      _idArbreOrig = arbre.idArbreOrig;
       _codeEssence = arbre.codeEssence;
       _azimut = arbre.azimut;
       _distance = arbre.distance;
       _taillis = arbre.taillis ?? true;
-      _observation = arbre.observation!;
+      _observation = arbre.observation ?? '';
       // _isNewArbre
 
       // Init ArbreMesure
@@ -235,25 +273,27 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     _idCycle = cycle.idCycle;
     if (arbreMesure == null) {
       _isNewArbreMesure = true;
+      _idArbreMesure = null;
     } else {
       // Init ArbreInfos
+      _idArbreMesure = arbreMesure.idArbreMesure;
       _idCycle = arbreMesure.idCycle;
       _diametre1 = arbreMesure.diametre1;
       _diametre2 = arbreMesure.diametre2;
-      _type = arbreMesure.type!;
+      _type = arbreMesure.type ?? '';
       _hauteurTotale = arbreMesure.hauteurTotale;
       _hauteurBranche = arbreMesure.hauteurBranche;
-      _stadeDurete = arbreMesure.stadeDurete!;
-      _stadeEcorce = arbreMesure.stadeEcorce!;
-      _liane = arbreMesure.liane!;
+      _stadeDurete = arbreMesure.stadeDurete;
+      _stadeEcorce = arbreMesure.stadeEcorce;
+      _liane = arbreMesure.liane ?? '';
       _diametreLiane = arbreMesure.diametreLiane;
-      _coupe = arbreMesure.coupe!;
+      _coupe = arbreMesure.coupe ?? '';
       _limite = arbreMesure.limite ?? false;
-      _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire!;
-      _codeEcolo = arbreMesure.codeEcolo!;
-      _refCodeEcolo = arbreMesure.refCodeEcolo!;
+      _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
+      _codeEcolo = arbreMesure.codeEcolo ?? '';
+      _refCodeEcolo = arbreMesure.refCodeEcolo ?? 'EFI';
       _ratioHauteur = arbreMesure.ratioHauteur ?? false;
-      _observationMesure = arbreMesure.observation!;
+      _observationMesure = arbreMesure.observation ?? '';
     }
   }
 
@@ -303,6 +343,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       // );
       // _todoListViewModel.updateTodo(newTodo);
     }
+
     // try {
     //   await _insertArbreUseCase.execute(arbreEntity);
     // } on Exception catch (e) {
@@ -310,6 +351,39 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     // } catch (e) {
     //   print(e);
     // }
+  }
+
+  @override
+  Future<void> updateObject() async {
+    _arbreListViewModel.updateItem({
+      'idArbre': _idArbre,
+      'idArbreOrig': _idArbreOrig,
+      'idPlacette': _idPlacette,
+      'codeEssence': _codeEssence,
+      'azimut': _azimut!,
+      'distance': _distance!,
+      'taillis': _taillis,
+      'observation': _observation,
+      'idArbreMesure': _idArbreMesure,
+      'idCycle': _idCycle,
+      'numCycle': cycle.numCycle,
+      'diametre1': _diametre1,
+      'diametre2': _diametre2,
+      'type': _type,
+      'hauteurTotale': _hauteurTotale,
+      'hauteurBranche': _hauteurBranche,
+      'stadeDurete': _stadeDurete,
+      'stadeEcorce': _stadeEcorce,
+      'liane': _liane,
+      'diametreLiane': _diametreLiane,
+      'coupe': '',
+      'limite': _limite,
+      'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
+      'codeEcolo': _codeEcolo,
+      'refCodeEcolo': _refCodeEcolo,
+      'ratioHauteur': _ratioHauteur,
+      'observationMesure': _observationMesure,
+    });
   }
   // Future<void> _init(int placetteId) async {
   //   state = const custom_async_state.State.loading();
@@ -467,14 +541,22 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Essence',
         fieldRequired: true,
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
-            getEssences(),
-        selectedItem: initialEssence,
+            getAndSetInitialEssence(),
+        selectedItem: () {
+          if (_codeEssence != '') {
+            return _essences!.values
+                .where((element) => element.codeEssence == _codeEssence)
+                .first;
+          }
+          return null;
+        },
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,
         onChanged: (dynamic? data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
         validator: (dynamic? text, formData) => validateCodeEssence(),
+        futureVariable: essenceFuture,
       ),
       TextFieldConfig(
         fieldName: 'Azimut',
@@ -514,6 +596,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}([.,]\d{0,1})?$')),
         ],
+        initialValue: _diametre1.toString(),
         fieldInfo: 'Diamètre apparent',
         fieldUnit: 'cm',
         fieldRequired: true,
@@ -538,7 +621,6 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           }
           return null;
         },
-        initialValue: '',
       ),
 
       TextFieldConfig(
@@ -614,15 +696,17 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
         fieldName: 'Hauteur',
-        initialValue: '',
+        initialValue: _hauteurTotale.toString(),
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
         ],
         fieldRequired: true,
-        isVisibleFn: (formData) =>
-            formData['Type'] != null && formData['Type'] != '',
+        isVisibleFn: (formData) {
+          return (formData['Type'] != null && formData['Type'] != '') ||
+              (_type != '');
+        },
         fieldUnit: 'm',
         hintText: "Entrer la hauteur",
         validator: (value, formData) {
@@ -663,15 +747,26 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       DropdownSearchConfig(
         fieldName: 'Stade Durete',
         fieldRequired: true,
+        futureVariable: stadeDureteFuture,
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
             getStadeDureteNomenclatures(),
         // selectedItem: initialEssence,
+        selectedItem: () {
+          if (_stadeDurete != null) {
+            return stadeDureteNomenclatures!.values
+                .where((element) => element.idNomenclature == _stadeDurete)
+                .first;
+          }
+          return null;
+        },
         filterFn: (dynamic essence, filter) {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        isVisibleFn: (formData) =>
-            formData['Type'] != null && formData['Type'] != '',
+        isVisibleFn: (formData) {
+          return (formData['Type'] != null && formData['Type'] != '') ||
+              (_type != '');
+        },
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
         validator: (value, formData) {
@@ -686,15 +781,26 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       DropdownSearchConfig(
         fieldName: 'Stade Ecorce',
         fieldRequired: true,
+        futureVariable: stadeEcorceFuture,
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
             getStadeEcorceNomenclatures(),
         // selectedItem: initialEssence,
+        selectedItem: () {
+          if (_stadeEcorce != null) {
+            return stadeEcorceNomenclatures!.values
+                .where((element) => element.idNomenclature == _stadeEcorce)
+                .first;
+          }
+          return null;
+        },
         filterFn: (dynamic essence, filter) {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        isVisibleFn: (formData) =>
-            formData['Type'] != null && formData['Type'] != '',
+        isVisibleFn: (formData) {
+          return (formData['Type'] != null && formData['Type'] != '') ||
+              (_type != '');
+        },
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
         validator: (value, formData) {
@@ -809,45 +915,33 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       DropdownSearchConfig(
         fieldName: 'Dendromicrohabitat',
         isMultiSelection: true,
-        asyncItems: (String filter, [Map<String, dynamic>? formData]) async {
-          // if (formData == null) {
-          //   return [];
-          // }
-          currentCodeEcoloNomenclature =
-              await getCodeEcoloNomenclaturesWithMnemonique(formData);
-          return currentCodeEcoloNomenclature;
-          // final nomenclatures = await getCodeEcoloNomenclatures();
-          // if (formData != null && formData.containsKey('Référentiel DMH')) {
-          //   return nomenclatures
-          //       .where((Nomenclature item) =>
-          //           item.mnemonique!.contains(formData!['Référentiel DMH']))
-          //       .toList();
-          // } else {
-          //   return nomenclatures
-          //       .where((Nomenclature item) => item.mnemonique!.contains('EFI'))
-          //       .toList();
-          // }
-          // return getCodeEcoloNomenclatures();
-        },
+        futureVariable: codeEcoloFuture,
+        asyncItems: (String filter, [Map<String, dynamic>? formData]) =>
+            getCodeEcoloNomenclaturesWithMnemonique(formData),
+
         filterFn: (dynamic codeEcolo, filter) {
           return codeEcolo.codeEcoloFilterByLabelDefault(filter);
         },
         // selectedItems: _codeEcolo != null && _codeEcolo != ''
         //     ? _codeEcolo.split('-').map((s) => int.parse(s)).toList()
         //     : [],
-        selectedItems: _codeEcolo != null && _codeEcolo.isNotEmpty
-            ? currentCodeEcoloNomenclature
+
+        selectedItems: () {
+          if (_codeEcolo != null && _codeEcolo.isNotEmpty) {
+            return currentCodeEcoloNomenclature!
                 .where((nomenclature) => _codeEcolo
                     .split('-')
-                    .map((s) => int.parse(s))
-                    .contains(nomenclature.idNomenclature))
-                .toList()
-            : [],
+                    // .map((s) => int.parse(s))
+                    .contains(nomenclature.cdNomenclature))
+                .toList();
+          }
+          return [];
+        },
         itemAsString: (dynamic e) => e.labelDefault,
         onChanged: (dynamic? data) => data == null
             ? []
             : setCodeEcolo(data
-                .map((item) => item.idNomenclature.toString())
+                .map((item) => item.cdNomenclature.toString())
                 .toList()
                 .join('-')),
         // validator: (dynamic? text) => validateCodeEssence(),

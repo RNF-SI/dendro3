@@ -162,6 +162,9 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   @override
+  Future<void> updateObject() async {}
+
+  @override
   List<FieldConfig> getFormConfig() {
     return [
       TextFieldConfig(
@@ -174,7 +177,11 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Code Essence',
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
             getEssences(),
-        selectedItem: initialEssence,
+        selectedItem: () {
+          return _essences.values
+              .where((element) => element.codeEssence == _codeEssence)
+              .first;
+        },
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,

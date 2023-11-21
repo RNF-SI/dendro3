@@ -184,6 +184,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   @override
+  Future<void> updateObject() async {}
+
+  @override
   List<FieldConfig> getFormConfig() {
     return [
       TextFieldConfig(
