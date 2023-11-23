@@ -8,6 +8,7 @@ import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -91,6 +92,10 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       final CorCyclePlacetteEntity corCyclePlacette) async {
     final db = await database;
     late final CorCyclePlacetteEntity corCyclePlacetteEntity;
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    corCyclePlacette["date_releve"] =
+        formatter.format(corCyclePlacette["date_releve"]);
 
     await db.transaction((txn) async {
       int? maxId = Sqflite.firstIntValue(

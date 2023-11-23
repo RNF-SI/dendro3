@@ -248,7 +248,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             // Button for deleting an item
             ElevatedButton(
               onPressed: () {
-                // Logic for deleting an item
+                // Logic for updating an item
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return FormSaisiePlacettePage(
+                      formType: "edit",
+                      type: widget.displayTypeState,
+                      placette: widget.placette,
+                      cycle: widget.dispCycleList.values[0], // Modify as needed
+                      saisisableObject1: selectedItemDetails,
+                      saisisableObject2: null,
+                    );
+                  },
+                ));
               },
               child: Text('Nouvelle Mesure'),
             ),

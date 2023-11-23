@@ -16,11 +16,16 @@ class CorCyclePlacetteMapper {
 
   static CorCyclePlacette transformToModel(
       final CorCyclePlacetteEntity entity) {
+    DateTime? parsedDateReleve;
+    if (entity['date_releve'] != null) {
+      parsedDateReleve =
+          DateFormat('yyyy-MM-dd').parse(entity['date_releve'], true);
+    }
     return CorCyclePlacette(
       idCyclePlacette: entity['id_cycle_placette'],
       idCycle: entity['id_cycle'],
       idPlacette: entity['id_placette'],
-      dateReleve: entity['date_releve'],
+      dateReleve: parsedDateReleve,
       dateIntervention: entity['date_intervention'],
       annee: entity['annee'],
       natureIntervention: entity['nature_intervention'],
@@ -94,21 +99,21 @@ class CorCyclePlacetteMapper {
     // final int id_cor_cycle_placette,
     final int id_cycle,
     final int id_placette,
-    final DateTime date_releve,
-    final String date_intervention,
+    final DateTime? date_releve,
+    final String? date_intervention,
     final int annee,
-    final String nature_intervention,
+    final String? nature_intervention,
     final String gestion_placette,
-    final int id_nomenclature_castor,
-    final int id_nomenclature_frottis,
-    final int id_nomenclature_boutis,
-    final double recouv_herbes_basses,
-    final double recouv_herbes_hautes,
-    final double recouv_buissons,
-    final double recouv_arbres,
+    final int? id_nomenclature_castor,
+    final int? id_nomenclature_frottis,
+    final int? id_nomenclature_boutis,
+    final double? recouv_herbes_basses,
+    final double? recouv_herbes_hautes,
+    final double? recouv_buissons,
+    final double? recouv_arbres,
   ) {
     return {
-      'id_cor_cycle_placette': null,
+      'id_cycle_placette': null,
       'id_cycle': id_cycle,
       'id_placette': id_placette,
       'date_releve': date_releve,

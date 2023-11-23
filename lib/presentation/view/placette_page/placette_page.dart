@@ -7,6 +7,7 @@ import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
 import 'package:dendro3/presentation/view/placette_page/placette_page_cycles.dart';
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
+import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +23,9 @@ class PlacettePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final CorCyclePlacetteList corCyclePlacetteList =
+        ref.watch(corCyclePlacetteListProvider);
+
     return DefaultTabController(
       initialIndex: 1,
       length: 2,
@@ -95,7 +99,7 @@ class PlacettePage extends ConsumerWidget {
             ),
             PlacetteCycleWidget(
               placette: placette,
-              corCyclePlacetteList: placette.corCyclesPlacettes!,
+              corCyclePlacetteList: corCyclePlacetteList,
               dispCycleList: dispCycleList,
             ),
           ],

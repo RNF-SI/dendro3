@@ -311,9 +311,10 @@ class FormSaisiePlacettePageState
             errorStyle: TextStyle(color: Colors.redAccent),
             border: OutlineInputBorder(),
             suffixIcon: Icon(Icons.event_note),
-            labelText: 'Only time',
+            labelText: 'Select a date',
           ),
-          mode: DateTimeFieldPickerMode.time,
+          mode: DateTimeFieldPickerMode
+              .date, // Change this to 'date' or 'dateAndTime'
           autovalidateMode: AutovalidateMode.always,
           validator: (e) =>
               (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
