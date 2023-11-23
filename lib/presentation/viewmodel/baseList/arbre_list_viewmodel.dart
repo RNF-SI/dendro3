@@ -4,8 +4,14 @@ import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final lastModifiedArbreIdProvider = Provider<int?>((ref) {
+  final viewModel = ref.watch(arbreListViewModelStateNotifierProvider.notifier);
+  return viewModel.getLastModifiedArbreId();
+});
 
 final arbreListProvider = Provider<ArbreList>((ref) {
   final state = ref.watch(arbreListViewModelStateNotifierProvider);
@@ -14,20 +20,27 @@ final arbreListProvider = Provider<ArbreList>((ref) {
 
 final arbreListViewModelStateNotifierProvider =
     StateNotifierProvider<ArbreListViewModel, State<ArbreList>>((ref) {
+  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
   return ArbreListViewModel(
     // ref.watch(getArbreListUseCaseProvider),
     ref.watch(createArbreAndMesureUseCaseProvider),
     ref.watch(updateArbreAndMesureUseCaseProvider),
     // ref.watch(deleteArbreUseCaseProvider),
     // arbreListe,
+    lastModifiedProvider,
   );
 });
 
 class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
+  late final LastModifiedIdNotifier _lastModifiedProvider;
+
+  // final Ref ref;
   // final GetArbreListUseCase _getArbreListUseCase;
   final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
   final UpdateArbreAndMesureUseCase _updateArbreAndMesureUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
+
+  int? _lastModifiedArbreId;
 
   ArbreListViewModel(
     // this._getArbreListUseCase,
@@ -35,6 +48,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     this._updateArbreAndMesureUseCase,
     // this._deleteArbreUseCase,
     // final ArbreList arbreListe
+    this._lastModifiedProvider,
   ) : super(const State.init()) {}
 
   // completeArbre(final Arbre todo) {
@@ -123,6 +137,9 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["ratioHauteur"],
         item["observationMesure"],
       );
+      // _lastModifiedArbreId = newArbre.idArbreOrig;
+      // _lastModifiedIdNotifier.setLastModifiedId('Arbres', newArbre.idArbreOrig);
+      _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.addItemToList(newArbre));
     } on Exception catch (e) {
@@ -166,11 +183,18 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["ratioHauteur"],
         item["observationMesure"],
       );
+      // _lastModifiedArbreId = newArbre.idArbreOrig;
+      _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
+
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
     } on Exception catch (e) {
       state = State.error(e);
     }
+  }
+
+  int? getLastModifiedArbreId() {
+    return _lastModifiedArbreId;
   }
 
   // void setCoupeOfLastCycle(final String value){

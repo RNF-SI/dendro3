@@ -1,7 +1,15 @@
+import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
+import 'package:dendro3/domain/model/regeneration_list.dart';
+import 'package:dendro3/domain/model/repere_list.dart';
+import 'package:dendro3/domain/model/saisisable_object.dart';
+import 'package:dendro3/domain/model/transect_list.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
+import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -184,3 +192,135 @@ final arrayWidthProvider =
     Provider.autoDispose.family<double, List<String>>((ref, list) {
   return list.length * columnWidth.toDouble();
 });
+
+class MyParameter {
+  Map<String, dynamic> value;
+  DisplayableList items;
+  // String type;
+
+  MyParameter(this.value, this.items);
+}
+
+// final selectedItemProvider =
+//     Provider.autoDispose.family<SaisisableObject, MyParameter>((ref, list) {
+//   final items = list.items;
+//   final type = list.type;
+//   final value = list.value;
+
+//   switch (type) {
+//     case 'Arbres':
+//       return items.getObjectFromId(value['idArbreOrig']);
+//     case 'BmsSup30':
+//       return items.getObjectFromId(value['idBmSup30Orig']);
+//     case 'Regenerations':
+//       return items.getObjectFromId(value['idRegeneration']);
+//     case 'Repères':
+//       return items.getObjectFromId(value['idRepere']);
+//     case 'Transects':
+//       return items.getObjectFromId(value['idTransectOrig']);
+//     default:
+//       throw ArgumentError('Unknown type: ${items.runtimeType}');
+//   }
+// });
+
+final selectedItemDetailsProvider = StateNotifierProvider.autoDispose
+    .family<SelectedItemDetailsNotifier, SaisisableObject?, DisplayableList>(
+        (ref, items) {
+  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+
+  return SelectedItemDetailsNotifier(
+    items,
+    lastModifiedProvider,
+  );
+});
+
+class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
+  final DisplayableList items;
+  late final LastModifiedIdNotifier _lastModifiedProvider;
+
+  SelectedItemDetailsNotifier(
+    this.items,
+    this._lastModifiedProvider,
+  ) : super(null) {
+    int lastModifiedId;
+
+    // Check if a map is empy
+    if (_lastModifiedProvider.getObject().isEmpty) {
+      lastModifiedId = 1;
+    } else if (items is ArbreList) {
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Arbres');
+    } else if (items is BmSup30List) {
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('BmsSup30');
+    } else if (items is RegenerationList) {
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Regenerations');
+    } else if (items is RepereList) {
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Repères');
+    } else if (items is TransectList) {
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Transects');
+    } else {
+      throw ArgumentError('Unknown type: ${items.runtimeType}');
+    }
+
+    state = items.getObjectFromId(lastModifiedId);
+  }
+
+  SaisisableObject? setSelectedItemDetails(
+      Map<String, dynamic> value, String type) {
+    switch (type) {
+      case 'Arbres':
+        state = items.getObjectFromId(value['idArbreOrig']);
+        return state;
+      case 'BmsSup30':
+        state = items.getObjectFromId(value['idBmSup30Orig']);
+        return state;
+      case 'Regenerations':
+        state = items.getObjectFromId(value['idRegeneration']);
+        return state;
+      case 'Repères':
+        state = items.getObjectFromId(value['idRepere']);
+        return state;
+      case 'Transects':
+        state = items.getObjectFromId(value['idTransectOrig']);
+        return state;
+      default:
+        throw ArgumentError('Unknown type: ${items.runtimeType}');
+    }
+  }
+}
+
+final selectedItemMesureDetailsProvider = StateNotifierProvider.autoDispose
+    .family<SelectedItemMesureDetailsNotifier, SaisisableObject?,
+        SaisisableObject?>((ref, item) {
+  return SelectedItemMesureDetailsNotifier(item);
+});
+
+class SelectedItemMesureDetailsNotifier
+    extends StateNotifier<SaisisableObject?> {
+  final SaisisableObject? item;
+
+  SelectedItemMesureDetailsNotifier(this.item) : super(null) {
+    if (item is Arbre) {
+      Arbre arbreDetails = item as Arbre;
+      state = arbreDetails.arbresMesures!.values.first;
+    }
+  }
+
+  void setSelectedItemMesureDetails(int selectedIndex) {
+    if (item is Arbre) {
+      Arbre arbreDetails = item as Arbre;
+      state = arbreDetails.arbresMesures!.values[selectedIndex];
+    }
+    // case 'BmsSup30':
+    //   state = item.getObjectFromId(value['idBmSup30Orig']);
+    //   break;
+    // case 'Regenerations':
+    //   state = item.getObjectFromId(value['idRegeneration']);
+    //   break;
+    // case 'Repères':
+    //   state = item.getObjectFromId(value['idRepere']);
+    //   break;
+    // case 'Transects':
+    //   state = item.getObjectFromId(value['idTransectOrig']);
+    //   break;
+  }
+}

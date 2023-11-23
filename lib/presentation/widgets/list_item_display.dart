@@ -35,8 +35,13 @@ Widget createPrimaryGrid(List<MapEntry<String, dynamic>> simpleElements) {
 
 class SecondaryGrid extends StatefulWidget {
   final List<dynamic> arbresMesuresList;
+  final Function(int) onItemSelected;
 
-  SecondaryGrid({Key? key, required this.arbresMesuresList}) : super(key: key);
+  SecondaryGrid({
+    Key? key,
+    required this.arbresMesuresList,
+    required this.onItemSelected,
+  }) : super(key: key);
 
   @override
   _SecondaryGridState createState() => _SecondaryGridState();
@@ -48,6 +53,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
   void _showNextItem() {
     setState(() {
       currentIndex = (currentIndex + 1) % widget.arbresMesuresList.length;
+      widget.onItemSelected(currentIndex);
     });
   }
 
@@ -55,6 +61,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
     setState(() {
       currentIndex = (currentIndex - 1 + widget.arbresMesuresList.length) %
           widget.arbresMesuresList.length;
+      widget.onItemSelected(currentIndex);
     });
   }
 

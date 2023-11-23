@@ -6,6 +6,8 @@ import 'package:dendro3/data/mapper/corCyclePlacette_mapper.dart';
 import 'package:dendro3/data/mapper/regeneration_mapper.dart';
 import 'package:dendro3/data/mapper/repere_mapper.dart';
 import 'package:dendro3/data/mapper/transect_mapper.dart';
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
@@ -23,6 +25,7 @@ import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/list_item_display.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
@@ -61,6 +64,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   double? arrayWidth;
   late List<bool> _extendedList;
   SaisisableObject? selectedItemDetails;
+  SaisisableObject? selectedItemMesureDetails;
 
   @override
   void initState() {
@@ -98,37 +102,47 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 
+    // final lastModifiedIds = ref.watch(lastModifiedIdProvider);
+    final selectedItemDetails = ref.watch(selectedItemDetailsProvider(items));
+    final selectedItemMesureDetails =
+        ref.watch(selectedItemMesureDetailsProvider(selectedItemDetails));
+
     return Column(
       children: [
         Container(
           height: 300,
           padding: EdgeInsets.only(right: 12),
           decoration: BoxDecoration(
-            color: Colors.green,
+            color: Colors.white,
             // border: Border(),
             // borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: columnNameList.isEmpty
               ? Text('An error occurred: columnNameList is null.')
               : DataTable2(
-                  columnSpacing: 10,
-                  horizontalMargin: 4,
+                  columnSpacing: 12, // Adjusted for better spacing
+                  horizontalMargin: 6, // Consistent margin
                   fixedLeftColumns: 1,
-
-                  // fixedLeftColumns: 1,
                   scrollController: _controller,
-                  dividerThickness: 0,
-                  // dataRowHeight: 300,
-                  showCheckboxColumn: false,
-                  // bottomMargin: 10,
-
-                  // scrollController: _controller,
-                  // horizontalMargin: 10,
-                  // columnSpacing: 30, //defaultPadding,
+                  dividerThickness: 1,
+                  showCheckboxColumn: false, // Added dividers for clarity
                   minWidth: _extendedList[0] ? null : arrayWidth,
                   columns: _createColumns(columnNameList),
-
                   rows: _createRows(cycleRowList, items),
+                  dataRowHeight:
+                      50, // Uncommented and adjusted for better row visibility
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Consider using theme-based colors
+                  ),
+                  headingTextStyle: TextStyle(
+                    color: Colors.black54,
+                    fontWeight:
+                        FontWeight.bold, // Custom text style for headers
+                  ),
+                  dataTextStyle: TextStyle(
+                    color: Colors.black, // Custom text style for data
+                  ),
+                  // Additional customizations like row color, sorting functionality, etc.
                 ),
         ),
         Row(
@@ -191,7 +205,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             ),
           ],
         ),
-        if (selectedItemDetails != null) _buildSelectedItemDetails(),
+        if (selectedItemDetails != null)
+          _buildSelectedItemDetails(selectedItemDetails),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -208,6 +223,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         placette: widget.placette,
                         cycle:
                             widget.dispCycleList.values[0], // Modify as needed
+                        saisisableObject1: selectedItemDetails,
+                        saisisableObject2: selectedItemMesureDetails,
+
                         // saisisableObject1: convertToSaisisObject1(
                         //     selectedItemDetails!, widget.displayTypeState),
                         // saisisableObject2: convertToSaisisObject2(
@@ -244,6 +262,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 type: widget.displayTypeState,
                 placette: widget.placette,
                 cycle: widget.dispCycleList.values[0],
+                saisisableObject1: selectedItemDetails,
+                saisisableObject2: selectedItemMesureDetails,
               );
             },
           )),
@@ -253,9 +273,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     );
   }
 
-  Widget _buildSelectedItemDetails() {
+  Widget _buildSelectedItemDetails(SaisisableObject? selectedItemDetailsCo) {
+    // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
     // Check if selectedItemDetails is null
-    if (selectedItemDetails == null) {
+    if (selectedItemDetailsCo == null) {
       return Text("No item selected.");
     }
 
@@ -263,7 +284,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<dynamic> arbresMesuresList = [];
 
     // Extracting the data
-    var allValues = selectedItemDetails!.getAllValuesMapped();
+    var allValues = selectedItemDetailsCo!.getAllValuesMapped();
     allValues.entries.forEach((entry) {
       if (entry.key == "arbresMesures" && entry.value is List) {
         arbresMesuresList = entry.value;
@@ -277,9 +298,86 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         createPrimaryGrid(simpleElements),
         // Only create SecondaryGrid if arbresMesuresList is not empty
         if (arbresMesuresList.isNotEmpty)
-          SecondaryGrid(arbresMesuresList: arbresMesuresList),
+          SecondaryGrid(
+            arbresMesuresList: arbresMesuresList,
+            onItemSelected: (int selectedIndex) {
+              ref
+                  .read(selectedItemMesureDetailsProvider(selectedItemDetailsCo)
+                      .notifier)
+                  .setSelectedItemMesureDetails(selectedIndex);
+              // if (selectedItemDetailsCo is Arbre) {
+              //   Arbre arbreDetails = selectedItemDetailsCo as Arbre;
+              //   selectedItemMesureDetails =
+              //       arbreDetails.arbresMesures!.values[selectedIndex];
+              // }
+            },
+          ),
       ],
     );
+  }
+
+  void onSelectedItemChanged(
+    int selectedIndex,
+    Map<String, dynamic> value,
+    String type,
+    DisplayableList items,
+  ) {
+    final SaisisableObject? aaa = ref
+        .read(selectedItemDetailsProvider(items).notifier)
+        .setSelectedItemDetails(value, widget.displayTypeState);
+    ref
+        .read(selectedItemMesureDetailsProvider(aaa).notifier)
+        .setSelectedItemMesureDetails(0);
+
+    // if (selectedItemDetails is Arbre) {
+    //   Arbre arbreDetails = selectedItemDetails as Arbre;
+    //   selectedItemMesureDetails =
+    //       arbreDetails.arbresMesures!.values[selectedIndex];
+    // }
+    // onSelectedItemIndexChanged(selectedIndex);
+    // switch (widget.displayTypeState) {
+    //   case 'Arbres':
+    //     selectedItemMesureDetails = selectedItemDetails!
+    //         .arbresMesures.values[selectedIndex] as ArbreMesure;
+    //     // selectedItemMesureDetails =
+    //     //     getObjectFromType(selectedItemDetails!.arbresMesures.values[selectedIndex], items, 'Arbres');
+    //     // selectedItemMesureDetails =
+    //     // selectedItemDetails!.arbresMesures.values[selectedIndex];
+
+    //     break;
+    //   case 'BmsSup30':
+
+    // case 'BmsSup30':
+    //   return items.getObjectFromId(value['idBmSup30Orig']);
+    // case 'Regenerations':
+    //   return items.getObjectFromId(value['idRegeneration']);
+    // case 'Repères':
+    //   return items.getObjectFromId(value['idRepere']);
+    // case 'Transects':
+    //   return items.getObjectFromId(value['idTransectOrig']);
+    // default:
+    //   throw ArgumentError('Unknown type: ${items.runtimeType}');
+    // }
+
+    // if (selectedItemDetails != null &&
+    //     selectedIndex < selectedItemDetails?.arbresMesures.values.length) {
+    //   setState(() {
+    //     selectedArbreMesure =
+    //         selectedItemDetails?.arbresMesures.values[selectedIndex];
+    //   });
+    // }
+  }
+
+  void onSelectedItemIndexChanged(
+    int selectedIndex,
+    // selectedItemDetailsCo
+  ) {
+    // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
+    if (selectedItemDetails is Arbre) {
+      Arbre arbreDetails = selectedItemDetails as Arbre;
+      selectedItemMesureDetails =
+          arbreDetails.arbresMesures!.values[selectedIndex];
+    }
   }
 
   List<DataColumn> _createColumns(List<String> columnList) {
@@ -326,10 +424,21 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 size: 24,
               ),
               onPressed: () {
-                setState(() {
-                  selectedItemDetails =
-                      getObjectFromType(value, items, widget.displayTypeState);
-                });
+                onSelectedItemChanged(
+                  0,
+                  value,
+                  widget.displayTypeState,
+                  items,
+                );
+
+                // setState(() {
+                //   selectedItemDetails = ref
+                //       .read(selectedItemDetailsProvider(items).notifier)
+                //       .setSelectedItemDetails(value, widget.displayTypeState);
+                //   // selectedItemDetails =
+                //   //     getObjectFromType(value, items, widget.displayTypeState);
+                //   onSelectedItemChanged(0);
+                // });
               },
             ),
           ),
