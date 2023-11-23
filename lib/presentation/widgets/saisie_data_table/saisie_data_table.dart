@@ -262,8 +262,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 type: widget.displayTypeState,
                 placette: widget.placette,
                 cycle: widget.dispCycleList.values[0],
-                saisisableObject1: selectedItemDetails,
-                saisisableObject2: selectedItemMesureDetails,
+                saisisableObject1: null,
+                saisisableObject2: null,
               );
             },
           )),
