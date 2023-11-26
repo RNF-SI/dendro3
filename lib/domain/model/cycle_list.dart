@@ -25,4 +25,19 @@ class CycleList with _$CycleList {
 
   CycleList removeCycleById(final int id) =>
       copyWith(values: values.where((cycle) => cycle.idCycle != id).toList());
+
+  Cycle? findCycleById(final int idCycle) {
+    return values.firstWhere(
+      (cycle) => cycle.idCycle == idCycle,
+    );
+  }
+
+  Cycle? findIdOfCycleWithLargestNumCycle() {
+    if (values.isEmpty) {
+      return null;
+    }
+    Cycle? cycleWithLargestNumCycle = values.reduce(
+        (current, next) => current.numCycle > next.numCycle ? current : next);
+    return cycleWithLargestNumCycle;
+  }
 }

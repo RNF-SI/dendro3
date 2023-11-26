@@ -1,5 +1,7 @@
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
@@ -25,6 +27,7 @@ final arbreListViewModelStateNotifierProvider =
     // ref.watch(getArbreListUseCaseProvider),
     ref.watch(createArbreAndMesureUseCaseProvider),
     ref.watch(updateArbreAndMesureUseCaseProvider),
+    ref.watch(addArbreMesureUseCaseProvider),
     // ref.watch(deleteArbreUseCaseProvider),
     // arbreListe,
     lastModifiedProvider,
@@ -38,6 +41,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   // final GetArbreListUseCase _getArbreListUseCase;
   final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
   final UpdateArbreAndMesureUseCase _updateArbreAndMesureUseCase;
+  final AddArbreMesureUseCase _addArbreMesureUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
 
   int? _lastModifiedArbreId;
@@ -46,6 +50,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     // this._getArbreListUseCase,
     this._createArbreAndMesureUseCase,
     this._updateArbreAndMesureUseCase,
+    this._addArbreMesureUseCase,
     // this._deleteArbreUseCase,
     // final ArbreList arbreListe
     this._lastModifiedProvider,
@@ -74,39 +79,6 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   @override
   addItem(
     final Map item,
-    // final int idArbreOrig,
-
-    // // Propriétés arbre
-    // final int idPlacette,
-    // final String codeEssence,
-    // final double azimut,
-    // final double distance,
-    // final bool taillis,
-    // final String observation,
-
-    // // Propriétés arbreMesure
-    // final int? idCycle,
-    // double? diametre1,
-    // double? diametre2,
-    // String? type,
-    // double? hauteurTotale,
-    // double? hauteurBranche,
-    // int? stadeDurete,
-    // int? stadeEcorce,
-    // String? liane,
-    // double? diametreLiane,
-    // String? coupe,
-    // final bool limite,
-    // int? idNomenclatureCodeSanitaire,
-    // String? codeEcolo,
-    // final String refCodeEcolo,
-    // bool? ratioHauteur,
-    // String? observationMesure,
-
-    // final String title,
-    // final String description,
-    // final bool isCompleted,
-    // final DateTime dueDate,
   ) async {
     try {
       final newArbre = await _createArbreAndMesureUseCase.execute(
@@ -164,6 +136,44 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["taillis"],
         item["observation"],
         item["idArbreMesure"],
+        item["idCycle"],
+        item["numCycle"],
+        item["diametre1"],
+        item["diametre2"],
+        item["type"],
+        item["hauteurTotale"],
+        item["hauteurBranche"],
+        item["stadeDurete"],
+        item["stadeEcorce"],
+        item["liane"],
+        item["diametreLiane"],
+        item["coupe"],
+        item["limite"],
+        item["idNomenclatureCodeSanitaire"],
+        item["codeEcolo"],
+        item["refCodeEcolo"],
+        item["ratioHauteur"],
+        item["observationMesure"],
+      );
+      // _lastModifiedArbreId = newArbre.idArbreOrig;
+      _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
+
+      // final aa = state.data!.addArbre(newArbre);
+      state = State.success(state.data!.updateItemInList(newArbre));
+    } on Exception catch (e) {
+      state = State.error(e);
+    }
+  }
+
+  addMesureItem(
+    Arbre arbre,
+    final Map item,
+    // final int idArbreOrig,
+  ) async {
+    try {
+      final newArbre = await _addArbreMesureUseCase.execute(
+        // idArbreOrig,
+        arbre,
         item["idCycle"],
         item["numCycle"],
         item["diametre1"],

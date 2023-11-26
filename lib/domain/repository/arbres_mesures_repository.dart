@@ -26,4 +26,39 @@ abstract class ArbresMesuresRepository {
     bool? ratioHauteur,
     String? observationMesure,
   );
+
+  Future<ArbreMesure> updateArbreMesure(
+    final int idArbreMesure,
+    final int idArbre,
+    final int? idCycle,
+    double? diametre1,
+    double? diametre2,
+    String? type,
+    double? hauteurTotale,
+    double? hauteurBranche,
+    int? stadeDurete,
+    int? stadeEcorce,
+    String? liane,
+    double? diametreLiane,
+    String? coupe,
+    final bool limite,
+    int? idNomenclatureCodeSanitaire,
+    String? codeEcolo,
+    final String refCodeEcolo,
+    bool? ratioHauteur,
+    String? observationMesure,
+  );
+
+  // Implements getPreviousCycleMeasure
+  Future<ArbreMesure> getPreviousCycleMeasure(
+    final int idArbre,
+    final int? idCycle,
+    int? numCycle,
+  );
+
+  Future<void> updateLastArbreMesureCoupe(
+    final int idArbre,
+    final int? idCycle,
+    final String? coupe,
+  );
 }

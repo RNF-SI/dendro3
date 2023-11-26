@@ -102,7 +102,9 @@ class FormSaisiePlacettePageState
       appBar: AppBar(
         title: Text(widget.formType == 'edit'
             ? 'Modifier un ${widget.type}'
-            : 'Ajouter un ${widget.type}'),
+            : widget.formType == 'newMesure'
+                ? 'Nouveau cycle pour ${widget.type}'
+                : 'Ajouter un ${widget.type}'),
       ),
       body: Padding(
         // height: 100,
@@ -132,7 +134,7 @@ class FormSaisiePlacettePageState
           },
           child: widget.formType == 'edit'
               ? const Text('Modifier')
-              : const Text('Ajout'),
+              : const Text('Ajouter'),
         ),
       ),
     );
@@ -495,6 +497,7 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
         'placette': widget.placette,
         'arbre': widget.saisisableObject1,
         'arbreMesure': widget.saisisableObject2,
+        'formType': widget.formType,
       }));
     // return ArbreViewModel();
     case 'BmsSup30':

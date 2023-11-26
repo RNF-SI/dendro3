@@ -9,6 +9,7 @@ import 'package:dendro3/data/mapper/transect_mapper.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
@@ -221,8 +222,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         formType: "edit",
                         type: widget.displayTypeState,
                         placette: widget.placette,
-                        cycle:
-                            widget.dispCycleList.values[0], // Modify as needed
+                        cycle: getCycleFromType(
+                          'edit',
+                          widget.dispCycleList,
+                          selectedItemMesureDetails,
+                        ),
                         saisisableObject1: selectedItemDetails,
                         saisisableObject2: selectedItemMesureDetails,
 
@@ -252,10 +256,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 Navigator.push(context, MaterialPageRoute<void>(
                   builder: (BuildContext context) {
                     return FormSaisiePlacettePage(
-                      formType: "edit",
+                      formType: "newMesure",
                       type: widget.displayTypeState,
                       placette: widget.placette,
-                      cycle: widget.dispCycleList.values[0], // Modify as needed
+                      cycle: getCycleFromType(
+                        'newMesure',
+                        widget.dispCycleList,
+                      ), // Modify as needed
                       saisisableObject1: selectedItemDetails,
                       saisisableObject2: null,
                     );
@@ -273,7 +280,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 formType: "add",
                 type: widget.displayTypeState,
                 placette: widget.placette,
-                cycle: widget.dispCycleList.values[0],
+                cycle: getCycleFromType(
+                  'add',
+                  widget.dispCycleList,
+                ),
                 saisisableObject1: null,
                 saisisableObject2: null,
               );
@@ -507,5 +517,24 @@ SaisisableObject getObjectFromType(
       return items.getObjectFromId(value['idTransectOrig']);
     default:
       throw ArgumentError('Unknown type: ${items.runtimeType}');
+  }
+}
+
+Cycle? getCycleFromType(String formType, CycleList dispCycleList,
+    [SaisisableObject? selectedItemMesureDetails]) {
+  if (formType == 'edit') {
+    if (selectedItemMesureDetails is ArbreMesure) {
+      return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+    } else if (selectedItemMesureDetails is BmSup30Mesure) {
+      return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+    } else {
+      return dispCycleList.values[0];
+    }
+  } else if (formType == 'newMesure') {
+    return dispCycleList.findIdOfCycleWithLargestNumCycle();
+  } else if (formType == 'add') {
+    return dispCycleList.findIdOfCycleWithLargestNumCycle();
+  } else {
+    return null;
   }
 }

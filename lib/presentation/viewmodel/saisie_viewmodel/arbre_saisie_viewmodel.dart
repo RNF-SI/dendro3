@@ -44,6 +44,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['placette'],
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
+      arbreInfoObj['formType'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -61,6 +62,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   final GetCodeEcoloNomenclaturesUseCase _getCodeEcoloNomenclaturesUseCase;
   // final InsertArbreUseCase _insertArbreUseCase;
   final Ref ref;
+
+  final String formType;
   // late TodoId _id;
   // var _title = '';
   // var _description = '';
@@ -85,6 +88,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   Placette placette;
   Cycle cycle;
 
+  Arbre arbre;
+
   late int? _idArbre;
   int? _idArbreOrig;
   var _idPlacette;
@@ -93,7 +98,6 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   double? _distance;
   bool _taillis = false;
   var _observation = '';
-  var _isNewArbre = false;
 
   // late ArbreMesureId idArbreMesure='';
   // var _idArbre = '';
@@ -123,8 +127,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this.ref,
     this.cycle,
     this.placette,
-    final Arbre? arbre,
+    this.arbre,
     final ArbreMesure? arbreMesure,
+    this.formType,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -244,39 +249,37 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   _initArbre(final Arbre? arbre) {
     _idPlacette = placette.idPlacette;
-    if (arbre == null) {
+    if (formType == 'add') {
       _idArbre = null;
-      _isNewArbre = true;
-    } else {
+    } else if (formType == 'edit') {
       // Init ArbreInfos
-      _idArbre = arbre.idArbre;
+      _idArbre = arbre!.idArbre;
       _idArbreOrig = arbre.idArbreOrig;
       _codeEssence = arbre.codeEssence;
       _azimut = arbre.azimut;
       _distance = arbre.distance;
       _taillis = arbre.taillis ?? true;
       _observation = arbre.observation ?? '';
-      // _isNewArbre
-
-      // Init ArbreMesure
-      // _idArbre = arbre.arbresMesures.;
-
-      // _id = todo.id;
-      // _title = todo.title;
-      // _description = todo.description;
-      // _isCompleted = todo.isCompleted;
-      // _dueDate = todo.dueDate;
+    } else if (formType == 'newMesure') {
+      // Init ArbreInfos
+      _idArbre = arbre!.idArbre;
+      _idArbreOrig = arbre.idArbreOrig;
+      _codeEssence = arbre.codeEssence;
+      _azimut = arbre.azimut;
+      _distance = arbre.distance;
+      _taillis = arbre.taillis ?? true;
+      _observation = arbre.observation ?? '';
     }
   }
 
   _initArbreMesure(final ArbreMesure? arbreMesure) {
     _idCycle = cycle.idCycle;
-    if (arbreMesure == null) {
+    if (formType == 'add') {
       _isNewArbreMesure = true;
       _idArbreMesure = null;
-    } else {
+    } else if (formType == 'edit') {
       // Init ArbreInfos
-      _idArbreMesure = arbreMesure.idArbreMesure;
+      _idArbreMesure = arbreMesure!.idArbreMesure;
       _idCycle = arbreMesure.idCycle;
       _diametre1 = arbreMesure.diametre1;
       _diametre2 = arbreMesure.diametre2;
@@ -294,11 +297,31 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _refCodeEcolo = arbreMesure.refCodeEcolo ?? 'EFI';
       _ratioHauteur = arbreMesure.ratioHauteur ?? false;
       _observationMesure = arbreMesure.observation ?? '';
+    } else if (formType == 'newMesure') {
+      // Init ArbreInfos
+      _idArbreMesure = null;
+      // _idCycle = arbreMesure.idCycle;
+      // _diametre1 = arbreMesure.diametre1;
+      // _diametre2 = arbreMesure.diametre2;
+      // _type = arbreMesure.type ?? '';
+      // _hauteurTotale = arbreMesure.hauteurTotale;
+      // _hauteurBranche = arbreMesure.hauteurBranche;
+      // _stadeDurete = arbreMesure.stadeDurete;
+      // _stadeEcorce = arbreMesure.stadeEcorce;
+      // _liane = arbreMesure.liane ?? '';
+      // _diametreLiane = arbreMesure.diametreLiane;
+      // _coupe = arbreMesure.coupe ?? '';
+      // _limite = arbreMesure.limite ?? false;
+      // _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
+      // _codeEcolo = arbreMesure.codeEcolo ?? '';
+      // _refCodeEcolo = arbreMesure.refCodeEcolo ?? 'EFI';
+      // _ratioHauteur = arbreMesure.ratioHauteur ?? false;
+      // _observationMesure = arbreMesure.observation ?? '';
     }
   }
 
   Future<void> createObject() async {
-    if (_isNewArbre) {
+    if (formType == 'add') {
       _arbreListViewModel.addItem({
         'idPlacette': _idPlacette,
         'codeEssence': _codeEssence,
@@ -326,31 +349,36 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'observationMesure': _observationMesure,
       });
     } else {
-      // final newTodo = Todo(
-      //   id: _id,
-      //   title: _title,
-      //   description: _description,
-      //   isCompleted: _isCompleted,
-      //   dueDate: _dueDate,
-      // );
-      // _todoListViewModel.updateTodo(newTodo);
-      // final newTodo = Todo(
-      //   id: _id,
-      //   title: _title,
-      //   description: _description,
-      //   isCompleted: _isCompleted,
-      //   dueDate: _dueDate,
-      // );
-      // _todoListViewModel.updateTodo(newTodo);
+      _arbreListViewModel.addMesureItem(
+        arbre,
+        {
+          'idPlacette': _idPlacette,
+          'codeEssence': _codeEssence,
+          'azimut': _azimut!,
+          'distance': _distance!,
+          'taillis': _taillis,
+          'observation': _observation,
+          'idCycle': _idCycle,
+          'numCycle': cycle.numCycle,
+          'diametre1': _diametre1,
+          'diametre2': _diametre2,
+          'type': _type,
+          'hauteurTotale': _hauteurTotale,
+          'hauteurBranche': _hauteurBranche,
+          'stadeDurete': _stadeDurete,
+          'stadeEcorce': _stadeEcorce,
+          'liane': _liane,
+          'diametreLiane': _diametreLiane,
+          'coupe': '',
+          'limite': _limite,
+          'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
+          'codeEcolo': _codeEcolo,
+          'refCodeEcolo': _refCodeEcolo,
+          'ratioHauteur': _ratioHauteur,
+          'observationMesure': _observationMesure,
+        },
+      );
     }
-
-    // try {
-    //   await _insertArbreUseCase.execute(arbreEntity);
-    // } on Exception catch (e) {
-    //   print(e);
-    // } catch (e) {
-    //   print(e);
-    // }
   }
 
   @override
@@ -385,6 +413,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       'observationMesure': _observationMesure,
     });
   }
+
   // Future<void> _init(int placetteId) async {
   //   state = const custom_async_state.State.loading();
   //   try {
@@ -420,8 +449,6 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   bool initialLimiteValue() => _taillis ?? true;
   bool initialRatioHauteurValue() => _ratioHauteur ?? true;
-
-  bool shouldShowDeleteTodoIcon() => !_isNewArbre;
 
   setCodeEssence(final String value) => _codeEssence = value;
   // setters Arbre
