@@ -328,72 +328,90 @@ class FormSaisiePlacettePageState
       return Visibility(
         visible:
             field.isVisibleFn != null ? field.isVisibleFn!(formData) : true,
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 2,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    field.fieldName.length > 18
-                        ? '${field.fieldName.substring(0, 18)}...'
-                        : field.fieldName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                    overflow:
-                        TextOverflow.ellipsis, // Ajouter la propriété overflow
+            // Texte importantMessage
+            if (field.importantMessage != null &&
+                field.importantMessage!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  field.importantMessage!,
+                  style: TextStyle(
+                    fontSize: 11, // Taille de police plus petite
+                    color: Colors.red, // Texte en rouge
                   ),
-                  if (field.fieldUnit != '')
-                    Text(
-                      ' ( ${field.fieldUnit})',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.grey,
-                        fontSize: 10,
+                ),
+              ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        field.fieldName.length > 18
+                            ? '${field.fieldName.substring(0, 18)}...'
+                            : field.fieldName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                        overflow: TextOverflow
+                            .ellipsis, // Ajouter la propriété overflow
                       ),
-                    ),
-                  if (field.fieldRequired)
-                    const Text(
-                      '*',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  if (field.fieldInfo != '')
-                    IconButton(
-                      padding: EdgeInsets.only(left: 0.0, right: 0.0),
-                      icon: const Icon(
-                        Icons.info_outline,
-                        color: Colors.grey,
-                        size: 12,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('Information'),
-                              content: Text(field.fieldInfo),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('OK'),
-                                ),
-                              ],
+                      if (field.fieldUnit != '')
+                        Text(
+                          ' ( ${field.fieldUnit})',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey,
+                            fontSize: 10,
+                          ),
+                        ),
+                      if (field.fieldRequired)
+                        const Text(
+                          '*',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      if (field.fieldInfo != '')
+                        IconButton(
+                          padding: EdgeInsets.only(left: 0.0, right: 0.0),
+                          icon: const Icon(
+                            Icons.info_outline,
+                            color: Colors.grey,
+                            size: 12,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Information'),
+                                  content: Text(field.fieldInfo),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: formWidget,
+                        ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: formWidget,
+                ),
+              ],
             ),
           ],
         ),

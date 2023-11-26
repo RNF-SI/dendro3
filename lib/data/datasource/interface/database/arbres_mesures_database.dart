@@ -13,9 +13,8 @@ abstract class ArbresMesuresDatabase {
     int? numCycle,
   );
 
-  Future<void> updateLastArbreMesureCoupe(
-    final int idArbre,
-    final int? idCycle,
+  Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
+    final int idArbreMesure,
     final String? coupe,
   );
 

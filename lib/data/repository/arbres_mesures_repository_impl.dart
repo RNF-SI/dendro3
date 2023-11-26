@@ -62,4 +62,73 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
 
     return ArbreMesureMapper.transformToModel(arbreEntity);
   }
+
+  @override
+  Future<ArbreMesure> updateArbreMesure(
+    final int? idArbreMesure,
+    final int? idArbre,
+    final int? idCycle,
+    double? diametre1,
+    double? diametre2,
+    String? type,
+    double? hauteurTotale,
+    double? hauteurBranche,
+    int? stadeDurete,
+    int? stadeEcorce,
+    String? liane,
+    double? diametreLiane,
+    String? coupe,
+    final bool limite,
+    int? idNomenclatureCodeSanitaire,
+    String? codeEcolo,
+    final String refCodeEcolo,
+    bool? ratioHauteur,
+    String? observationMesure,
+  ) async {
+    final arbreEntity =
+        await database.updateArbreMesure(ArbreMesureMapper.transformToEntityMap(
+      idArbreMesure,
+      idArbre,
+      idCycle,
+      diametre1,
+      diametre2,
+      type,
+      hauteurTotale,
+      hauteurBranche,
+      stadeDurete,
+      stadeEcorce,
+      liane,
+      diametreLiane,
+      coupe,
+      limite,
+      idNomenclatureCodeSanitaire,
+      codeEcolo,
+      refCodeEcolo,
+      ratioHauteur,
+      observationMesure,
+    ));
+
+    return ArbreMesureMapper.transformToModel(arbreEntity);
+  }
+
+  @override
+  Future<ArbreMesure> getPreviousCycleMeasure(
+    final int idArbre,
+    final int? idCycle,
+    int? numCycle,
+  ) async {
+    final arbreEntity =
+        await database.getPreviousCycleMeasure(idArbre, idCycle, numCycle);
+    return ArbreMesureMapper.transformToModel(arbreEntity);
+  }
+
+  @override
+  Future<ArbreMesure> updateLastArbreMesureCoupe(
+    final int idArbreMesure,
+    final String? coupe,
+  ) async {
+    final arbreEntity =
+        await database.updateLastArbreMesureCoupe(idArbreMesure, coupe);
+    return ArbreMesureMapper.transformToModel(arbreEntity);
+  }
 }

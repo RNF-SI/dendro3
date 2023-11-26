@@ -11,6 +11,7 @@ abstract class CreateArbreAndMesureUseCase {
     final bool? taillis,
     final String? observation,
     final int? idCycle,
+    int? numCycle,
     double? diametre1,
     double? diametre2,
     String? type,

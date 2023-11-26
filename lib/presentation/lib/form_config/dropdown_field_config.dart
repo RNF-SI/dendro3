@@ -23,11 +23,14 @@ class DropdownFieldConfig<T> extends FieldConfig {
     String? Function(dynamic, Map<String, dynamic>)? validator,
     this.onChanged,
     final bool Function(Map<String, dynamic>)? isVisibleFn,
+    final String? importantMessage,
   })  : validator = validator ?? defaultValidator,
         super(
-            fieldName: fieldName,
-            fieldRequired: fieldRequired,
-            fieldUnit: fieldUnit,
-            fieldInfo: fieldInfo,
-            isVisibleFn: isVisibleFn);
+          fieldName: fieldName,
+          fieldRequired: fieldRequired,
+          fieldUnit: fieldUnit,
+          fieldInfo: fieldInfo,
+          isVisibleFn: isVisibleFn,
+          importantMessage: importantMessage,
+        );
 }

@@ -93,22 +93,25 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   @override
-  Future<void> updateLastArbreMesureCoupe(
-    final int idArbre,
-    final int? idCycle,
+  Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
+    final int idArbreMesure,
     final String? coupe,
   ) async {
     final db = await database;
+    late final ArbreMesureEntity arbreMesureEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        {'coupe': coupe},
+        where: '$_columnId = ?',
+        whereArgs: [idArbreMesure],
+      );
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [idArbreMesure]);
+      arbreMesureEntity = results.first;
+    });
 
-    if (idCycle == null) {
-      throw ArgumentError('idCycle cannot be null');
-    }
-    await db.update(
-      _tableName,
-      {'coupe': coupe},
-      where: 'id_arbre_mesure = ?',
-      whereArgs: [idArbre],
-    );
+    return arbreMesureEntity;
   }
 
   // @override

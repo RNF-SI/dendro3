@@ -12,10 +12,10 @@ import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 
 class CreateArbreAndMesureUseCaseImpl implements CreateArbreAndMesureUseCase {
   final ArbresRepository _arbreRepository;
-  final ArbresMesuresRepository _arbreMesureRepositoryMesure;
+  final ArbresMesuresRepository _arbreMesureRepository;
 
   const CreateArbreAndMesureUseCaseImpl(
-      this._arbreRepository, this._arbreMesureRepositoryMesure);
+      this._arbreRepository, this._arbreMesureRepository);
 
   @override
   Future<Arbre> execute(
@@ -27,6 +27,7 @@ class CreateArbreAndMesureUseCaseImpl implements CreateArbreAndMesureUseCase {
     bool? taillis,
     String? observation,
     final int? idCycle,
+    int? numCycle,
     double? diametre1,
     double? diametre2,
     String? type,
@@ -54,8 +55,7 @@ class CreateArbreAndMesureUseCaseImpl implements CreateArbreAndMesureUseCase {
       observation,
     );
 
-    ArbreMesure arbreMesure =
-        await _arbreMesureRepositoryMesure.insertArbreMesure(
+    ArbreMesure arbreMesure = await _arbreMesureRepository.insertArbreMesure(
       arbre.idArbre,
       idCycle,
       diametre1,

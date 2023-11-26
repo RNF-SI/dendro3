@@ -56,9 +56,8 @@ abstract class ArbresMesuresRepository {
     int? numCycle,
   );
 
-  Future<void> updateLastArbreMesureCoupe(
-    final int idArbre,
-    final int? idCycle,
+  Future<ArbreMesure> updateLastArbreMesureCoupe(
+    final int idArbreMesure,
     final String? coupe,
   );
 }

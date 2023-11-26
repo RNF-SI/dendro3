@@ -3,8 +3,8 @@ import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 class DropdownSearchConfig<T> extends FieldConfig {
   final Future<List<T>> Function(String, [Map<String, dynamic>?]) asyncItems;
   final bool isMultiSelection;
-  final T? selectedItem;
-  final List<T>? selectedItems;
+  final T? Function()? selectedItem;
+  final List<T> Function()? selectedItems;
   final bool Function(T, String) filterFn;
   final String Function(T)? itemAsString;
   final void Function(T)? onChanged;
@@ -15,7 +15,11 @@ class DropdownSearchConfig<T> extends FieldConfig {
     return null;
   }
 
+  Future<List<dynamic>>? defaultFutureVariable;
+
   String? Function(dynamic, Map<String, dynamic>) validator;
+
+  Future<List<dynamic>>? futureVariable;
 
   DropdownSearchConfig({
     required String fieldName,
@@ -25,14 +29,19 @@ class DropdownSearchConfig<T> extends FieldConfig {
     // required this.items,
     required this.asyncItems,
     this.isMultiSelection = false,
-    this.selectedItem,
-    this.selectedItems,
+    // this.selectedItems,
     this.itemAsString,
     String? Function(dynamic, Map<String, dynamic>)? validator,
+    Future<List<dynamic>>? futureVariable,
+    T? Function()? selectedItem,
+    List<T> Function()? selectedItems,
     this.onChanged,
     required this.filterFn,
     final bool Function(Map<String, dynamic>)? isVisibleFn,
   })  : validator = validator ?? defaultValidator,
+        futureVariable = futureVariable ?? Future.value([]),
+        selectedItem = selectedItem ?? (() => null),
+        selectedItems = selectedItems ?? (() => []),
         super(
           fieldName: fieldName,
           fieldRequired: fieldRequired,

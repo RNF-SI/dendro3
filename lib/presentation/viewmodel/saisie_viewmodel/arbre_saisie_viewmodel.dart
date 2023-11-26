@@ -369,7 +369,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           'stadeEcorce': _stadeEcorce,
           'liane': _liane,
           'diametreLiane': _diametreLiane,
-          'coupe': '',
+          'coupe': _coupe,
           'limite': _limite,
           'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
           'codeEcolo': _codeEcolo,
@@ -878,6 +878,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             (formData['Type'] != '') &&
             (cycle.numCycle != 1),
         onChanged: (value) => setCoupe(value),
+        importantMessage: formType == 'newMesure'
+            ? "En cas de coupe, l'information que vous saissirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})"
+            : null,
       ),
 
       // TextFieldConfig(

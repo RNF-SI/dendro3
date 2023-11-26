@@ -38,6 +38,7 @@ class TextFieldConfig extends FieldConfig {
     required this.hintText,
     this.onChanged,
     final bool Function(Map<String, dynamic>)? isVisibleFn,
+    final String? importantMessage,
   })  : validator = validator ?? defaultValidator,
         super(
           fieldName: fieldName,
@@ -45,5 +46,6 @@ class TextFieldConfig extends FieldConfig {
           fieldUnit: fieldUnit,
           fieldInfo: fieldInfo,
           isVisibleFn: isVisibleFn,
+          importantMessage: importantMessage,
         );
 }

@@ -3,6 +3,8 @@ import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
@@ -46,6 +48,8 @@ import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -120,9 +124,24 @@ final getCodeEcoloNomenclaturesUseCaseProvider =
             ref.watch(nomenclaturesTypesRepositoryProvider)));
 
 final createArbreAndMesureUseCaseProvider =
-    Provider<CreateArbreAndMesureUseCase>((ref) =>
-        CreateArbreAndMesureUseCaseImpl(ref.watch(arbresRepositoryProvider),
-            ref.watch(arbresMesuresRepositoryProvider)));
+    Provider<CreateArbreAndMesureUseCase>(
+        (ref) => CreateArbreAndMesureUseCaseImpl(
+              ref.watch(arbresRepositoryProvider),
+              ref.watch(arbresMesuresRepositoryProvider),
+            ));
+
+final updateArbreAndMesureUseCaseProvider =
+    Provider<UpdateArbreAndMesureUseCase>(
+        (ref) => UpdateArbreAndMesureUseCaseImpl(
+              ref.watch(arbresRepositoryProvider),
+              ref.watch(arbresMesuresRepositoryProvider),
+            ));
+
+final addArbreMesureUseCaseProvider =
+    Provider<AddArbreMesureUseCase>((ref) => AddArbreMesureUseCaseImpl(
+          ref.watch(arbresRepositoryProvider),
+          ref.watch(arbresMesuresRepositoryProvider),
+        ));
 
 final createBmSup30AndMesureUseCaseProvider =
     Provider<CreateBmSup30AndMesureUseCase>((ref) =>

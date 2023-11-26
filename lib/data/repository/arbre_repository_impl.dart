@@ -8,6 +8,7 @@ import 'package:dendro3/domain/model/arbre.dart';
 // import 'package:dendro3/domain/model/arbre_id.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ArbresRepositoryImpl implements ArbresRepository {
   final ArbresDatabase database;
@@ -16,7 +17,6 @@ class ArbresRepositoryImpl implements ArbresRepository {
 
   @override
   Future<Arbre> insertArbre(
-    // final int idArbreOrig,
     final int idPlacette,
     final String codeEssence,
     final double azimut,
@@ -35,6 +35,31 @@ class ArbresRepositoryImpl implements ArbresRepository {
       observation,
     ));
 
+    return ArbreMapper.transformToModel(arbreEntity);
+  }
+
+  @override
+  Future<Arbre> updateArbre(
+    final int idArbre,
+    final int idArbreOrig,
+    final int idPlacette,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final bool? taillis,
+    final String? observation,
+  ) async {
+    final arbreEntity =
+        await database.updateArbre(ArbreMapper.transformToEntityMap(
+      idArbre,
+      idArbreOrig,
+      idPlacette,
+      codeEssence,
+      azimut,
+      distance,
+      taillis,
+      observation,
+    ));
     return ArbreMapper.transformToModel(arbreEntity);
   }
 }
