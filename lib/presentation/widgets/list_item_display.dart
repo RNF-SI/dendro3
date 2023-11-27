@@ -34,12 +34,12 @@ Widget createPrimaryGrid(List<MapEntry<String, dynamic>> simpleElements) {
 }
 
 class SecondaryGrid extends StatefulWidget {
-  final List<dynamic> arbresMesuresList;
+  final List<dynamic> mesuresList;
   final Function(int) onItemSelected;
 
   SecondaryGrid({
     Key? key,
-    required this.arbresMesuresList,
+    required this.mesuresList,
     required this.onItemSelected,
   }) : super(key: key);
 
@@ -52,27 +52,27 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
   void _showNextItem() {
     setState(() {
-      currentIndex = (currentIndex + 1) % widget.arbresMesuresList.length;
+      currentIndex = (currentIndex + 1) % widget.mesuresList.length;
       widget.onItemSelected(currentIndex);
     });
   }
 
   void _showPreviousItem() {
     setState(() {
-      currentIndex = (currentIndex - 1 + widget.arbresMesuresList.length) %
-          widget.arbresMesuresList.length;
+      currentIndex = (currentIndex - 1 + widget.mesuresList.length) %
+          widget.mesuresList.length;
       widget.onItemSelected(currentIndex);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.arbresMesuresList.isEmpty) {
+    if (widget.mesuresList.isEmpty) {
       return SizedBox.shrink(); // Return an empty widget if the list is empty
     }
 
     // Assuming each item in arbresMesuresList is a Map<String, dynamic>
-    Map<String, dynamic> currentItem = widget.arbresMesuresList[currentIndex];
+    Map<String, dynamic> currentItem = widget.mesuresList[currentIndex];
 
     List<Widget> gridItems = currentItem.entries.map((entry) {
       return Container(

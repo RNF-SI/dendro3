@@ -53,12 +53,8 @@ class BmSup30Mesure with _$BmSup30Mesure implements SaisisableObject {
   Map<String, dynamic> getReducedValuesMapped() {
     return {
       'idCycle': idCycle,
-      'diametreIni': diametreIni,
       'diametreMed': diametreMed,
-      'diametreFin': diametreFin,
       'longueur': longueur,
-      'stadeDurete': stadeDurete,
-      'stadeEcorce': stadeEcorce,
     };
   }
 

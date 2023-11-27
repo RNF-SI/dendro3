@@ -1,6 +1,7 @@
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
@@ -302,6 +303,9 @@ class SelectedItemMesureDetailsNotifier
     if (item is Arbre) {
       Arbre arbreDetails = item as Arbre;
       state = arbreDetails.arbresMesures!.values.first;
+    } else if (item is BmSup30) {
+      BmSup30 bmSup30Details = item as BmSup30;
+      state = bmSup30Details.bmsSup30Mesures!.values.first;
     }
   }
 
@@ -309,6 +313,20 @@ class SelectedItemMesureDetailsNotifier
     if (item is Arbre) {
       Arbre arbreDetails = item as Arbre;
       state = arbreDetails.arbresMesures!.values[selectedIndex];
+    } else if (item is BmSup30) {
+      BmSup30 bmSup30Details = item as BmSup30;
+      state = bmSup30Details.bmsSup30Mesures!.values[selectedIndex];
+      // } else if (item is Regeneration) {
+      //   Regeneration regenerationDetails = item as Regeneration;
+      //   state = regenerationDetails.regenerationsMesures!.values[selectedIndex];
+      // } else if (item is Repere) {
+      //   Repere repereDetails = item as Repere;
+      //   state = repereDetails.reperesMesures!.values[selectedIndex];
+      // } else if (item is Transect) {
+      //   Transect transectDetails = item as Transect;
+      //   state = transectDetails.transectsMesures!.values[selectedIndex];
+    } else {
+      throw ArgumentError('Unknown type: ${item.runtimeType}');
     }
     // case 'BmsSup30':
     //   state = item.getObjectFromId(value['idBmSup30Orig']);

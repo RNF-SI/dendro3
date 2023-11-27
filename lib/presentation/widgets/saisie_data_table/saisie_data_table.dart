@@ -213,32 +213,43 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           children: <Widget>[
             Visibility(
               visible: selectedItemDetails != null,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Logic for updating an item
-                  Navigator.push(context, MaterialPageRoute<void>(
-                    builder: (BuildContext context) {
-                      return FormSaisiePlacettePage(
-                        formType: "edit",
-                        type: widget.displayTypeState,
-                        placette: widget.placette,
-                        cycle: getCycleFromType(
-                          'edit',
-                          widget.dispCycleList,
-                          selectedItemMesureDetails,
-                        ),
-                        saisisableObject1: selectedItemDetails,
-                        saisisableObject2: selectedItemMesureDetails,
+              child: Flexible(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Logic for updating an item
+                    Navigator.push(context, MaterialPageRoute<void>(
+                      builder: (BuildContext context) {
+                        return FormSaisiePlacettePage(
+                          formType: "edit",
+                          type: widget.displayTypeState,
+                          placette: widget.placette,
+                          cycle: getCycleFromType(
+                            'edit',
+                            widget.dispCycleList,
+                            selectedItemMesureDetails,
+                          ),
+                          saisisableObject1: selectedItemDetails,
+                          saisisableObject2: selectedItemMesureDetails,
 
-                        // saisisableObject1: convertToSaisisObject1(
-                        //     selectedItemDetails!, widget.displayTypeState),
-                        // saisisableObject2: convertToSaisisObject2(
-                        //     selectedItemDetails!, widget.displayTypeState),
-                      );
-                    },
-                  ));
-                },
-                child: Text("Modifier l'${widget.displayTypeState}"),
+                          // saisisableObject1: convertToSaisisObject1(
+                          //     selectedItemDetails!, widget.displayTypeState),
+                          // saisisableObject2: convertToSaisisObject2(
+                          //     selectedItemDetails!, widget.displayTypeState),
+                        );
+                      },
+                    ));
+                  },
+                  child: Text(
+                    "Modifier l'${widget.displayTypeState}",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 10),
@@ -246,7 +257,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               onPressed: () {
                 // Logic for deleting an item
               },
-              child: Text('Supprimer'),
+              child: Text(
+                'Supprimer',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
             ),
             const SizedBox(width: 10),
             // Button for deleting an item
@@ -269,7 +285,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   },
                 ));
               },
-              child: Text('Nouvelle Mesure'),
+              child: Text(
+                'Nouvelle Mesure',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
             ),
           ],
         ),
@@ -303,13 +324,15 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     }
 
     List<MapEntry<String, dynamic>> simpleElements = [];
-    List<dynamic> arbresMesuresList = [];
+    List<dynamic> mesuresList = [];
 
     // Extracting the data
     var allValues = selectedItemDetailsCo!.getAllValuesMapped();
     allValues.entries.forEach((entry) {
       if (entry.key == "arbresMesures" && entry.value is List) {
-        arbresMesuresList = entry.value;
+        mesuresList = entry.value;
+      } else if (entry.key == "bmsSup30Mesures" && entry.value is List) {
+        mesuresList = entry.value;
       } else {
         simpleElements.add(entry);
       }
@@ -319,9 +342,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       children: [
         createPrimaryGrid(simpleElements),
         // Only create SecondaryGrid if arbresMesuresList is not empty
-        if (arbresMesuresList.isNotEmpty)
+        if (mesuresList.isNotEmpty)
           SecondaryGrid(
-            arbresMesuresList: arbresMesuresList,
+            mesuresList: mesuresList,
             onItemSelected: (int selectedIndex) {
               ref
                   .read(selectedItemMesureDetailsProvider(selectedItemDetailsCo)

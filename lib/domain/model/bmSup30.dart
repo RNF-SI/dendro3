@@ -62,17 +62,11 @@ class BmSup30 with _$BmSup30 implements SaisisableObject {
     DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
   }) {
     return {
-      'idBmSup30': idBmSup30,
       'idBmSup30Orig': idBmSup30Orig,
-      'idPlacette': idPlacette,
       'idArbre': idArbre,
       'codeEssence': codeEssence,
       'azimut': azimut,
       'distance': distance,
-      'orientation': orientation,
-      'azimutSouche': azimutSouche,
-      'distanceSouche': distanceSouche,
-      'observation': observation,
       'bmsSup30Mesures': bmsSup30Mesures!
           .getValuesMappedFromDisplayedColumnType(
               displayedMesureColumnType: displayedMesureColumnType),
