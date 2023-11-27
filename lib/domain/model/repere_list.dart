@@ -69,4 +69,9 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   getObjectFromId(final int id) {
     return values.firstWhere((repere) => repere.idRepere == id);
   }
+
+  @override
+  int getFirstElementIdOrig() {
+    return values.first.idRepere;
+  }
 }

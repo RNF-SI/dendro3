@@ -70,14 +70,9 @@ class Transect with _$Transect implements SaisisableObject {
   }) {
     return {
       'idTransectOrig': idTransectOrig,
+      'idCyclePlacette': idCyclePlacette,
       'codeEssence': codeEssence,
-      'distance': distance,
-      'azimutSouche': azimutSouche,
-      'distanceSouche': distanceSouche,
       'diametre': diametre,
-      'diametre130': diametre130,
-      'stadeDurete': stadeDurete,
-      'stadeEcorce': stadeEcorce,
     };
   }
 

@@ -2,6 +2,7 @@ import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'regeneration_list.freezed.dart';
@@ -78,5 +79,10 @@ class RegenerationList
   getObjectFromId(final int id) {
     return values
         .firstWhere((regeneration) => regeneration.idRegeneration == id);
+  }
+
+  @override
+  int getFirstElementIdOrig() {
+    return values.first.idRegeneration;
   }
 }

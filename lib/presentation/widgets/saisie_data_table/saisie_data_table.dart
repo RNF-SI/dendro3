@@ -99,7 +99,20 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final DisplayableList items = ref.watch(displayableListProvider);
 
     final rowList = ref.watch(rowsProvider(items));
-    final cycleRowList = ref.watch(cycleRowsProvider(rowList));
+
+    // create an object with 2 property: rowList and widget.placette.corCyclesPlacettes!.values
+    List<Map<String, int>> links = [];
+    for (var corCyclePlacette in widget.placette.corCyclesPlacettes!.values) {
+      links.add({
+        'idCyclePlacette': corCyclePlacette.idCyclePlacette,
+        'idCycle': corCyclePlacette.idCycle,
+      });
+    }
+
+    final cycleRowList = ref.watch(cycleRowsProvider({
+      'rowList': rowList,
+      'links': links,
+    }));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 

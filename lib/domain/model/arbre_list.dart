@@ -66,4 +66,9 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
   Arbre getObjectFromId(final int id) {
     return values.firstWhere((arbre) => arbre.idArbreOrig == id);
   }
+
+  @override
+  int getFirstElementIdOrig() {
+    return values.first.idArbreOrig;
+  }
 }

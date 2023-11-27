@@ -168,16 +168,40 @@ final displayedCycleProvider = StateProvider.autoDispose<List<int>>(
 );
 
 final cycleRowsProvider = Provider.autoDispose
-    .family<List<Map<String, dynamic>>, List<Map<String, dynamic>>>(
-        (ref, list) {
+    .family<List<Map<String, dynamic>>, dynamic>((ref, objProperties) {
+  List<Map<String, dynamic>> rowList = objProperties['rowList'];
+  List<Map<String, int>> links = objProperties['links'];
+
   List<int> rowsCycle = ref.watch(displayedCycleProvider);
   final mesureColumnType =
       ref.read(displayedMesureColumnTypeProvider.notifier).state;
 
   if (mesureColumnType == DisplayedColumnType.none) {
-    return list;
+    return rowList;
+  } else if (rowList[0].containsKey('idArbreOrig') ||
+      rowList[0].containsKey('idBmSup30Orig')) {
+    return rowList
+        .where(
+          (item) => rowsCycle.contains(item['idCycle']),
+        )
+        .toList();
+  } else if (rowList[0].containsKey('idTransectOrig')) {
+    var cyclePlacetteToCycleMap = {
+      for (var link in links) link['idCyclePlacette']: link['idCycle']
+    };
+
+    // Filter the rowList
+    List<Map<String, dynamic>> filteredList = rowList.where((row) {
+      // Get the cycle ID corresponding to the row's cyclePlacette ID
+      var cycleId = cyclePlacetteToCycleMap[row['idCyclePlacette']];
+
+      // Check if this cycleId is in the list of rowsCycle
+      return cycleId != null && rowsCycle.contains(cycleId);
+    }).toList();
+
+    return filteredList;
   } else {
-    return list.where((item) => rowsCycle.contains(item['idCycle'])).toList();
+    return rowList;
   }
 });
 
@@ -247,7 +271,7 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
 
     // Check if a map is empy
     if (_lastModifiedProvider.getObject().isEmpty) {
-      lastModifiedId = 1;
+      lastModifiedId = items.getFirstElementIdOrig();
     } else if (items is ArbreList) {
       lastModifiedId = _lastModifiedProvider.getLastModifiedId('Arbres');
     } else if (items is BmSup30List) {
@@ -306,6 +330,8 @@ class SelectedItemMesureDetailsNotifier
     } else if (item is BmSup30) {
       BmSup30 bmSup30Details = item as BmSup30;
       state = bmSup30Details.bmsSup30Mesures!.values.first;
+    } else {
+      state = null;
     }
   }
 
@@ -326,7 +352,8 @@ class SelectedItemMesureDetailsNotifier
       //   Transect transectDetails = item as Transect;
       //   state = transectDetails.transectsMesures!.values[selectedIndex];
     } else {
-      throw ArgumentError('Unknown type: ${item.runtimeType}');
+      state = null;
+      // throw ArgumentError('Unknown type: ${item.runtimeType}');
     }
     // case 'BmsSup30':
     //   state = item.getObjectFromId(value['idBmSup30Orig']);
