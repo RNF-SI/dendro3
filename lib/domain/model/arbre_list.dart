@@ -71,4 +71,9 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
   int getFirstElementIdOrig() {
     return values.first.idArbreOrig;
   }
+
+  @override
+  bool isEmpty() {
+    return values.isEmpty;
+  }
 }

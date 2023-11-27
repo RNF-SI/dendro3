@@ -79,4 +79,9 @@ class BmSup30List
   int getFirstElementIdOrig() {
     return values.first.idBmSup30Orig;
   }
+
+  @override
+  bool isEmpty() {
+    return values.isEmpty;
+  }
 }

@@ -178,6 +178,8 @@ final cycleRowsProvider = Provider.autoDispose
 
   if (mesureColumnType == DisplayedColumnType.none) {
     return rowList;
+  } else if (rowList.isEmpty) {
+    return [];
   } else if (rowList[0].containsKey('idArbreOrig') ||
       rowList[0].containsKey('idBmSup30Orig')) {
     return rowList
@@ -271,7 +273,10 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
     int lastModifiedId;
 
     // Check if a map is empy
-    if (_lastModifiedProvider.getObject().isEmpty) {
+    if (items.isEmpty()) {
+      state = null;
+      return;
+    } else if (_lastModifiedProvider.getObject().isEmpty) {
       lastModifiedId = items.getFirstElementIdOrig();
     } else if (items is ArbreList) {
       lastModifiedId = _lastModifiedProvider.getLastModifiedId('Arbres');

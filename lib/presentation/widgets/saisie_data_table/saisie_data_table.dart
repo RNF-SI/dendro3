@@ -101,9 +101,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final rowList = ref.watch(rowsProvider(items));
 
     // create an object with 2 property: rowList and widget.placette.corCyclesPlacettes!.values
-    List<Map<String, int>> links = [];
+    List<Map<String, int>> idCyclePlacetteIdCycleMapList = [];
     for (var corCyclePlacette in widget.placette.corCyclesPlacettes!.values) {
-      links.add({
+      idCyclePlacetteIdCycleMapList.add({
         'idCyclePlacette': corCyclePlacette.idCyclePlacette,
         'idCycle': corCyclePlacette.idCycle,
       });
@@ -111,7 +111,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     final cycleRowList = ref.watch(cycleRowsProvider({
       'rowList': rowList,
-      'links': links,
+      'links': idCyclePlacetteIdCycleMapList,
     }));
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
@@ -132,7 +132,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             // borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: columnNameList.isEmpty
-              ? Text('An error occurred: columnNameList is null.')
+              ? Text("Il n'y a pas de ${widget.displayTypeState} à afficher")
               : DataTable2(
                   columnSpacing: 12, // Adjusted for better spacing
                   horizontalMargin: 6, // Consistent margin

@@ -11,4 +11,6 @@ abstract class DisplayableList {
   getObjectFromId(final int id);
 
   getFirstElementIdOrig();
+
+  bool isEmpty();
 }

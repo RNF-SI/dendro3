@@ -83,4 +83,9 @@ class TransectList
   int getFirstElementIdOrig() {
     return values.first.idTransectOrig;
   }
+
+  @override
+  bool isEmpty() {
+    return values.isEmpty;
+  }
 }

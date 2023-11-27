@@ -74,4 +74,9 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   int getFirstElementIdOrig() {
     return values.first.idRepere;
   }
+
+  @override
+  bool isEmpty() {
+    return values.isEmpty;
+  }
 }

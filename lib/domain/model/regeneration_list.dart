@@ -85,4 +85,9 @@ class RegenerationList
   int getFirstElementIdOrig() {
     return values.first.idRegeneration;
   }
+
+  @override 
+  bool isEmpty() {
+    return values.isEmpty;
+  }
 }
