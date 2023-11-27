@@ -185,7 +185,8 @@ final cycleRowsProvider = Provider.autoDispose
           (item) => rowsCycle.contains(item['idCycle']),
         )
         .toList();
-  } else if (rowList[0].containsKey('idTransectOrig')) {
+  } else if (rowList[0].containsKey('idTransectOrig') ||
+      rowList[0].containsKey('idRegeneration')) {
     var cyclePlacetteToCycleMap = {
       for (var link in links) link['idCyclePlacette']: link['idCycle']
     };

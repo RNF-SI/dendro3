@@ -57,10 +57,10 @@ class Regeneration with _$Regeneration implements SaisisableObject {
   }) {
     return {
       'idRegeneration': idRegeneration,
+      'idCyclePlacette': idCyclePlacette,
+      'sousPlacette': sousPlacette,
       'codeEssence': codeEssence,
-      'recouvrement': recouvrement,
       'taillis': taillis,
-      'abroutissement': abroutissement,
     };
   }
 
