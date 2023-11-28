@@ -84,4 +84,9 @@ class Arbre with _$Arbre implements SaisisableObject {
           displayedMesureColumnType: displayedMesureColumnType),
     };
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idArbreOrig == valueMap['idArbreOrig'];
+  }
 }

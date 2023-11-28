@@ -149,11 +149,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   columns: _createColumns(
                     columnNameList,
                   ),
-                  rows: _createRows(
-                    cycleRowList,
-                    items,
-                    mapIdCycleNumCycle,
-                  ),
+                  rows: _createRows(cycleRowList, items, mapIdCycleNumCycle,
+                      selectedItemDetails),
                   dataRowHeight:
                       50, // Uncommented and adjusted for better row visibility
                   decoration: BoxDecoration(
@@ -437,18 +434,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     // }
   }
 
-  void onSelectedItemIndexChanged(
-    int selectedIndex,
-    // selectedItemDetailsCo
-  ) {
-    // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
-    if (selectedItemDetails is Arbre) {
-      Arbre arbreDetails = selectedItemDetails as Arbre;
-      selectedItemMesureDetails =
-          arbreDetails.arbresMesures!.values[selectedIndex];
-    }
-  }
-
   List<DataColumn> _createColumns(List<String> columnList) {
     List<DataColumn> columns = [];
 
@@ -479,9 +464,17 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<Map<String, dynamic>> valueList,
     DisplayableList items,
     Map<int, int> mapIdCycleNumCycle,
+    SaisisableObject? selectedItemDetails,
   ) {
     return valueList.map<DataRow>((value) {
       List<DataCell> cellList = [];
+      bool isSelected = false;
+      if (selectedItemDetails != null) {
+        if (selectedItemDetails!.isEqualToMap(value)) {
+          isSelected = true;
+        }
+      }
+      ;
 
       // Ajouter une cellule pour la colonne "update" au début
       cellList.add(
@@ -492,7 +485,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             child: IconButton(
               padding: EdgeInsets.only(left: 12),
               icon: Icon(
-                Icons.select_all,
+                isSelected
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
                 size: 24,
               ),
               onPressed: () {
@@ -502,15 +497,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   widget.displayTypeState,
                   items,
                 );
-
-                // setState(() {
-                //   selectedItemDetails = ref
-                //       .read(selectedItemDetailsProvider(items).notifier)
-                //       .setSelectedItemDetails(value, widget.displayTypeState);
-                //   // selectedItemDetails =
-                //   //     getObjectFromType(value, items, widget.displayTypeState);
-                //   onSelectedItemChanged(0);
-                // });
               },
             ),
           ),

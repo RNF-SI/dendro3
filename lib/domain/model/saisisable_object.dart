@@ -3,4 +3,5 @@ abstract class SaisisableObject {
   Map<String, dynamic> getAllValuesMapped();
   Map<String, dynamic> getReducedValuesMapped();
   Map<String, dynamic> getNoneValues();
+  isEqualToMap(Map<String, dynamic> valueMap);
 }

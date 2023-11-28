@@ -96,4 +96,9 @@ class Transect with _$Transect implements SaisisableObject {
             displayedMesureColumnType: displayedMesureColumnType);
     }
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idTransectOrig == valueMap['idTransectOrig'];
+  }
 }

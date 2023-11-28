@@ -84,4 +84,9 @@ class Regeneration with _$Regeneration implements SaisisableObject {
             displayedMesureColumnType: displayedMesureColumnType);
     }
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idRegeneration == valueMap['idRegeneration'];
+  }
 }

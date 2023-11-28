@@ -72,4 +72,9 @@ class Repere with _$Repere implements SaisisableObject {
             displayedMesureColumnType: displayedMesureColumnType);
     }
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idRepere == valueMap['idRepere'];
+  }
 }

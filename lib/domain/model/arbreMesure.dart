@@ -81,4 +81,9 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
   Map<String, dynamic> getNoneValues() {
     return {};
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idArbreMesure == valueMap['idArbreMesure'];
+  }
 }

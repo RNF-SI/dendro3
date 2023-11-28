@@ -93,4 +93,9 @@ class BmSup30 with _$BmSup30 implements SaisisableObject {
             displayedMesureColumnType: displayedMesureColumnType);
     }
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idBmSup30Orig == valueMap['idBmSup30Orig'];
+  }
 }

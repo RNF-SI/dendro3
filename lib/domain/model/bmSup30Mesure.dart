@@ -73,4 +73,9 @@ class BmSup30Mesure with _$BmSup30Mesure implements SaisisableObject {
         return getAllValuesMapped();
     }
   }
+
+  @override
+  bool isEqualToMap(Map<String, dynamic> valueMap) {
+    return idBmSup30Mesure == valueMap['idBmSup30Mesure'];
+  }
 }
