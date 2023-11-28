@@ -139,9 +139,12 @@ List<Map<String, dynamic>> flattenNestedObject(
   List<Map<String, dynamic>> flattenedList = [];
 
   for (var element in nestedObj) {
+    bool hasNestedList = false;
+
     // Handling 'arbresMesures'
     if (element.containsKey('arbresMesures') &&
         element['arbresMesures'] is List) {
+      hasNestedList = true;
       Map<String, dynamic> topLevelAttributes = Map.from(element)
         ..remove('arbresMesures');
 
@@ -157,6 +160,7 @@ List<Map<String, dynamic>> flattenNestedObject(
     // Handling 'bmsSup30Mesures'
     if (element.containsKey('bmsSup30Mesures') &&
         element['bmsSup30Mesures'] is List) {
+      hasNestedList = true;
       Map<String, dynamic> topLevelAttributes = Map.from(element)
         ..remove('bmsSup30Mesures');
 
@@ -167,6 +171,10 @@ List<Map<String, dynamic>> flattenNestedObject(
         });
         flattenedList.add(combinedMap);
       }
+    }
+
+    if (!hasNestedList) {
+      flattenedList.add(element);
     }
   }
 
