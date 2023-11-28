@@ -522,8 +522,9 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
       return ref.read(bmsup30SaisieViewModelProvider({
         'cycle': widget.cycle,
         'placette': widget.placette,
-        'bms': widget.saisisableObject1,
-        'bmsMesure': widget.saisisableObject2,
+        'bmsup30': widget.saisisableObject1,
+        'bmsup30Mesure': widget.saisisableObject2,
+        'formType': widget.formType,
       }));
     // return BmsViewModel();
     // ...other types
