@@ -131,23 +131,47 @@ final rowsProvider = StateProvider.autoDispose
   );
   List<Map<String, dynamic>> objLisseList = [];
   Map<String, dynamic> objLisse = {};
-  for (var element in nestedObj) {
-    objLisse = {};
-    element.forEach((key1, value1) {
-      if (value1 is List) {
-        for (var mesure in value1) {
-          mesure.forEach((key2, value2) {
-            objLisse[key2] = value2;
-          });
-        }
-      } else {
-        objLisse[key1] = value1;
-      }
-    });
-    objLisseList.add(objLisse);
-  }
-  return objLisseList;
+  return flattenNestedObject(nestedObj);
 });
+
+List<Map<String, dynamic>> flattenNestedObject(
+    List<Map<String, dynamic>> nestedObj) {
+  List<Map<String, dynamic>> flattenedList = [];
+
+  for (var element in nestedObj) {
+    // Handling 'arbresMesures'
+    if (element.containsKey('arbresMesures') &&
+        element['arbresMesures'] is List) {
+      Map<String, dynamic> topLevelAttributes = Map.from(element)
+        ..remove('arbresMesures');
+
+      for (var mesure in element['arbresMesures']) {
+        Map<String, dynamic> combinedMap = Map.from(topLevelAttributes);
+        mesure.forEach((key, value) {
+          combinedMap[key] = value;
+        });
+        flattenedList.add(combinedMap);
+      }
+    }
+
+    // Handling 'bmsSup30Mesures'
+    if (element.containsKey('bmsSup30Mesures') &&
+        element['bmsSup30Mesures'] is List) {
+      Map<String, dynamic> topLevelAttributes = Map.from(element)
+        ..remove('bmsSup30Mesures');
+
+      for (var mesure in element['bmsSup30Mesures']) {
+        Map<String, dynamic> combinedMap = Map.from(topLevelAttributes);
+        mesure.forEach((key, value) {
+          combinedMap[key] = value;
+        });
+        flattenedList.add(combinedMap);
+      }
+    }
+  }
+
+  return flattenedList;
+}
 
 final displayedCycleProvider = StateProvider.autoDispose<List<int>>(
   // We return the default mesureColumn type, here name.

@@ -92,6 +92,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   @override
   Widget build(BuildContext context) {
     List<Cycle> cycleList = ref.watch(cycleSelectedProvider);
+    // create a Map with key idCycle and value numCycle
+    Map<int, int> mapIdCycleNumCycle = {
+      for (Cycle cycle in cycleList) cycle.idCycle: cycle.numCycle
+    };
+
     List<bool> reducedList = ref.watch(reducedToggleProvider);
     List<bool> reducedMesureList = ref.watch(reducedMesureToggleProvider);
     List<bool> cycleToggleSelectedList = ref.watch(cycleSelectedToggleProvider);
@@ -141,8 +146,14 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   dividerThickness: 1,
                   showCheckboxColumn: false, // Added dividers for clarity
                   minWidth: _extendedList[0] ? null : arrayWidth,
-                  columns: _createColumns(columnNameList),
-                  rows: _createRows(cycleRowList, items),
+                  columns: _createColumns(
+                    columnNameList,
+                  ),
+                  rows: _createRows(
+                    cycleRowList,
+                    items,
+                    mapIdCycleNumCycle,
+                  ),
                   dataRowHeight:
                       50, // Uncommented and adjusted for better row visibility
                   decoration: BoxDecoration(
@@ -465,7 +476,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   }
 
   List<DataRow> _createRows(
-      List<Map<String, dynamic>> valueList, DisplayableList items) {
+    List<Map<String, dynamic>> valueList,
+    DisplayableList items,
+    Map<int, int> mapIdCycleNumCycle,
+  ) {
     return valueList.map<DataRow>((value) {
       List<DataCell> cellList = [];
 
@@ -513,7 +527,51 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         }),
       );
 
-      return DataRow(cells: cellList);
+      return DataRow(
+        cells: cellList,
+        color: MaterialStateProperty.resolveWith<Color?>((states) {
+          // Use a different Color for each idCycle of mapIdCycleNumCycle, according to numCycle
+          if (mapIdCycleNumCycle[value["idCycle"]] == 1) {
+            return Colors.white;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 2) {
+            return Colors.blue[100];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3) {
+            return Colors.blue[200];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4) {
+            return Colors.blue[300];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5) {
+            return Colors.blue[400];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6) {
+            return Colors.blue;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7) {
+            return Colors.blue[600];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8) {
+            return Colors.blue[700];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9) {
+            return Colors.blue[800];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10) {
+            return Colors.blue[900];
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11) {
+            return Colors.green;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12) {
+            return Colors.lime;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13) {
+            return Colors.amber;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14) {
+            return Colors.cyan;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15) {
+            return Colors.deepOrange;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 16) {
+            return Colors.deepPurple;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 17) {
+            return Colors.lightBlue;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 18) {
+            return Colors.lightGreen;
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 19) {
+            return Colors.limeAccent;
+          }
+        }),
+      );
     }).toList();
   }
 
