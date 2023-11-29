@@ -279,6 +279,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       'azimutSouche': _azimutSouche,
       'distanceSouche': _distanceSouche,
       'observation': _observation,
+      'idBmSup30Mesure': _idBmSup30Mesure,
       'idCycle': _idCycle,
       'diametreIni': _diametreIni,
       'diametreMed': _diametreMed,
@@ -322,8 +323,8 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       _distanceSouche != null ? _distanceSouche.toString() : '';
 
   // bool initialLimiteValue() => _taillis ?? true;
-  bool initialRatioHauteurValue() => _ratioHauteur ?? true;
-  bool initialChablisValue() => _chablis ?? true;
+  bool initialRatioHauteurValue() => _ratioHauteur == true ? true : false;
+  bool initialChablisValue() => _chablis == true ? true : false;
 
   bool shouldShowDeleteTodoIcon() => !_isNewBmSup30;
 
@@ -347,7 +348,10 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   setLongueur(final String value) => _longueur = double.parse(value);
   setRatioHauteur(final bool value) => _ratioHauteur = value;
   setContact(final String value) => _contact = double.parse(value);
-  setChablis(final bool value) => _chablis = value;
+  setChablis(final bool value) {
+    _chablis = value;
+  }
+
   setStadeDurete(final int value) => _stadeDurete = value;
   setStadeEcorce(final int value) => _stadeEcorce = value;
   setObservationMesure(final String value) => _observationMesure = value;

@@ -96,7 +96,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
       );
       // final aa = state.data!.addBmSup30(newBmSup30);
       _lastModifiedProvider.setLastModifiedId(
-          'Arbres', newBmSup30.idBmSup30Orig);
+          'BmsSup30', newBmSup30.idBmSup30Orig);
       state = State.success(state.data!.addItemToList(newBmSup30));
     } on Exception catch (e) {
       state = State.error(e);
@@ -138,7 +138,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
       );
       // _lastModifiedArbreId = newArbre.idArbreOrig;
       _lastModifiedProvider.setLastModifiedId(
-        'Arbres',
+        'BmsSup30',
         newBmSup30.idBmSup30Orig,
       );
 

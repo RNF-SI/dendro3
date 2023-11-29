@@ -311,15 +311,21 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
     } else if (_lastModifiedProvider.getObject().isEmpty) {
       lastModifiedId = items.getFirstElementIdOrig();
     } else if (items is ArbreList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Arbres');
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Arbres') ??
+          items.getFirstElementIdOrig();
     } else if (items is BmSup30List) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('BmsSup30');
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('BmsSup30') ??
+          items.getFirstElementIdOrig();
     } else if (items is RegenerationList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Regenerations');
+      lastModifiedId =
+          _lastModifiedProvider.getLastModifiedId('Regenerations') ??
+              items.getFirstElementIdOrig();
     } else if (items is RepereList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Repères');
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Repères') ??
+          items.getFirstElementIdOrig();
     } else if (items is TransectList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Transects');
+      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Transects') ??
+          items.getFirstElementIdOrig();
     } else {
       throw ArgumentError('Unknown type: ${items.runtimeType}');
     }
