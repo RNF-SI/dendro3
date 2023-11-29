@@ -82,6 +82,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   // late BmSup30Id _idBmSup30;
   // var _idBmSup30Orig;
   late int? _idBmSup30;
+  int? _idBmSup30Orig;
   var _idPlacette;
   var _idArbre;
   var _codeEssence = '';
@@ -194,6 +195,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     } else if (formType == 'edit') {
       // Init ArbreInfos
       _idBmSup30 = bmsup30!.idBmSup30;
+      _idBmSup30Orig = bmsup30!.idBmSup30Orig;
       _idArbre = bmsup30!.idArbre;
       _codeEssence = bmsup30.codeEssence;
       _azimut = bmsup30.azimut;
@@ -264,7 +266,33 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     } else {}
   }
 
-  Future<void> updateObject() async {}
+  Future<void> updateObject() async {
+    _bmsup30ListViewModel.updateItem({
+      'idBmSup30': _idBmSup30,
+      'idBmSup30Orig': _idBmSup30Orig,
+      'idPlacette': _idPlacette,
+      'idArbre': _idArbre,
+      'codeEssence': _codeEssence,
+      'azimut': _azimut,
+      'distance': _distance,
+      'orientation': _orientation,
+      'azimutSouche': _azimutSouche,
+      'distanceSouche': _distanceSouche,
+      'observation': _observation,
+      'idCycle': _idCycle,
+      'diametreIni': _diametreIni,
+      'diametreMed': _diametreMed,
+      'diametreFin': _diametreFin,
+      'diametre130': _diametre130,
+      'longueur': _longueur,
+      'ratioHauteur': _ratioHauteur,
+      'contact': _contact,
+      'chablis': _chablis,
+      'stadeDurete': _stadeDurete,
+      'stadeEcorce': _stadeEcorce,
+      'observationMesure': _observationMesure,
+    });
+  }
 
   String initialIdPlacetteValue() => _idPlacette.toString();
   String initialIdArbreValue() => _idArbre.toString();

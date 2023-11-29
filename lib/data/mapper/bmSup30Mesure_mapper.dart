@@ -42,9 +42,11 @@ class BmSup30MesureMapper {
         diametreFin: entity['diametre_fin'],
         diametre130: entity['diametre_130'],
         longueur: entity['longueur'],
-        ratioHauteur: entity['ratio_hauteur'],
+        ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
         contact: entity['contact'],
-        chablis: entity['chablis'],
+        chablis: (entity['chablis'] == true || entity['chablis'] == 1)
+            ? true
+            : false,
         stadeDurete: entity['stade_durete'],
         stadeEcorce: entity['stade_ecorce'],
         observation: entity['observation']);
@@ -85,13 +87,46 @@ class BmSup30MesureMapper {
       final int stadeEcorce,
       String? observation) {
     return {
-      'id_bm_sup_mesure': idBmSup30Mesure,
-      'id_bm_sup': idBmSup30,
+      'id_bm_sup_30_mesure': idBmSup30Mesure,
+      'id_bm_sup_30': idBmSup30,
       'id_cycle': idCycle,
       'diametre_ini': diametreIni,
       'diametre_med': diametreMed,
       'diametre_fin': diametreFin,
-      'diametre': diametre130,
+      'diametre_130': diametre130,
+      'longueur': longueur,
+      'ratio_hauteur': ratioHauteur,
+      'contact': contact,
+      'chablis': chablis,
+      'stade_durete': stadeDurete,
+      'stade_ecorce': stadeEcorce,
+      'observation': observation,
+    };
+  }
+
+  static BmSup30MesureEntity transformToEntityMap(
+      final int idBmSup30Mesure,
+      final int idBmSup30,
+      final int idCycle,
+      double? diametreIni,
+      double? diametreMed,
+      double? diametreFin,
+      double? diametre130,
+      final double longueur,
+      bool? ratioHauteur,
+      final double contact,
+      final bool chablis,
+      final int stadeDurete,
+      final int stadeEcorce,
+      String? observation) {
+    return {
+      'id_bm_sup_30_mesure': idBmSup30Mesure,
+      'id_bm_sup_30': idBmSup30,
+      'id_cycle': idCycle,
+      'diametre_ini': diametreIni,
+      'diametre_med': diametreMed,
+      'diametre_fin': diametreFin,
+      'diametre_130': diametre130,
       'longueur': longueur,
       'ratio_hauteur': ratioHauteur,
       'contact': contact,

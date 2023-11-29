@@ -17,4 +17,18 @@ abstract class BmsSup30Repository {
     final double? distanceSouche,
     final String? observation,
   );
+
+  Future<BmSup30> updateBmSup30(
+    final int idBmSup30,
+    final int idBmSup30Orig,
+    final int idPlacette,
+    final int idArbre,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final double? orientation,
+    final double? azimutSouche,
+    final double? distanceSouche,
+    final String? observation,
+  );
 }

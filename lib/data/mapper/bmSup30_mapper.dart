@@ -90,4 +90,32 @@ class BmSup30Mapper {
       observation: entity[' observation'],
     );
   }
+
+  static BmSup30Entity transformToEntityMap(
+    final int idBmSup30,
+    final int idBmSup30Orig,
+    final int idPlacette,
+    final int idArbre,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final double? orientation,
+    final double? azimutSouche,
+    final double? distanceSouche,
+    final String? observation,
+  ) {
+    return {
+      'id_bm_sup_30': idBmSup30,
+      'id_bm_sup_30_orig': idBmSup30Orig,
+      'id_placette': idPlacette,
+      'id_arbre': idArbre,
+      'code_essence': codeEssence,
+      'azimut': azimut,
+      'distance': distance,
+      'orientation': orientation,
+      'azimut_souche': azimutSouche,
+      'distance_souche': distanceSouche,
+      'observation': observation
+    };
+  }
 }

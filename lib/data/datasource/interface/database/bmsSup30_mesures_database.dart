@@ -6,6 +6,7 @@ abstract class BmsSup30MesuresDatabase {
   // Future<BmSup30ListEntity> allBmsSup30Mesures();
   // Future<BmSup30Entity> insertBmSup30(
   //     final BmSup30Entity bmSup30Entity);
-  // Future<void> updateBmSup30(final BmSup30Entity bmSup30Entity);
+  Future<BmSup30MesureEntity> updateBmSup30Mesure(
+      final BmSup30MesureEntity bmSup30MesureEntity);
   // Future<void> deleteBmSup30(final int id);
 }

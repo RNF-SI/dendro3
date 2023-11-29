@@ -3,12 +3,13 @@ import 'package:dendro3/data/datasource/implementation/database/global_database_
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   static const _tableName = 't_bm_sup_30_mesures';
-  static const _columnId = 'id_bm_sup_30_mesures';
+  static const _columnId = 'id_bm_sup_30_mesure';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -38,10 +39,10 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     final db = await database;
     late final BmSup30Entity bmsup30Entity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_bmsup30_mesure) FROM $_tableName'));
+      int? maxId = Sqflite.firstIntValue(await txn
+          .rawQuery('SELECT MAX(id_bm_sup_30_mesure) FROM $_tableName'));
 
-      bmSup30Mesure['id_bmsup30_mesure'] = maxId! + 1;
+      bmSup30Mesure['id_bm_sup_30_mesure'] = maxId! + 1;
       await txn.insert(
         _tableName,
         bmSup30Mesure,
@@ -55,6 +56,27 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     return bmsup30Entity;
   }
 
+  @override
+  Future<BmSup30MesureEntity> updateBmSup30Mesure(
+    final BmSup30MesureEntity bmSup30Mesure,
+  ) async {
+    final db = await database;
+    late final BmSup30MesureEntity bmSup30MesureEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        bmSup30Mesure,
+        where: '$_columnId = ?',
+        whereArgs: [bmSup30Mesure['id_bm_sup_30_mesure']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?',
+          whereArgs: [bmSup30Mesure['id_bm_sup_30_mesure']]);
+      bmSup30MesureEntity = results.first;
+    });
+    return bmSup30MesureEntity;
+  }
   // @override
   // Future<void> updateBmSup30(final BmSup30Entity bmSup30) async {
   //   final db = await database;

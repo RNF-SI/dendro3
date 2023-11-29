@@ -95,6 +95,25 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     return bmSup30Entity;
   }
 
+  @override
+  Future<BmSup30Entity> updateBmSup30(BmSup30Entity bmSup30) async {
+    final db = await database;
+    late final BmSup30Entity bmSup30Entity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        bmSup30,
+        where: '$_columnId = ?',
+        whereArgs: [bmSup30['id_bm_sup_30']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [bmSup30['id_bm_sup_30']]);
+      bmSup30Entity = results.first;
+    });
+    return bmSup30Entity;
+  }
+
   // @override
   // Future<void> updateBmSup30Mesures(final BmSup30MesuresEntity bmSup30) async {
   //   final db = await database;

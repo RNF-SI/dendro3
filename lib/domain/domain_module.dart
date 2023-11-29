@@ -50,6 +50,8 @@ import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -152,6 +154,13 @@ final createCorCyclePlacetteUseCaseProvider =
     Provider<CreateCorCyclePlacetteUseCase>((ref) =>
         CreateCorCyclePlacetteUseCaseImpl(
             ref.watch(corCyclePlacetteRepositoryProvider)));
+
+final updateBmSup30AndMesureUseCaseProvider =
+    Provider<UpdateBmSup30AndMesureUseCase>(
+        (ref) => UpdateBmSup30AndMesureUseCaseImpl(
+              ref.watch(bmsSup30RepositoryProvider),
+              ref.watch(bmsSup30MesuresRepositoryProvider),
+            ));
 
 final createRepereUseCaseProvider = Provider<CreateRepereUseCase>(
     (ref) => CreateRepereUseCaseImpl(ref.watch(repereRepositoryProvider)));
