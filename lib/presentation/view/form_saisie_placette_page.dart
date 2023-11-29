@@ -303,7 +303,12 @@ class FormSaisiePlacettePageState
         formWidget = CheckboxFormField(
           title: Text(field.fieldName),
           initialValue: field.initialValue,
-          onSaved: field.onSaved,
+          onSaved: (aaa) {
+            field.onSaved(aaa);
+          },
+          onChanged: (aaa) {
+            field.onSaved(aaa);
+          },
         );
         // return CheckboxFormField or whatever the widget should be
       } else if (field is DateFieldConfig) {
@@ -478,26 +483,33 @@ class FormSaisiePlacettePageState
 }
 
 class CheckboxFormField extends FormField<bool> {
-  CheckboxFormField(
-      {Widget? title,
-      FormFieldSetter<bool>? onSaved,
-      FormFieldValidator<bool>? validator,
-      bool initialValue = false,
-      bool autovalidate = false})
-      : super(
+  CheckboxFormField({
+    Widget? title,
+    required FormFieldSetter<bool> onSaved,
+    FormFieldValidator<bool>? validator,
+    bool initialValue = false,
+    AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
+    ValueChanged<bool?>? onChanged, // Add onChanged callback
+  }) : super(
             onSaved: onSaved,
             validator: validator,
             initialValue: initialValue,
+            autovalidateMode: autovalidateMode,
             builder: (FormFieldState<bool> state) {
               return CheckboxListTile(
                 dense: state.hasError,
                 title: title,
-                value: state.value,
-                onChanged: state.didChange,
+                value: state.value ?? false,
+                onChanged: (bool? newValue) {
+                  if (onChanged != null) {
+                    onChanged(newValue); // Call onChanged callback
+                  }
+                  state.didChange(newValue);
+                },
                 subtitle: state.hasError
                     ? Builder(
                         builder: (BuildContext context) => Text(
-                          state.errorText!,
+                          state.errorText ?? '',
                           style: TextStyle(color: Theme.of(context).errorColor),
                         ),
                       )
