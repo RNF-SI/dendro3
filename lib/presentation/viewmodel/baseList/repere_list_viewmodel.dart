@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:dendro3/domain/usecase/create_repere_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
@@ -61,7 +63,10 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
 
   @override
   updateItem(
-    final Map item,
-    // final int idArbreOrig,
-  ) async {}
+    final Map item, {
+    Arbre? arbre,
+    BmSup30? bmSup30,
+  }
+      // final int idArbreOrig,
+      ) async {}
 }

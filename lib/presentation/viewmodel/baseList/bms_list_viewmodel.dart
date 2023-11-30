@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
@@ -111,11 +113,15 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
 
   @override
   updateItem(
-    final Map item,
-    // final int idArbreOrig,
-  ) async {
+    final Map item, {
+    Arbre? arbre,
+    BmSup30? bmSup30,
+  }
+      // final int idArbreOrig,
+      ) async {
     try {
       final newBmSup30 = await _updateBmSup30AndMesureUseCase.execute(
+        bmSup30!,
         // idArbreOrig,
         item['idBmSup30'],
         item['idBmSup30Orig'],

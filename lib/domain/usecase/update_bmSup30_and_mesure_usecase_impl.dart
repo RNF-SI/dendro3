@@ -19,6 +19,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
 
   @override
   Future<BmSup30> execute(
+    BmSup30 bmsup30,
     int idBmSup30,
     int idBmSup30Orig,
     int idPlacette,
@@ -58,7 +59,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
       observation,
     );
 
-    BmSup30Mesure bmsup30Mesure =
+    BmSup30Mesure bmsup30MesureUpdated =
         await _bmsup30MesureRepositoryMesure.updateBmSup30Mesure(
             idBmSup30Mesure,
             idBmSup30,
@@ -75,7 +76,17 @@ class UpdateBmSup30AndMesureUseCaseImpl
             stadeEcorce,
             observationMesure);
 
+    int mesureIndex = bmsup30.bmsSup30Mesures!.values
+        .indexWhere((mesure) => mesure.idBmSup30Mesure == idBmSup30Mesure);
+
+    // Créer une nouvelle liste des mesures avec la mesure mise à jour
+    List<BmSup30Mesure> updatedMesures =
+        List.from(bmsup30.bmsSup30Mesures!.values);
+    if (mesureIndex != -1) {
+      updatedMesures[mesureIndex] = bmsup30MesureUpdated;
+    }
+
     return bmsup30.copyWith(
-        bmsSup30Mesures: BmSup30MesureList(values: [bmsup30Mesure]));
+        bmsSup30Mesures: BmSup30MesureList(values: updatedMesures));
   }
 }

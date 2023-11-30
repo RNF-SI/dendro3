@@ -19,6 +19,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
 
   @override
   Future<Arbre> execute(
+    Arbre arbre,
     final int idArbre,
     final int idArbreOrig,
     int idPlacette,
@@ -47,7 +48,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
     bool? ratioHauteur,
     String? observationMesure,
   ) async {
-    Arbre arbre = await _arbreRepository.updateArbre(
+    Arbre arbreUpdated = await _arbreRepository.updateArbre(
       idArbre,
       idArbreOrig,
       idPlacette,
@@ -71,9 +72,10 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
     //   }
     // }
 
-    ArbreMesure arbreMesure = await _arbreMesureRepository.updateArbreMesure(
+    ArbreMesure arbreMesureUpdated =
+        await _arbreMesureRepository.updateArbreMesure(
       idArbreMesure,
-      arbre.idArbre,
+      arbreUpdated.idArbre,
       idCycle,
       diametre1,
       diametre2,
@@ -93,8 +95,16 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       observationMesure,
     );
 
-    return arbre.copyWith(
-        arbresMesures: ArbreMesureList(values: [arbreMesure]));
-    // return aa;
+    int mesureIndex = arbre.arbresMesures!.values
+        .indexWhere((mesure) => mesure.idArbreMesure == idArbreMesure);
+
+    // Créer une nouvelle liste des mesures avec la mesure mise à jour
+    List<ArbreMesure> updatedMesures = List.from(arbre.arbresMesures!.values);
+    if (mesureIndex != -1) {
+      updatedMesures[mesureIndex] = arbreMesureUpdated;
+    }
+
+    return arbreUpdated.copyWith(
+        arbresMesures: ArbreMesureList(values: updatedMesures));
   }
 }

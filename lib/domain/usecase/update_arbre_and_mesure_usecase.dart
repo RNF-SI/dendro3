@@ -3,6 +3,7 @@ import 'package:dendro3/domain/model/arbre.dart';
 
 abstract class UpdateArbreAndMesureUseCase {
   Future<Arbre> execute(
+    Arbre arbre,
     // final int idArbreOrig,
     final int idArbre,
     final int idArbreOrig,

@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
 // import 'package:dendro3/domain/model/arbre_list.dart';
@@ -90,9 +92,12 @@ class CorCyclePlacetteListViewModel
 
   @override
   updateItem(
-    final Map item,
-    // final int idArbreOrig,
-  ) async {}
+    final Map item, {
+    Arbre? arbre,
+    BmSup30? bmSup30,
+  }
+      // final int idArbreOrig,
+      ) async {}
 
 //   addArbre(
 //     // final int idArbreOrig,

@@ -1,4 +1,6 @@
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/domain/usecase/create_transect_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
@@ -72,7 +74,10 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
 
   @override
   updateItem(
-    final Map item,
-    // final int idArbreOrig,
-  ) async {}
+    final Map item, {
+    Arbre? arbre,
+    BmSup30? bmSup30,
+  }
+      // final int idArbreOrig,
+      ) async {}
 }

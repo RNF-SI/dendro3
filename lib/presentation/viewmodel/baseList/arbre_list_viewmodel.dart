@@ -1,6 +1,8 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
+import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
@@ -128,11 +130,15 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
 
   @override
   updateItem(
-    final Map item,
-    // final int idArbreOrig,
-  ) async {
+    final Map item, {
+    Arbre? arbre,
+    BmSup30? bmSup30,
+  }) async {
     try {
+      // convert object to Arbre
+
       final newArbre = await _updateArbreAndMesureUseCase.execute(
+        arbre!,
         // idArbreOrig,
         item["idArbre"],
         item["idArbreOrig"],
@@ -206,6 +212,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }

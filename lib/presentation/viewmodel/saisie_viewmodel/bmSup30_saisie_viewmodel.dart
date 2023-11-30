@@ -267,32 +267,35 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   }
 
   Future<void> updateObject() async {
-    _bmsup30ListViewModel.updateItem({
-      'idBmSup30': _idBmSup30,
-      'idBmSup30Orig': _idBmSup30Orig,
-      'idPlacette': _idPlacette,
-      'idArbre': _idArbre,
-      'codeEssence': _codeEssence,
-      'azimut': _azimut,
-      'distance': _distance,
-      'orientation': _orientation,
-      'azimutSouche': _azimutSouche,
-      'distanceSouche': _distanceSouche,
-      'observation': _observation,
-      'idBmSup30Mesure': _idBmSup30Mesure,
-      'idCycle': _idCycle,
-      'diametreIni': _diametreIni,
-      'diametreMed': _diametreMed,
-      'diametreFin': _diametreFin,
-      'diametre130': _diametre130,
-      'longueur': _longueur,
-      'ratioHauteur': _ratioHauteur,
-      'contact': _contact,
-      'chablis': _chablis,
-      'stadeDurete': _stadeDurete,
-      'stadeEcorce': _stadeEcorce,
-      'observationMesure': _observationMesure,
-    });
+    _bmsup30ListViewModel.updateItem(
+      {
+        'idBmSup30': _idBmSup30,
+        'idBmSup30Orig': _idBmSup30Orig,
+        'idPlacette': _idPlacette,
+        'idArbre': _idArbre,
+        'codeEssence': _codeEssence,
+        'azimut': _azimut,
+        'distance': _distance,
+        'orientation': _orientation,
+        'azimutSouche': _azimutSouche,
+        'distanceSouche': _distanceSouche,
+        'observation': _observation,
+        'idBmSup30Mesure': _idBmSup30Mesure,
+        'idCycle': _idCycle,
+        'diametreIni': _diametreIni,
+        'diametreMed': _diametreMed,
+        'diametreFin': _diametreFin,
+        'diametre130': _diametre130,
+        'longueur': _longueur,
+        'ratioHauteur': _ratioHauteur,
+        'contact': _contact,
+        'chablis': _chablis,
+        'stadeDurete': _stadeDurete,
+        'stadeEcorce': _stadeEcorce,
+        'observationMesure': _observationMesure,
+      },
+      bmSup30: bmsup30,
+    );
   }
 
   String initialIdPlacetteValue() => _idPlacette.toString();
