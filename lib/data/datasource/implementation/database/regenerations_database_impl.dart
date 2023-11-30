@@ -55,6 +55,27 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     return regenerationEntity;
   }
 
+  @override
+  Future<RegenerationEntity> updateRegeneration(
+      final RegenerationEntity regeneration) async {
+    final db = await database;
+    late final RegenerationEntity regenerationEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        regeneration,
+        where: '$_columnId = ?',
+        whereArgs: [regeneration['id_regeneration']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?',
+          whereArgs: [regeneration['id_regeneration']]);
+      regenerationEntity = results.first;
+    });
+    return regenerationEntity;
+  }
+
   // @override
   // Future<void> updateRegeneration(final RegenerationEntity regeneration) async {
   //   final db = await database;

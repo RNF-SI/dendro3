@@ -39,4 +39,36 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
 
     return RegenerationMapper.transformToModel(regenerationsEntity);
   }
+
+  @override
+  Future<Regeneration> updateRegeneration(
+      final int idRegeneration,
+      final int idCyclePlacette,
+      final int sousPlacette,
+      final String codeEssence,
+      final double recouvrement,
+      final int classe1,
+      final int classe2,
+      final int classe3,
+      final bool taillis,
+      final bool abroutissement,
+      int? idNomenclatureAbroutissement,
+      String? observation) async {
+    final regenerationsEntity = await database.addRegeneration(
+        RegenerationMapper.transformToEntityMap(
+            idRegeneration,
+            idCyclePlacette,
+            sousPlacette,
+            codeEssence,
+            recouvrement,
+            classe1,
+            classe2,
+            classe3,
+            taillis,
+            abroutissement,
+            idNomenclatureAbroutissement,
+            observation));
+
+    return RegenerationMapper.transformToModel(regenerationsEntity);
+  }
 }

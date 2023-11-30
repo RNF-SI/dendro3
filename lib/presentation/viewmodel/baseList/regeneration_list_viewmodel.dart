@@ -3,8 +3,11 @@ import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration_list.dart';
 import 'package:dendro3/domain/usecase/create_regeneration_usecase.dart';
+import 'package:dendro3/domain/usecase/update_regeneration_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
+import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final regenerationListProvider = Provider<RegenerationList>((ref) {
@@ -15,28 +18,44 @@ final regenerationListProvider = Provider<RegenerationList>((ref) {
 final regenerationListViewModelStateNotifierProvider =
     StateNotifierProvider<RegenerationListViewModel, State<RegenerationList>>(
         (ref) {
+  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final displayableListNotifier = ref.watch(displayableListProvider.notifier);
+
   return RegenerationListViewModel(
     // ref.watch(getBmSup30ListUseCaseProvider),
     ref.watch(createRegenerationUseCaseProvider),
+    ref.watch(updateRegenerationUseCaseProvider),
+
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
+    lastModifiedProvider,
+    displayableListNotifier,
   );
 });
 
 class RegenerationListViewModel
     extends BaseListViewModel<State<RegenerationList>> {
+  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final DisplayableListNotifier _displayableListNotifier;
+
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
   final CreateRegenerationUseCase _createRegenerationUseCase;
+  final UpdateRegenerationUseCase _updateRegenerationUseCase;
+
   // final UpdateBmSup30UseCase _updateBmSup30UseCase;
   // final DeleteBmSup30UseCase _deleteBmSup30UseCase;
 
   RegenerationListViewModel(
     // this._getBmSup30ListUseCase,
     this._createRegenerationUseCase,
+    this._updateRegenerationUseCase,
+
     // this._updateBmSup30UseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
+    this._lastModifiedProvider,
+    this._displayableListNotifier,
   ) : super(const State.init()) {}
 
   void setRegenerationList(RegenerationList regenerationList) {
@@ -74,7 +93,30 @@ class RegenerationListViewModel
     final Map item, {
     Arbre? arbre,
     BmSup30? bmSup30,
+  }) async {
+    try {
+      final updatedRege = await _updateRegenerationUseCase.execute(
+        item["idRegeneration"],
+        item["idCyclePlacette"],
+        item["sousPlacette"],
+        item["codeEssence"],
+        item["recouvrement"],
+        item["classe1"],
+        item["classe2"],
+        item["classe3"],
+        item["taillis"],
+        item["abroutissement"],
+        item["idNomenclatureAbroutissement"],
+        item["observation"],
+      );
+      _lastModifiedProvider.setLastModifiedId(
+          'Regenerations', updatedRege.idRegeneration);
+      state = State.success(state.data!.updateItemInList(updatedRege));
+      _displayableListNotifier.setDisplayableList(state.data!);
+
+      // state = State.success(state.data!.updateItemToList(newBmSup30));
+    } on Exception catch (e) {
+      state = State.error(e);
+    }
   }
-      // final int idArbreOrig,
-      ) async {}
 }
