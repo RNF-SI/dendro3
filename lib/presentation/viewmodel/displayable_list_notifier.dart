@@ -15,27 +15,34 @@ final displayableListProvider =
 });
 
 class DisplayableListNotifier extends StateNotifier<DisplayableList> {
-  DisplayableListNotifier(Ref ref) : super(ref.watch(arbreListProvider));
+  DisplayableListNotifier(Ref ref)
+      : super(
+          ref.read(arbreListProvider),
+        );
 
-  void setDisplayableList(WidgetRef ref, String type) {
+  void setDisplayableListFromListProvider(WidgetRef ref, String type) {
     switch (type) {
       case 'Arbres':
-        state = ref.watch(arbreListProvider);
+        state = ref.read(arbreListProvider);
         break;
       case 'BmsSup30':
-        state = ref.watch(bmSup30ListProvider);
+        state = ref.read(bmSup30ListProvider);
         break;
       case 'Transects':
-        state = ref.watch(transectListProvider);
+        state = ref.read(transectListProvider);
         break;
       case 'Regenerations':
-        state = ref.watch(regenerationListProvider);
+        state = ref.read(regenerationListProvider);
         break;
       case 'Reperes':
-        state = ref.watch(repereListProvider);
+        state = ref.read(repereListProvider);
         break;
       default:
     }
+  }
+
+  void setDisplayableList(DisplayableList displayableList) {
+    state = displayableList;
   }
 
   DisplayableList getDisplayableList() {

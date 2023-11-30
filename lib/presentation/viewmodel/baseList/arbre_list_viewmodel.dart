@@ -6,6 +6,7 @@ import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,8 @@ final arbreListProvider = Provider<ArbreList>((ref) {
 final arbreListViewModelStateNotifierProvider =
     StateNotifierProvider<ArbreListViewModel, State<ArbreList>>((ref) {
   final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final displayableListNotifier = ref.watch(displayableListProvider.notifier);
+
   return ArbreListViewModel(
     // ref.watch(getArbreListUseCaseProvider),
     ref.watch(createArbreAndMesureUseCaseProvider),
@@ -31,11 +34,13 @@ final arbreListViewModelStateNotifierProvider =
     // ref.watch(deleteArbreUseCaseProvider),
     // arbreListe,
     lastModifiedProvider,
+    displayableListNotifier,
   );
 });
 
 class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final DisplayableListNotifier _displayableListNotifier;
 
   // final Ref ref;
   // final GetArbreListUseCase _getArbreListUseCase;
@@ -54,6 +59,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     // this._deleteArbreUseCase,
     // final ArbreList arbreListe
     this._lastModifiedProvider,
+    this._displayableListNotifier,
   ) : super(const State.init()) {}
 
   // completeArbre(final Arbre todo) {
@@ -114,6 +120,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.addItemToList(newArbre));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }
@@ -160,6 +167,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }

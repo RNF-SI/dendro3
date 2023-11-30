@@ -4,6 +4,7 @@ import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ final bmSup30ListProvider = Provider<BmSup30List>((ref) {
 final bmSup30ListViewModelStateNotifierProvider =
     StateNotifierProvider<BmSup30ListViewModel, State<BmSup30List>>((ref) {
   final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return BmSup30ListViewModel(
     // ref.watch(getBmSup30ListUseCaseProvider),
@@ -24,11 +26,13 @@ final bmSup30ListViewModelStateNotifierProvider =
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
     lastModifiedProvider,
+    displayableListNotifier,
   );
 });
 
 class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
   final CreateBmSup30AndMesureUseCase _createBmSup30AndMesureUseCase;
@@ -42,6 +46,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
     this._lastModifiedProvider,
+    this._displayableListNotifier,
   ) : super(const State.init()) {}
 
   // completeBmSup30(final BmSup30 todo) {
@@ -98,6 +103,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
       _lastModifiedProvider.setLastModifiedId(
           'BmsSup30', newBmSup30.idBmSup30Orig);
       state = State.success(state.data!.addItemToList(newBmSup30));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }
@@ -143,6 +149,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
       );
 
       state = State.success(state.data!.updateItemInList(newBmSup30));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }

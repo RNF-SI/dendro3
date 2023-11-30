@@ -171,32 +171,36 @@ Widget __buildAsyncPlacetteListWidget(
             children: [
               DisplayableButton(
                 onPressed: () {
-                  displayableListNotifier.setDisplayableList(ref, 'Arbres');
+                  displayableListNotifier.setDisplayableListFromListProvider(
+                      ref, 'Arbres');
                 },
                 text: "Arbres",
               ),
               DisplayableButton(
                 onPressed: () {
-                  displayableListNotifier.setDisplayableList(ref, 'BmsSup30');
+                  displayableListNotifier.setDisplayableListFromListProvider(
+                      ref, 'BmsSup30');
                 },
                 text: "BmsSup30",
               ),
               DisplayableButton(
                 onPressed: () {
-                  displayableListNotifier.setDisplayableList(ref, 'Transects');
+                  displayableListNotifier.setDisplayableListFromListProvider(
+                      ref, 'Transects');
                 },
                 text: "Transects",
               ),
               DisplayableButton(
                 onPressed: () {
-                  displayableListNotifier.setDisplayableList(
+                  displayableListNotifier.setDisplayableListFromListProvider(
                       ref, 'Regenerations');
                 },
                 text: 'Regenerations',
               ),
               DisplayableButton(
                 onPressed: () {
-                  displayableListNotifier.setDisplayableList(ref, 'Reperes');
+                  displayableListNotifier.setDisplayableListFromListProvider(
+                      ref, 'Reperes');
                 },
                 text: "Repères",
               ),
