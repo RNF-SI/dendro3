@@ -28,4 +28,27 @@ class ReperesRepositoryImpl implements ReperesRepository {
 
     return RepereMapper.transformToModel(reperesEntity);
   }
+
+  @override
+  Future<Repere> updateRepere(
+      final int idRepere,
+      final int idPlacette,
+      double? azimut,
+      double? distance,
+      double? diametre,
+      String? repere,
+      String? observation) async {
+    final reperesEntity =
+        await database.updateRepere(RepereMapper.transformToEntityMap(
+      idRepere,
+      idPlacette,
+      azimut,
+      distance,
+      diametre,
+      repere,
+      observation,
+    ));
+
+    return RepereMapper.transformToModel(reperesEntity);
+  }
 }

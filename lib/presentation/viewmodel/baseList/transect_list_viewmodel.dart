@@ -64,7 +64,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
     Map item,
   ) async {
     try {
-      final newRege = await _createTransectUseCase.execute(
+      final newTransect = await _createTransectUseCase.execute(
         item["idCyclePlacette"],
         item["codeEssence"],
         item["refTransect"],
@@ -82,7 +82,10 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["stadeEcorce"],
         item["observation"],
       );
-      state = State.success(state.data!.addItemToList(newRege));
+      _lastModifiedProvider.setLastModifiedId(
+          'Transects', newTransect.idTransect);
+      state = State.success(state.data!.addItemToList(newTransect));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }

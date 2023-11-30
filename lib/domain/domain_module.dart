@@ -56,6 +56,8 @@ import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_repere_usecase.dart';
+import 'package:dendro3/domain/usecase/update_repere_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
 import 'package:dendro3/domain/usecase/update_transect_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
@@ -192,4 +194,9 @@ final updateTransectUseCaseProvider =
 final updateRegenerationUseCaseProvider =
     Provider<UpdateRegenerationUseCase>((ref) => UpdateRegenerationUseCaseImpl(
           ref.watch(regenerationRepositoryProvider),
+        ));
+
+final updateRepereUseCaseProvider =
+    Provider<UpdateRepereUseCase>((ref) => UpdateRepereUseCaseImpl(
+          ref.watch(repereRepositoryProvider),
         ));

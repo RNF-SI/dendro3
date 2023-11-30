@@ -9,4 +9,13 @@ abstract class ReperesRepository {
     String? repere,
     String? observation,
   );
+  Future<Repere> updateRepere(
+    final int idRepere,
+    final int idPlacette,
+    double? azimut,
+    double? distance,
+    double? diametre,
+    String? repere,
+    String? observation,
+  );
 }

@@ -53,6 +53,26 @@ class RepereMapper {
     };
   }
 
+  static RepereEntity transformToEntityMap(
+    int idRepere,
+    int idPlacette,
+    double? azimut,
+    double? distance,
+    double? diametre,
+    String? repere,
+    String? observation,
+  ) {
+    return {
+      'id_repere': idRepere,
+      'id_placette': idPlacette,
+      'azimut': azimut,
+      'distance': distance,
+      'diametre': diametre,
+      'repere': repere,
+      'observation': observation
+    };
+  }
+
   static Repere transformToModel(RepereEntity reperesEntity) {
     return Repere(
         idRepere: reperesEntity['id_repere'],

@@ -52,6 +52,26 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     });
     return repereEntity;
   }
+
+  @override
+  // Function called when one arbre is updated (not updating arbre mesure)
+  Future<RepereEntity> updateRepere(final RepereEntity repere) async {
+    final db = await database;
+    late final RepereEntity transectEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        repere,
+        where: '$_columnId = ?',
+        whereArgs: [repere['id_repere']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [repere['id_repere']]);
+      transectEntity = results.first;
+    });
+    return transectEntity;
+  }
   // @override
   // Future<void> updateRepere(final RepereEntity repere) async {
   //   final db = await database;

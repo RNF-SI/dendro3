@@ -32,6 +32,8 @@ final repereSaisieViewModelProvider = Provider.autoDispose
       // regeInfoObj['cycle'],
       // regeInfoObj['placette'],
       regeInfoObj['repere'],
+      regeInfoObj['formType'],
+
       // ref.watch(getEssencesUseCaseProvider),
       repereListViewModel);
 }
@@ -42,6 +44,8 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   // late final ListViewModel _baseListViewModel;
 
   late final RepereListViewModel _repereListViewModel;
+
+  final String formType;
 
   final Ref ref;
   // Placette placette;
@@ -61,6 +65,8 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
     // this.cycle,
     // this.placette,
     final Repere? repere,
+    this.formType,
+
     // this._getEssencesUseCase,
     this._repereListViewModel,
     // this._insertArbreUseCase,
@@ -72,38 +78,29 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
 
   _initRepere(final Repere? repere) {
     // _idPlacette = placette.idPlacette;
-    if (repere == null) {
+    if (formType == 'add') {
       _isNewRepere = true;
-    } else {}
+    } else {
+      _idPlacette = repere!.idRepere;
+      _idPlacette = repere!.idPlacette;
+      _azimut = repere.azimut;
+      _distance = repere.distance;
+      _diametre = repere.diametre;
+      _repere = repere.repere;
+      _observation = repere.observation;
+    }
   }
 
   @override
   Future<void> createObject() async {
-    if (_isNewRepere) {
-      _repereListViewModel.addItem({
-        'idPlacette': _idPlacette,
-        'azimut': _azimut,
-        'distance': _distance,
-        'diametre': _diametre,
-        'repere': _repere,
-        'observation': _observation,
-      });
-    } else {
-      //   _repereListViewModel.updateItem({
-      //   'idCyclePlacette': _idCyclePlacette,
-      //   'sousPlacette': _sousPlacette,
-      //   'codeEssence': _codeEssence,
-      //   'recouvrement': _recouvrement,
-      //   'classe1': _classe1,
-      //   'classe2': _classe2,
-      //   'classe3': _classe3,
-      //   'taillis': _taillis,
-      //   'abroutissement': _abroutissement,
-      //   'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
-      //   'observation': _observation,
-      // });
-      // });
-    }
+    _repereListViewModel.addItem({
+      'idPlacette': _idPlacette,
+      'azimut': _azimut,
+      'distance': _distance,
+      'diametre': _diametre,
+      'repere': _repere,
+      'observation': _observation,
+    });
   }
 
   @override
