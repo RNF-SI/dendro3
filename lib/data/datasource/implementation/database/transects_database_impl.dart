@@ -59,6 +59,26 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     return transectEntity;
   }
 
+  @override
+  // Function called when one arbre is updated (not updating arbre mesure)
+  Future<TransectEntity> updateTransect(final TransectEntity arbre) async {
+    final db = await database;
+    late final TransectEntity transectEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        arbre,
+        where: '$_columnId = ?',
+        whereArgs: [arbre['id_transect']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [arbre['id_transect']]);
+      transectEntity = results.first;
+    });
+    return transectEntity;
+  }
+
   // @override
   // Future<void> updateTransect(final TransectEntity transect) async {
   //   final db = await database;

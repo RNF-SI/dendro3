@@ -118,6 +118,47 @@ class TransectMapper {
         observation: transectsEntity['observation']);
   }
 
+  static TransectEntity transformToEntityMap(
+    int idTransect,
+    int idCyclePlacette,
+    String codeEssence,
+    String refTransect,
+    double? distance,
+    double? orientation,
+    double? azimutSouche,
+    double? distanceSouche,
+    double diametre,
+    double? diametre130,
+    bool? ratioHauteur,
+    bool contact,
+    double angle,
+    bool chablis,
+    int stadeDurete,
+    int stadeEcorce,
+    String? observation,
+  ) {
+    return {
+      'id_transect': idTransect,
+      'id_cycle_placette': idCyclePlacette,
+      'id_transect_orig': null,
+      'code_essence': codeEssence,
+      'ref_transect': refTransect,
+      'distance': distance,
+      'orientation': orientation,
+      'azimut_souche': azimutSouche,
+      'distance_souche': distanceSouche,
+      'diametre': diametre,
+      'diametre_130': diametre130,
+      'ratio_hauteur': ratioHauteur == true ? true : false,
+      'contact': contact == true ? true : false,
+      'angle': angle,
+      'chablis': chablis == true ? true : false,
+      'stade_durete': stadeDurete,
+      'stade_ecorce': stadeEcorce,
+      'observation': observation
+    };
+  }
+
   // static TransectEntity transformToNewEntityMap(
   //   final String name,
   //   final int idOrganisme,

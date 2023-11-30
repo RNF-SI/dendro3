@@ -54,6 +54,8 @@ import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
+import 'package:dendro3/domain/usecase/update_transect_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/update_dispositif_usecase_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -179,3 +181,8 @@ final createRegenerationUseCaseProvider = Provider<CreateRegenerationUseCase>(
 
 final createTransectUseCaseProvider = Provider<CreateTransectUseCase>(
     (ref) => CreateTransectUseCaseImpl(ref.watch(transectRepositoryProvider)));
+
+final updateTransectUseCaseProvider =
+    Provider<UpdateTransectUseCase>((ref) => UpdateTransectUseCaseImpl(
+          ref.watch(transectRepositoryProvider),
+        ));
