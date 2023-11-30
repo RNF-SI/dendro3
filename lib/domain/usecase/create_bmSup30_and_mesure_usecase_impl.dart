@@ -28,7 +28,6 @@ class CreateBmSup30AndMesureUseCaseImpl
     double? azimutSouche,
     double? distanceSouche,
     String? observation,
-    int idBmSup30Mesure,
     int idBmSup30,
     int idCycle,
     double? diametreIni,
@@ -57,7 +56,6 @@ class CreateBmSup30AndMesureUseCaseImpl
 
     BmSup30Mesure bmsup30Mesure =
         await _bmsup30MesureRepositoryMesure.insertBmSup30Mesure(
-            idBmSup30Mesure,
             idBmSup30,
             idCycle,
             diametreIni,

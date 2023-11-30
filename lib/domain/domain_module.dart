@@ -5,6 +5,8 @@ import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
@@ -143,6 +145,12 @@ final addArbreMesureUseCaseProvider =
     Provider<AddArbreMesureUseCase>((ref) => AddArbreMesureUseCaseImpl(
           ref.watch(arbresRepositoryProvider),
           ref.watch(arbresMesuresRepositoryProvider),
+        ));
+
+final addBmSup30MesureUseCaseProvider =
+    Provider<AddBmSup30MesureUseCase>((ref) => AddBmSup30MesureUseCaseImpl(
+          ref.watch(bmsSup30RepositoryProvider),
+          ref.watch(bmsSup30MesuresRepositoryProvider),
         ));
 
 final createBmSup30AndMesureUseCaseProvider =

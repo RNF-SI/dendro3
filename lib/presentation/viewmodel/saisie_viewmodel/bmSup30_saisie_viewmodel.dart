@@ -239,7 +239,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   }
 
   Future<void> createObject() async {
-    if (_isNewBmSup30) {
+    if (formType == 'add') {
       _bmsup30ListViewModel.addItem({
         'idPlacette': _idPlacette,
         'idArbre': _idArbre,
@@ -263,7 +263,25 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         'stadeEcorce': _stadeEcorce,
         'observationMesure': _observationMesure,
       });
-    } else {}
+    } else {
+      _bmsup30ListViewModel.addMesureItem(
+        bmsup30,
+        {
+          'idCycle': _idCycle,
+          'diametreIni': _diametreIni,
+          'diametreMed': _diametreMed,
+          'diametreFin': _diametreFin,
+          'diametre130': _diametre130,
+          'longueur': _longueur,
+          'ratioHauteur': _ratioHauteur,
+          'contact': _contact,
+          'chablis': _chablis,
+          'stadeDurete': _stadeDurete,
+          'stadeEcorce': _stadeEcorce,
+          'observationMesure': _observationMesure,
+        },
+      );
+    }
   }
 
   Future<void> updateObject() async {

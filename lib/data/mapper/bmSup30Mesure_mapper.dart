@@ -72,7 +72,6 @@ class BmSup30MesureMapper {
   }
 
   static BmSup30MesureEntity transformToNewEntityMap(
-      final int idBmSup30Mesure,
       final int idBmSup30,
       final int idCycle,
       double? diametreIni,
@@ -87,7 +86,6 @@ class BmSup30MesureMapper {
       final int stadeEcorce,
       String? observation) {
     return {
-      'id_bm_sup_30_mesure': idBmSup30Mesure,
       'id_bm_sup_30': idBmSup30,
       'id_cycle': idCycle,
       'diametre_ini': diametreIni,

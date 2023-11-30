@@ -14,7 +14,6 @@ class BmsSup30MesuresRepositoryImpl implements BmsSup30MesuresRepository {
 
   @override
   Future<BmSup30Mesure> insertBmSup30Mesure(
-      final int idBmSup30Mesure,
       final int idBmSup30,
       final int idCycle,
       double? diametreIni,
@@ -28,22 +27,22 @@ class BmsSup30MesuresRepositoryImpl implements BmsSup30MesuresRepository {
       final int stadeDurete,
       final int stadeEcorce,
       String? observation) async {
-    final bmsup30Entity = await database.addBmSup30Mesure(
-        BmSup30MesureMapper.transformToNewEntityMap(
-            idBmSup30Mesure,
-            idBmSup30,
-            idCycle,
-            diametreIni,
-            diametreMed,
-            diametreFin,
-            diametre130,
-            longueur,
-            ratioHauteur,
-            contact,
-            chablis,
-            stadeDurete,
-            stadeEcorce,
-            observation));
+    final bmsup30Entity = await database
+        .addBmSup30Mesure(BmSup30MesureMapper.transformToNewEntityMap(
+      idBmSup30,
+      idCycle,
+      diametreIni,
+      diametreMed,
+      diametreFin,
+      diametre130,
+      longueur,
+      ratioHauteur,
+      contact,
+      chablis,
+      stadeDurete,
+      stadeEcorce,
+      observation,
+    ));
 
     return BmSup30MesureMapper.transformToModel(bmsup30Entity);
   }
