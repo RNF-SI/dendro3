@@ -13,6 +13,7 @@ import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart'
 import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -55,6 +56,11 @@ class SaisiePlacetteViewModel
       final arbreListViewModel =
           ref.read(arbreListViewModelStateNotifierProvider.notifier);
       arbreListViewModel.setArbreList(placette.arbres!);
+
+      // Initialiser la liste à afficher dans le widget saisie_data_table
+      final displayableListNotifier =
+          ref.watch(displayableListProvider.notifier);
+      displayableListNotifier.setDisplayableList(placette.arbres!);
 
       final bmsListViewModel =
           ref.read(bmSup30ListViewModelStateNotifierProvider.notifier);

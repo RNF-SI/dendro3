@@ -14,3 +14,31 @@ abstract class DisplayableList {
 
   bool isEmpty();
 }
+
+// Concrete implementation of DisplayableList representing an empty list.
+class EmptyDisplayableList extends DisplayableList {
+  @override
+  List<Map<String, dynamic>> getObjectMapped({
+    DisplayedColumnType displayedColumnType = DisplayedColumnType.all,
+    DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
+  }) {
+    return []; // Returns an empty list.
+  }
+
+  @override
+  getObjectFromId(final int id) {
+    // Return null or an appropriate default object.
+    return null;
+  }
+
+  @override
+  getFirstElementIdOrig() {
+    // Return null or an appropriate default value.
+    return null;
+  }
+
+  @override
+  bool isEmpty() {
+    return true; // Always returns true for the empty list.
+  }
+}

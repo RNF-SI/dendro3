@@ -17,7 +17,7 @@ final displayableListProvider =
 class DisplayableListNotifier extends StateNotifier<DisplayableList> {
   DisplayableListNotifier(Ref ref)
       : super(
-          ref.read(arbreListProvider),
+          EmptyDisplayableList(),
         );
 
   void setDisplayableListFromListProvider(WidgetRef ref, String type) {
