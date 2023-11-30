@@ -34,6 +34,7 @@ final transectSaisieViewModelProvider = Provider.autoDispose
       // regeInfoObj['cycle'],
       // regeInfoObj['placette'],
       regeInfoObj['transect'],
+      regeInfoObj['formType'],
       ref.watch(getEssencesUseCaseProvider),
       transectListViewModel);
 }
@@ -49,13 +50,16 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   Essence? _initialEssence = null;
   Essence? initialEssence = null;
 
+  final String formType;
+
   final Ref ref;
   // Placette placette;
   // Cycle cycle;
 
   var _codeEssence = '';
 
-  late TransectId idTransect;
+  // late TransectId idTransect;
+  late int? _idTransect;
 
   int? _idCyclePlacette;
   int? _idTransectOrig;
@@ -81,6 +85,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
     // this.cycle,
     // this.placette,
     final Transect? transect,
+    this.formType,
     this._getEssencesUseCase,
     this._transectListViewModel,
     // this._insertArbreUseCase,
@@ -120,9 +125,11 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
 
   _initTransect(final Transect? transect) {
     // _idPlacette = placette.idPlacette;
-    if (transect == null) {
+    if (formType == 'add') {
       _isNewTransect = true;
+      _idTransect = null;
     } else {
+      _idTransect = transect!.idTransect;
       _idCyclePlacette = transect.idCyclePlacette;
       _idTransectOrig = transect.idTransectOrig;
       _codeEssence = transect.codeEssence;
@@ -145,46 +152,51 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
 
   @override
   Future<void> createObject() async {
-    if (_isNewTransect) {
-      _transectListViewModel.addItem({
-        '_idCyclePlacette': _idCyclePlacette,
-        '_idTransectOrig': _idTransectOrig,
-        '_codeEssence': _codeEssence,
-        '_refTransect': _refTransect,
-        '_distance': _distance,
-        '_orientation': _orientation,
-        '_azimutSouche': _azimutSouche,
-        '_distanceSouche': _distanceSouche,
-        '_diametre': _diametre,
-        '_diametre130': _diametre130,
-        '_ratioHauteur': _ratioHauteur,
-        '_contact': _contact,
-        '_angle': _angle,
-        '_chablis': _chablis,
-        '_stadeDurete': _stadeDurete,
-        '_stadeEcorce': _stadeEcorce,
-        '_observation': _observation,
-      });
-    } else {
-      //   _transectListViewModel.updateItem({
-      //   'idCyclePlacette': _idCyclePlacette,
-      //   'sousPlacette': _sousPlacette,
-      //   'codeEssence': _codeEssence,
-      //   'recouvrement': _recouvrement,
-      //   'classe1': _classe1,
-      //   'classe2': _classe2,
-      //   'classe3': _classe3,
-      //   'taillis': _taillis,
-      //   'abroutissement': _abroutissement,
-      //   'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
-      //   'observation': _observation,
-      // });
-      // });
-    }
+    // if (_isNewTransect) {
+    _transectListViewModel.addItem({
+      '_idCyclePlacette': _idCyclePlacette,
+      '_idTransectOrig': _idTransectOrig,
+      '_codeEssence': _codeEssence,
+      '_refTransect': _refTransect,
+      '_distance': _distance,
+      '_orientation': _orientation,
+      '_azimutSouche': _azimutSouche,
+      '_distanceSouche': _distanceSouche,
+      '_diametre': _diametre,
+      '_diametre130': _diametre130,
+      '_ratioHauteur': _ratioHauteur,
+      '_contact': _contact,
+      '_angle': _angle,
+      '_chablis': _chablis,
+      '_stadeDurete': _stadeDurete,
+      '_stadeEcorce': _stadeEcorce,
+      '_observation': _observation,
+    });
   }
 
   @override
-  Future<void> updateObject() async {}
+  Future<void> updateObject() async {
+    _transectListViewModel.updateItem({
+      '_idTransect': _idTransect,
+      '_idCyclePlacette': _idCyclePlacette,
+      '_idTransectOrig': _idTransectOrig,
+      '_codeEssence': _codeEssence,
+      '_refTransect': _refTransect,
+      '_distance': _distance,
+      '_orientation': _orientation,
+      '_azimutSouche': _azimutSouche,
+      '_distanceSouche': _distanceSouche,
+      '_diametre': _diametre,
+      '_diametre130': _diametre130,
+      '_ratioHauteur': _ratioHauteur,
+      '_contact': _contact,
+      '_angle': _angle,
+      '_chablis': _chablis,
+      '_stadeDurete': _stadeDurete,
+      '_stadeEcorce': _stadeEcorce,
+      '_observation': _observation,
+    });
+  }
 
   @override
   List<FieldConfig> getFormConfig() {

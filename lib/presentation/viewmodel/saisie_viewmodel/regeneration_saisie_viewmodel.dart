@@ -33,6 +33,7 @@ final regenerationSaisieViewModelProvider = Provider.autoDispose
       // regeInfoObj['cycle'],
       // regeInfoObj['placette'],
       regeInfoObj['regeneration'],
+      regeInfoObj['formType'],
       ref.watch(getEssencesUseCaseProvider),
       regenerationListViewModel);
 }
@@ -51,7 +52,9 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   final Ref ref;
   // Placette placette;
   // Cycle cycle;
+  final String formType;
 
+  late int? _idRegeneration;
   int? _idCyclePlacette;
   int? _sousPlacette;
   var _codeEssence;
@@ -71,6 +74,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
     // this.cycle,
     // this.placette,
     final Regeneration? regeneration,
+    this.formType,
     this._getEssencesUseCase,
     this._regenerationListViewModel,
     // this._insertArbreUseCase,
@@ -110,9 +114,11 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
 
   _initRegeneration(final Regeneration? regeneration) {
     // _idPlacette = placette.idPlacette;
-    if (regeneration == null) {
+    if (formType == 'add') {
       _isNewRegeneration = true;
+      _idRegeneration = null;
     } else {
+      _idRegeneration = regeneration!.idRegeneration;
       _idCyclePlacette = regeneration.idCyclePlacette;
       _sousPlacette = regeneration.sousPlacette;
       _codeEssence = regeneration.codeEssence;
@@ -129,40 +135,38 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
 
   @override
   Future<void> createObject() async {
-    if (_isNewRegeneration) {
-      _regenerationListViewModel.addItem({
-        'idCyclePlacette': _idCyclePlacette,
-        'sousPlacette': _sousPlacette,
-        'codeEssence': _codeEssence,
-        'recouvrement': _recouvrement,
-        'classe1': _classe1,
-        'classe2': _classe2,
-        'classe3': _classe3,
-        'taillis': _taillis,
-        'abroutissement': _abroutissement,
-        'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
-        'observation': _observation,
-      });
-    } else {
-      //   _regenerationListViewModel.updateItem({
-      //   'idCyclePlacette': _idCyclePlacette,
-      //   'sousPlacette': _sousPlacette,
-      //   'codeEssence': _codeEssence,
-      //   'recouvrement': _recouvrement,
-      //   'classe1': _classe1,
-      //   'classe2': _classe2,
-      //   'classe3': _classe3,
-      //   'taillis': _taillis,
-      //   'abroutissement': _abroutissement,
-      //   'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
-      //   'observation': _observation,
-      // });
-      // });
-    }
+    _regenerationListViewModel.addItem({
+      'idCyclePlacette': _idCyclePlacette,
+      'sousPlacette': _sousPlacette,
+      'codeEssence': _codeEssence,
+      'recouvrement': _recouvrement,
+      'classe1': _classe1,
+      'classe2': _classe2,
+      'classe3': _classe3,
+      'taillis': _taillis,
+      'abroutissement': _abroutissement,
+      'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
+      'observation': _observation,
+    });
   }
 
   @override
-  Future<void> updateObject() async {}
+  Future<void> updateObject() async {
+    _regenerationListViewModel.updateItem({
+      'idRegeneration': _idRegeneration,
+      'idCyclePlacette': _idCyclePlacette,
+      'sousPlacette': _sousPlacette,
+      'codeEssence': _codeEssence,
+      'recouvrement': _recouvrement,
+      'classe1': _classe1,
+      'classe2': _classe2,
+      'classe3': _classe3,
+      'taillis': _taillis,
+      'abroutissement': _abroutissement,
+      'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
+      'observation': _observation,
+    });
+  }
 
   @override
   List<FieldConfig> getFormConfig() {
