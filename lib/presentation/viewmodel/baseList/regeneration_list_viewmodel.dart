@@ -82,7 +82,11 @@ class RegenerationListViewModel
         item["idNomenclatureAbroutissement"],
         item["observation"],
       );
+
+      _lastModifiedProvider.setLastModifiedId(
+          'Regenerations', newRege.idRegeneration);
       state = State.success(state.data!.addItemToList(newRege));
+      _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
     }
