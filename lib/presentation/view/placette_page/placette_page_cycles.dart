@@ -173,6 +173,7 @@ class NoCycleWidget extends ConsumerWidget {
                 type: 'corCyclePlacette',
                 placette: placette,
                 cycle: cycle,
+                corCyclePlacette: null,
 
                 // placette: placette,
                 // cycle: dispCycleList.values[0],
