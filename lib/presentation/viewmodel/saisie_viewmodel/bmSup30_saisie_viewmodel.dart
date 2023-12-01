@@ -238,7 +238,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
-  Future<void> createObject() async {
+  Future<String> createObject() async {
     if (formType == 'add') {
       _bmsup30ListViewModel.addItem({
         'idPlacette': _idPlacette,
@@ -282,9 +282,10 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         },
       );
     }
+    return '';
   }
 
-  Future<void> updateObject() async {
+  Future<String> updateObject() async {
     _bmsup30ListViewModel.updateItem(
       {
         'idBmSup30': _idBmSup30,
@@ -314,6 +315,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       },
       bmSup30: bmsup30,
     );
+    return '';
   }
 
   String initialIdPlacetteValue() => _idPlacette.toString();

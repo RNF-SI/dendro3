@@ -89,7 +89,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   @override
-  Future<void> createObject() async {
+  Future<String> createObject() async {
     _corCyclePlacetteListViewModel.addItem({
       'idCycle': _idCycle,
       'idPlacette': _idPlacette,
@@ -106,9 +106,12 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       'recouvBuissons': _recouvBuissons,
       'recouvArbres': _recouvArbres,
     });
+    return '';
   }
 
-  Future<void> updateObject() async {}
+  Future<String> updateObject() async {
+    return '';
+  }
 
   @override
   List<FieldConfig> getFormConfig() {

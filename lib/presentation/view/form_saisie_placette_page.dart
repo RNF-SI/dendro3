@@ -77,13 +77,14 @@ class FormSaisiePlacettePageState
   List<dynamic>? _selectedDropdownItems = [];
   // final distanceController = TextEditingController();
   // Arbre arbre = Arbre();
+  String? _errorMessage;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _viewModel = getViewModel(ref, widget.type, widget);
-
+    _errorMessage = null;
     // distanceController.addListener(() {
     //   updateDistanceWarning();
     // })
@@ -116,6 +117,14 @@ class FormSaisiePlacettePageState
         // child: SingleChildScrollView(
         child: ListView(
           children: [
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _errorMessage!,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
             _buildFormWidget(),
           ],
         ),
@@ -124,15 +133,23 @@ class FormSaisiePlacettePageState
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(4.0),
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             final currentState = _formKey.currentState;
             if (currentState != null && currentState.validate()) {
+              String? tempErrorMessage;
               if (widget.formType == 'edit') {
-                _viewModel.updateObject();
+                tempErrorMessage = await _viewModel.updateObject();
               } else {
-                _viewModel.createObject();
+                tempErrorMessage = await _viewModel.createObject();
               }
-              Navigator.pop(context);
+
+              setState(() {
+                _errorMessage = tempErrorMessage;
+              });
+
+              if (_errorMessage == null || _errorMessage!.isEmpty) {
+                Navigator.pop(context);
+              }
             }
           },
           child: widget.formType == 'edit'

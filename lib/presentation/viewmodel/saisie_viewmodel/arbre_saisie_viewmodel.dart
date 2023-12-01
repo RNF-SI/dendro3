@@ -320,7 +320,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
-  Future<void> createObject() async {
+  Future<String> createObject() async {
     if (formType == 'add') {
       _arbreListViewModel.addItem({
         'idPlacette': _idPlacette,
@@ -379,10 +379,11 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
       );
     }
+    return '';
   }
 
   @override
-  Future<void> updateObject() async {
+  Future<String> updateObject() async {
     _arbreListViewModel.updateItem(
       {
         'idArbre': _idArbre,
@@ -415,6 +416,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       },
       arbre: arbre,
     );
+    return '';
   }
 
   // Future<void> _init(int placetteId) async {

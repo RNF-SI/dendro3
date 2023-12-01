@@ -92,7 +92,7 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   @override
-  Future<void> createObject() async {
+  Future<String> createObject() async {
     _repereListViewModel.addItem({
       'idPlacette': _idPlacette,
       'azimut': _azimut,
@@ -101,10 +101,13 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
       'repere': _repere,
       'observation': _observation,
     });
+    return '';
   }
 
   @override
-  Future<void> updateObject() async {}
+  Future<String> updateObject() async {
+    return '';
+  }
 
   @override
   List<FieldConfig> getFormConfig() {

@@ -86,8 +86,20 @@ class RegenerationList
     return values.first.idRegeneration;
   }
 
-  @override 
+  @override
   bool isEmpty() {
     return values.isEmpty;
+  }
+
+  bool isUniqueCombination(
+      int? sousPlacette, String? codeEssence, bool? taillis) {
+    for (var regeneration in values) {
+      if (regeneration.sousPlacette == sousPlacette &&
+          regeneration.codeEssence == codeEssence &&
+          regeneration.taillis == taillis) {
+        return false; // La combinaison existe déjà
+      }
+    }
+    return true; // La combinaison est unique
   }
 }

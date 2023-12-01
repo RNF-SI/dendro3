@@ -200,7 +200,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   @override
-  Future<void> createObject() async {
+  Future<String> createObject() async {
     // if (_isNewTransect) {
     _transectListViewModel.addItem({
       'idCyclePlacette': corCyclePlacette!.idCyclePlacette,
@@ -221,10 +221,11 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       '_stadeEcorce': _stadeEcorce,
       '_observation': _observation,
     });
+    return '';
   }
 
   @override
-  Future<void> updateObject() async {
+  Future<String> updateObject() async {
     _transectListViewModel.updateItem({
       '_idTransect': _idTransect,
       '_idCyclePlacette': _idCyclePlacette,
@@ -245,6 +246,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       '_stadeEcorce': _stadeEcorce,
       '_observation': _observation,
     });
+    return '';
   }
 
   @override

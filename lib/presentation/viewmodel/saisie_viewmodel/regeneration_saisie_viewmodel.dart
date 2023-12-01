@@ -147,38 +147,53 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   @override
-  Future<void> createObject() async {
-    _regenerationListViewModel.addItem({
-      'idCyclePlacette': corCyclePlacette!.idCyclePlacette,
-      'sousPlacette': _sousPlacette,
-      'codeEssence': _codeEssence,
-      'recouvrement': _recouvrement,
-      'classe1': _classe1,
-      'classe2': _classe2,
-      'classe3': _classe3,
-      'taillis': _taillis,
-      'abroutissement': _abroutissement,
-      'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
-      'observation': _observation,
-    });
+  Future<String> createObject() async {
+    if (isUniqueCombination()) {
+      _regenerationListViewModel.addItem({
+        'idCyclePlacette': corCyclePlacette!.idCyclePlacette,
+        'sousPlacette': _sousPlacette,
+        'codeEssence': _codeEssence,
+        'recouvrement': _recouvrement,
+        'classe1': _classe1,
+        'classe2': _classe2,
+        'classe3': _classe3,
+        'taillis': _taillis,
+        'abroutissement': _abroutissement,
+        'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
+        'observation': _observation,
+      });
+      return '';
+    } else {
+      return 'La combinaison Sous placette, Essence et Taillis existe déjà';
+    }
   }
 
   @override
-  Future<void> updateObject() async {
-    _regenerationListViewModel.updateItem({
-      'idRegeneration': _idRegeneration,
-      'idCyclePlacette': _idCyclePlacette,
-      'sousPlacette': _sousPlacette,
-      'codeEssence': _codeEssence,
-      'recouvrement': _recouvrement,
-      'classe1': _classe1,
-      'classe2': _classe2,
-      'classe3': _classe3,
-      'taillis': _taillis,
-      'abroutissement': _abroutissement,
-      'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
-      'observation': _observation,
-    });
+  Future<String> updateObject() async {
+    if (isUniqueCombination()) {
+      _regenerationListViewModel.updateItem({
+        'idRegeneration': _idRegeneration,
+        'idCyclePlacette': _idCyclePlacette,
+        'sousPlacette': _sousPlacette,
+        'codeEssence': _codeEssence,
+        'recouvrement': _recouvrement,
+        'classe1': _classe1,
+        'classe2': _classe2,
+        'classe3': _classe3,
+        'taillis': _taillis,
+        'abroutissement': _abroutissement,
+        'idNomenclatureAbroutissement': _idNomenclatureAbroutissement,
+        'observation': _observation,
+      });
+    } else {
+      return 'La combinaison Sous placette, Essence et Taillis existe déjà';
+    }
+    return '';
+  }
+
+  bool isUniqueCombination() {
+    return corCyclePlacette!.regenerations!
+        .isUniqueCombination(_sousPlacette, _codeEssence, _taillis);
   }
 
   @override

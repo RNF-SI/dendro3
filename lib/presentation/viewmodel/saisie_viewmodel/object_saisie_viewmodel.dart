@@ -7,8 +7,8 @@ abstract class ObjectSaisieViewModel {
   // ObjectSaisieViewModel(this._baseListViewModel) {
   //   fetchData();
   // }
-  Future<void> createObject();
-  Future<void> updateObject();
+  Future<String> createObject();
+  Future<String?> updateObject();
 
   List<FieldConfig> getFormConfig();
   // // Methods that can be overridden by subclasses if required
