@@ -108,11 +108,17 @@ class RegenerationMapper {
         sousPlacette: regenerationsEntity['sous_placette'],
         codeEssence: regenerationsEntity['code_essence'],
         recouvrement: regenerationsEntity['recouvrement'],
-        classe1: regenerationsEntity['classe'],
-        classe2: regenerationsEntity['classe'],
-        classe3: regenerationsEntity['classe'],
-        taillis: regenerationsEntity['taillis'],
-        abroutissement: regenerationsEntity['abroutissement'],
+        classe1: regenerationsEntity['classe1'],
+        classe2: regenerationsEntity['classe2'],
+        classe3: regenerationsEntity['classe3'],
+        taillis: (regenerationsEntity['taillis'] == true ||
+                regenerationsEntity['taillis'] == 1)
+            ? true
+            : false,
+        abroutissement: (regenerationsEntity['abroutissement'] == true ||
+                regenerationsEntity['abroutissement'] == 1)
+            ? true
+            : false,
         idNomenclatureAbroutissement:
             regenerationsEntity['id_nomenclature_abroutissement'],
         observation: regenerationsEntity['observation']);

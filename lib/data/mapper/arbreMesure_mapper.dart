@@ -28,11 +28,17 @@ class ArbreMesureMapper {
         liane: entity['liane'],
         diametreLiane: entity['diametre_liane'],
         coupe: entity['coupe'],
-        limite: entity['limite'] == true ? true : false,
+        limite:
+            (entity['limite'] == true || entity['limite'] == 1) ? true : false,
         idNomenclatureCodeSanitaire: entity['id_nomenclature_code_sanitaire'],
         codeEcolo: entity['code_ecolo'],
         refCodeEcolo: entity['ref_code_ecolo'],
-        ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
+        ratioHauteur: (entity['ratio_hauteur'] == true ||
+                entity['ratio_hauteur'] == 1)
+            ? true
+            : (entity['ratio_hauteur'] == false || entity['ratio_hauteur'] == 0)
+                ? false
+                : null,
         observation: entity['observation']);
   }
 

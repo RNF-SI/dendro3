@@ -22,7 +22,11 @@ class ArbreMapper {
       codeEssence: entity['code_essence'],
       azimut: entity['azimut'],
       distance: entity['distance'],
-      taillis: entity['taillis'] == true ? true : false,
+      taillis: (entity['taillis'] == true || entity['taillis'] == 1)
+          ? true
+          : (entity['taillis'] == false || entity['taillis'] == 0)
+              ? false
+              : null,
       observation: entity['observation'],
     );
   }

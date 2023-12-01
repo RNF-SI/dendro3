@@ -54,7 +54,7 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
       final bool abroutissement,
       int? idNomenclatureAbroutissement,
       String? observation) async {
-    final regenerationsEntity = await database.addRegeneration(
+    final regenerationsEntity = await database.updateRegeneration(
         RegenerationMapper.transformToEntityMap(
             idRegeneration,
             idCyclePlacette,

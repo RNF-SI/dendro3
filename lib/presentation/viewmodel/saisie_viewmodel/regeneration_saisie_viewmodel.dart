@@ -260,12 +260,12 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
       CheckboxFieldConfig(
         fieldName: 'Taillis',
         initialValue: initialTaillis(),
-        onSaved: (value) => _taillis = value == 'true',
+        onSaved: (value) => setTaillis(value!),
       ),
       CheckboxFieldConfig(
         fieldName: 'Abroutissement',
         initialValue: initialAbroutissement(),
-        onSaved: (value) => _taillis = value == 'true',
+        onSaved: (value) => setAbroutissement(value!),
       ),
       // TextFieldConfig(
       //   fieldName: 'Id nomenclature abroutissement',
@@ -302,8 +302,14 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   setClasse1(final int value) => _classe1 = value;
   setClasse2(final int value) => _classe2 = value;
   setClasse3(final int value) => _classe3 = value;
-  setTaillis(final bool value) => _taillis = value;
-  setAbroutissement(final bool value) => _abroutissement = value;
+  setTaillis(final bool value) {
+    _taillis = value;
+  }
+
+  setAbroutissement(final bool value) {
+    _abroutissement = value;
+  }
+
   setIdNomenclatureAbroutissement(final int value) =>
       _idNomenclatureAbroutissement = value;
   setObservation(final String value) => _observation = value;

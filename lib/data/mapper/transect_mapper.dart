@@ -109,10 +109,22 @@ class TransectMapper {
         distanceSouche: transectsEntity['distance_souche'],
         diametre: transectsEntity['diametre'],
         diametre130: transectsEntity['diametre_130'],
-        ratioHauteur: transectsEntity['ratio_hauteur'] == true ? true : false,
-        contact: transectsEntity['contact'] == true ? true : false,
+        ratioHauteur: (transectsEntity['ratio_hauteur'] == true ||
+                transectsEntity['ratio_hauteur'] == 1)
+            ? true
+            : (transectsEntity['ratio_hauteur'] == false ||
+                    transectsEntity['ratio_hauteur'] == 0)
+                ? false
+                : null,
+        contact: (transectsEntity['contact'] == true ||
+                transectsEntity['contact'] == 1)
+            ? true
+            : false,
         angle: transectsEntity['angle'],
-        chablis: transectsEntity['chablis'] == true ? true : false,
+        chablis: (transectsEntity['chablis'] == true ||
+                transectsEntity['chablis'] == 1)
+            ? true
+            : false,
         stadeDurete: transectsEntity['stade_durete'],
         stadeEcorce: transectsEntity['stade_ecorce'],
         observation: transectsEntity['observation']);
