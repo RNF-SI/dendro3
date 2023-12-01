@@ -75,4 +75,10 @@ class CorCyclePlacetteList
                 (placette) => placette.regenerations?.values ?? [])
             .toList());
   }
+
+  // Get the corcyclePlacette corresponding to the given idCycle
+  CorCyclePlacette? getCorCyclePlacetteByIdCycle(final int idCycle) {
+    return values
+        .firstWhere((corCyclePlacette) => corCyclePlacette.idCycle == idCycle);
+  }
 }

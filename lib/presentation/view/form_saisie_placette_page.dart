@@ -1,6 +1,7 @@
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/essence.dart';
@@ -42,6 +43,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final SaisisableObject? saisisableObject1;
   final SaisisableObject? saisisableObject2;
   final Cycle? cycle;
+  final CorCyclePlacette? corCyclePlacette;
   final String formType;
 
   FormSaisiePlacettePage({
@@ -52,6 +54,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
     this.saisisableObject1,
     this.saisisableObject2,
     required this.cycle,
+    required this.corCyclePlacette,
     // required this.placette,
     // required this.dispCycleList,
   }) : super(key: key);
@@ -543,16 +546,19 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
     // ...other types
     case 'Transects':
       return ref.read(transectSaisieViewModelProvider({
+        'corCyclePlacette': widget.corCyclePlacette,
         'transect': widget.saisisableObject1,
         'formType': widget.formType,
       }));
     case 'Regenerations':
       return ref.read(regenerationSaisieViewModelProvider({
+        'corCyclePlacette': widget.corCyclePlacette,
         'regeneration': widget.saisisableObject1,
         'formType': widget.formType,
       }));
     case 'Repères':
       return ref.read(repereSaisieViewModelProvider({
+        'corCyclePlacette': widget.corCyclePlacette,
         'repere': widget.saisisableObject1,
         'formType': widget.formType,
       }));

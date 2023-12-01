@@ -249,6 +249,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             widget.dispCycleList,
                             selectedItemMesureDetails,
                           ),
+                          corCyclePlacette: getCorCyclePlacetteFromType(
+                            'add',
+                            widget.placette,
+                            widget.dispCycleList,
+                          ),
                           saisisableObject1: selectedItemDetails,
                           saisisableObject2: selectedItemMesureDetails,
 
@@ -299,7 +304,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                       cycle: getCycleFromType(
                         'newMesure',
                         widget.dispCycleList,
-                      ), // Modify as needed
+                      ),
+                      corCyclePlacette: getCorCyclePlacetteFromType(
+                        'add',
+                        widget.placette,
+                        widget.dispCycleList,
+                      ),
                       saisisableObject1: selectedItemDetails,
                       saisisableObject2: null,
                     );
@@ -324,6 +334,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 placette: widget.placette,
                 cycle: getCycleFromType(
                   'add',
+                  widget.dispCycleList,
+                ),
+                corCyclePlacette: getCorCyclePlacetteFromType(
+                  'add',
+                  widget.placette,
                   widget.dispCycleList,
                 ),
                 saisisableObject1: null,
@@ -607,13 +622,28 @@ Cycle? getCycleFromType(String formType, CycleList dispCycleList,
       return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
     } else if (selectedItemMesureDetails is BmSup30Mesure) {
       return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+    } else if (selectedItemMesureDetails is CorCyclePlacette) {
+      CorCyclePlacette aaa = selectedItemMesureDetails as CorCyclePlacette;
+      return dispCycleList.findCycleById(aaa!.idCycle);
     } else {
-      return dispCycleList.values[0];
+      return null;
     }
   } else if (formType == 'newMesure') {
     return dispCycleList.findIdOfCycleWithLargestNumCycle();
   } else if (formType == 'add') {
     return dispCycleList.findIdOfCycleWithLargestNumCycle();
+  } else {
+    return null;
+  }
+}
+
+CorCyclePlacette? getCorCyclePlacetteFromType(
+    String formType, Placette placette, CycleList dispCycleList) {
+  Cycle? cycle = dispCycleList.findIdOfCycleWithLargestNumCycle();
+  // Get the idCyclePlacette of the corCyclePlacette corresponding to the cycle
+  if (formType == 'add' || formType == 'newMesure') {
+    return placette.corCyclesPlacettes!
+        .getCorCyclePlacetteByIdCycle(cycle!.idCycle);
   } else {
     return null;
   }
