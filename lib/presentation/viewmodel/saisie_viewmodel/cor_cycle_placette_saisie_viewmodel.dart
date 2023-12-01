@@ -149,7 +149,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
 
       DropdownFieldConfig<dynamic>(
         fieldName: 'gestionPlacette',
-        value: _gestionPlacette,
+        value: _gestionPlacette != null ? _gestionPlacette.toString() : '',
         items: [
           const MapEntry('', 'Sélectionnez une option'),
           const MapEntry('gérée', 'Gérée'),
