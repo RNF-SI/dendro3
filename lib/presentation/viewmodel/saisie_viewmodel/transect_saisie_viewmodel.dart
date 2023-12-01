@@ -3,11 +3,15 @@ import 'dart:ffi';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
+import 'package:dendro3/domain/model/nomenclature.dart';
+import 'package:dendro3/domain/model/nomenclature_list.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/transect_id.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
+import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
+import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
@@ -36,6 +40,8 @@ final transectSaisieViewModelProvider = Provider.autoDispose
       regeInfoObj['transect'],
       regeInfoObj['formType'],
       ref.watch(getEssencesUseCaseProvider),
+      ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
+      ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
       transectListViewModel);
 }
         // ref.watch(insertArbreUseCaseProvider))
@@ -46,9 +52,17 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
 
   late final TransectListViewModel _transectListViewModel;
   final GetEssencesUseCase _getEssencesUseCase;
-  late EssenceList _essences;
-  Essence? _initialEssence = null;
-  Essence? initialEssence = null;
+  final GetStadeDureteNomenclaturesUseCase _getStadeDureteNomenclaturesUseCase;
+  final GetStadeEcorceNomenclaturesUseCase _getStadeEcorceNomenclaturesUseCase;
+
+  EssenceList? _essences;
+  Future<List<Essence>>? essenceFuture;
+
+  NomenclatureList? stadeDureteNomenclatures;
+  Future<List<Nomenclature>>? stadeDureteFuture;
+
+  NomenclatureList? stadeEcorceNomenclatures;
+  Future<List<Nomenclature>>? stadeEcorceFuture;
 
   final String formType;
 
@@ -87,23 +101,21 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
     final Transect? transect,
     this.formType,
     this._getEssencesUseCase,
+    this._getStadeDureteNomenclaturesUseCase,
+    this._getStadeEcorceNomenclaturesUseCase,
     this._transectListViewModel,
     // this._insertArbreUseCase,
   ) {
-    _getEssences();
-
     _initTransect(transect);
+
+    essenceFuture = getAndSetInitialEssence();
+    stadeEcorceFuture = getStadeEcorceNomenclatures();
+    stadeDureteFuture = getStadeDureteNomenclatures();
   }
 
   Future<void> _getEssences() async {
     try {
       _essences = await _getEssencesUseCase.execute();
-      _initialEssence = _essences.values
-          .where((element) => element.codeEssence == _codeEssence)
-          .first;
-      initialEssence = _essences.values
-          .where((element) => element.codeEssence == _codeEssence)
-          .first;
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -111,10 +123,42 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
-  Future<List<Essence>> getEssences() async {
+  Future<List<Essence>> getAndSetInitialEssence() async {
     try {
-      var essences = await _getEssencesUseCase.execute();
-      return essences.values.toList();
+      if (_essences == null) {
+        await _getEssences();
+      }
+
+      // Assuming _essences is a Map or similar collection
+      List<Essence> essenceList = _essences!.values.toList();
+
+      return essenceList;
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<Nomenclature>> getStadeDureteNomenclatures() async {
+    try {
+      stadeDureteNomenclatures ??=
+          await _getStadeDureteNomenclaturesUseCase.execute();
+      return stadeDureteNomenclatures!.values.toList();
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<Nomenclature>> getStadeEcorceNomenclatures() async {
+    try {
+      stadeEcorceNomenclatures ??=
+          await _getStadeEcorceNomenclaturesUseCase.execute();
+      return stadeEcorceNomenclatures!.values.toList();
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -201,6 +245,27 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   @override
   List<FieldConfig> getFormConfig() {
     return [
+      DropdownSearchConfig(
+        fieldName: 'Essence',
+        fieldRequired: true,
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getAndSetInitialEssence(),
+        selectedItem: () {
+          if (_codeEssence != '') {
+            return _essences!.values
+                .where((element) => element.codeEssence == _codeEssence)
+                .first;
+          }
+          return null;
+        },
+        filterFn: (dynamic essence, filter) =>
+            essence.essenceFilterByCodeEssence(filter),
+        itemAsString: (dynamic e) => e.codeEssence,
+        onChanged: (dynamic? data) =>
+            data == null ? '' : setCodeEssence(data.codeEssence),
+        validator: (dynamic? text, formData) => validateCodeEssence(),
+        futureVariable: essenceFuture,
+      ),
       TextFieldConfig(
         fieldName: 'refTransect',
         initialValue: _refTransect.toString(),
@@ -309,30 +374,47 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         initialValue: initialChablis(),
         onSaved: (value) => _chablis = value == 'true',
       ),
-      DropdownFieldConfig<dynamic>(
-        fieldName: 'stadeDurete',
-        value: _stadeDurete,
-        items: [
-          const MapEntry('', ''),
-          const MapEntry('1', '1'),
-          const MapEntry('2', '2'),
-          const MapEntry('3', '3'),
-          const MapEntry('4', '4'),
-          const MapEntry('5', '5'),
-        ],
-        onChanged: (value) => setStadeDurete(initialStadeDureteValue()),
+      DropdownSearchConfig(
+        fieldName: 'Stade Durete',
+        fieldRequired: true,
+        futureVariable: stadeDureteFuture,
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getStadeDureteNomenclatures(),
+        selectedItem: () {
+          if (_stadeDurete != null) {
+            return stadeDureteNomenclatures!.values
+                .where((element) => element.idNomenclature == _stadeDurete)
+                .first;
+          }
+          return null;
+        },
+        filterFn: (dynamic essence, filter) {
+          return true;
+        },
+        itemAsString: (dynamic e) => e.labelDefault,
+        onChanged: (dynamic? data) =>
+            data == null ? '' : setStadeDurete(data.idNomenclature),
       ),
-      DropdownFieldConfig<dynamic>(
-        fieldName: 'stadeEcorce',
-        value: _stadeEcorce,
-        items: [
-          const MapEntry('', ''),
-          const MapEntry('1', '1'),
-          const MapEntry('2', '2'),
-          const MapEntry('3', '3'),
-          const MapEntry('4', '4'),
-        ],
-        onChanged: (value) => setStadeEcorce(initialStadeEcorceValue()),
+      DropdownSearchConfig(
+        fieldName: 'Stade Ecorce',
+        fieldRequired: true,
+        futureVariable: stadeEcorceFuture,
+        asyncItems: (String filter, [Map<String, dynamic>? options]) =>
+            getStadeEcorceNomenclatures(),
+        selectedItem: () {
+          if (_stadeEcorce != null) {
+            return stadeEcorceNomenclatures!.values
+                .where((element) => element.idNomenclature == _stadeEcorce)
+                .first;
+          }
+          return null;
+        },
+        filterFn: (dynamic essence, filter) {
+          return true;
+        },
+        itemAsString: (dynamic e) => e.labelDefault,
+        onChanged: (dynamic? data) =>
+            data == null ? '' : setStadeEcorce(data.idNomenclature),
       ),
       TextFieldConfig(
         fieldName: 'observation',
@@ -403,4 +485,11 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   int initialStadeDureteValue() => _stadeDurete ?? 0;
 
   int initialStadeEcorceValue() => _stadeEcorce ?? 0;
+
+  String? validateCodeEssence() {
+    if (_codeEssence == '') {
+      return 'Le champ code Essence est nécessaire.';
+    } else
+      return null;
+  }
 }
