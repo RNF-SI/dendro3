@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
@@ -35,6 +36,7 @@ final regenerationSaisieViewModelProvider = Provider.autoDispose
       // regeInfoObj['placette'],
       regeInfoObj['regeneration'],
       regeInfoObj['formType'],
+      regeInfoObj['corCyclePlacette'],
       ref.watch(getEssencesUseCaseProvider),
       regenerationListViewModel);
 }
@@ -55,14 +57,16 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   EssenceList? _essences;
   Future<List<Essence>>? essenceFuture;
 
+  CorCyclePlacette? corCyclePlacette;
+
   late int? _idRegeneration;
   int? _idCyclePlacette;
   int? _sousPlacette;
-  var _codeEssence;
+  var _codeEssence = '';
   double? _recouvrement;
-  int? _classe1;
-  int? _classe2;
-  int? _classe3;
+  int? _classe1 = 0;
+  int? _classe2 = 0;
+  int? _classe3 = 0;
   bool _taillis = false;
   bool _abroutissement = false;
   int? _idNomenclatureAbroutissement;
@@ -76,6 +80,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
     // this.placette,
     final Regeneration? regeneration,
     this.formType,
+    this.corCyclePlacette,
     this._getEssencesUseCase,
     this._regenerationListViewModel,
     // this._insertArbreUseCase,
@@ -144,7 +149,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   @override
   Future<void> createObject() async {
     _regenerationListViewModel.addItem({
-      'idCyclePlacette': _idCyclePlacette,
+      'idCyclePlacette': corCyclePlacette!.idCyclePlacette,
       'sousPlacette': _sousPlacette,
       'codeEssence': _codeEssence,
       'recouvrement': _recouvrement,
@@ -182,7 +187,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
       DropdownFieldConfig<dynamic>(
         fieldName: 'Sous placette',
         fieldRequired: true,
-        value: _sousPlacette.toString(),
+        value: _sousPlacette != null ? _sousPlacette.toString() : '',
         items: [
           const MapEntry('', 'Sélectionnez une option'),
           const MapEntry('1', '1'),
@@ -202,7 +207,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
             getAndSetInitialEssence(),
         selectedItem: () {
-          if (_codeEssence != '') {
+          if (_codeEssence != '' && _codeEssence != null) {
             return _essences!.values
                 .where((element) => element.codeEssence == _codeEssence)
                 .first;

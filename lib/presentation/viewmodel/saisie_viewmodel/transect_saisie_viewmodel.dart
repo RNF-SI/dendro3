@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/nomenclature.dart';
@@ -39,6 +40,7 @@ final transectSaisieViewModelProvider = Provider.autoDispose
       // regeInfoObj['placette'],
       regeInfoObj['transect'],
       regeInfoObj['formType'],
+      regeInfoObj['corCyclePlacette'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -63,6 +65,8 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
 
   NomenclatureList? stadeEcorceNomenclatures;
   Future<List<Nomenclature>>? stadeEcorceFuture;
+
+  CorCyclePlacette? corCyclePlacette;
 
   final String formType;
 
@@ -100,6 +104,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
     // this.placette,
     final Transect? transect,
     this.formType,
+    this.corCyclePlacette,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -198,7 +203,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   Future<void> createObject() async {
     // if (_isNewTransect) {
     _transectListViewModel.addItem({
-      '_idCyclePlacette': _idCyclePlacette,
+      'idCyclePlacette': corCyclePlacette!.idCyclePlacette,
       '_idTransectOrig': _idTransectOrig,
       '_codeEssence': _codeEssence,
       '_refTransect': _refTransect,
