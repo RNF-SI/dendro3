@@ -13,6 +13,7 @@ import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
@@ -45,14 +46,14 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
 
   late final RegenerationListViewModel _regenerationListViewModel;
   final GetEssencesUseCase _getEssencesUseCase;
-  late EssenceList _essences;
-  Essence? _initialEssence = null;
-  Essence? initialEssence = null;
 
   final Ref ref;
   // Placette placette;
   // Cycle cycle;
   final String formType;
+
+  EssenceList? _essences;
+  Future<List<Essence>>? essenceFuture;
 
   late int? _idRegeneration;
   int? _idCyclePlacette;
@@ -79,20 +80,14 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
     this._regenerationListViewModel,
     // this._insertArbreUseCase,
   ) {
-    _getEssences();
-
     _initRegeneration(regeneration);
+
+    essenceFuture = getAndSetInitialEssence();
   }
 
   Future<void> _getEssences() async {
     try {
       _essences = await _getEssencesUseCase.execute();
-      _initialEssence = _essences.values
-          .where((element) => element.codeEssence == _codeEssence)
-          .first;
-      initialEssence = _essences.values
-          .where((element) => element.codeEssence == _codeEssence)
-          .first;
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -100,10 +95,16 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
-  Future<List<Essence>> getEssences() async {
+  Future<List<Essence>> getAndSetInitialEssence() async {
     try {
-      var essences = await _getEssencesUseCase.execute();
-      return essences.values.toList();
+      if (_essences == null) {
+        await _getEssences();
+      }
+
+      // Assuming _essences is a Map or similar collection
+      List<Essence> essenceList = _essences!.values.toList();
+
+      return essenceList;
     } on Exception catch (e) {
       print(e);
     } catch (e) {
@@ -131,6 +132,13 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
       _idNomenclatureAbroutissement = regeneration.idNomenclatureAbroutissement;
       _observation = regeneration.observation;
     }
+  }
+
+  String? validateCodeEssence() {
+    if (_codeEssence == '') {
+      return 'Le champ code Essence est nécessaire.';
+    } else
+      return null;
   }
 
   @override
@@ -171,60 +179,83 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   @override
   List<FieldConfig> getFormConfig() {
     return [
-      TextFieldConfig(
+      DropdownFieldConfig<dynamic>(
         fieldName: 'Sous placette',
-        initialValue: _sousPlacette.toString(),
-        onChanged: (value) => _sousPlacette = int.parse(value),
-        hintText: 'Veuillez entrer le code',
+        fieldRequired: true,
+        value: _sousPlacette.toString(),
+        items: [
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('1', '1'),
+          const MapEntry('2', '2'),
+          const MapEntry('3', '3'),
+        ],
+        validator: (value, formData) {
+          return null;
+        },
+        onChanged: (value) {
+          _sousPlacette = int.parse(value);
+        },
       ),
       DropdownSearchConfig(
-        fieldName: 'Code Essence',
+        fieldName: 'Essence',
+        fieldRequired: true,
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
-            getEssences(),
+            getAndSetInitialEssence(),
         selectedItem: () {
-          return _essences.values
-              .where((element) => element.codeEssence == _codeEssence)
-              .first;
+          if (_codeEssence != '') {
+            return _essences!.values
+                .where((element) => element.codeEssence == _codeEssence)
+                .first;
+          }
+          return null;
         },
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,
         onChanged: (dynamic? data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
+        validator: (dynamic? text, formData) => validateCodeEssence(),
+        futureVariable: essenceFuture,
       ),
       TextFieldConfig(
         fieldName: 'Recouvrement',
+        fieldInfo: "Hauteur < 50 cm en surface de recouvrement",
+        fieldUnit: '%',
+        fieldRequired: true,
         initialValue: initialRecouvrement(),
         keyboardType: TextInputType.number,
         onChanged: (value) => _recouvrement = double.parse(value),
-        hintText: 'Veuillez entrer le code',
+        hintText: 'Veuillez entrer le pourcentage de recouvrement',
       ),
-      DropdownFieldConfig<dynamic>(
-        fieldName: 'Classe ',
-        value: _classe1,
-        items: [
-          const MapEntry('', ''),
-          const MapEntry('1', '1'),
-        ],
-        onChanged: (value) => setClasse1(initialClasse1()),
+      TextFieldConfig(
+        fieldName: 'Classe 1',
+        fieldInfo: "Nombre de tiges 50cm< H < 1.5m",
+        initialValue: _classe1.toString(),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        fieldRequired: true,
+        hintText: "Entrer le le nombre de tiges",
+        onChanged: (value) => _classe1 = int.parse(value),
       ),
-      DropdownFieldConfig<dynamic>(
+      TextFieldConfig(
         fieldName: 'Classe 2',
-        value: _classe2,
-        items: [
-          const MapEntry('0', '0'),
-          const MapEntry('1', '1'),
-        ],
-        onChanged: (value) => setClasse2(initialClasse2()),
+        fieldInfo: "Nombre de tiges H > 1.5m et diamètre <2.5cm",
+        initialValue: _classe2.toString(),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        fieldRequired: true,
+        hintText: "Entrer nombre de tiges",
+        onChanged: (value) => _classe2 = int.parse(value),
       ),
-      DropdownFieldConfig<dynamic>(
+      TextFieldConfig(
         fieldName: 'Classe 3',
-        value: _classe1,
-        items: [
-          const MapEntry('', ''),
-          const MapEntry('3', '3'),
-        ],
-        onChanged: (value) => setClasse1(initialClasse3()),
+        fieldInfo: "Nombre de tiges 2.5cm< diamètre < 7.5cm",
+        initialValue: _classe3.toString(),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        fieldRequired: true,
+        hintText: "Entrer le nombre de tiges",
+        onChanged: (value) => _classe3 = int.parse(value),
       ),
       CheckboxFieldConfig(
         fieldName: 'Taillis',
@@ -236,18 +267,18 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
         initialValue: initialAbroutissement(),
         onSaved: (value) => _taillis = value == 'true',
       ),
-      TextFieldConfig(
-        fieldName: 'Id nomenclature abroutissement',
-        initialValue: initialIdNomenclatureAbroutissement().toString(),
-        keyboardType: TextInputType.number,
-        onChanged: (value) => _idNomenclatureAbroutissement = int.parse(value),
-        hintText: 'Veuillez entrer le code',
-      ),
+      // TextFieldConfig(
+      //   fieldName: 'Id nomenclature abroutissement',
+      //   initialValue: initialIdNomenclatureAbroutissement().toString(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _idNomenclatureAbroutissement = int.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
       TextFieldConfig(
         fieldName: 'Observation',
         initialValue: initialObservation(),
         onChanged: (value) => _observation = value,
-        hintText: 'Veuillez entrer le code',
+        hintText: 'Champ Libre',
       ),
     ];
   }

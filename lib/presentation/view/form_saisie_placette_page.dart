@@ -384,6 +384,7 @@ class FormSaisiePlacettePageState
                       if (field.fieldInfo != '')
                         IconButton(
                           padding: EdgeInsets.only(left: 0.0, right: 0.0),
+                          constraints: BoxConstraints(),
                           icon: const Icon(
                             Icons.info_outline,
                             color: Colors.grey,
@@ -542,15 +543,18 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
     // ...other types
     case 'Transects':
       return ref.read(transectSaisieViewModelProvider({
-        'transects': widget.saisisableObject1,
+        'transect': widget.saisisableObject1,
+        'formType': widget.formType,
       }));
     case 'Regenerations':
       return ref.read(regenerationSaisieViewModelProvider({
-        'regenerations': widget.saisisableObject1,
+        'regeneration': widget.saisisableObject1,
+        'formType': widget.formType,
       }));
     case 'Repères':
       return ref.read(repereSaisieViewModelProvider({
-        'reperes': widget.saisisableObject1,
+        'repere': widget.saisisableObject1,
+        'formType': widget.formType,
       }));
     case 'corCyclePlacette':
       return ref.read(corCyclePlacetteSaisieViewModelProvider({
