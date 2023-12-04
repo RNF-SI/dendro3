@@ -306,7 +306,9 @@ class FormSaisiePlacettePageState
                   formData['Stade Ecorce'] = Null;
                 }
               }
-              field.onChanged!(value);
+              if (value is String) {
+                field.onChanged(value.toString());
+              }
             });
           },
           validator: (value) {

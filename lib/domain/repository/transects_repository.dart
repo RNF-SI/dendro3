@@ -23,6 +23,7 @@ abstract class TransectsRepository {
   Future<Transect> updateTransect(
     final int idTransect,
     final int idCyclePlacette,
+    final int idTransectOrig,
     final String codeEssence,
     final String refTransect,
     double? distance,

@@ -349,7 +349,7 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
         state = items.getObjectFromId(value['idRepere']);
         return state;
       case 'Transects':
-        state = items.getObjectFromId(value['idTransectOrig']);
+        state = items.getObjectFromId(value['idTransect']);
         return state;
       default:
         throw ArgumentError('Unknown type: ${items.runtimeType}');

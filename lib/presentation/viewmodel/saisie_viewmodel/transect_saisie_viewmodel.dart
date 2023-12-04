@@ -180,6 +180,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
     } else {
       _idTransect = transect!.idTransect;
       _idCyclePlacette = transect.idCyclePlacette;
+      _diametre = transect.diametre;
       _idTransectOrig = transect.idTransectOrig;
       _codeEssence = transect.codeEssence;
       _refTransect = transect.refTransect;
@@ -204,22 +205,22 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
     // if (_isNewTransect) {
     _transectListViewModel.addItem({
       'idCyclePlacette': corCyclePlacette!.idCyclePlacette,
-      '_idTransectOrig': _idTransectOrig,
-      '_codeEssence': _codeEssence,
-      '_refTransect': _refTransect,
-      '_distance': _distance,
-      '_orientation': _orientation,
-      '_azimutSouche': _azimutSouche,
-      '_distanceSouche': _distanceSouche,
-      '_diametre': _diametre,
-      '_diametre130': _diametre130,
-      '_ratioHauteur': _ratioHauteur,
-      '_contact': _contact,
-      '_angle': _angle,
-      '_chablis': _chablis,
-      '_stadeDurete': _stadeDurete,
-      '_stadeEcorce': _stadeEcorce,
-      '_observation': _observation,
+      'idTransectOrig': _idTransectOrig,
+      'codeEssence': _codeEssence,
+      'refTransect': _refTransect,
+      'distance': _distance,
+      'orientation': _orientation,
+      'azimutSouche': _azimutSouche,
+      'distanceSouche': _distanceSouche,
+      'diametre': _diametre,
+      'diametre130': _diametre130,
+      'ratioHauteur': _ratioHauteur,
+      'contact': _contact,
+      'angle': _angle,
+      'chablis': _chablis,
+      'stadeDurete': _stadeDurete,
+      'stadeEcorce': _stadeEcorce,
+      'observation': _observation,
     });
     return '';
   }
@@ -227,24 +228,24 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   @override
   Future<String> updateObject() async {
     _transectListViewModel.updateItem({
-      '_idTransect': _idTransect,
-      '_idCyclePlacette': _idCyclePlacette,
-      '_idTransectOrig': _idTransectOrig,
-      '_codeEssence': _codeEssence,
-      '_refTransect': _refTransect,
-      '_distance': _distance,
-      '_orientation': _orientation,
-      '_azimutSouche': _azimutSouche,
-      '_distanceSouche': _distanceSouche,
-      '_diametre': _diametre,
-      '_diametre130': _diametre130,
-      '_ratioHauteur': _ratioHauteur,
-      '_contact': _contact,
-      '_angle': _angle,
-      '_chablis': _chablis,
-      '_stadeDurete': _stadeDurete,
-      '_stadeEcorce': _stadeEcorce,
-      '_observation': _observation,
+      'idTransect': _idTransect,
+      'idCyclePlacette': _idCyclePlacette,
+      'idTransectOrig': _idTransectOrig,
+      'codeEssence': _codeEssence,
+      'refTransect': _refTransect,
+      'distance': _distance,
+      'orientation': _orientation,
+      'azimutSouche': _azimutSouche,
+      'distanceSouche': _distanceSouche,
+      'diametre': _diametre,
+      'diametre130': _diametre130,
+      'ratioHauteur': _ratioHauteur,
+      'contact': _contact,
+      'angle': _angle,
+      'chablis': _chablis,
+      'stadeDurete': _stadeDurete,
+      'stadeEcorce': _stadeEcorce,
+      'observation': _observation,
     });
     return '';
   }
@@ -252,6 +253,31 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   @override
   List<FieldConfig> getFormConfig() {
     return [
+      DropdownFieldConfig<String>(
+        fieldName: "Transect",
+        fieldRequired: true,
+        value: _refTransect != null ? _refTransect.toString() : '',
+        validator: (value, formData) {
+          if (value == '') {
+            return 'Le champ transect est nécessaire.';
+          }
+          return null;
+        },
+        items: [
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('11', '11'),
+          const MapEntry('12', '12'),
+          const MapEntry('21', '21'),
+          const MapEntry('22', '22'),
+          const MapEntry('31', '31'),
+          const MapEntry('32', '32'),
+        ],
+        onChanged: (value) {
+          _refTransect = value;
+          // setRefTransect(value!);
+        },
+      ),
+
       DropdownSearchConfig(
         fieldName: 'Essence',
         fieldRequired: true,
@@ -273,42 +299,38 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         validator: (dynamic? text, formData) => validateCodeEssence(),
         futureVariable: essenceFuture,
       ),
-      TextFieldConfig(
-        fieldName: 'refTransect',
-        initialValue: _refTransect.toString(),
-        hintText: 'Veuillez entrer le nom du transect',
-      ),
-      TextFieldConfig(
-        fieldName: 'Distance',
-        initialValue: initialDistanceValue(),
-        keyboardType: TextInputType.number,
-        onChanged: (value) => _distance = double.parse(value),
-        hintText: 'Veuillez entrer le code',
-      ),
-      TextFieldConfig(
-        fieldName: 'Orientation',
-        initialValue: initialOrientationValue(),
-        keyboardType: TextInputType.number,
-        onChanged: (value) => _orientation = double.parse(value),
-        hintText: 'Veuillez entrer le code',
-      ),
-      TextFieldConfig(
-        fieldName: 'AzimutSouche',
-        initialValue: initialAzimutSoucheValue(),
-        keyboardType: TextInputType.number,
-        onChanged: (value) => _azimutSouche = double.parse(value),
-        hintText: 'Veuillez entrer le code',
-      ),
-      TextFieldConfig(
-        fieldName: 'DistanceSouche',
-        initialValue: initialDistanceSoucheValue(),
-        keyboardType: TextInputType.number,
-        onChanged: (value) => _distanceSouche = double.parse(value),
-        hintText: 'Veuillez entrer le code',
-      ),
+      // TextFieldConfig(
+      //   fieldName: 'Distance',
+      //   initialValue: initialDistanceValue(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _distance = double.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
+      // TextFieldConfig(
+      //   fieldName: 'Orientation',
+      //   initialValue: initialOrientationValue(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _orientation = double.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
+      // TextFieldConfig(
+      //   fieldName: 'AzimutSouche',
+      //   initialValue: initialAzimutSoucheValue(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _azimutSouche = double.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
+      // TextFieldConfig(
+      //   fieldName: 'DistanceSouche',
+      //   initialValue: initialDistanceSoucheValue(),
+      //   keyboardType: TextInputType.number,
+      //   onChanged: (value) => _distanceSouche = double.parse(value),
+      //   hintText: 'Veuillez entrer le code',
+      // ),
 
       TextFieldConfig(
         fieldName: 'Diametre',
+        fieldRequired: true,
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
@@ -316,34 +338,39 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         ],
         hintText: "Veuillez entrer le diametre",
         onChanged: (value) => setDiametre(value),
+        fieldUnit: 'cm',
         validator: (value, formData) {
-          // Vérifier si la valeur en grade est entre 0 et 400
-          // if (int.parse(value!) < 0 || int.parse(value) > 400) {
-          //   return 'La valeur doit être entre 0 et 400 gr';
-          // }
+          // Vérifier que la valeur n'est pas nulle
+          if (value == '') {
+            return 'Le champ Diametre est nécessaire.';
+          }
+          // Vérifier si la valeur est entre 5 et 30 cm
+          if (double.parse(value!) < 5 || double.parse(value) > 30) {
+            return 'La valeur doit être entre 5 et 30 cm';
+          }
           return null;
         },
-        initialValue: '',
+        initialValue: _diametre != null ? _diametre.toString() : '',
       ),
 
-      TextFieldConfig(
-        fieldName: 'Diametre130',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-          DecimalTextInputFormatter(decimalRange: 1),
-        ],
-        hintText: "Veuillez entrer le diametre",
-        onChanged: (value) => setDiametre130(value),
-        validator: (value, formData) {
-          // Vérifier si la valeur en grade est entre 0 et 400
-          // if (int.parse(value!) < 0 || int.parse(value) > 400) {
-          //   return 'La valeur doit être entre 0 et 400 gr';
-          // }
-          return null;
-        },
-        initialValue: '',
-      ),
+      // TextFieldConfig(
+      //   fieldName: 'Diametre130',
+      //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+      //     DecimalTextInputFormatter(decimalRange: 1),
+      //   ],
+      //   hintText: "Veuillez entrer le diametre",
+      //   onChanged: (value) => setDiametre130(value),
+      //   validator: (value, formData) {
+      //     // Vérifier si la valeur en grade est entre 0 et 400
+      //     // if (int.parse(value!) < 0 || int.parse(value) > 400) {
+      //     //   return 'La valeur doit être entre 0 et 400 gr';
+      //     // }
+      //     return null;
+      //   },
+      //   initialValue: '',
+      // ),
 
       // TextFieldConfig(
       //   fieldName: 'Diametre',
@@ -359,27 +386,42 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       //   onChanged: (value) => _diametre130 = double.parse(value),
       //   hintText: 'Veuillez entrer le code',
       // ),
-      CheckboxFieldConfig(
-        fieldName: 'RatioHauteur',
-        initialValue: initialRatioHauteur(),
-        onSaved: (value) => _ratioHauteur = value == 'true',
-      ),
+      // CheckboxFieldConfig(
+      //   fieldName: 'RatioHauteur',
+      //   initialValue: initialRatioHauteur(),
+      //   onSaved: (value) => _ratioHauteur = value == 'true',
+      // ),
       CheckboxFieldConfig(
         fieldName: 'Contact',
         initialValue: initialContact(),
-        onSaved: (value) => _contact = value == 'true',
+        onSaved: (value) => setContact(value!),
       ),
       TextFieldConfig(
         fieldName: 'Angle',
+        fieldUnit: '°',
+        fieldInfo:
+            "Angle entre l'horizontal et la pièce ce bois - voir notice. Min 0°, Max 50°",
+        fieldRequired: true,
         initialValue: initialAngleValue(),
         keyboardType: TextInputType.number,
         onChanged: (value) => _angle = double.parse(value),
-        hintText: 'Veuillez entrer le code',
+        hintText: "Veuillez entrer l'angle",
+        validator: (value, formData) {
+          // Vérifier que la valeur n'est pas nulle
+          if (value == '') {
+            return 'Le champ Angle est nécessaire.';
+          }
+          // Vérifier si la valeur en grade est entre 0 et 400
+          if (double.parse(value!) < 0 || double.parse(value) > 50) {
+            return 'La valeur doit être entre 0 et 50°';
+          }
+          return null;
+        },
       ),
       CheckboxFieldConfig(
         fieldName: 'Chablis',
         initialValue: initialChablis(),
-        onSaved: (value) => _chablis = value == 'true',
+        onSaved: (value) => setChablis(value!),
       ),
       DropdownSearchConfig(
         fieldName: 'Stade Durete',
@@ -401,6 +443,12 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         itemAsString: (dynamic e) => e.labelDefault,
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
+        validator: (dynamic? text, formData) {
+          if (text == null) {
+            return 'Le champ Stade Durete est nécessaire.';
+          }
+          return null;
+        },
       ),
       DropdownSearchConfig(
         fieldName: 'Stade Ecorce',
@@ -422,10 +470,16 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         itemAsString: (dynamic e) => e.labelDefault,
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
+        validator: (dynamic? text, formData) {
+          if (text == null) {
+            return 'Le champ Stade Ecorce est nécessaire.';
+          }
+          return null;
+        },
       ),
       TextFieldConfig(
         fieldName: 'observation',
-        hintText: "Veuillez entrer le observation",
+        hintText: "Champ libre",
         onChanged: (value) => setObservation(value),
         initialValue: '',
       ),

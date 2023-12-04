@@ -55,6 +55,7 @@ class TransectsRepositoryImpl implements TransectsRepository {
   Future<Transect> updateTransect(
     final idTransect,
     final int idCyclePlacette,
+    final int idTransectOrig,
     final String codeEssence,
     final String refTransect,
     double? distance,
@@ -75,6 +76,7 @@ class TransectsRepositoryImpl implements TransectsRepository {
         await database.updateTransect(TransectMapper.transformToEntityMap(
       idTransect,
       idCyclePlacette,
+      idTransectOrig,
       codeEssence,
       refTransect,
       distance,

@@ -69,6 +69,7 @@ class Transect with _$Transect implements SaisisableObject {
     DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
   }) {
     return {
+      'idTransect': idTransect,
       'idTransectOrig': idTransectOrig,
       'idCyclePlacette': idCyclePlacette,
       'codeEssence': codeEssence,

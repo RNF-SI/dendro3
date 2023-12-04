@@ -101,6 +101,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
       final updatedTransect = await _updateTransectUseCase.execute(
         item["idTransect"],
         item["idCyclePlacette"],
+        item["idTransectOrig"],
         item["codeEssence"],
         item["refTransect"],
         item["distance"],

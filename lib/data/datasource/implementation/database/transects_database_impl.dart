@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class TransectsDatabaseImpl implements TransectsDatabase {
   static const _tableName = 't_transects';
-  static const _columnId = 'id_transects';
+  static const _columnId = 'id_transect';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -44,7 +44,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
           [transect['id_cycle_placette']]));
 
       transect['id_transect'] = maxId! + 1;
-      transect['id_transect_orig'] = maxIdOrig! + 1;
+      transect['id_transect_orig'] = maxIdOrig == null ? 1 : maxIdOrig + 1;
 
       await txn.insert(
         _tableName,

@@ -133,6 +133,7 @@ class TransectMapper {
   static TransectEntity transformToEntityMap(
     int idTransect,
     int idCyclePlacette,
+    int idTransectOrig,
     String codeEssence,
     String refTransect,
     double? distance,
@@ -152,7 +153,7 @@ class TransectMapper {
     return {
       'id_transect': idTransect,
       'id_cycle_placette': idCyclePlacette,
-      'id_transect_orig': null,
+      'id_transect_orig': idTransectOrig,
       'code_essence': codeEssence,
       'ref_transect': refTransect,
       'distance': distance,

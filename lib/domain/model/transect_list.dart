@@ -76,12 +76,12 @@ class TransectList
   //     values: values.where((transect) => !transect.isCompleted).toList());
   @override
   getObjectFromId(final int id) {
-    return values.firstWhere((transect) => transect.idTransectOrig == id);
+    return values.firstWhere((transect) => transect.idTransect == id);
   }
 
   @override
   int getFirstElementIdOrig() {
-    return values.first.idTransectOrig;
+    return values.first.idTransect;
   }
 
   @override

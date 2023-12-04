@@ -4,6 +4,7 @@ abstract class UpdateTransectUseCase {
   Future<Transect> execute(
     final int idTransect,
     final int idCyclePlacette,
+    final int idTransectOrig,
     final String codeEssence,
     final String refTransect,
     double? distance,

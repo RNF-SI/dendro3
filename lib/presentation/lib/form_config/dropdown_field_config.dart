@@ -11,7 +11,7 @@ class DropdownFieldConfig<T> extends FieldConfig {
 
   final String? Function(dynamic, Map<String, dynamic>)? validator;
 
-  final void Function(T)? onChanged;
+  final void Function(String) onChanged;
 
   DropdownFieldConfig({
     required String fieldName,
@@ -21,7 +21,7 @@ class DropdownFieldConfig<T> extends FieldConfig {
     required this.items,
     required this.value,
     String? Function(dynamic, Map<String, dynamic>)? validator,
-    this.onChanged,
+    required this.onChanged,
     final bool Function(Map<String, dynamic>)? isVisibleFn,
     final String? importantMessage,
   })  : validator = validator ?? defaultValidator,
