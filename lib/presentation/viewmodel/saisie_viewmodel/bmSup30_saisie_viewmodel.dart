@@ -77,7 +77,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   Placette placette;
   Cycle cycle;
 
-  BmSup30 bmsup30;
+  BmSup30? bmsup30;
 
   // late BmSup30Id _idBmSup30;
   // var _idBmSup30Orig;
@@ -265,7 +265,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       });
     } else {
       _bmsup30ListViewModel.addMesureItem(
-        bmsup30,
+        bmsup30!,
         {
           'idCycle': _idCycle,
           'diametreIni': _diametreIni,

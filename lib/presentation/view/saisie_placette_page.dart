@@ -188,7 +188,7 @@ Widget __buildAsyncPlacetteListWidget(
                   displayableListNotifier.setDisplayableListFromListProvider(
                       ref, 'Transects');
                 },
-                text: "Transects",
+                text: "BmsInf30",
               ),
               DisplayableButton(
                 onPressed: () {

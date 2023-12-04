@@ -88,7 +88,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   Placette placette;
   Cycle cycle;
 
-  Arbre arbre;
+  Arbre? arbre;
 
   late int? _idArbre;
   int? _idArbreOrig;
@@ -350,7 +350,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       });
     } else {
       _arbreListViewModel.addMesureItem(
-        arbre,
+        arbre!,
         {
           'idPlacette': _idPlacette,
           'codeEssence': _codeEssence,

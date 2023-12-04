@@ -29,6 +29,7 @@ class DisplayableListNotifier extends StateNotifier<DisplayableList> {
         state = ref.read(bmSup30ListProvider);
         break;
       case 'Transects':
+      case 'BmsInf30':
         state = ref.read(transectListProvider);
         break;
       case 'Regenerations':

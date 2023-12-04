@@ -349,6 +349,7 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
         state = items.getObjectFromId(value['idRepere']);
         return state;
       case 'Transects':
+      case 'BmsInf30':
         state = items.getObjectFromId(value['idTransect']);
         return state;
       default:

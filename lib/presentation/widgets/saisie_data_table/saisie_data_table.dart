@@ -609,6 +609,7 @@ SaisisableObject getObjectFromType(
     case 'Repères':
       return items.getObjectFromId(value['idRepere']);
     case 'Transects':
+    case 'BmsInf30':
       return items.getObjectFromId(value['idTransectOrig']);
     default:
       throw ArgumentError('Unknown type: ${items.runtimeType}');

@@ -564,6 +564,7 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
     // return BmsViewModel();
     // ...other types
     case 'Transects':
+    case 'BmsInf30':
       return ref.read(transectSaisieViewModelProvider({
         'corCyclePlacette': widget.corCyclePlacette,
         'transect': widget.saisisableObject1,
