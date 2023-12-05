@@ -140,6 +140,12 @@ class CorCyclePlacetteListViewModel
     state = State.success(corCyclePlacetteList);
   }
 
+  @override
+  Future<void> deleteItem(int id) {
+    // TODO: implement deleteItem
+    throw UnimplementedError();
+  }
+
 //   ArbreList getArbreList() {
 //     return state.data!;
 //   }

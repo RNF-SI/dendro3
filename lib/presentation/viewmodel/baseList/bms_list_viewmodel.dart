@@ -203,6 +203,12 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     return state.data!;
   }
 
+  @override
+  Future<void> deleteItem(int id) {
+    // TODO: implement deleteItem
+    throw UnimplementedError();
+  }
+
   // updateBmSup30(final BmSup30 newBmSup30) async {
   //   try {
   //     await _updateBmSup30UseCase.execute(

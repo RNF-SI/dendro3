@@ -127,4 +127,10 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
       state = State.error(e);
     }
   }
+
+  @override
+  Future<void> deleteItem(int id) {
+    // TODO: implement deleteItem
+    throw UnimplementedError();
+  }
 }

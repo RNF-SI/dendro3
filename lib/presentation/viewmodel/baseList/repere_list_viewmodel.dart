@@ -106,4 +106,10 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
       state = State.error(e);
     }
   }
+
+  @override
+  Future<void> deleteItem(int id) {
+    // TODO: implement deleteItem
+    throw UnimplementedError();
+  }
 }
