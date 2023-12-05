@@ -4,5 +4,5 @@ abstract class ReperesDatabase {
   // Future<RepereListEntity> allReperes();
   Future<RepereEntity> addRepere(final RepereEntity repereEntity);
   Future<RepereEntity> updateRepere(final RepereEntity repereEntity);
-  // Future<void> deleteRepere(final int id);
+  Future<void> deleteRepere(final int id);
 }

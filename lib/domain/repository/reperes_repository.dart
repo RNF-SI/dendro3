@@ -18,4 +18,5 @@ abstract class ReperesRepository {
     String? repere,
     String? observation,
   );
+  Future<void> deleteRepere(final int idRepere);
 }

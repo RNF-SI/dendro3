@@ -51,4 +51,9 @@ class ReperesRepositoryImpl implements ReperesRepository {
 
     return RepereMapper.transformToModel(reperesEntity);
   }
+
+  @override
+  Future<void> deleteRepere(final int idRepere) async {
+    await database.deleteRepere(idRepere);
+  }
 }

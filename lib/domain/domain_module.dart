@@ -26,6 +26,8 @@ import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase_impl.da
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/delete_repere_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_repere_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_transect_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_transect_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
@@ -234,4 +236,9 @@ final deleteTransectUseCaseProvider =
 final deleteRegenerationUseCaseProvider =
     Provider<DeleteRegenerationUseCase>((ref) => DeleteRegenerationUseCaseImpl(
           ref.watch(regenerationRepositoryProvider),
+        ));
+
+final deleteRepereUseCaseProvider =
+    Provider<DeleteRepereUseCase>((ref) => DeleteRepereUseCaseImpl(
+          ref.watch(repereRepositoryProvider),
         ));
