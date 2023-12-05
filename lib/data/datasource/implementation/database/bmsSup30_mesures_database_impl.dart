@@ -89,14 +89,23 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   //   );
   // }
 
-  // @override
-  // Future<void> deleteBmSup30(final int id) async {
-  //   final db = await database;
-  //   await db.delete(
-  //     _tableName,
-  //     where: '$_columnId = ?',
-  //     whereArgs: [id],
-  //   );
-  // }
+  @override
+  Future<void> deleteBmSup30MesureFromIdBmSup30(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_bm_sup_30 = ?',
+      whereArgs: [id],
+    );
+  }
 
+  @override
+  Future<void> deleteBmSup30Mesure(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
 }

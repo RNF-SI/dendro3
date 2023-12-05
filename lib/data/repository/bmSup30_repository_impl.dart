@@ -67,4 +67,9 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
 
     return BmSup30Mapper.transformToModel(bmSup30Entity);
   }
+
+  @override
+  Future<void> deleteBmSup30(int idBmSup30) {
+    return database.deleteBmSup30(idBmSup30);
+  }
 }

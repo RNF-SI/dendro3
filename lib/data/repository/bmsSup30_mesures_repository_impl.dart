@@ -82,4 +82,14 @@ class BmsSup30MesuresRepositoryImpl implements BmsSup30MesuresRepository {
 
     return BmSup30MesureMapper.transformToModel(bmsup30Entity);
   }
+
+  @override
+  Future<void> deleteBmSup30FromIdBmSup30(int idBmSup30Mesure) async {
+    await database.deleteBmSup30MesureFromIdBmSup30(idBmSup30Mesure);
+  }
+
+  @override
+  Future<void> deleteBmsSup30Mesure(int idBmSup30Mesure) async {
+    await database.deleteBmSup30Mesure(idBmSup30Mesure);
+  }
 }

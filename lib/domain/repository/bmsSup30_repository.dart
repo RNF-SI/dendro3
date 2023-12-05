@@ -31,4 +31,6 @@ abstract class BmsSup30Repository {
     final double? distanceSouche,
     final String? observation,
   );
+
+  Future<void> deleteBmSup30(final int idBmSup30);
 }

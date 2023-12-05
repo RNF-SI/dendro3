@@ -33,4 +33,7 @@ abstract class BmsSup30MesuresRepository {
     final int stadeEcorce,
     final String? observation,
   );
+
+  Future<void> deleteBmSup30FromIdBmSup30(final int idBmSup30Mesure);
+  Future<void> deleteBmsSup30Mesure(final int idBmSup30Mesure);
 }
