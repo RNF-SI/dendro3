@@ -40,4 +40,6 @@ abstract class TransectsRepository {
     final int stadeEcorce,
     String? observation,
   );
+
+  Future<void> deleteTransect(final int idTransect);
 }
