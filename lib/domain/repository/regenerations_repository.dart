@@ -29,4 +29,6 @@ abstract class RegenerationsRepository {
     int? idNomenclatureAbroutissement,
     String? observation,
   );
+
+  Future<void> deleteRegeneration(final int idRegeneration);
 }

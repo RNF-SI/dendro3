@@ -3,6 +3,7 @@ import 'package:dendro3/data/mapper/regeneration_mapper.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/regenerations_repository.dart';
+import 'package:flutter/rendering.dart';
 
 class RegenerationsRepositoryImpl implements RegenerationsRepository {
   final RegenerationsDatabase database;
@@ -70,5 +71,10 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
             observation));
 
     return RegenerationMapper.transformToModel(regenerationsEntity);
+  }
+
+  @override
+  Future<void> deleteRegeneration(final int idRegeneration) async {
+    await database.deleteRegeneration(idRegeneration);
   }
 }

@@ -88,14 +88,13 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   //   );
   // }
 
-  // @override
-  // Future<void> deleteRegeneration(final int id) async {
-  //   final db = await database;
-  //   await db.delete(
-  //     _tableName,
-  //     where: '$_columnId = ?',
-  //     whereArgs: [id],
-  //   );
-  // }
-
+  @override
+  Future<void> deleteRegeneration(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
 }
