@@ -79,4 +79,10 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   bool isEmpty() {
     return values.isEmpty;
   }
+
+  @override
+  RepereList removeItemFromList(final int idRepere) {
+    return copyWith(
+        values: values.where((repere) => repere.idRepere != idRepere).toList());
+  }
 }

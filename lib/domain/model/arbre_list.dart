@@ -76,4 +76,10 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
   bool isEmpty() {
     return values.isEmpty;
   }
+
+  @override
+  ArbreList removeItemFromList(final int id) {
+    return copyWith(
+        values: values.where((arbre) => arbre.idArbre != id).toList());
+  }
 }

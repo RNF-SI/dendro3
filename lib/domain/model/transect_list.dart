@@ -88,4 +88,12 @@ class TransectList
   bool isEmpty() {
     return values.isEmpty;
   }
+
+  @override
+  TransectList removeItemFromList(final int idTransect) {
+    return copyWith(
+        values: values
+            .where((transect) => transect.idTransect != idTransect)
+            .toList());
+  }
 }

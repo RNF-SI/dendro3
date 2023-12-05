@@ -81,4 +81,10 @@ class CorCyclePlacetteList
     return values
         .firstWhere((corCyclePlacette) => corCyclePlacette.idCycle == idCycle);
   }
+
+  @override
+  CorCyclePlacetteList removeItemFromList(final int id) => copyWith(
+      values: values
+          .where((corCyclePlacette) => corCyclePlacette.idCyclePlacette != id)
+          .toList());
 }

@@ -84,4 +84,9 @@ class BmSup30List
   bool isEmpty() {
     return values.isEmpty;
   }
+
+  @override
+  BmSup30List removeItemFromList(final int id) {
+    return copyWith(values: values.where((bm) => bm.idBmSup30 != id).toList());
+  }
 }

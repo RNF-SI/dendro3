@@ -102,4 +102,13 @@ class RegenerationList
     }
     return true; // La combinaison est unique
   }
+
+  @override
+  RegenerationList removeItemFromList(final int idRegeneration) {
+    return copyWith(
+        values: values
+            .where(
+                (regeneration) => regeneration.idRegeneration != idRegeneration)
+            .toList());
+  }
 }
