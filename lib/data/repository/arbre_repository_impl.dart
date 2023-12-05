@@ -62,4 +62,9 @@ class ArbresRepositoryImpl implements ArbresRepository {
     ));
     return ArbreMapper.transformToModel(arbreEntity);
   }
+
+  @override
+  Future<void> deleteArbre(final int idArbre) async {
+    await database.deleteArbre(idArbre);
+  }
 }

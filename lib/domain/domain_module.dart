@@ -17,6 +17,10 @@ import 'package:dendro3/domain/usecase/create_repere_usecase.dart';
 import 'package:dendro3/domain/usecase/create_repere_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_transect_usecase.dart';
 import 'package:dendro3/domain/usecase/create_transect_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/delete_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_arbre_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/delete_arbre_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
@@ -199,4 +203,14 @@ final updateRegenerationUseCaseProvider =
 final updateRepereUseCaseProvider =
     Provider<UpdateRepereUseCase>((ref) => UpdateRepereUseCaseImpl(
           ref.watch(repereRepositoryProvider),
+        ));
+
+final deleteArbreAndMesureUseCaseProvider =
+    Provider<DeleteArbreAndMesureUseCase>((ref) =>
+        DeleteArbreAndMesureUseCaseImpl(ref.watch(arbresRepositoryProvider),
+            ref.watch(arbresMesuresRepositoryProvider)));
+
+final deleteArbreMesureUseCaseProvider =
+    Provider<DeleteArbreMesureUseCase>((ref) => DeleteArbreMesureUseCaseImpl(
+          ref.watch(arbresMesuresRepositoryProvider),
         ));

@@ -60,4 +60,8 @@ abstract class ArbresMesuresRepository {
     final int idArbreMesure,
     final String? coupe,
   );
+
+  Future<void> deleteArbreMesureFromIdArbre(final int idArbre);
+
+  Future<void> deleteArbreMesure(final int idArbreMesure);
 }

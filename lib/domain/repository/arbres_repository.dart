@@ -20,4 +20,6 @@ abstract class ArbresRepository {
     final bool? taillis,
     final String? observation,
   );
+
+  Future<void> deleteArbre(final int idArbre);
 }

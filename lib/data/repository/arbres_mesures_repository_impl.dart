@@ -131,4 +131,14 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
         await database.updateLastArbreMesureCoupe(idArbreMesure, coupe);
     return ArbreMesureMapper.transformToModel(arbreEntity);
   }
+
+  @override
+  Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
+    await database.deleteArbreMesureFromIdArbre(idArbre);
+  }
+
+  @override
+  Future<void> deleteArbreMesure(final int idArbre) async {
+    await database.deleteArbreMesure(idArbre);
+  }
 }

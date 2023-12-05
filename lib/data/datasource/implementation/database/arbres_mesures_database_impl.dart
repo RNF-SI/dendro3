@@ -5,6 +5,7 @@ import 'package:dendro3/data/datasource/interface/database/cycles_database.dart'
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -112,6 +113,26 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     });
 
     return arbreMesureEntity;
+  }
+
+  @override
+  Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_arbre = ?',
+      whereArgs: [idArbre],
+    );
+  }
+
+  @override
+  Future<void> deleteArbreMesure(final int idArbreMesure) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [idArbreMesure],
+    );
   }
 
   // @override

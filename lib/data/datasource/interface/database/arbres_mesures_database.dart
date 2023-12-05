@@ -18,6 +18,10 @@ abstract class ArbresMesuresDatabase {
     final String? coupe,
   );
 
+  Future<void> deleteArbreMesureFromIdArbre(final int idArbre);
+
+  Future<void> deleteArbreMesure(final int idArbreMesure);
+
   // Future<ArbreMesureListEntity> allArbresMesures();
   // Future<ArbreMesureEntity> insertArbreMesure(
   //     final ArbreMesureEntity arbreMesureEntity);
