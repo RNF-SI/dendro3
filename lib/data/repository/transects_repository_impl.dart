@@ -96,4 +96,9 @@ class TransectsRepositoryImpl implements TransectsRepository {
 
     return TransectMapper.transformToModel(transectsEntity);
   }
+
+  @override
+  Future<void> deleteTransect(final int idTransect) async {
+    await database.deleteTransect(idTransect);
+  }
 }
