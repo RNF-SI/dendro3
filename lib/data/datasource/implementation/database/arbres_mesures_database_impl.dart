@@ -1,0 +1,160 @@
+import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
+import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
+import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
+import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
+import 'package:dendro3/data/entity/arbresMesures_entity.dart';
+import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
+  static const _tableName = 't_arbres_mesures';
+  static const _columnId = 'id_arbre_mesure';
+
+  Future<Database> get database async {
+    return await DB.instance.database;
+  }
+
+  @override
+  Future<ArbreMesureEntity> addArbreMesure(
+      final ArbreMesureEntity arbreMesure) async {
+    final db = await database;
+    late final ArbreEntity arbreEntity;
+    await db.transaction((txn) async {
+      int? maxId = Sqflite.firstIntValue(
+          await txn.rawQuery('SELECT MAX(id_arbre_mesure) FROM $_tableName'));
+
+      arbreMesure['id_arbre_mesure'] = maxId! + 1;
+      await txn.insert(
+        _tableName,
+        arbreMesure,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      final results = await txn
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      arbreEntity = results.first;
+    });
+    return arbreEntity;
+  }
+
+  @override
+  Future<ArbreMesureEntity> updateArbreMesure(
+      final ArbreMesureEntity arbre) async {
+    final db = await database;
+    late final ArbreMesureEntity arbreMesureEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        arbre,
+        where: '$_columnId = ?',
+        whereArgs: [arbre['id_arbre_mesure']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [arbre['id_arbre_mesure']]);
+      arbreMesureEntity = results.first;
+    });
+    return arbreMesureEntity;
+  }
+
+  static Future<void> insertArbreMesure(
+      Batch batch, final ArbreMesureEntity arbreMesure) async {
+    batch.insert(_tableName, arbreMesure,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  static Future<ArbreMesureListEntity> getArbreArbresMesures(
+      Database db, final int arbreId) async {
+    return await db
+        .query(_tableName, where: 'id_arbre = ?', whereArgs: [arbreId]);
+  }
+
+  @override
+  Future<ArbreMesureEntity> getPreviousCycleMeasure(
+      final int idArbre, final int? idCycle, int? numCycle) async {
+    final db = await database;
+
+    if (idCycle == null) {
+      throw ArgumentError('idCycle cannot be null');
+    }
+
+    final cycle = await CyclesDatabaseImpl.getCycle(db, idCycle);
+    final lastCycle = await CyclesDatabaseImpl.getCycleFromDispAndNumCycle(
+        db, cycle['id_dispositif'], cycle['num_cycle'] - 1);
+    ArbreMesureListEntity arbreMesureList = await db.query(
+      _tableName,
+      where: 'id_cycle = ? AND id_arbre = ?',
+      whereArgs: [lastCycle['id_cycle'], idArbre],
+      limit: 1,
+    );
+    return arbreMesureList[0];
+  }
+
+  @override
+  Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
+    final int idArbreMesure,
+    final String? coupe,
+  ) async {
+    final db = await database;
+    late final ArbreMesureEntity arbreMesureEntity;
+    await db.transaction((txn) async {
+      await txn.update(
+        _tableName,
+        {'coupe': coupe},
+        where: '$_columnId = ?',
+        whereArgs: [idArbreMesure],
+      );
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [idArbreMesure]);
+      arbreMesureEntity = results.first;
+    });
+
+    return arbreMesureEntity;
+  }
+
+  @override
+  Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_arbre = ?',
+      whereArgs: [idArbre],
+    );
+  }
+
+  @override
+  Future<void> deleteArbreMesure(final int idArbreMesure) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [idArbreMesure],
+    );
+  }
+
+  // @override
+  // Future<void> updateArbre(final ArbreEntity arbre) async {
+  //   final db = await database;
+  //   final int id = arbre['id'];
+  //   await db.update(
+  //     _tableName,
+  //     arbre,
+  //     where: '$_columnId = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
+
+  // @override
+  // Future<void> deleteArbre(final int id) async {
+  //   final db = await database;
+  //   await db.delete(
+  //     _tableName,
+  //     where: '$_columnId = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
+
+}

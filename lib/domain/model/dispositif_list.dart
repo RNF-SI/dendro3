@@ -29,7 +29,9 @@ class DispositifList with _$DispositifList {
   DispositifList removeDispositifById(final int id) => copyWith(
       values: values.where((dispositif) => dispositif.id != id).toList());
 
-  // DispositifList filterByCompleted() => copyWith(
+
+// TODO: Change searching disp in phone db
+  // DispositifList filterByDownloaded() => copyWith(
   //     values: values.where((dispositif) => dispositif.isCompleted).toList());
 
   // DispositifList filterByIncomplete() => copyWith(

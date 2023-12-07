@@ -1,21 +1,20 @@
+import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
+import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DispositifsDatabaseImpl implements DispositifsDatabase {
-  static const _databaseName = 'psdrf_database';
-  static const _tableName = 'dispositifs_table';
-  static const _databaseVersion = 1;
+  static const _tableName = 't_dispositifs';
   static const _columnId = 'id_dispositif';
-  static const _columnName = 'name';
-  static const _columnIdOrganisme = 'id_organisme';
-  static const _columnAlluvial = 'alluvial';
-  static Database? _database;
 
   Future<Database> get database async {
-    _database ??= await _initDatabase();
-    return _database!;
+    return await DB.instance.database;
   }
 
   @override
@@ -30,13 +29,34 @@ class DispositifsDatabaseImpl implements DispositifsDatabase {
     final db = await database;
     late final DispositifEntity dispositifEntity;
     await db.transaction((txn) async {
-      final id = await txn.insert(
+      Batch batch = txn.batch();
+      final dispositifInsertProperties = {
+        for (var property in dispositif.keys.where((k) =>
+            k == 'id_dispositif' ||
+            k == 'name' ||
+            k == 'id_organisme' ||
+            k == 'alluvial'))
+          property: dispositif[property]
+      };
+      batch.insert(
         _tableName,
-        dispositif,
+        dispositifInsertProperties,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      final results =
-          await txn.query(_tableName, where: '$_columnId = ?', whereArgs: [id]);
+
+      await dispositif['placettes']
+          .map((placette) async =>
+              {await PlacettesDatabaseImpl.insertPlacette(batch, placette)})
+          .toList();
+      await dispositif['cycles']
+          .map((cycle) async =>
+              {await CyclesDatabaseImpl.insertCycle(batch, cycle)})
+          .toList();
+
+      await batch.commit();
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [dispositif['id_dispositif']]);
       dispositifEntity = results.first;
     });
     return dispositifEntity;
@@ -64,20 +84,20 @@ class DispositifsDatabaseImpl implements DispositifsDatabase {
     );
   }
 
-  Future<Database> _initDatabase() async {
-    return openDatabase(
-      join(await getDatabasesPath(), _databaseName),
-      onCreate: (db, _) {
-        db.execute('''
-          CREATE TABLE $_tableName(
-            $_columnId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            $_columnName TEXT NOT NULL,
-            $_columnIdOrganisme INTEGER,
-            $_columnAlluvial INTEGER NOT NULL
-          )
-        ''');
-      },
-      version: _databaseVersion,
-    );
+  @override
+  Future<DispositifListEntity> getUserDispositifs(final int id) async {
+    final db = await database;
+    return db.query(_tableName);
+  }
+
+  @override
+  Future<DispositifEntity> getDispositif(final int id) async {
+    final db = await database;
+    DispositifListEntity dispList = await db.query(_tableName,
+        where: '$_columnId = ?', whereArgs: [id], limit: 1);
+
+    final placettesObj = await PlacettesDatabaseImpl.getDispPlacettes(db, id);
+    final cycleObj = await CyclesDatabaseImpl.getDispCycles(db, id);
+    return {...dispList[0], 'placettes': placettesObj, 'cycles': cycleObj};
   }
 }

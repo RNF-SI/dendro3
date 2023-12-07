@@ -20,6 +20,8 @@ mixin _$Dispositif {
   String get name => throw _privateConstructorUsedError;
   int get idOrganisme => throw _privateConstructorUsedError;
   bool get alluvial => throw _privateConstructorUsedError;
+  PlacetteList? get placettes => throw _privateConstructorUsedError;
+  CycleList? get cycles => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DispositifCopyWith<Dispositif> get copyWith =>
@@ -32,7 +34,16 @@ abstract class $DispositifCopyWith<$Res> {
           Dispositif value, $Res Function(Dispositif) then) =
       _$DispositifCopyWithImpl<$Res, Dispositif>;
   @useResult
-  $Res call({int id, String name, int idOrganisme, bool alluvial});
+  $Res call(
+      {int id,
+      String name,
+      int idOrganisme,
+      bool alluvial,
+      PlacetteList? placettes,
+      CycleList? cycles});
+
+  $PlacetteListCopyWith<$Res>? get placettes;
+  $CycleListCopyWith<$Res>? get cycles;
 }
 
 /// @nodoc
@@ -52,6 +63,8 @@ class _$DispositifCopyWithImpl<$Res, $Val extends Dispositif>
     Object? name = null,
     Object? idOrganisme = null,
     Object? alluvial = null,
+    Object? placettes = freezed,
+    Object? cycles = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -70,7 +83,39 @@ class _$DispositifCopyWithImpl<$Res, $Val extends Dispositif>
           ? _value.alluvial
           : alluvial // ignore: cast_nullable_to_non_nullable
               as bool,
+      placettes: freezed == placettes
+          ? _value.placettes
+          : placettes // ignore: cast_nullable_to_non_nullable
+              as PlacetteList?,
+      cycles: freezed == cycles
+          ? _value.cycles
+          : cycles // ignore: cast_nullable_to_non_nullable
+              as CycleList?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlacetteListCopyWith<$Res>? get placettes {
+    if (_value.placettes == null) {
+      return null;
+    }
+
+    return $PlacetteListCopyWith<$Res>(_value.placettes!, (value) {
+      return _then(_value.copyWith(placettes: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CycleListCopyWith<$Res>? get cycles {
+    if (_value.cycles == null) {
+      return null;
+    }
+
+    return $CycleListCopyWith<$Res>(_value.cycles!, (value) {
+      return _then(_value.copyWith(cycles: value) as $Val);
+    });
   }
 }
 
@@ -82,7 +127,18 @@ abstract class _$$_DispositifCopyWith<$Res>
       __$$_DispositifCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String name, int idOrganisme, bool alluvial});
+  $Res call(
+      {int id,
+      String name,
+      int idOrganisme,
+      bool alluvial,
+      PlacetteList? placettes,
+      CycleList? cycles});
+
+  @override
+  $PlacetteListCopyWith<$Res>? get placettes;
+  @override
+  $CycleListCopyWith<$Res>? get cycles;
 }
 
 /// @nodoc
@@ -100,6 +156,8 @@ class __$$_DispositifCopyWithImpl<$Res>
     Object? name = null,
     Object? idOrganisme = null,
     Object? alluvial = null,
+    Object? placettes = freezed,
+    Object? cycles = freezed,
   }) {
     return _then(_$_Dispositif(
       id: null == id
@@ -118,6 +176,14 @@ class __$$_DispositifCopyWithImpl<$Res>
           ? _value.alluvial
           : alluvial // ignore: cast_nullable_to_non_nullable
               as bool,
+      placettes: freezed == placettes
+          ? _value.placettes
+          : placettes // ignore: cast_nullable_to_non_nullable
+              as PlacetteList?,
+      cycles: freezed == cycles
+          ? _value.cycles
+          : cycles // ignore: cast_nullable_to_non_nullable
+              as CycleList?,
     ));
   }
 }
@@ -129,7 +195,9 @@ class _$_Dispositif extends _Dispositif {
       {required this.id,
       required this.name,
       required this.idOrganisme,
-      required this.alluvial})
+      required this.alluvial,
+      this.placettes,
+      this.cycles})
       : super._();
 
   @override
@@ -140,10 +208,14 @@ class _$_Dispositif extends _Dispositif {
   final int idOrganisme;
   @override
   final bool alluvial;
+  @override
+  final PlacetteList? placettes;
+  @override
+  final CycleList? cycles;
 
   @override
   String toString() {
-    return 'Dispositif(id: $id, name: $name, idOrganisme: $idOrganisme, alluvial: $alluvial)';
+    return 'Dispositif(id: $id, name: $name, idOrganisme: $idOrganisme, alluvial: $alluvial, placettes: $placettes, cycles: $cycles)';
   }
 
   @override
@@ -156,11 +228,15 @@ class _$_Dispositif extends _Dispositif {
             (identical(other.idOrganisme, idOrganisme) ||
                 other.idOrganisme == idOrganisme) &&
             (identical(other.alluvial, alluvial) ||
-                other.alluvial == alluvial));
+                other.alluvial == alluvial) &&
+            (identical(other.placettes, placettes) ||
+                other.placettes == placettes) &&
+            (identical(other.cycles, cycles) || other.cycles == cycles));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, idOrganisme, alluvial);
+  int get hashCode => Object.hash(
+      runtimeType, id, name, idOrganisme, alluvial, placettes, cycles);
 
   @JsonKey(ignore: true)
   @override
@@ -174,7 +250,9 @@ abstract class _Dispositif extends Dispositif {
       {required final int id,
       required final String name,
       required final int idOrganisme,
-      required final bool alluvial}) = _$_Dispositif;
+      required final bool alluvial,
+      final PlacetteList? placettes,
+      final CycleList? cycles}) = _$_Dispositif;
   const _Dispositif._() : super._();
 
   @override
@@ -185,6 +263,10 @@ abstract class _Dispositif extends Dispositif {
   int get idOrganisme;
   @override
   bool get alluvial;
+  @override
+  PlacetteList? get placettes;
+  @override
+  CycleList? get cycles;
   @override
   @JsonKey(ignore: true)
   _$$_DispositifCopyWith<_$_Dispositif> get copyWith =>
