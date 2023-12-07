@@ -42,10 +42,10 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   var _idPlacette;
 
   DateTime? _dateReleve;
-  String? _dateIntervention;
+  String? _dateIntervention = '';
   int? _annee;
-  String? _natureIntervention;
-  String? _gestionPlacette;
+  String? _natureIntervention = '';
+  String? _gestionPlacette = '';
   int? _idNomenclatureCastor;
   int? _idNomenclatureFrottis;
   int? _idNomenclatureBoutis;

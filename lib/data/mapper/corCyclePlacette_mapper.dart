@@ -101,7 +101,7 @@ class CorCyclePlacetteMapper {
     final int id_placette,
     final DateTime? date_releve,
     final String? date_intervention,
-    final int annee,
+    final int? annee,
     final String? nature_intervention,
     final String gestion_placette,
     final int? id_nomenclature_castor,
