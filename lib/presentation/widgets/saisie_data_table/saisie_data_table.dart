@@ -450,14 +450,24 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     String type,
     DisplayableList items,
   ) {
-    final SaisisableObject? aaa = ref
+    final SaisisableObject? selectedItem = ref
         .read(selectedItemDetailsProvider.notifier)
         .setSelectedItemDetails(value, widget.displayTypeState);
 
-    aaa as Arbre;
-    ref.watch(selectedMesureIndexProvider.notifier).state = aaa.arbresMesures!
-            .findIndexOfArbreMesureFromIdArbreMesure(value['idArbreMesure']) ??
-        0;
+    if (selectedItem is Arbre) {
+      selectedItem as Arbre;
+      ref.watch(selectedMesureIndexProvider.notifier).state =
+          selectedItem.arbresMesures!.findIndexOfArbreMesureFromIdArbreMesure(
+                  value['idArbreMesure']) ??
+              0;
+    } else if (selectedItem is BmSup30) {
+      selectedItem as BmSup30;
+      ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
+              .bmsSup30Mesures!
+              .findIndexOfBmSup30MesureFromIdBmSup30Mesure(
+                  value['idBmSup30Mesure']) ??
+          0;
+    }
 
     // ref
     //     .read(selectedItemMesureDetailsProvider.notifier)
