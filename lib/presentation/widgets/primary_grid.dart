@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class PrimaryGridWidget extends StatelessWidget {
   final List<MapEntry<String, dynamic>> simpleElements;
+  final Function(dynamic) onItemAdded;
   final Function(dynamic) onItemDeleted;
   final Function(dynamic) onItemUpdated;
 
   PrimaryGridWidget({
     Key? key,
     required this.simpleElements,
+    required this.onItemAdded,
     required this.onItemDeleted,
     required this.onItemUpdated,
   }) : super(key: key);
@@ -55,10 +57,18 @@ class PrimaryGridWidget extends StatelessWidget {
               constraints: BoxConstraints(),
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () =>
                   onItemDeleted(simpleElements), // Using onItemMesureDeleted
               iconSize: 18, // Reduced icon size
+              padding: EdgeInsets.all(4), // Reduced padding
+              constraints: BoxConstraints(),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.green),
+              onPressed: () =>
+                  onItemAdded(simpleElements), // Using onItemMesureDeleted
+              iconSize: 20, // Reduced icon size
               padding: EdgeInsets.all(4), // Reduced padding
               constraints: BoxConstraints(),
             ),
