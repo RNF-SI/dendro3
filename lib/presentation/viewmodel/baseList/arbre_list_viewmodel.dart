@@ -1,10 +1,13 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/arbreMesure_list.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_arbre_and_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
@@ -33,6 +36,8 @@ final arbreListViewModelStateNotifierProvider =
     ref.watch(createArbreAndMesureUseCaseProvider),
     ref.watch(updateArbreAndMesureUseCaseProvider),
     ref.watch(addArbreMesureUseCaseProvider),
+    ref.watch(deleteArbreAndMesureUseCaseProvider),
+    ref.watch(deleteArbreMesureUseCaseProvider),
     // ref.watch(deleteArbreUseCaseProvider),
     // arbreListe,
     lastModifiedProvider,
@@ -49,6 +54,8 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
   final UpdateArbreAndMesureUseCase _updateArbreAndMesureUseCase;
   final AddArbreMesureUseCase _addArbreMesureUseCase;
+  final DeleteArbreAndMesureUseCase _deleteArbreAndMesureUseCase;
+  final DeleteArbreMesureUseCase _deleteArbreMesureUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
 
   int? _lastModifiedArbreId;
@@ -58,6 +65,8 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     this._createArbreAndMesureUseCase,
     this._updateArbreAndMesureUseCase,
     this._addArbreMesureUseCase,
+    this._deleteArbreAndMesureUseCase,
+    this._deleteArbreMesureUseCase,
     // this._deleteArbreUseCase,
     // final ArbreList arbreListe
     this._lastModifiedProvider,
@@ -215,6 +224,74 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
       state = State.error(e);
+    }
+  }
+
+  @override
+  Future<void> deleteItem(int id) async {
+    try {
+      await _deleteArbreAndMesureUseCase.execute(id);
+      _lastModifiedProvider.setLastModifiedId('Arbres', null);
+      state = State.success(state.data!.removeItemFromList(id));
+      _displayableListNotifier.setDisplayableList(state.data!);
+    } on Exception catch (e) {
+      state = State.error(e);
+    }
+  }
+
+  Future<bool> deleteItemMesure(int idArbre, int idArbreMesure) async {
+    try {
+      // Find the Arbre that corresponds to the idArbre
+      Arbre? targetedArbre;
+      for (var arbre in state.data!.values) {
+        if (arbre.idArbre == idArbre) {
+          targetedArbre = arbre;
+          break;
+        }
+      }
+
+      if (targetedArbre == null) {
+        throw Exception("Arbre not found.");
+      }
+
+      // Check if the Arbre has more than one mesure
+      if (targetedArbre.arbresMesures!.values.length <= 1) {
+        throw Exception("Cannot delete the only mesure of an arbre.");
+      }
+
+      // Execute the use case to delete the ArbreMesure
+      await _deleteArbreMesureUseCase.execute(idArbreMesure);
+
+      // Update the ArbreList by removing the specific ArbreMesure
+      List<Arbre> updatedArbres = [];
+      for (var arbre in state.data!.values) {
+        if (arbre.idArbre == idArbre) {
+          // Remove the ArbreMesure from the arbresMesures list
+          var updatedArbreMesures = arbre.arbresMesures!.values
+              .where((mesure) => mesure.idArbreMesure != idArbreMesure)
+              .toList();
+          // Create a new Arbre with the updated list
+          var updatedArbre = arbre.copyWith(
+              arbresMesures: ArbreMesureList(values: updatedArbreMesures));
+          updatedArbres.add(updatedArbre);
+        } else {
+          updatedArbres.add(arbre);
+        }
+      }
+
+      // Set the new state with the updated Arbres list
+      ArbreList updatedList = ArbreList(values: updatedArbres);
+      state = State.success(updatedList);
+      _displayableListNotifier.setDisplayableList(updatedList);
+
+      // Update last modified ID
+      _lastModifiedProvider.setLastModifiedId('Arbres', null);
+      return true;
+    } on Exception catch (e) {
+      state = State.error(e);
+      print(e.toString()); // For debugging purposes
+      // Return false if an exception occurs
+      return false;
     }
   }
 
