@@ -1,46 +1,19 @@
 import 'package:flutter/material.dart';
 
-Widget createPrimaryGrid(List<MapEntry<String, dynamic>> simpleElements) {
-  List<Widget> simpleWidgets =
-      simpleElements.map((MapEntry<String, dynamic> entry) {
-    return Container(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "${entry.key}:",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            entry.value.toString(),
-            style: TextStyle(fontSize: 10),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }).toList();
-
-  return GridView.count(
-    shrinkWrap: true,
-    physics: NeverScrollableScrollPhysics(),
-    crossAxisCount: 4,
-    childAspectRatio: 3,
-    children: simpleWidgets,
-  );
-}
-
 class SecondaryGrid extends StatefulWidget {
   final List<dynamic> mesuresList;
   final Function(int) onItemSelected;
+  final Function(dynamic) onItemMesureDeleted;
+  final Function(dynamic) onItemMesureUpdated;
+  final int currentIndex;
 
   SecondaryGrid({
     Key? key,
     required this.mesuresList,
     required this.onItemSelected,
+    required this.onItemMesureDeleted,
+    required this.onItemMesureUpdated,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -67,6 +40,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
   @override
   Widget build(BuildContext context) {
+    currentIndex = widget.currentIndex;
     if (widget.mesuresList.isEmpty) {
       return SizedBox.shrink(); // Return an empty widget if the list is empty
     }
@@ -81,15 +55,19 @@ class _SecondaryGridState extends State<SecondaryGrid> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "${entry.key}:",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-              overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: Text(
+                "${entry.key}:",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            Text(
-              entry.value.toString(),
-              style: TextStyle(fontSize: 10),
-              overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: Text(
+                entry.value.toString(),
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),
@@ -98,6 +76,29 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                widget.onItemMesureUpdated(widget.mesuresList[currentIndex]);
+              },
+              iconSize: 18, // Reduced icon size
+              padding: EdgeInsets.all(4), // Reduced padding
+              constraints: BoxConstraints(),
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                widget.onItemMesureDeleted(widget.mesuresList[currentIndex]);
+              },
+              iconSize: 18, // Reduced icon size
+              padding: EdgeInsets.all(4), // Reduced padding
+              constraints: BoxConstraints(),
+            ),
+          ],
+        ),
         Row(
           children: [
             IconButton(
@@ -110,12 +111,17 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               onPressed: _showPreviousItem,
             ),
             Expanded(
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 4,
-                childAspectRatio: 3,
-                children: gridItems,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 4,
+                  childAspectRatio: 3,
+                  mainAxisSpacing: 1,
+                  crossAxisSpacing: 2,
+                  children: gridItems,
+                ),
               ),
             ),
             IconButton(
