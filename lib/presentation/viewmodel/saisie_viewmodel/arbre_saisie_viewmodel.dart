@@ -657,17 +657,19 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
           fieldName: 'Diametre2',
-          initialValue: '',
+          initialValue: _diametre2.toString(),
           fieldRequired: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
             DecimalTextInputFormatter(decimalRange: 1),
           ],
-          isVisibleFn: (formData) =>
-              formData['Diametre1'] != null &&
-              double.tryParse(formData['Diametre1']) != null &&
-              double.tryParse(formData['Diametre1'])! > 30,
+          isVisibleFn: (formData) {
+            return (formData['Diametre1'] != null &&
+                    formData['Diametre1'] != '') ||
+                // double.tryParse(formData['Diametre1']) != null ||
+                (_diametre1 != null && _diametre1! > 30);
+          },
           hintText: "Entrer le diametre2",
           fieldUnit: 'cm',
           fieldInfo:
