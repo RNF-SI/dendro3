@@ -40,4 +40,22 @@ class ArbreMesureList with _$ArbreMesureList {
           .map((value) => value.getValuesMappedFromDisplayedColumnType(
               displayedMesureColumnType: displayedMesureColumnType))
           .toList();
+
+  int? findIndexOfArbreMesure(ArbreMesure targetArbreMesure) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].idArbreMesure == targetArbreMesure.idArbreMesure) {
+        return i;
+      }
+    }
+    return null; // Retourne null si l'objet n'est pas trouvé
+  }
+
+  int? findIndexOfArbreMesureFromIdArbreMesure(int targetIdArbreMesure) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].idArbreMesure == targetIdArbreMesure) {
+        return i;
+      }
+    }
+    return null; // Retourne null si l'objet n'est pas trouvé
+  }
 }

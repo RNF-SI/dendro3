@@ -40,4 +40,13 @@ class BmSup30MesureList with _$BmSup30MesureList {
           .map((value) => value.getValuesMappedFromDisplayedColumnType(
               displayedMesureColumnType: displayedMesureColumnType))
           .toList();
+
+  int? findIndexOfBmSup30Mesure(BmSup30Mesure targetbmSup30Mesure) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].idBmSup30Mesure == targetbmSup30Mesure.idBmSup30Mesure) {
+        return i;
+      }
+    }
+    return null; // Retourne null si l'objet n'est pas trouvé
+  }
 }

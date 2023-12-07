@@ -49,6 +49,7 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
   @override
   Map<String, dynamic> getAllValuesMapped() {
     return {
+      'idArbreMesure': idArbreMesure,
       'idCycle': idCycle,
       'diametre1': diametre1,
       'diametre2': diametre2,
@@ -71,6 +72,7 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
   @override
   Map<String, dynamic> getReducedValuesMapped() {
     return {
+      'idArbreMesure': idArbreMesure,
       'idCycle': idCycle,
       'diametre1': diametre1,
       'type': type,
