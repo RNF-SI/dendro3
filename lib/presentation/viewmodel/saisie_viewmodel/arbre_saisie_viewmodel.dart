@@ -667,7 +667,6 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           isVisibleFn: (formData) {
             return (formData['Diametre1'] != null &&
                     formData['Diametre1'] != '') ||
-                // double.tryParse(formData['Diametre1']) != null ||
                 (_diametre1 != null && _diametre1! > 30);
           },
           hintText: "Entrer le diametre2",
