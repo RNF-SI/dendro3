@@ -9,6 +9,7 @@ import 'package:dendro3/data/mapper/transect_mapper.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
@@ -24,13 +25,15 @@ import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
-import 'package:dendro3/presentation/widgets/list_item_display.dart';
+import 'package:dendro3/presentation/widgets/primary_grid.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/presentation/widgets/secondary_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -122,9 +125,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 
     // final lastModifiedIds = ref.watch(lastModifiedIdProvider);
-    final selectedItemDetails = ref.watch(selectedItemDetailsProvider(items));
+    final selectedItemDetails = ref.watch(selectedItemDetailsProvider);
+
     final selectedItemMesureDetails =
-        ref.watch(selectedItemMesureDetailsProvider(selectedItemDetails));
+        ref.watch(selectedItemMesureDetailsProvider);
 
     return Column(
       children: [
@@ -149,8 +153,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   columns: _createColumns(
                     columnNameList,
                   ),
-                  rows: _createRows(cycleRowList, items, mapIdCycleNumCycle,
-                      selectedItemDetails),
+                  rows: _createRows(
+                    cycleRowList,
+                    items,
+                    mapIdCycleNumCycle,
+                    selectedItemDetails,
+                  ),
                   dataRowHeight:
                       50, // Uncommented and adjusted for better row visibility
                   decoration: BoxDecoration(
@@ -228,131 +236,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           ],
         ),
         if (selectedItemDetails != null)
-          _buildSelectedItemDetails(selectedItemDetails),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Visibility(
-              visible: selectedItemDetails != null,
-              child: Flexible(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Logic for updating an item
-                    Navigator.push(context, MaterialPageRoute<void>(
-                      builder: (BuildContext context) {
-                        return FormSaisiePlacettePage(
-                          formType: "edit",
-                          type: widget.displayTypeState,
-                          placette: widget.placette,
-                          cycle: getCycleFromType(
-                            'edit',
-                            widget.dispCycleList,
-                            selectedItemMesureDetails,
-                          ),
-                          corCyclePlacette: getCorCyclePlacetteFromType(
-                            'add',
-                            widget.placette,
-                            widget.dispCycleList,
-                          ),
-                          saisisableObject1: selectedItemDetails,
-                          saisisableObject2: selectedItemMesureDetails,
-
-                          // saisisableObject1: convertToSaisisObject1(
-                          //     selectedItemDetails!, widget.displayTypeState),
-                          // saisisableObject2: convertToSaisisObject2(
-                          //     selectedItemDetails!, widget.displayTypeState),
-                        );
-                      },
-                    ));
-                  },
-                  child: Text(
-                    "Modifier l'${widget.displayTypeState}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Logic for deleting an item
-              },
-              child: Text(
-                'Supprimer',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-            const SizedBox(width: 10),
-            // Button for deleting an item
-            ElevatedButton(
-              onPressed: () {
-                // Logic for updating an item
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return FormSaisiePlacettePage(
-                      formType: "newMesure",
-                      type: widget.displayTypeState,
-                      placette: widget.placette,
-                      cycle: getCycleFromType(
-                        'newMesure',
-                        widget.dispCycleList,
-                      ),
-                      corCyclePlacette: getCorCyclePlacetteFromType(
-                        'add',
-                        widget.placette,
-                        widget.dispCycleList,
-                      ),
-                      saisisableObject1: selectedItemDetails,
-                      saisisableObject2: null,
-                    );
-                  },
-                ));
-              },
-              child: Text(
-                'Nouvelle Mesure',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-          ],
-        ),
-        ElevatedButton(
-          onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
-            builder: (BuildContext context) {
-              return FormSaisiePlacettePage(
-                formType: "add",
-                type: widget.displayTypeState,
-                placette: widget.placette,
-                cycle: getCycleFromType(
-                  'add',
-                  widget.dispCycleList,
-                ),
-                corCyclePlacette: getCorCyclePlacetteFromType(
-                  'add',
-                  widget.placette,
-                  widget.dispCycleList,
-                ),
-                saisisableObject1: null,
-                saisisableObject2: null,
-              );
-            },
-          )),
-          child: Text('Ajouter un ${widget.displayTypeState}'),
-        ),
+          _buildSelectedItemDetails(
+              selectedItemDetails, selectedItemMesureDetails),
       ],
     );
   }
 
-  Widget _buildSelectedItemDetails(SaisisableObject? selectedItemDetailsCo) {
+  Widget _buildSelectedItemDetails(
+    SaisisableObject? selectedItemDetailsCo,
+    SaisisableObject? selectedItemMesureDetailsCo,
+  ) {
     // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
     // Check if selectedItemDetails is null
     if (selectedItemDetailsCo == null) {
@@ -363,37 +256,191 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<dynamic> mesuresList = [];
 
     // Extracting the data
+    int currentIndex = 0;
     var allValues = selectedItemDetailsCo!.getAllValuesMapped();
     allValues.entries.forEach((entry) {
       if (entry.key == "arbresMesures" && entry.value is List) {
         mesuresList = entry.value;
+        selectedItemDetailsCo as Arbre;
+        selectedItemMesureDetailsCo as ArbreMesure;
+        currentIndex = selectedItemDetailsCo.arbresMesures!
+                .findIndexOfArbreMesure(selectedItemMesureDetailsCo) ??
+            currentIndex;
       } else if (entry.key == "bmsSup30Mesures" && entry.value is List) {
+        mesuresList = entry.value;
+        selectedItemDetailsCo as BmSup30;
+        selectedItemMesureDetailsCo as BmSup30Mesure;
+        currentIndex = selectedItemDetailsCo.bmsSup30Mesures!
+                .findIndexOfBmSup30Mesure(selectedItemMesureDetailsCo) ??
+            currentIndex;
         mesuresList = entry.value;
       } else {
         simpleElements.add(entry);
       }
     });
 
-    return Column(
-      children: [
-        createPrimaryGrid(simpleElements),
-        // Only create SecondaryGrid if arbresMesuresList is not empty
-        if (mesuresList.isNotEmpty)
-          SecondaryGrid(
-            mesuresList: mesuresList,
-            onItemSelected: (int selectedIndex) {
-              ref
-                  .read(selectedItemMesureDetailsProvider(selectedItemDetailsCo)
-                      .notifier)
-                  .setSelectedItemMesureDetails(selectedIndex);
-              // if (selectedItemDetailsCo is Arbre) {
-              //   Arbre arbreDetails = selectedItemDetailsCo as Arbre;
-              //   selectedItemMesureDetails =
-              //       arbreDetails.arbresMesures!.values[selectedIndex];
-              // }
+    return Container(
+      margin: EdgeInsets.all(10), // Marge externe
+      decoration: BoxDecoration(
+        color: Colors.grey[200], // Couleur de fond
+        borderRadius: BorderRadius.circular(15), // Bords arrondis
+      ),
+      child: Column(
+        children: [
+          PrimaryGridWidget(
+            simpleElements: simpleElements,
+            onItemAdded: (dynamic item) {
+              Navigator.push(context, MaterialPageRoute<void>(
+                builder: (BuildContext context) {
+                  return FormSaisiePlacettePage(
+                    formType: "add",
+                    type: widget.displayTypeState,
+                    placette: widget.placette,
+                    cycle: getCycleFromType(
+                      'add',
+                      widget.dispCycleList,
+                    ),
+                    corCyclePlacette: getCorCyclePlacetteFromType(
+                      'add',
+                      widget.placette,
+                      widget.dispCycleList,
+                    ),
+                    saisisableObject1: null,
+                    saisisableObject2: null,
+                  );
+                },
+              ));
+            },
+            onItemDeleted: (dynamic item) {
+              if (selectedItemDetailsCo is Arbre) {
+                final arbreListViewModel =
+                    ref.read(arbreListViewModelStateNotifierProvider.notifier);
+                // Arbre? arbreDetails = selectedItemDetailsCo as Arbre?;
+                // if (arbreDetails != null) {
+                arbreListViewModel.deleteItem(selectedItemDetailsCo.idArbre);
+                // }
+              }
+            },
+            onItemUpdated: (dynamic item) {
+              // Logic for updating an item
+              Navigator.push(context, MaterialPageRoute<void>(
+                builder: (BuildContext context) {
+                  return FormSaisiePlacettePage(
+                    formType: "edit",
+                    type: widget.displayTypeState,
+                    placette: widget.placette,
+                    cycle: getCycleFromType(
+                      'edit',
+                      widget.dispCycleList,
+                      selectedItemMesureDetailsCo,
+                    ),
+                    corCyclePlacette: getCorCyclePlacetteFromType(
+                      'add',
+                      widget.placette,
+                      widget.dispCycleList,
+                    ),
+                    saisisableObject1: selectedItemDetailsCo,
+                    saisisableObject2: selectedItemMesureDetailsCo,
+                  );
+                },
+              ));
             },
           ),
-      ],
+
+          // Only create SecondaryGrid if arbresMesuresList is not empty
+          if (mesuresList.isNotEmpty)
+            Container(
+              margin: EdgeInsets.all(5), // Marge externe
+              decoration: BoxDecoration(
+                color: Colors.grey[400], // Couleur de fond
+                borderRadius: BorderRadius.circular(15), // Bords arrondis
+              ),
+              child: SecondaryGrid(
+                mesuresList: mesuresList,
+                currentIndex: currentIndex,
+                onItemSelected: (int selectedIndex) {
+                  ref.watch(selectedMesureIndexProvider.notifier).state =
+                      selectedIndex;
+                  // ref
+                  //     .read(selectedItemMesureDetailsProvider.notifier)
+                  //     .setSelectedItemMesureDetails(selectedIndex);
+                },
+                onItemMesureAdded: (dynamic adedItem) async {
+                  Navigator.push(context, MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return FormSaisiePlacettePage(
+                        formType: "newMesure",
+                        type: widget.displayTypeState,
+                        placette: widget.placette,
+                        cycle: getCycleFromType(
+                          'newMesure',
+                          widget.dispCycleList,
+                        ),
+                        corCyclePlacette: getCorCyclePlacetteFromType(
+                          'add',
+                          widget.placette,
+                          widget.dispCycleList,
+                        ),
+                        saisisableObject1: selectedItemDetailsCo,
+                        saisisableObject2: null,
+                      );
+                    },
+                  ));
+                },
+                onItemMesureDeleted: (dynamic deletedItem) async {
+                  bool result = false;
+                  // if map contain idArbre then it's an ArbreMesure
+                  if (deletedItem.containsKey('idArbreMesure')) {
+                    final arbreListViewModel = ref
+                        .read(arbreListViewModelStateNotifierProvider.notifier);
+                    selectedItemDetailsCo as Arbre;
+                    result = await arbreListViewModel.deleteItemMesure(
+                        selectedItemDetailsCo.idArbre,
+                        deletedItem['idArbreMesure']);
+                  } else if (deletedItem.containsKey('idBmSup30Mesure')) {
+                    final bmSup30ListViewModel = ref.read(
+                        bmSup30ListViewModelStateNotifierProvider.notifier);
+                    bmSup30ListViewModel
+                        .deleteItemMesure(deletedItem['idBmSup30Mesure']);
+                  }
+
+                  if (!result) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text('Cannot delete the only mesure of an arbre.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
+                onItemMesureUpdated: (dynamic updatedItem) {
+                  Navigator.push(context, MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return FormSaisiePlacettePage(
+                        formType: "edit",
+                        type: widget.displayTypeState,
+                        placette: widget.placette,
+                        cycle: getCycleFromType(
+                          'edit',
+                          widget.dispCycleList,
+                          selectedItemMesureDetailsCo,
+                        ),
+                        corCyclePlacette: getCorCyclePlacetteFromType(
+                          'add',
+                          widget.placette,
+                          widget.dispCycleList,
+                        ),
+                        saisisableObject1: selectedItemDetailsCo,
+                        saisisableObject2: selectedItemMesureDetailsCo,
+                      );
+                    },
+                  ));
+                },
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -404,11 +451,17 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     DisplayableList items,
   ) {
     final SaisisableObject? aaa = ref
-        .read(selectedItemDetailsProvider(items).notifier)
+        .read(selectedItemDetailsProvider.notifier)
         .setSelectedItemDetails(value, widget.displayTypeState);
-    ref
-        .read(selectedItemMesureDetailsProvider(aaa).notifier)
-        .setSelectedItemMesureDetails(0);
+
+    aaa as Arbre;
+    ref.watch(selectedMesureIndexProvider.notifier).state = aaa.arbresMesures!
+            .findIndexOfArbreMesureFromIdArbreMesure(value['idArbreMesure']) ??
+        0;
+
+    // ref
+    //     .read(selectedItemMesureDetailsProvider.notifier)
+    //     .setSelectedItemMesureDetails(selectedIndex);
 
     // if (selectedItemDetails is Arbre) {
     //   Arbre arbreDetails = selectedItemDetails as Arbre;
@@ -484,12 +537,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     return valueList.map<DataRow>((value) {
       List<DataCell> cellList = [];
       bool isSelected = false;
+      int selectedIndex = 0;
+
       if (selectedItemDetails != null) {
         if (selectedItemDetails!.isEqualToMap(value)) {
           isSelected = true;
         }
       }
-      ;
 
       // Ajouter une cellule pour la colonne "update" au début
       cellList.add(
@@ -507,7 +561,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               ),
               onPressed: () {
                 onSelectedItemChanged(
-                  0,
+                  selectedIndex,
                   value,
                   widget.displayTypeState,
                   items,
