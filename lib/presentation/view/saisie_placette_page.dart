@@ -161,50 +161,55 @@ Widget __buildAsyncPlacetteListWidget(
 
       return Column(
         children: [
-          SaisieDataTable(
-            placette: placette,
-            dispCycleList: dispCycleList,
-            // corCyclePlacetteList: placette.corCyclesPlacettes!,
-            displayTypeState: displayTypeState,
+          Expanded(
+            child: SaisieDataTable(
+              placette: placette,
+              dispCycleList: dispCycleList,
+              // corCyclePlacetteList: placette.corCyclesPlacettes!,
+              displayTypeState: displayTypeState,
+            ),
           ),
-          Row(
-            children: [
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Arbres');
-                },
-                text: "Arbres",
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'BmsSup30');
-                },
-                text: "BmsSup30",
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Transects');
-                },
-                text: "BmsInf30",
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Regenerations');
-                },
-                text: 'Regenerations',
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Reperes');
-                },
-                text: "Repères",
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                DisplayableButton(
+                  onPressed: () {
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Arbres');
+                  },
+                  text: "Arbres",
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'BmsSup30');
+                  },
+                  text: "BmsSup30",
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Transects');
+                  },
+                  text: "BmsInf30",
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Regenerations');
+                  },
+                  text: 'Regenerations',
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Reperes');
+                  },
+                  text: "Repères",
+                ),
+              ],
+            ),
           )
         ],
       );
