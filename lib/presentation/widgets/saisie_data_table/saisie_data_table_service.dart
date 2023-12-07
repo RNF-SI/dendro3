@@ -283,10 +283,10 @@ class MyParameter {
 //   }
 // });
 
-final selectedItemDetailsProvider = StateNotifierProvider.autoDispose
-    .family<SelectedItemDetailsNotifier, SaisisableObject?, DisplayableList>(
-        (ref, items) {
+final selectedItemDetailsProvider = StateNotifierProvider.autoDispose<
+    SelectedItemDetailsNotifier, SaisisableObject?>((ref) {
   final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final items = ref.watch(displayableListProvider);
 
   return SelectedItemDetailsNotifier(
     items,
@@ -358,59 +358,69 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
   }
 }
 
-final selectedItemMesureDetailsProvider = StateNotifierProvider.autoDispose
-    .family<SelectedItemMesureDetailsNotifier, SaisisableObject?,
-        SaisisableObject?>((ref, item) {
-  return SelectedItemMesureDetailsNotifier(item);
+// provider of index of the selected mesure
+final selectedMesureIndexProvider = StateProvider.autoDispose<int>((ref) {
+  return 0;
+});
+
+final selectedItemMesureDetailsProvider = StateNotifierProvider.autoDispose<
+    SelectedItemMesureDetailsNotifier, SaisisableObject?>((ref) {
+  final index = ref.watch(selectedMesureIndexProvider);
+  final item = ref.watch(selectedItemDetailsProvider);
+  return SelectedItemMesureDetailsNotifier(
+    item,
+    index,
+  );
 });
 
 class SelectedItemMesureDetailsNotifier
     extends StateNotifier<SaisisableObject?> {
   final SaisisableObject? item;
+  final int index;
 
-  SelectedItemMesureDetailsNotifier(this.item) : super(null) {
+  SelectedItemMesureDetailsNotifier(this.item, this.index) : super(null) {
     if (item is Arbre) {
       Arbre arbreDetails = item as Arbre;
-      state = arbreDetails.arbresMesures!.values.first;
+      state = arbreDetails.arbresMesures!.values[index];
     } else if (item is BmSup30) {
       BmSup30 bmSup30Details = item as BmSup30;
-      state = bmSup30Details.bmsSup30Mesures!.values.first;
+      state = bmSup30Details.bmsSup30Mesures!.values[index];
     } else {
       state = null;
     }
   }
 
-  void setSelectedItemMesureDetails(int selectedIndex) {
-    if (item is Arbre) {
-      Arbre arbreDetails = item as Arbre;
-      state = arbreDetails.arbresMesures!.values[selectedIndex];
-    } else if (item is BmSup30) {
-      BmSup30 bmSup30Details = item as BmSup30;
-      state = bmSup30Details.bmsSup30Mesures!.values[selectedIndex];
-      // } else if (item is Regeneration) {
-      //   Regeneration regenerationDetails = item as Regeneration;
-      //   state = regenerationDetails.regenerationsMesures!.values[selectedIndex];
-      // } else if (item is Repere) {
-      //   Repere repereDetails = item as Repere;
-      //   state = repereDetails.reperesMesures!.values[selectedIndex];
-      // } else if (item is Transect) {
-      //   Transect transectDetails = item as Transect;
-      //   state = transectDetails.transectsMesures!.values[selectedIndex];
-    } else {
-      state = null;
-      // throw ArgumentError('Unknown type: ${item.runtimeType}');
-    }
-    // case 'BmsSup30':
-    //   state = item.getObjectFromId(value['idBmSup30Orig']);
-    //   break;
-    // case 'Regenerations':
-    //   state = item.getObjectFromId(value['idRegeneration']);
-    //   break;
-    // case 'Repères':
-    //   state = item.getObjectFromId(value['idRepere']);
-    //   break;
-    // case 'Transects':
-    //   state = item.getObjectFromId(value['idTransectOrig']);
-    //   break;
-  }
+  // void setSelectedItemMesureDetails(int selectedIndex) {
+  //   if (item is Arbre) {
+  //     Arbre arbreDetails = item as Arbre;
+  //     state = arbreDetails.arbresMesures!.values[selectedIndex];
+  //   } else if (item is BmSup30) {
+  //     BmSup30 bmSup30Details = item as BmSup30;
+  //     state = bmSup30Details.bmsSup30Mesures!.values[selectedIndex];
+  //     // } else if (item is Regeneration) {
+  //     //   Regeneration regenerationDetails = item as Regeneration;
+  //     //   state = regenerationDetails.regenerationsMesures!.values[selectedIndex];
+  //     // } else if (item is Repere) {
+  //     //   Repere repereDetails = item as Repere;
+  //     //   state = repereDetails.reperesMesures!.values[selectedIndex];
+  //     // } else if (item is Transect) {
+  //     //   Transect transectDetails = item as Transect;
+  //     //   state = transectDetails.transectsMesures!.values[selectedIndex];
+  //   } else {
+  //     state = null;
+  //     // throw ArgumentError('Unknown type: ${item.runtimeType}');
+  //   }
+  //   // case 'BmsSup30':
+  //   //   state = item.getObjectFromId(value['idBmSup30Orig']);
+  //   //   break;
+  //   // case 'Regenerations':
+  //   //   state = item.getObjectFromId(value['idRegeneration']);
+  //   //   break;
+  //   // case 'Repères':
+  //   //   state = item.getObjectFromId(value['idRepere']);
+  //   //   break;
+  //   // case 'Transects':
+  //   //   state = item.getObjectFromId(value['idTransectOrig']);
+  //   //   break;
+  // }
 }
