@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class SecondaryGrid extends StatefulWidget {
   final List<dynamic> mesuresList;
   final Function(int) onItemSelected;
+  final Function(dynamic) onItemMesureAdded;
   final Function(dynamic) onItemMesureDeleted;
   final Function(dynamic) onItemMesureUpdated;
   final int currentIndex;
@@ -11,6 +12,7 @@ class SecondaryGrid extends StatefulWidget {
     Key? key,
     required this.mesuresList,
     required this.onItemSelected,
+    required this.onItemMesureAdded,
     required this.onItemMesureDeleted,
     required this.onItemMesureUpdated,
     required this.currentIndex,
@@ -89,9 +91,18 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               constraints: BoxConstraints(),
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 widget.onItemMesureDeleted(widget.mesuresList[currentIndex]);
+              },
+              iconSize: 18, // Reduced icon size
+              padding: EdgeInsets.all(4), // Reduced padding
+              constraints: BoxConstraints(),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.green),
+              onPressed: () {
+                widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
               },
               iconSize: 18, // Reduced icon size
               padding: EdgeInsets.all(4), // Reduced padding
