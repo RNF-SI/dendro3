@@ -26,18 +26,21 @@ class _SecondaryGridState extends State<SecondaryGrid> {
   int currentIndex = 0;
 
   void _showNextItem() {
-    setState(() {
-      currentIndex = (currentIndex + 1) % widget.mesuresList.length;
-      widget.onItemSelected(currentIndex);
-    });
+    if (currentIndex < widget.mesuresList.length - 1) {
+      setState(() {
+        currentIndex++;
+        widget.onItemSelected(currentIndex);
+      });
+    }
   }
 
   void _showPreviousItem() {
-    setState(() {
-      currentIndex = (currentIndex - 1 + widget.mesuresList.length) %
-          widget.mesuresList.length;
-      widget.onItemSelected(currentIndex);
-    });
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+        widget.onItemSelected(currentIndex);
+      });
+    }
   }
 
   @override
@@ -47,7 +50,6 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       return SizedBox.shrink(); // Return an empty widget if the list is empty
     }
 
-    // Assuming each item in arbresMesuresList is a Map<String, dynamic>
     Map<String, dynamic> currentItem = widget.mesuresList[currentIndex];
 
     List<Widget> gridItems = currentItem.entries.map((entry) {
@@ -116,10 +118,12 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               padding: const EdgeInsets.only(
                 left: 5,
                 right: 5,
-              ), // Minimize padding around the icon
-              constraints: BoxConstraints(), // Remove additional constraints
-              icon: Icon(Icons.arrow_left, size: 20), // Adjust the icon size
-              onPressed: _showPreviousItem,
+              ),
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.arrow_left, size: 20),
+              onPressed: currentIndex > 0
+                  ? _showPreviousItem
+                  : null, // Disable if first item
             ),
             Expanded(
               child: Padding(
@@ -140,9 +144,11 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 left: 5,
                 right: 5,
               ),
-              constraints: BoxConstraints(), // Remove additional constraints
-              icon: Icon(Icons.arrow_right, size: 20), // Adjust the icon size
-              onPressed: _showNextItem,
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.arrow_right, size: 20),
+              onPressed: currentIndex < widget.mesuresList.length - 1
+                  ? _showNextItem
+                  : null, // Disable if last item
             ),
           ],
         ),
