@@ -23,6 +23,8 @@ import 'package:dendro3/domain/usecase/delete_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase_impl.dart';
@@ -227,6 +229,11 @@ final deleteBmSup30AndMesureUseCaseProvider =
     Provider<DeleteBmSup30AndMesureUseCase>((ref) =>
         DeleteBmSup30AndMesureUseCaseImpl(ref.watch(bmsSup30RepositoryProvider),
             ref.watch(bmsSup30MesuresRepositoryProvider)));
+
+final deleteBmSup30MesureUseCaseProvider = Provider<DeleteBmSup30MesureUseCase>(
+    (ref) => DeleteBmSup30MesureUseCaseImpl(
+          ref.watch(bmsSup30MesuresRepositoryProvider),
+        ));
 
 final deleteTransectUseCaseProvider =
     Provider<DeleteTransectUseCase>((ref) => DeleteTransectUseCaseImpl(
