@@ -107,17 +107,19 @@ class PlacettePage extends ConsumerWidget {
         floatingActionButton: PlacetteFAB(
           distance: 112.0,
           children: [
-            ActionButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return SaisiePlacettePage(
-                    placette: placette,
-                    dispCycleList: dispCycleList,
-                  );
-                },
-              )),
-              icon: const Icon(Icons.add),
-            ),
+            if (corCyclePlacetteList.length == dispCycleList.length)
+              ActionButton(
+                onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return SaisiePlacettePage(
+                      placette: placette,
+                      dispCycleList: dispCycleList,
+                    );
+                  },
+                )),
+                icon: const Icon(Icons.add),
+              ),
             ActionButton(
               onPressed: () => null,
               icon: const Icon(Icons.play_arrow),
