@@ -17,7 +17,7 @@ final transectListProvider = Provider<TransectList>((ref) {
 
 final transectListViewModelStateNotifierProvider =
     StateNotifierProvider<TransectListViewModel, State<TransectList>>((ref) {
-  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return TransectListViewModel(
@@ -27,13 +27,13 @@ final transectListViewModelStateNotifierProvider =
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
-    lastModifiedProvider,
+    lastSelectedProvider,
     displayableListNotifier,
   );
 });
 
 class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
-  late final LastSelectedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -47,7 +47,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
     this._updateTransectUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste,
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
     this._displayableListNotifier,
   ) : super(const State.init()) {}
 
@@ -82,7 +82,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["stadeEcorce"],
         item["observation"],
       );
-      _lastModifiedProvider.setLastSelectedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Transects', newTransect.idTransect);
       state = State.success(state.data!.addItemToList(newTransect));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -119,7 +119,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["observation"],
       );
 
-      _lastModifiedProvider.setLastSelectedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Transects', updatedTransect.idTransect);
       state = State.success(state.data!.updateItemInList(updatedTransect));
       _displayableListNotifier.setDisplayableList(state.data!);

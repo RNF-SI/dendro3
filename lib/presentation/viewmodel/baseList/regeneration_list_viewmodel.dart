@@ -18,7 +18,7 @@ final regenerationListProvider = Provider<RegenerationList>((ref) {
 final regenerationListViewModelStateNotifierProvider =
     StateNotifierProvider<RegenerationListViewModel, State<RegenerationList>>(
         (ref) {
-  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return RegenerationListViewModel(
@@ -29,14 +29,14 @@ final regenerationListViewModelStateNotifierProvider =
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
-    lastModifiedProvider,
+    lastSelectedProvider,
     displayableListNotifier,
   );
 });
 
 class RegenerationListViewModel
     extends BaseListViewModel<State<RegenerationList>> {
-  late final LastSelectedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -54,7 +54,7 @@ class RegenerationListViewModel
     // this._updateBmSup30UseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
     this._displayableListNotifier,
   ) : super(const State.init()) {}
 
@@ -83,7 +83,7 @@ class RegenerationListViewModel
         item["observation"],
       );
 
-      _lastModifiedProvider.setLastSelectedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Regenerations', newRege.idRegeneration);
       state = State.success(state.data!.addItemToList(newRege));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -113,7 +113,7 @@ class RegenerationListViewModel
         item["idNomenclatureAbroutissement"],
         item["observation"],
       );
-      _lastModifiedProvider.setLastSelectedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Regenerations', updatedRege.idRegeneration);
       state = State.success(state.data!.updateItemInList(updatedRege));
       _displayableListNotifier.setDisplayableList(state.data!);

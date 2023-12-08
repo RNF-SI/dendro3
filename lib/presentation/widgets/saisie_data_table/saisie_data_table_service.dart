@@ -285,22 +285,22 @@ class MyParameter {
 
 final selectedItemDetailsProvider = StateNotifierProvider.autoDispose<
     SelectedItemDetailsNotifier, SaisisableObject?>((ref) {
-  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final items = ref.watch(displayableListProvider);
 
   return SelectedItemDetailsNotifier(
     items,
-    lastModifiedProvider,
+    lastSelectedProvider,
   );
 });
 
 class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
   final DisplayableList items;
-  late final LastSelectedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
 
   SelectedItemDetailsNotifier(
     this.items,
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
   ) : super(null) {
     int lastSelectedId;
 
@@ -308,23 +308,23 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
     if (items.isEmpty()) {
       state = null;
       return;
-    } else if (_lastModifiedProvider.getObject().isEmpty) {
+    } else if (_lastSelectedProvider.getObject().isEmpty) {
       lastSelectedId = items.getFirstElementIdOrig();
     } else if (items is ArbreList) {
-      lastSelectedId = _lastModifiedProvider.getLastSelectedId('Arbres') ??
+      lastSelectedId = _lastSelectedProvider.getLastSelectedId('Arbres') ??
           items.getFirstElementIdOrig();
     } else if (items is BmSup30List) {
-      lastSelectedId = _lastModifiedProvider.getLastSelectedId('BmsSup30') ??
+      lastSelectedId = _lastSelectedProvider.getLastSelectedId('BmsSup30') ??
           items.getFirstElementIdOrig();
     } else if (items is RegenerationList) {
       lastSelectedId =
-          _lastModifiedProvider.getLastSelectedId('Regenerations') ??
+          _lastSelectedProvider.getLastSelectedId('Regenerations') ??
               items.getFirstElementIdOrig();
     } else if (items is RepereList) {
-      lastSelectedId = _lastModifiedProvider.getLastSelectedId('Repères') ??
+      lastSelectedId = _lastSelectedProvider.getLastSelectedId('Repères') ??
           items.getFirstElementIdOrig();
     } else if (items is TransectList) {
-      lastSelectedId = _lastModifiedProvider.getLastSelectedId('Transects') ??
+      lastSelectedId = _lastSelectedProvider.getLastSelectedId('Transects') ??
           items.getFirstElementIdOrig();
     } else {
       throw ArgumentError('Unknown type: ${items.runtimeType}');
@@ -337,26 +337,26 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
       Map<String, dynamic> value, String type) {
     switch (type) {
       case 'Arbres':
-        _lastModifiedProvider.setLastSelectedId('Arbres', value['idArbreOrig']);
+        _lastSelectedProvider.setLastSelectedId('Arbres', value['idArbreOrig']);
         state = items.getObjectFromId(value['idArbreOrig']);
         return state;
       case 'BmsSup30':
-        _lastModifiedProvider.setLastSelectedId(
+        _lastSelectedProvider.setLastSelectedId(
             'BmsSup30', value['idBmSup30Orig']);
         state = items.getObjectFromId(value['idBmSup30Orig']);
         return state;
       case 'Regenerations':
-        _lastModifiedProvider.setLastSelectedId(
+        _lastSelectedProvider.setLastSelectedId(
             'Regenerations', value['idRegeneration']);
         state = items.getObjectFromId(value['idRegeneration']);
         return state;
       case 'Reperes':
-        _lastModifiedProvider.setLastSelectedId('Repere', value['idRepere']);
+        _lastSelectedProvider.setLastSelectedId('Repere', value['idRepere']);
         state = items.getObjectFromId(value['idRepere']);
         return state;
       case 'Transects':
       case 'BmsInf30':
-        _lastModifiedProvider.setLastSelectedId(
+        _lastSelectedProvider.setLastSelectedId(
             'Transects', value['idTransect']);
         state = items.getObjectFromId(value['idTransect']);
         return state;

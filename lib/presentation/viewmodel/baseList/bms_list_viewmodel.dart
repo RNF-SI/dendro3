@@ -21,7 +21,7 @@ final bmSup30ListProvider = Provider<BmSup30List>((ref) {
 
 final bmSup30ListViewModelStateNotifierProvider =
     StateNotifierProvider<BmSup30ListViewModel, State<BmSup30List>>((ref) {
-  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return BmSup30ListViewModel(
@@ -33,13 +33,13 @@ final bmSup30ListViewModelStateNotifierProvider =
     ref.watch(deleteBmSup30MesureUseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
-    lastModifiedProvider,
+    lastSelectedProvider,
     displayableListNotifier,
   );
 });
 
 class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
-  late final LastSelectedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -60,7 +60,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     this._deleteBmSup30MesureUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
     this._displayableListNotifier,
   ) : super(const State.init()) {}
 
@@ -114,7 +114,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
         item["observationMesure"],
       );
       // final aa = state.data!.addBmSup30(newBmSup30);
-      _lastModifiedProvider.setLastSelectedId(
+      _lastSelectedProvider.setLastSelectedId(
           'BmsSup30', newBmSup30.idBmSup30Orig);
       state = State.success(state.data!.addItemToList(newBmSup30));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -158,8 +158,8 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
         item["stadeEcorce"],
         item["observationMesure"],
       );
-      // _lastModifiedArbreId = newArbre.idArbreOrig;
-      _lastModifiedProvider.setLastSelectedId(
+      // _lastSelectedArbreId = newArbre.idArbreOrig;
+      _lastSelectedProvider.setLastSelectedId(
         'BmsSup30',
         newBmSup30.idBmSup30Orig,
       );
@@ -191,8 +191,8 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
         item["stadeEcorce"],
         item["observationMesure"],
       );
-      // _lastModifiedArbreId = newArbre.idArbreOrig;
-      _lastModifiedProvider.setLastSelectedId(
+      // _lastSelectedArbreId = newArbre.idArbreOrig;
+      _lastSelectedProvider.setLastSelectedId(
           'BmsSup30', newBmSup30.idBmSup30Orig);
 
       // final aa = state.data!.addArbre(newArbre);
@@ -220,7 +220,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   Future<void> deleteItemMesure(int id) async {
     try {
       await _deleteBmSup30MesureUseCase.execute(id);
-      _lastModifiedProvider.setLastSelectedId('BmsSup30', null);
+      _lastSelectedProvider.setLastSelectedId('BmsSup30', null);
       state = State.success(state.data!.removeItemFromList(id));
       _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {

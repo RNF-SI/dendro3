@@ -18,7 +18,7 @@ final repereListProvider = Provider<RepereList>((ref) {
 
 final repereListViewModelStateNotifierProvider =
     StateNotifierProvider<RepereListViewModel, State<RepereList>>((ref) {
-  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return RepereListViewModel(
@@ -29,13 +29,13 @@ final repereListViewModelStateNotifierProvider =
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
-    lastModifiedProvider,
+    lastSelectedProvider,
     displayableListNotifier,
   );
 });
 
 class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
-  late final LastSelectedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -51,7 +51,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
     this._updateRepereUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
     this._displayableListNotifier,
   ) : super(const State.init()) {}
 
@@ -74,7 +74,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
           item["repere"],
           item["observation"]);
 
-      _lastModifiedProvider.setLastSelectedId('Reperes', newRepere.idRepere);
+      _lastSelectedProvider.setLastSelectedId('Reperes', newRepere.idRepere);
       state = State.success(state.data!.addItemToList(newRepere));
       _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
@@ -98,7 +98,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
           item["repere"],
           item["observation"]);
 
-      _lastModifiedProvider.setLastSelectedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Reperes', updatedRepere.idRepere);
       state = State.success(state.data!.updateItemInList(updatedRepere));
       _displayableListNotifier.setDisplayableList(state.data!);
