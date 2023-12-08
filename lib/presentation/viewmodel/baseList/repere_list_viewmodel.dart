@@ -8,7 +8,7 @@ import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
+import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final repereListProvider = Provider<RepereList>((ref) {
