@@ -28,7 +28,7 @@ final arbreListProvider = Provider<ArbreList>((ref) {
 
 final arbreListViewModelStateNotifierProvider =
     StateNotifierProvider<ArbreListViewModel, State<ArbreList>>((ref) {
-  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return ArbreListViewModel(
@@ -46,7 +46,7 @@ final arbreListViewModelStateNotifierProvider =
 });
 
 class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
-  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastModifiedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final Ref ref;
@@ -127,8 +127,8 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["observationMesure"],
       );
       // _lastModifiedArbreId = newArbre.idArbreOrig;
-      // _lastModifiedIdNotifier.setLastModifiedId('Arbres', newArbre.idArbreOrig);
-      _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
+      // _LastSelectedIdNotifier.setLastSelectedId('Arbres', newArbre.idArbreOrig);
+      _lastModifiedProvider.setLastSelectedId('Arbres', newArbre.idArbreOrig);
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.addItemToList(newArbre));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -178,7 +178,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["observationMesure"],
       );
       // _lastModifiedArbreId = newArbre.idArbreOrig;
-      _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
+      _lastModifiedProvider.setLastSelectedId('Arbres', newArbre.idArbreOrig);
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
@@ -217,7 +217,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["observationMesure"],
       );
       // _lastModifiedArbreId = newArbre.idArbreOrig;
-      _lastModifiedProvider.setLastModifiedId('Arbres', newArbre.idArbreOrig);
+      _lastModifiedProvider.setLastSelectedId('Arbres', newArbre.idArbreOrig);
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
@@ -231,7 +231,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   Future<void> deleteItem(int id) async {
     try {
       await _deleteArbreAndMesureUseCase.execute(id);
-      _lastModifiedProvider.setLastModifiedId('Arbres', null);
+      _lastModifiedProvider.setLastSelectedId('Arbres', null);
       state = State.success(state.data!.removeItemFromList(id));
       _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
@@ -285,7 +285,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       _displayableListNotifier.setDisplayableList(updatedList);
 
       // Update last modified ID
-      _lastModifiedProvider.setLastModifiedId('Arbres', null);
+      _lastModifiedProvider.setLastSelectedId('Arbres', null);
       return true;
     } on Exception catch (e) {
       state = State.error(e);

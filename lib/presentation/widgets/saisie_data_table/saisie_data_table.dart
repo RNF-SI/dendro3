@@ -124,7 +124,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final columnNameList = ref.watch(columnsProvider(rowList));
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 
-    // final lastModifiedIds = ref.watch(lastModifiedIdProvider);
     final selectedItemDetails = ref.watch(selectedItemDetailsProvider);
 
     final selectedItemMesureDetails =

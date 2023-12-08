@@ -18,7 +18,7 @@ final regenerationListProvider = Provider<RegenerationList>((ref) {
 final regenerationListViewModelStateNotifierProvider =
     StateNotifierProvider<RegenerationListViewModel, State<RegenerationList>>(
         (ref) {
-  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return RegenerationListViewModel(
@@ -36,7 +36,7 @@ final regenerationListViewModelStateNotifierProvider =
 
 class RegenerationListViewModel
     extends BaseListViewModel<State<RegenerationList>> {
-  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastModifiedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -83,7 +83,7 @@ class RegenerationListViewModel
         item["observation"],
       );
 
-      _lastModifiedProvider.setLastModifiedId(
+      _lastModifiedProvider.setLastSelectedId(
           'Regenerations', newRege.idRegeneration);
       state = State.success(state.data!.addItemToList(newRege));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -113,7 +113,7 @@ class RegenerationListViewModel
         item["idNomenclatureAbroutissement"],
         item["observation"],
       );
-      _lastModifiedProvider.setLastModifiedId(
+      _lastModifiedProvider.setLastSelectedId(
           'Regenerations', updatedRege.idRegeneration);
       state = State.success(state.data!.updateItemInList(updatedRege));
       _displayableListNotifier.setDisplayableList(state.data!);

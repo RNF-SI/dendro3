@@ -285,7 +285,7 @@ class MyParameter {
 
 final selectedItemDetailsProvider = StateNotifierProvider.autoDispose<
     SelectedItemDetailsNotifier, SaisisableObject?>((ref) {
-  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final items = ref.watch(displayableListProvider);
 
   return SelectedItemDetailsNotifier(
@@ -296,60 +296,68 @@ final selectedItemDetailsProvider = StateNotifierProvider.autoDispose<
 
 class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
   final DisplayableList items;
-  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastModifiedProvider;
 
   SelectedItemDetailsNotifier(
     this.items,
     this._lastModifiedProvider,
   ) : super(null) {
-    int lastModifiedId;
+    int lastSelectedId;
 
     // Check if a map is empy
     if (items.isEmpty()) {
       state = null;
       return;
     } else if (_lastModifiedProvider.getObject().isEmpty) {
-      lastModifiedId = items.getFirstElementIdOrig();
+      lastSelectedId = items.getFirstElementIdOrig();
     } else if (items is ArbreList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Arbres') ??
+      lastSelectedId = _lastModifiedProvider.getLastSelectedId('Arbres') ??
           items.getFirstElementIdOrig();
     } else if (items is BmSup30List) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('BmsSup30') ??
+      lastSelectedId = _lastModifiedProvider.getLastSelectedId('BmsSup30') ??
           items.getFirstElementIdOrig();
     } else if (items is RegenerationList) {
-      lastModifiedId =
-          _lastModifiedProvider.getLastModifiedId('Regenerations') ??
+      lastSelectedId =
+          _lastModifiedProvider.getLastSelectedId('Regenerations') ??
               items.getFirstElementIdOrig();
     } else if (items is RepereList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Repères') ??
+      lastSelectedId = _lastModifiedProvider.getLastSelectedId('Repères') ??
           items.getFirstElementIdOrig();
     } else if (items is TransectList) {
-      lastModifiedId = _lastModifiedProvider.getLastModifiedId('Transects') ??
+      lastSelectedId = _lastModifiedProvider.getLastSelectedId('Transects') ??
           items.getFirstElementIdOrig();
     } else {
       throw ArgumentError('Unknown type: ${items.runtimeType}');
     }
 
-    state = items.getObjectFromId(lastModifiedId);
+    state = items.getObjectFromId(lastSelectedId);
   }
 
   SaisisableObject? setSelectedItemDetails(
       Map<String, dynamic> value, String type) {
     switch (type) {
       case 'Arbres':
+        _lastModifiedProvider.setLastSelectedId('Arbres', value['idArbreOrig']);
         state = items.getObjectFromId(value['idArbreOrig']);
         return state;
       case 'BmsSup30':
+        _lastModifiedProvider.setLastSelectedId(
+            'BmsSup30', value['idBmSup30Orig']);
         state = items.getObjectFromId(value['idBmSup30Orig']);
         return state;
       case 'Regenerations':
+        _lastModifiedProvider.setLastSelectedId(
+            'Regenerations', value['idRegeneration']);
         state = items.getObjectFromId(value['idRegeneration']);
         return state;
-      case 'Repères':
+      case 'Reperes':
+        _lastModifiedProvider.setLastSelectedId('Repere', value['idRepere']);
         state = items.getObjectFromId(value['idRepere']);
         return state;
       case 'Transects':
       case 'BmsInf30':
+        _lastModifiedProvider.setLastSelectedId(
+            'Transects', value['idTransect']);
         state = items.getObjectFromId(value['idTransect']);
         return state;
       default:

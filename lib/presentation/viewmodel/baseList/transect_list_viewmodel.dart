@@ -17,7 +17,7 @@ final transectListProvider = Provider<TransectList>((ref) {
 
 final transectListViewModelStateNotifierProvider =
     StateNotifierProvider<TransectListViewModel, State<TransectList>>((ref) {
-  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final lastModifiedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return TransectListViewModel(
@@ -33,7 +33,7 @@ final transectListViewModelStateNotifierProvider =
 });
 
 class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
-  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastModifiedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -82,7 +82,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["stadeEcorce"],
         item["observation"],
       );
-      _lastModifiedProvider.setLastModifiedId(
+      _lastModifiedProvider.setLastSelectedId(
           'Transects', newTransect.idTransect);
       state = State.success(state.data!.addItemToList(newTransect));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -119,7 +119,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["observation"],
       );
 
-      _lastModifiedProvider.setLastModifiedId(
+      _lastModifiedProvider.setLastSelectedId(
           'Transects', updatedTransect.idTransect);
       state = State.success(state.data!.updateItemInList(updatedTransect));
       _displayableListNotifier.setDisplayableList(state.data!);
