@@ -666,7 +666,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           ],
           isVisibleFn: (formData) {
             return (formData['Diametre1'] != null &&
-                    formData['Diametre1'] != '') ||
+                    formData['Diametre1'] != '') &&
                 (_diametre1 != null && _diametre1! > 30);
           },
           hintText: "Entrer le diametre2",
@@ -694,7 +694,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         value: _type,
         items: [
           const MapEntry('', 'Sélectionnez une option'),
-          const MapEntry('1', '1- arbre'),
+          const MapEntry('1', '1- arbre mort sur pied'),
           const MapEntry('2', '2- chandelle'),
           const MapEntry('3', '3- souche'),
           const MapEntry('4', '4- souche anthropique'),
@@ -712,7 +712,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           }
         },
         fieldInfo:
-            "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
+            "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre mort sur pied\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
       ),
       // TextFieldConfig(
       //   fieldName: 'type',
@@ -901,6 +901,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'limite',
         initialValue: initialLimiteValue(),
         onSaved: (value) => setLimite(value!),
+        fieldInfo:
+            "Arbre n'ayant pas les caractéristiques pour être échantillonné. Ne sera pas pris en compte dans l'analyse",
       ),
 
       // TextFieldConfig(
