@@ -2,6 +2,16 @@
 ------- TABLES ---------
 ------------------------
 
+-- Table contenant les différentes essences
+CREATE TABLE bib_essences (
+  code_essence character varying(4) NOT NULL PRIMARY KEY,
+  cd_nom integer,
+  nom character varying,
+  nom_latin character varying,
+  ess_reg character varying(4),
+  couleur character varying(25)
+);
+
 -- Table des dispositifs
 CREATE TABLE t_dispositifs (
   id_dispositif serial NOT NULL PRIMARY KEY,
@@ -157,16 +167,6 @@ CREATE TABLE t_categories (
     FOREIGN KEY (id_dispositif) REFERENCES t_dispositifs (id_dispositif)
     ON UPDATE CASCADE
     ON DELETE CASCADE
-);
-
--- Table contenant les différentes essences
-CREATE TABLE bib_essences (
-  code_essence character varying(4) NOT NULL PRIMARY KEY,
-  cd_nom integer,
-  nom character varying,
-  nom_latin character varying,
-  ess_reg character varying(4),
-  couleur character varying(25)
 );
 
 CREATE TABLE t_bm_sup_30 (
