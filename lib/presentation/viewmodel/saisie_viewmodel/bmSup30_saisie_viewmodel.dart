@@ -443,7 +443,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
             'Lorsque 2 pièce de BMsup30 appartiennent au même individu, indiquer le même Arbre',
         initialValue: initialIdArbreValue(),
         hintText: 'Veuillez entrer le code',
-        // validator: ...,
+        onChanged: (value) => _idArbre = int.parse(value),
       ),
       DropdownSearchConfig(
         fieldName: 'Code Essence',
