@@ -12,7 +12,6 @@ abstract class CreateBmSup30AndMesureUseCase {
     double? azimutSouche,
     double? distanceSouche,
     String? observation,
-    int idBmSup30,
     int idCycle,
     double? diametreIni,
     double? diametreMed,

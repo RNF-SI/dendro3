@@ -99,7 +99,6 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
         item["azimutSouche"],
         item["distanceSouche"],
         item["observation"],
-        item["idBmSup30"],
         item["idCycle"],
         item["diametreIni"],
         item["diametreMed"],
