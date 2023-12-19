@@ -355,7 +355,7 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
         state = items.getObjectFromId(value['idRepere']);
         return state;
       case 'Transects':
-      case 'BmsInf30':
+      case 'Transects':
         _lastSelectedProvider.setLastSelectedId(
             'Transects', value['idTransect']);
         state = items.getObjectFromId(value['idTransect']);
