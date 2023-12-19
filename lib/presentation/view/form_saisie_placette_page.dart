@@ -190,6 +190,11 @@ class FormSaisiePlacettePageState
             filled: true,
             hintText: field.hintText,
             suffixText: field.fieldUnit,
+            errorStyle: const TextStyle(
+              fontSize: 16, // Set the font size of the error message
+              color: Colors.red, // You can also change the color if needed
+            ),
+            errorMaxLines: 3,
           ),
         );
       } else if (field is DropdownSearchConfig && !field.isMultiSelection) {
@@ -564,7 +569,6 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
     // return BmsViewModel();
     // ...other types
     case 'Transects':
-    case 'BmsInf30':
       return ref.read(transectSaisieViewModelProvider({
         'corCyclePlacette': widget.corCyclePlacette,
         'transect': widget.saisisableObject1,
