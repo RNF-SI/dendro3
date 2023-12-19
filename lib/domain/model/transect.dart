@@ -102,4 +102,27 @@ class Transect with _$Transect implements SaisisableObject {
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idTransectOrig == valueMap['idTransectOrig'];
   }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idTransect',
+      // 'idCyclePlacette',
+      // 'idTransectOrig',
+      'codeEssence',
+      'refTransect',
+      // 'distance',
+      // 'orientation',
+      // 'azimutSouche',
+      // 'distanceSouche',
+      'diametre',
+      // 'diametre130',
+      // 'ratioHauteur',
+      'contact',
+      'angle',
+      'chablis',
+      'stadeDurete',
+      'stadeEcorce',
+      'observation',
+    ].contains(columnName);
+  }
 }

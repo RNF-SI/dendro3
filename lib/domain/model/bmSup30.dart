@@ -1,12 +1,14 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
+import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bmSup30.freezed.dart';
 
 @freezed
-class BmSup30 with _$BmSup30 implements SaisisableObject {
+class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
   const factory BmSup30(
       {required int idBmSup30,
       required int idBmSup30Orig,
@@ -97,5 +99,35 @@ class BmSup30 with _$BmSup30 implements SaisisableObject {
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idBmSup30Orig == valueMap['idBmSup30Orig'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idBmSup30Orig',
+      'idPlacette',
+      'idArbre',
+      'codeEssence',
+      'azimut',
+      'distance',
+      // 'orientation',
+      // 'azimutSouche',
+      // 'distanceSouche',
+      'idCycle',
+      'diametreIni',
+      'diametreMed',
+      'diametreFin',
+      // 'diametre130',
+      'longueur',
+      'contact',
+      'chablis',
+      'stadeDurete',
+      'stadeEcorce',
+      'observation',
+    ].contains(columnName);
+  }
+
+  @override
+  BmSup30Mesure getMesureFromIndex(int index) {
+    return bmsSup30Mesures![index];
   }
 }

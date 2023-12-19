@@ -77,4 +77,16 @@ class Repere with _$Repere implements SaisisableObject {
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idRepere == valueMap['idRepere'];
   }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idRepere',
+      // 'idPlacette',
+      'azimut',
+      'distance',
+      'diametre',
+      'repere',
+      'observation'
+    ].contains(columnName);
+  }
 }

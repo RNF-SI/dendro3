@@ -1,12 +1,14 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
+import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'arbre.freezed.dart';
 
 @freezed
-class Arbre with _$Arbre implements SaisisableObject {
+class Arbre with _$Arbre implements SaisisableObjectMesure {
   const factory Arbre(
       {required int idArbre,
       required int idArbreOrig,
@@ -88,5 +90,31 @@ class Arbre with _$Arbre implements SaisisableObject {
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idArbreOrig == valueMap['idArbreOrig'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idArbreOrig',
+      'codeEssence',
+      'azimut',
+      'distance',
+      'taillis',
+      'idCycle',
+      'diametre1',
+      'diametre2',
+      'type',
+      'hauteurTotale',
+      'stadeDurete',
+      'stadeEcorce',
+      'coupe',
+      'limite',
+      'codeEcolo',
+      'refCodeEcolo',
+    ].contains(columnName);
+  }
+
+  @override
+  ArbreMesure getMesureFromIndex(int index) {
+    return arbresMesures![index];
   }
 }
