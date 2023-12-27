@@ -885,7 +885,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             (cycle.numCycle != 1),
         onChanged: (value) => setCoupe(value),
         importantMessage: formType == 'newMesure'
-            ? "En cas de coupe, l'information que vous saissirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})"
+            ? "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})"
             : null,
       ),
 
