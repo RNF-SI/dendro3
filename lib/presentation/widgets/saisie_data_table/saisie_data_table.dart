@@ -19,9 +19,13 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
+import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/regeneration_list.dart';
+import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
+import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
+import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
@@ -100,7 +104,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       for (Cycle cycle in cycleList) cycle.idCycle: cycle.numCycle
     };
 
-    List<bool> reducedList = ref.watch(reducedToggleProvider);
+    // List<bool> reducedList = ref.watch(reducedToggleProvider);
     List<bool> reducedMesureList = ref.watch(reducedMesureToggleProvider);
     List<bool> cycleToggleSelectedList = ref.watch(cycleSelectedToggleProvider);
 
@@ -236,7 +240,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         ),
         if (selectedItemDetails != null)
           _buildSelectedItemDetails(
-              selectedItemDetails, selectedItemMesureDetails),
+            selectedItemDetails,
+            selectedItemMesureDetails,
+          ),
       ],
     );
   }
@@ -278,167 +284,179 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       }
     });
 
-    return Container(
-      margin: EdgeInsets.all(10), // Marge externe
-      decoration: BoxDecoration(
-        color: Colors.grey[200], // Couleur de fond
-        borderRadius: BorderRadius.circular(15), // Bords arrondis
-      ),
-      child: Column(
-        children: [
-          PrimaryGridWidget(
-            simpleElements: simpleElements,
-            onItemAdded: (dynamic item) {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return FormSaisiePlacettePage(
-                    formType: "add",
-                    type: widget.displayTypeState,
-                    placette: widget.placette,
-                    cycle: getCycleFromType(
-                      'add',
-                      widget.dispCycleList,
-                    ),
-                    corCyclePlacette: getCorCyclePlacetteFromType(
-                      'add',
-                      widget.placette,
-                      widget.dispCycleList,
-                    ),
-                    saisisableObject1: null,
-                    saisisableObject2: null,
-                  );
-                },
-              ));
-            },
-            onItemDeleted: (dynamic item) {
-              if (selectedItemDetailsCo is Arbre) {
-                final arbreListViewModel =
-                    ref.read(arbreListViewModelStateNotifierProvider.notifier);
-                // Arbre? arbreDetails = selectedItemDetailsCo as Arbre?;
-                // if (arbreDetails != null) {
-                arbreListViewModel.deleteItem(selectedItemDetailsCo.idArbre);
-                // }
-              }
-            },
-            onItemUpdated: (dynamic item) {
-              // Logic for updating an item
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return FormSaisiePlacettePage(
-                    formType: "edit",
-                    type: widget.displayTypeState,
-                    placette: widget.placette,
-                    cycle: getCycleFromType(
-                      'edit',
-                      widget.dispCycleList,
-                      selectedItemMesureDetailsCo,
-                    ),
-                    corCyclePlacette: getCorCyclePlacetteFromType(
-                      'add',
-                      widget.placette,
-                      widget.dispCycleList,
-                    ),
-                    saisisableObject1: selectedItemDetailsCo,
-                    saisisableObject2: selectedItemMesureDetailsCo,
-                  );
-                },
-              ));
-            },
-          ),
-
-          // Only create SecondaryGrid if arbresMesuresList is not empty
-          if (mesuresList.isNotEmpty)
-            Container(
-              margin: EdgeInsets.all(5), // Marge externe
-              decoration: BoxDecoration(
-                color: Colors.grey[400], // Couleur de fond
-                borderRadius: BorderRadius.circular(15), // Bords arrondis
-              ),
-              child: SecondaryGrid(
-                mesuresList: mesuresList,
-                currentIndex: currentIndex,
-                onItemSelected: (int selectedIndex) {
-                  ref.watch(selectedMesureIndexProvider.notifier).state =
-                      selectedIndex;
-                  // ref
-                  //     .read(selectedItemMesureDetailsProvider.notifier)
-                  //     .setSelectedItemMesureDetails(selectedIndex);
-                },
-                onItemMesureAdded: (dynamic adedItem) async {
-                  Navigator.push(context, MaterialPageRoute<void>(
-                    builder: (BuildContext context) {
-                      return FormSaisiePlacettePage(
-                        formType: "newMesure",
-                        type: widget.displayTypeState,
-                        placette: widget.placette,
-                        cycle: getCycleFromType(
-                          'newMesure',
-                          widget.dispCycleList,
-                        ),
-                        corCyclePlacette: getCorCyclePlacetteFromType(
-                          'add',
-                          widget.placette,
-                          widget.dispCycleList,
-                        ),
-                        saisisableObject1: selectedItemDetailsCo,
-                        saisisableObject2: null,
-                      );
-                    },
-                  ));
-                },
-                onItemMesureDeleted: (dynamic deletedItem) async {
-                  bool result = false;
-                  // if map contain idArbre then it's an ArbreMesure
-                  if (deletedItem.containsKey('idArbreMesure')) {
-                    final arbreListViewModel = ref
-                        .read(arbreListViewModelStateNotifierProvider.notifier);
-                    selectedItemDetailsCo as Arbre;
-                    result = await arbreListViewModel.deleteItemMesure(
-                        selectedItemDetailsCo.idArbre,
-                        deletedItem['idArbreMesure']);
-                  } else if (deletedItem.containsKey('idBmSup30Mesure')) {
-                    final bmSup30ListViewModel = ref.read(
-                        bmSup30ListViewModelStateNotifierProvider.notifier);
-                    bmSup30ListViewModel
-                        .deleteItemMesure(deletedItem['idBmSup30Mesure']);
-                  }
-
-                  if (!result) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content:
-                            Text('Cannot delete the only mesure of an arbre.'),
-                        duration: Duration(seconds: 3),
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(10), // Marge externe
+        decoration: BoxDecoration(
+          color: Colors.grey[200], // Couleur de fond
+          borderRadius: BorderRadius.circular(15), // Bords arrondis
+        ),
+        child: Column(
+          children: [
+            PrimaryGridWidget(
+              simpleElements: simpleElements,
+              displayTypeState: widget.displayTypeState,
+              onItemAdded: (dynamic item) {
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return FormSaisiePlacettePage(
+                      formType: "add",
+                      type: widget.displayTypeState,
+                      placette: widget.placette,
+                      cycle: getCycleFromType(
+                        'add',
+                        widget.dispCycleList,
                       ),
+                      corCyclePlacette: getCorCyclePlacetteFromType(
+                        'add',
+                        widget.placette,
+                        widget.dispCycleList,
+                      ),
+                      saisisableObject1: null,
+                      saisisableObject2: null,
                     );
-                  }
-                },
-                onItemMesureUpdated: (dynamic updatedItem) {
-                  Navigator.push(context, MaterialPageRoute<void>(
-                    builder: (BuildContext context) {
-                      return FormSaisiePlacettePage(
-                        formType: "edit",
-                        type: widget.displayTypeState,
-                        placette: widget.placette,
-                        cycle: getCycleFromType(
-                          'edit',
-                          widget.dispCycleList,
-                          selectedItemMesureDetailsCo,
-                        ),
-                        corCyclePlacette: getCorCyclePlacetteFromType(
-                          'add',
-                          widget.placette,
-                          widget.dispCycleList,
-                        ),
-                        saisisableObject1: selectedItemDetailsCo,
-                        saisisableObject2: selectedItemMesureDetailsCo,
-                      );
-                    },
-                  ));
-                },
-              ),
+                  },
+                ));
+              },
+              onItemDeleted: (dynamic item) {
+                if (selectedItemDetailsCo is Arbre) {
+                  final arbreListViewModel = ref
+                      .read(arbreListViewModelStateNotifierProvider.notifier);
+                  // Arbre? arbreDetails = selectedItemDetailsCo as Arbre?;
+                  // if (arbreDetails != null) {
+                  arbreListViewModel.deleteItem(selectedItemDetailsCo.idArbre);
+                  // }
+                }
+              },
+              onItemUpdated: (dynamic item) {
+                // Logic for updating an item
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return FormSaisiePlacettePage(
+                      formType: "edit",
+                      type: widget.displayTypeState,
+                      placette: widget.placette,
+                      cycle: getCycleFromType(
+                        'edit',
+                        widget.dispCycleList,
+                        selectedItemMesureDetailsCo,
+                      ),
+                      corCyclePlacette: getCorCyclePlacetteFromType(
+                        'add',
+                        widget.placette,
+                        widget.dispCycleList,
+                      ),
+                      saisisableObject1: selectedItemDetailsCo,
+                      saisisableObject2: selectedItemMesureDetailsCo,
+                    );
+                  },
+                ));
+              },
             ),
-        ],
+
+            // Only create SecondaryGrid if arbresMesuresList is not empty
+            if (mesuresList.isNotEmpty)
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  margin: EdgeInsets.all(5), // Marge externe
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400], // Couleur de fond
+                    borderRadius: BorderRadius.circular(15), // Bords arrondis
+                  ),
+                  child: SecondaryGrid(
+                    mesuresList: mesuresList,
+                    currentIndex: currentIndex,
+                    displayTypeState: widget.displayTypeState,
+                    onItemSelected: (int selectedIndex) {
+                      ref.watch(selectedMesureIndexProvider.notifier).state =
+                          selectedIndex;
+                      // ref
+                      //     .read(selectedItemMesureDetailsProvider.notifier)
+                      //     .setSelectedItemMesureDetails(selectedIndex);
+                    },
+                    onItemMesureAdded: (dynamic adedItem) async {
+                      Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return FormSaisiePlacettePage(
+                            formType: "newMesure",
+                            type: widget.displayTypeState,
+                            placette: widget.placette,
+                            cycle: getCycleFromType(
+                              'newMesure',
+                              widget.dispCycleList,
+                            ),
+                            corCyclePlacette: getCorCyclePlacetteFromType(
+                              'add',
+                              widget.placette,
+                              widget.dispCycleList,
+                            ),
+                            saisisableObject1: selectedItemDetailsCo,
+                            saisisableObject2: null,
+                          );
+                        },
+                      ));
+                    },
+                    onItemMesureDeleted: (dynamic deletedItem) async {
+                      bool result = false;
+                      // if map contain idArbre then it's an ArbreMesure
+                      if (deletedItem.containsKey('idArbreMesure')) {
+                        final arbreListViewModel = ref.read(
+                            arbreListViewModelStateNotifierProvider.notifier);
+                        selectedItemDetailsCo as Arbre;
+                        result = await arbreListViewModel.deleteItemMesure(
+                            selectedItemDetailsCo.idArbre,
+                            deletedItem['idArbreMesure']);
+                      } else if (deletedItem.containsKey('idBmSup30Mesure')) {
+                        final bmSup30ListViewModel = ref.read(
+                            bmSup30ListViewModelStateNotifierProvider.notifier);
+                        bmSup30ListViewModel
+                            .deleteItemMesure(deletedItem['idBmSup30Mesure']);
+                      }
+
+                      if (!result) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Cannot delete the only mesure of an arbre.'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    },
+                    onItemMesureUpdated: (int index) {
+                      Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return FormSaisiePlacettePage(
+                            formType: "edit",
+                            type: widget.displayTypeState,
+                            placette: widget.placette,
+                            cycle: getCycleFromType(
+                              'edit',
+                              widget.dispCycleList,
+                              selectedItemMesureDetailsCo,
+                            ),
+                            corCyclePlacette: getCorCyclePlacetteFromType(
+                              'add',
+                              widget.placette,
+                              widget.dispCycleList,
+                            ),
+                            saisisableObject1: selectedItemDetailsCo,
+                            // saisisableObject2: selectedItemMesureDetailsCo,
+                            saisisableObject2:
+                                selectedItemDetailsCo is SaisisableObjectMesure
+                                    ? selectedItemDetailsCo
+                                        .getMesureFromIndex(index)
+                                    : null,
+                          );
+                        },
+                      ));
+                    },
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -514,25 +532,29 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   List<DataColumn> _createColumns(List<String> columnList) {
     List<DataColumn> columns = [];
 
+    // Filter the column list first based on whether they should be included
+    List<String> filteredColumnList = columnList
+        .where((columnStr) =>
+            shouldIncludeColumn(columnStr, widget.displayTypeState))
+        .toList();
+
+    List<String> columnTitles =
+        _getColumnTitlesForType(filteredColumnList, widget.displayTypeState);
+
     // Ajouter d'abord la colonne "update"
     columns.add(
-      DataColumn2(
+      const DataColumn2(
         label: SizedBox.shrink(), // Empty label for the update icon
       ),
     );
 
-    // Ajouter les autres colonnes
-    columns.addAll(
-      columnList.map(
-        (columnStr) => DataColumn2(
-          label: Text(
-            columnStr,
-            style: TextStyle(fontSize: 12),
-          ),
-          numeric: true,
-        ),
-      ),
-    );
+    for (var columnStr in columnTitles) {
+      // Check if column should be included based on displayType
+      columns.add(DataColumn2(
+        label: Text(columnStr, style: TextStyle(fontSize: 12)),
+        numeric: true,
+      ));
+    }
 
     return columns;
   }
@@ -581,15 +603,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         ),
       );
 
-      // Ajouter les autres cellules
-      cellList.addAll(
-        value.values.map<DataCell>((yo) {
-          return DataCell(Text(
-            yo.toString(),
+      // Create cells based on the new column order
+      value.forEach((key, val) {
+        // Use the new name if it exists in the mapping, else use the original key
+        if (shouldIncludeColumn(key, widget.displayTypeState)) {
+          cellList.add(DataCell(Text(
+            val.toString(),
             style: TextStyle(fontSize: 12),
-          ));
-        }),
-      );
+          )));
+        }
+      });
 
       return DataRow(
         cells: cellList,
@@ -639,6 +662,39 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     }).toList();
   }
 
+  bool shouldIncludeColumn(String columnName, String type) {
+    switch (type) {
+      case 'Arbres':
+        return Arbre.getDisplayableColumn(columnName);
+      case 'BmsSup30':
+        return BmSup30.getDisplayableColumn(columnName);
+      case 'Reperes':
+        return Repere.getDisplayableColumn(columnName);
+      case 'Regenerations':
+        return Regeneration.getDisplayableColumn(columnName);
+      case 'Transects':
+        return Transect.getDisplayableColumn(columnName);
+    }
+    return true;
+  }
+
+  List<String> _getColumnTitlesForType(List<String> columnList, String type) {
+    switch (type) {
+      case 'Arbres':
+        return Arbre.changeColumnName(columnList);
+      case 'BmsSup30':
+        return BmSup30.changeColumnName(columnList);
+      case 'Reperes':
+        return Repere.changeColumnName(columnList);
+      case 'Regenerations':
+        return Regeneration.changeColumnName(columnList);
+      case 'Transects':
+        return Transect.changeColumnName(columnList);
+      default:
+        throw ArgumentError('Unknown type: ${type}');
+    }
+  }
+
   List<Widget> _generateCircleAvatars(
       List<Cycle> cycleList, CorCyclePlacetteList corCyclePlacetteList) {
     var list = cycleList
@@ -672,7 +728,6 @@ SaisisableObject getObjectFromType(
     case 'Repères':
       return items.getObjectFromId(value['idRepere']);
     case 'Transects':
-    case 'BmsInf30':
       return items.getObjectFromId(value['idTransectOrig']);
     default:
       throw ArgumentError('Unknown type: ${items.runtimeType}');

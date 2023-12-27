@@ -1,3 +1,8 @@
+import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/bmSup30.dart';
+import 'package:dendro3/domain/model/regeneration.dart';
+import 'package:dendro3/domain/model/repere.dart';
+import 'package:dendro3/domain/model/transect.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryGridWidget extends StatelessWidget {
@@ -5,6 +10,7 @@ class PrimaryGridWidget extends StatelessWidget {
   final Function(dynamic) onItemAdded;
   final Function(dynamic) onItemDeleted;
   final Function(dynamic) onItemUpdated;
+  final String displayTypeState;
 
   PrimaryGridWidget({
     Key? key,
@@ -12,10 +18,15 @@ class PrimaryGridWidget extends StatelessWidget {
     required this.onItemAdded,
     required this.onItemDeleted,
     required this.onItemUpdated,
+    required this.displayTypeState,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // remove the elements of simpleElements that are not in the displayable columns
+    simpleElements.removeWhere(
+        (element) => !shouldIncludeColumn(element.key, displayTypeState));
+
     List<Widget> simpleWidgets =
         simpleElements.map((MapEntry<String, dynamic> entry) {
       return Container(
@@ -88,5 +99,21 @@ class PrimaryGridWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool shouldIncludeColumn(String columnName, String type) {
+    switch (type) {
+      case 'Arbres':
+        return Arbre.getDisplayableColumn(columnName);
+      case 'BmsSup30':
+        return BmSup30.getDisplayableColumn(columnName);
+      case 'Reperes':
+        return Repere.getDisplayableColumn(columnName);
+      case 'Regenerations':
+        return Regeneration.getDisplayableColumn(columnName);
+      case 'Transects':
+        return Transect.getDisplayableColumn(columnName);
+    }
+    return true;
   }
 }
