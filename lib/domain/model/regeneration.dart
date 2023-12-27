@@ -106,4 +106,21 @@ class Regeneration with _$Regeneration implements SaisisableObject {
       'observation',
     ].contains(columnName);
   }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idRegeneration':
+          return 'id';
+        case 'sousPlacette':
+          return 'sousPlacette';
+        case 'codeEssence':
+          return 'Ess';
+        case 'taillis':
+          return 'Taillis';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }

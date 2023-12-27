@@ -130,4 +130,27 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
   BmSup30Mesure getMesureFromIndex(int index) {
     return bmsSup30Mesures![index];
   }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idBmSup30Orig':
+          return 'id';
+        case 'idArbre':
+          return 'NumArbre';
+        case 'codeEssence':
+          return 'Ess';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Dist';
+        case 'diametre':
+          return 'Diam';
+        case 'longueur':
+          return 'Long';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }

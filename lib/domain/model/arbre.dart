@@ -117,4 +117,27 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
   ArbreMesure getMesureFromIndex(int index) {
     return arbresMesures![index];
   }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idArbreOrig':
+          return 'Num';
+        case 'codeEssence':
+          return 'Ess';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Dist';
+        case 'diametre1':
+          return 'Diam1';
+        case 'type':
+          return 'Type';
+        case 'taillis':
+          return 'Taillis';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }

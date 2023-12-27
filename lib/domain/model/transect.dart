@@ -125,4 +125,19 @@ class Transect with _$Transect implements SaisisableObject {
       'observation',
     ].contains(columnName);
   }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idTransect':
+          return 'idTransectOrigine';
+        case 'codeEssence':
+          return 'Ess';
+        case 'diametre':
+          return 'Diam';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }
