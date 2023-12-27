@@ -140,4 +140,37 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
       }
     }).toList();
   }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idArbreOrig':
+          return 'Num';
+        case 'codeEssence':
+          return 'Essence';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Distance';
+        case 'diametre1':
+          return 'Diamètre 1';
+        case 'type':
+          return 'Type';
+        case 'taillis':
+          return 'Taillis';
+        case 'observation':
+          return 'Observation';
+        case 'hauteurTotale':
+          return 'Hauteur';
+        case 'diametre2':
+          return 'Diametre 2';
+        case 'stadeDurete':
+          return 'Stade Dureté';
+        case 'stadeEcorce':
+          return 'Stade Ecorce';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }

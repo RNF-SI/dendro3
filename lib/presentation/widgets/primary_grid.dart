@@ -27,32 +27,41 @@ class PrimaryGridWidget extends StatelessWidget {
     simpleElements.removeWhere(
         (element) => !shouldIncludeColumn(element.key, displayTypeState));
 
-    List<Widget> simpleWidgets =
-        simpleElements.map((MapEntry<String, dynamic> entry) {
-      return Container(
-        padding: const EdgeInsets.all(2.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Text(
-                "${entry.key}:",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-                overflow: TextOverflow.ellipsis,
+    // Map for title name changes
+    List<String> titleNames = _getTitleGridNamesForType(
+        simpleElements.map((e) => e.key).toList(), displayTypeState);
+
+    List<Widget> simpleWidgets = [];
+    for (int i = 0; i < simpleElements.length; i++) {
+      MapEntry<String, dynamic> entry = simpleElements[i];
+      String titleName = titleNames[i]; // Get the modified title name
+
+      simpleWidgets.add(
+        Container(
+          padding: const EdgeInsets.all(2.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Text(
+                  "$titleName:", // Use the modified title name
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-            Flexible(
-              child: Text(
-                entry.value.toString(),
-                style: TextStyle(fontSize: 13),
-                overflow: TextOverflow.ellipsis,
+              Flexible(
+                child: Text(
+                  entry.value.toString(),
+                  style: TextStyle(fontSize: 13),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
-    }).toList();
+    }
 
     return Column(
       children: [
@@ -115,5 +124,22 @@ class PrimaryGridWidget extends StatelessWidget {
         return Transect.getDisplayableColumn(columnName);
     }
     return true;
+  }
+
+  List<String> _getTitleGridNamesForType(List<String> columnList, String type) {
+    switch (type) {
+      case 'Arbres':
+        return Arbre.changeTitleGridNames(columnList);
+      case 'BmsSup30':
+        return BmSup30.changeTitleGridNames(columnList);
+      case 'Reperes':
+        return Repere.changeTitleGridNames(columnList);
+      case 'Regenerations':
+        return Regeneration.changeTitleGridNames(columnList);
+      case 'Transects':
+        return Transect.changeTitleGridNames(columnList);
+      default:
+        throw ArgumentError('Unknown type: ${type}');
+    }
   }
 }

@@ -140,4 +140,35 @@ class Transect with _$Transect implements SaisisableObject {
       }
     }).toList();
   }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idTransect':
+          return 'idTransectOrigine';
+        case 'codeEssence':
+          return 'Essence';
+        case 'refTransect':
+          return 'Transect';
+        case 'distance':
+          return 'Distance';
+        case 'diametre':
+          return 'Diamètre';
+        case 'contact':
+          return 'Contact';
+        case 'angle':
+          return 'Angle';
+        case 'chablis':
+          return 'Chablis';
+        case 'StadeDurete':
+          return 'Stade Dureté';
+        case 'stadeEcorce':
+          return 'Stade Ecorce';
+        case 'observation':
+          return 'Observation';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }

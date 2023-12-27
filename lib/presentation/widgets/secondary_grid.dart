@@ -159,13 +159,18 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                     itemCount: currentItem.entries.length,
                     itemBuilder: (context, itemIndex) {
                       var entry = currentItem.entries.elementAt(itemIndex);
+                      List<String> titleGridNames = _getTitleGridNamesForType(
+                          currentItem.keys.toList(), widget.displayTypeState);
+                      String titleName = titleGridNames[
+                          itemIndex]; // Get the modified title name
+
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Flexible(
                             child: Text(
-                              "${entry.key}:",
+                              "$titleName:",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 10),
                               overflow: TextOverflow.ellipsis,
@@ -226,5 +231,16 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         return Transect.getDisplayableColumn(columnName);
     }
     return true;
+  }
+
+  List<String> _getTitleGridNamesForType(List<String> columnList, String type) {
+    switch (type) {
+      case 'Arbres':
+        return Arbre.changeTitleGridNames(columnList);
+      case 'BmsSup30':
+        return BmSup30.changeTitleGridNames(columnList);
+      default:
+        throw ArgumentError('Unknown type: ${type}');
+    }
   }
 }

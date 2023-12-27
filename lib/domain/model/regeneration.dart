@@ -110,14 +110,31 @@ class Regeneration with _$Regeneration implements SaisisableObject {
   static List<String> changeColumnName(List<String> columnNames) {
     return columnNames.map((columnName) {
       switch (columnName) {
-        case 'idRegeneration':
-          return 'id';
         case 'sousPlacette':
           return 'sousPlacette';
         case 'codeEssence':
           return 'Ess';
         case 'taillis':
           return 'Taillis';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idRegeneration':
+          return 'id';
+        case 'sousPlacette':
+          return 'Sous placette';
+        case 'codeEssence':
+          return 'Essence';
+        case 'taillis':
+          return 'Taillis';
+        case 'observation':
+          return 'Observation';
         default:
           return columnName;
       }

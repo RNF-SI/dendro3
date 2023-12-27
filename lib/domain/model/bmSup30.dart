@@ -153,4 +153,31 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
       }
     }).toList();
   }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idBmSup30Orig':
+          return 'id';
+        case 'idArbre':
+          return 'Num arbre';
+        case 'codeEssence':
+          return 'Essence';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Distance';
+        case 'diametre':
+          return 'Diam';
+        case 'longueur':
+          return 'Longueur';
+        case 'stadeDurete':
+          return 'Stade Dureté';
+        case 'stadeEcorce':
+          return 'Stade Ecorce';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
 }
