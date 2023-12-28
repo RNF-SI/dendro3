@@ -129,6 +129,8 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
           return 'Azimut';
         case 'distance':
           return 'Dist';
+        case 'idCycle':
+          return 'NumCycle';
         case 'diametre1':
           return 'Diam1';
         case 'type':
@@ -160,6 +162,8 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
           return 'Taillis';
         case 'observation':
           return 'Observation';
+        case 'idCycle':
+          return 'NumCycle';
         case 'hauteurTotale':
           return 'Hauteur';
         case 'diametre2':

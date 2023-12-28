@@ -148,6 +148,8 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
           return 'Diam';
         case 'longueur':
           return 'Long';
+        case 'idCycle':
+          return 'NumCycle';
         default:
           return columnName;
       }

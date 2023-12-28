@@ -605,8 +605,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       // Create cells based on the new column order
       value.forEach((key, val) {
-        // Use the new name if it exists in the mapping, else use the original key
-        if (shouldIncludeColumn(key, widget.displayTypeState)) {
+        if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
+          cellList.add(DataCell(Text(
+            mapIdCycleNumCycle[val].toString(),
+            style: TextStyle(fontSize: 12),
+          )));
+        } else if (shouldIncludeColumn(key, widget.displayTypeState)) {
           cellList.add(DataCell(Text(
             val.toString(),
             style: TextStyle(fontSize: 12),
