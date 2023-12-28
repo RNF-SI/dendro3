@@ -583,7 +583,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             width: 32, // Adjust the width as needed
             height: 24,
             child: IconButton(
-              padding: EdgeInsets.only(left: 12),
+              padding: EdgeInsets.only(left: 6, right: 30),
               icon: Icon(
                 isSelected
                     ? Icons.radio_button_checked
