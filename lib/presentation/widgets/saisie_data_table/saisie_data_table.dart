@@ -463,6 +463,29 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     onItemMesureUpdated: (int index) {
                       Navigator.push(context, MaterialPageRoute<void>(
                         builder: (BuildContext context) {
+                          // Get the coupe info of the previous cycle
+                          // Get previous cycle
+                          String? previousCycleCoupe;
+                          if (widget.displayTypeState == "Arbres") {
+                            selectedItemDetailsCo as SaisisableObjectMesure;
+                            int? numCycle = mapIdCycleNumCycle[
+                                selectedItemDetailsCo
+                                    .getMesureFromIndex(index)
+                                    .idCycle];
+                            // get previous cycle with numCycle - 1
+                            int? previousCycle = numCycle! - 1;
+                            // get previous cycle idCycle
+                            int? previousCycleIdCycle = mapIdCycleNumCycle
+                                .entries
+                                .firstWhere(
+                                    (element) => element.value == previousCycle)
+                                .key;
+
+                            // get coupe value of previous Cycle with previousCycleIdCycle
+                            previousCycleCoupe = selectedItemDetailsCo
+                                .getMesureFromIdCycle(previousCycleIdCycle)
+                                .coupe;
+                          }
                           return FormSaisiePlacettePage(
                             formType: "edit",
                             type: widget.displayTypeState,
@@ -484,6 +507,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                     ? selectedItemDetailsCo
                                         .getMesureFromIndex(index)
                                     : null,
+                            previousCycleCoupe: previousCycleCoupe,
                           );
                         },
                       ));

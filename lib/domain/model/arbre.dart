@@ -118,6 +118,11 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
     return arbresMesures![index];
   }
 
+  @override
+  ArbreMesure? getMesureFromIdCycle(int idCycle) {
+    return arbresMesures!.getMesureFromIdCycle(idCycle);
+  }
+
   static List<String> changeColumnName(List<String> columnNames) {
     return columnNames.map((columnName) {
       switch (columnName) {

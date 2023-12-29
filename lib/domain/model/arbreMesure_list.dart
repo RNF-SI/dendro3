@@ -58,4 +58,13 @@ class ArbreMesureList with _$ArbreMesureList {
     }
     return null; // Retourne null si l'objet n'est pas trouvé
   }
+
+  ArbreMesure? getMesureFromIdCycle(idCycle) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].idCycle == idCycle) {
+        return values[i];
+      }
+    }
+    return null; // Retourne null si l'objet n'est pas trouvé
+  }
 }

@@ -58,4 +58,13 @@ class BmSup30MesureList with _$BmSup30MesureList {
     }
     return null; // Retourne null si l'objet n'est pas trouvé
   }
+
+  BmSup30Mesure? getMesureFromIdCycle(idCycle) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].idCycle == idCycle) {
+        return values[i];
+      }
+    }
+    return null; // Retourne null si l'objet n'est pas trouvé
+  }
 }

@@ -45,6 +45,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
       arbreInfoObj['formType'],
+      arbreInfoObj['previousCycleCoupe'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -64,6 +65,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   final Ref ref;
 
   final String formType;
+
+  final String? previousCycleCoupe;
   // late TodoId _id;
   // var _title = '';
   // var _description = '';
@@ -130,6 +133,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this.arbre,
     final ArbreMesure? arbreMesure,
     this.formType,
+    this.previousCycleCoupe,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -290,7 +294,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _stadeEcorce = arbreMesure.stadeEcorce;
       _liane = arbreMesure.liane ?? '';
       _diametreLiane = arbreMesure.diametreLiane;
-      _coupe = arbreMesure.coupe ?? '';
+      _coupe = previousCycleCoupe ?? '';
       _limite = arbreMesure.limite ?? false;
       _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
       _codeEcolo = arbreMesure.codeEcolo ?? '';
@@ -406,7 +410,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': '',
+        'coupe': _coupe,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -703,7 +707,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           isVisibleFn: (formData) {
             if (formData.isNotEmpty) {
               return (formData['Diametre1'] != null &&
-                      formData['Diametre1'] != '') &&
+                      formData['Diametre1'] != '') ||
                   (_diametre1 != null && _diametre1! > 30);
             } else {
               return (_diametre1 != null && _diametre1! > 30);
@@ -777,8 +781,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         ],
         fieldRequired: true,
         isVisibleFn: (formData) {
-          return (formData['Type'] != null && formData['Type'] != '') ||
-              (_type != '');
+          if (formData.isNotEmpty) {
+            return (formData['Type'] != null && formData['Type'] != '') ||
+                (_type != '');
+          } else {
+            return (_type != '');
+          }
         },
         fieldUnit: 'm',
         hintText: "Entrer la hauteur",
@@ -837,8 +845,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         itemAsString: (dynamic e) => e.labelDefault,
         isVisibleFn: (formData) {
-          return (formData['Type'] != null && formData['Type'] != '') ||
-              (_type != '');
+          if (formData.isNotEmpty) {
+            return (formData['Type'] != null && formData['Type'] != '') ||
+                (_type != '');
+          } else {
+            return (_type != '');
+          }
         },
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
@@ -870,9 +882,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
+
         isVisibleFn: (formData) {
-          return (formData['Type'] != null && formData['Type'] != '') ||
-              (_type != '');
+          if (formData.isNotEmpty) {
+            return (formData['Type'] != null && formData['Type'] != '') ||
+                (_type != '');
+          } else {
+            return (_type != '');
+          }
         },
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
@@ -919,10 +936,20 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         validator: (value, formData) {
           return null;
         },
-        isVisibleFn: (formData) =>
-            (formData['Type'] != null) &&
-            (formData['Type'] != '') &&
-            (cycle.numCycle != 1),
+        isVisibleFn: (formData) {
+          if (formData.isNotEmpty) {
+            if (cycle.numCycle == 1) {
+              return false;
+            } else if (((formData['Type'] != null) &&
+                    (formData['Type'] != '')) ||
+                (_type != '')) {
+              return true;
+            } else
+              return false;
+          } else {
+            return (cycle.numCycle != 1);
+          }
+        },
         onChanged: (value) => setCoupe(value),
         importantMessage: formType == 'newMesure'
             ? "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})"

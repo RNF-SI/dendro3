@@ -45,6 +45,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final Cycle? cycle;
   final CorCyclePlacette? corCyclePlacette;
   final String formType;
+  final String? previousCycleCoupe;
 
   FormSaisiePlacettePage({
     Key? key,
@@ -55,6 +56,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
     this.saisisableObject2,
     required this.cycle,
     required this.corCyclePlacette,
+    this.previousCycleCoupe,
     // required this.placette,
     // required this.dispCycleList,
   }) : super(key: key);
@@ -547,7 +549,11 @@ class CheckboxFormField extends FormField<bool> {
             });
 }
 
-ObjectSaisieViewModel getViewModel(ref, String type, widget) {
+ObjectSaisieViewModel getViewModel(
+  ref,
+  String type,
+  widget,
+) {
   switch (type) {
     case 'Arbres':
       return ref.read(arbreSaisieViewModelProvider({
@@ -556,6 +562,7 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
         'arbre': widget.saisisableObject1,
         'arbreMesure': widget.saisisableObject2,
         'formType': widget.formType,
+        'previousCycleCoupe': widget.previousCycleCoupe,
       }));
     // return ArbreViewModel();
     case 'BmsSup30':

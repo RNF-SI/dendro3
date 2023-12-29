@@ -131,6 +131,11 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
     return bmsSup30Mesures![index];
   }
 
+  @override
+  BmSup30Mesure? getMesureFromIdCycle(int idCycle) {
+    return bmsSup30Mesures!.getMesureFromIdCycle(idCycle);
+  }
+
   static List<String> changeColumnName(List<String> columnNames) {
     return columnNames.map((columnName) {
       switch (columnName) {
