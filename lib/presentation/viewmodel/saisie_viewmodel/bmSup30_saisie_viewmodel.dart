@@ -319,7 +319,14 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   }
 
   String initialIdPlacetteValue() => _idPlacette.toString();
-  String initialIdArbreValue() => _idArbre.toString();
+
+  String initialIdArbreValue() {
+    if (_idArbre == null) {
+      return '';
+    }
+    return _idArbre.toString();
+  }
+
   String initialAzimutValue() {
     if (_azimut == null) {
       return '';
