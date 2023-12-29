@@ -471,6 +471,15 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         : _diametre2!.toStringAsFixed(1);
   }
 
+  String initialHauteurTotaleValue() {
+    if (_hauteurTotale == null) {
+      return '';
+    }
+    return _hauteurTotale == _hauteurTotale!.toInt()
+        ? _hauteurTotale!.toInt().toString()
+        : _hauteurTotale!.toStringAsFixed(1);
+  }
+
   // String initialDescriptionValue() => _description;
 
   // DateTime initialDueDateValue() => _dueDate;
@@ -760,7 +769,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
         fieldName: 'Hauteur',
-        initialValue: _hauteurTotale.toString(),
+        initialValue: initialHauteurTotaleValue(),
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
