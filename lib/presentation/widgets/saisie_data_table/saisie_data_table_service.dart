@@ -16,7 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/model/cycle_list.dart';
 
-const columnWidth = 100;
+const columnWidth = 40;
 
 // Provider appelé à la fois pour les toggles bouton et l'affichage dataTable
 final reducedToggleProvider =
