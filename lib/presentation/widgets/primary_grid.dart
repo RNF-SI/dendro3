@@ -89,8 +89,38 @@ class PrimaryGridWidget extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () =>
-                  onItemDeleted(simpleElements), // Using onItemMesureDeleted
+              onPressed: () {
+                // Show confirmation dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Confirmer la suppression'),
+                      content: Text(
+                          'Etes vous sûr de vouloir supprimer cet élément?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Annuler'),
+                          onPressed: () {
+                            // Close the dialog
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text('Supprimer',
+                              style: TextStyle(color: Colors.red)),
+                          onPressed: () {
+                            // Close the dialog
+                            Navigator.of(context).pop();
+                            // Perform the delete action
+                            onItemDeleted(simpleElements);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
               iconSize: 18, // Reduced icon size
               padding: EdgeInsets.all(4), // Reduced padding
               constraints: BoxConstraints(),
