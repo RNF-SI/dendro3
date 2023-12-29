@@ -616,7 +616,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       cellList.add(
         DataCell(
           SizedBox(
-            width: 32, // Adjust the width as needed
+            width: 24, // Adjust the width as needed
             height: 24,
             child: IconButton(
               padding: EdgeInsets.only(left: 6, right: 30),
@@ -647,8 +647,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             style: TextStyle(fontSize: 12),
           )));
         } else if (shouldIncludeColumn(key, widget.displayTypeState)) {
+          String displayValue;
+          if (val is double) {
+            displayValue = val == val.toInt()
+                ? val.toInt().toString()
+                : val.toStringAsFixed(1);
+          } else {
+            displayValue = val.toString();
+          }
           cellList.add(DataCell(Text(
-            val.toString(),
+            displayValue,
             style: TextStyle(fontSize: 12),
           )));
         }
