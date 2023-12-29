@@ -43,6 +43,14 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       return SizedBox.shrink(); // Return an empty widget if the list is empty
     }
 
+    var maxNumberCyclePlacette = widget.mapIdCycleNumCycle.isNotEmpty
+        ? widget.mapIdCycleNumCycle.values.reduce(max)
+        : null;
+    var maxIdCyclePlacette = maxNumberCyclePlacette != null
+        ? widget.mapIdCycleNumCycle.keys.firstWhere(
+            (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette)
+        : null;
+
     return
         // Column(
         //   children: [
@@ -86,10 +94,6 @@ class _SecondaryGridState extends State<SecondaryGrid> {
           if (widget.mapIdCycleNumCycle.isEmpty) {
             return SizedBox.shrink();
           }
-          var maxNumberCyclePlacette =
-              widget.mapIdCycleNumCycle.values.reduce(max);
-          var maxIdCyclePlacette = widget.mapIdCycleNumCycle.keys.firstWhere(
-              (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette);
 
           // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
           if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette) {
@@ -166,45 +170,46 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                       padding: EdgeInsets.all(4), // Reduced padding
                       constraints: BoxConstraints(),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
-                        // Show confirmation dialog
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Confirmer la suppression'),
-                              content: Text(
-                                  'Etes vous sûr de vouloir supprimer cet élément?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Annuler'),
-                                  onPressed: () {
-                                    // Close the dialog
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text('Supprimer',
-                                      style: TextStyle(color: Colors.red)),
-                                  onPressed: () {
-                                    // Close the dialog
-                                    Navigator.of(context).pop();
-                                    // Perform the delete action
-                                    widget.onItemMesureDeleted(
-                                        widget.mesuresList[index]);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      iconSize: 18, // Reduced icon size
-                      padding: EdgeInsets.all(4), // Reduced padding
-                      constraints: BoxConstraints(),
-                    ),
+                    if (maxIdCyclePlacette == currentItem['idCycle'])
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          // Show confirmation dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Confirmer la suppression'),
+                                content: Text(
+                                    'Etes vous sûr de vouloir supprimer cet élément?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Annuler'),
+                                    onPressed: () {
+                                      // Close the dialog
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Supprimer',
+                                        style: TextStyle(color: Colors.red)),
+                                    onPressed: () {
+                                      // Close the dialog
+                                      Navigator.of(context).pop();
+                                      // Perform the delete action
+                                      widget.onItemMesureDeleted(
+                                          widget.mesuresList[index]);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        iconSize: 18, // Reduced icon size
+                        padding: EdgeInsets.all(4), // Reduced padding
+                        constraints: BoxConstraints(),
+                      ),
                     // IconButton(
                     //   icon: Icon(Icons.add, color: Colors.green),
                     //   onPressed: () {
