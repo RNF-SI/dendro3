@@ -692,9 +692,13 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             DecimalTextInputFormatter(decimalRange: 1),
           ],
           isVisibleFn: (formData) {
-            return (formData['Diametre1'] != null &&
-                    formData['Diametre1'] != '') &&
-                (_diametre1 != null && _diametre1! > 30);
+            if (formData.isNotEmpty) {
+              return (formData['Diametre1'] != null &&
+                      formData['Diametre1'] != '') &&
+                  (_diametre1 != null && _diametre1! > 30);
+            } else {
+              return (_diametre1 != null && _diametre1! > 30);
+            }
           },
           hintText: "Entrer le diametre2",
           fieldUnit: 'cm',
