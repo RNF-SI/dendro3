@@ -203,6 +203,17 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                       String titleName = titleGridNames[
                           itemIndex]; // Get the modified title name
 
+                      // Determine the display value
+                      String displayValue;
+                      if (entry.value is double) {
+                        double doubleValue = entry.value as double;
+                        displayValue = doubleValue == doubleValue.toInt()
+                            ? doubleValue.toInt().toString()
+                            : doubleValue.toStringAsFixed(1);
+                      } else {
+                        displayValue = entry.value.toString();
+                      }
+
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +228,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           ),
                           Flexible(
                             child: Text(
-                              entry.value.toString(),
+                              displayValue,
                               style: TextStyle(fontSize: 13),
                               overflow: TextOverflow.ellipsis,
                             ),
