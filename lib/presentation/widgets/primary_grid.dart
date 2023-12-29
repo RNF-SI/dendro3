@@ -36,6 +36,17 @@ class PrimaryGridWidget extends StatelessWidget {
       MapEntry<String, dynamic> entry = simpleElements[i];
       String titleName = titleNames[i]; // Get the modified title name
 
+      // Determine the display value
+      String displayValue;
+      if (entry.value is double) {
+        double doubleValue = entry.value as double;
+        displayValue = doubleValue == doubleValue.toInt()
+            ? doubleValue.toInt().toString()
+            : doubleValue.toStringAsFixed(1);
+      } else {
+        displayValue = entry.value.toString();
+      }
+
       simpleWidgets.add(
         Container(
           padding: const EdgeInsets.all(2.0),
@@ -52,7 +63,7 @@ class PrimaryGridWidget extends StatelessWidget {
               ),
               Flexible(
                 child: Text(
-                  entry.value.toString(),
+                  displayValue,
                   style: TextStyle(fontSize: 13),
                   overflow: TextOverflow.ellipsis,
                 ),
