@@ -946,14 +946,15 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
               return true;
             } else
               return false;
+          } else if (cycle.numCycle == 1) {
+            return false;
           } else {
-            return (cycle.numCycle != 1);
+            return true;
           }
         },
         onChanged: (value) => setCoupe(value),
-        importantMessage: formType == 'newMesure'
-            ? "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})"
-            : null,
+        importantMessage:
+            "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})",
       ),
 
       // TextFieldConfig(

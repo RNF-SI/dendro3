@@ -474,17 +474,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                     .idCycle];
                             // get previous cycle with numCycle - 1
                             int? previousCycle = numCycle! - 1;
-                            // get previous cycle idCycle
-                            int? previousCycleIdCycle = mapIdCycleNumCycle
-                                .entries
-                                .firstWhere(
-                                    (element) => element.value == previousCycle)
-                                .key;
+                            if (previousCycle != 0) {
+                              // get previous cycle idCycle
+                              int? previousCycleIdCycle = mapIdCycleNumCycle
+                                  .entries
+                                  .firstWhere((element) =>
+                                      element.value == previousCycle)
+                                  .key;
 
-                            // get coupe value of previous Cycle with previousCycleIdCycle
-                            previousCycleCoupe = selectedItemDetailsCo
-                                .getMesureFromIdCycle(previousCycleIdCycle)
-                                .coupe;
+                              // get coupe value of previous Cycle with previousCycleIdCycle
+                              previousCycleCoupe = selectedItemDetailsCo
+                                  .getMesureFromIdCycle(previousCycleIdCycle)
+                                  .coupe;
+                            }
                           }
                           return FormSaisiePlacettePage(
                             formType: "edit",
@@ -493,7 +495,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             cycle: getCycleFromType(
                               'edit',
                               widget.dispCycleList,
-                              selectedItemMesureDetailsCo,
+                              selectedItemDetailsCo is SaisisableObjectMesure
+                                  ? selectedItemDetailsCo
+                                      .getMesureFromIndex(index)
+                                  : null,
                             ),
                             corCyclePlacette: getCorCyclePlacetteFromType(
                               'add',
