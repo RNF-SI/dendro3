@@ -436,13 +436,40 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   //     .first;
   // Essence initialCodeEssenceValue() => _initialEssence;
   String initialIdPlacetteValue() => _idPlacette.toString();
-  String initialAzimutValue() => _azimut != null ? _azimut.toString() : '';
+  String initialAzimutValue() {
+    if (_azimut == null) {
+      return '';
+    }
+    // Check if azimut is a whole number and display it as an integer if so
+    return _azimut == _azimut!.toInt()
+        ? _azimut!.toInt().toString()
+        : _azimut!.toStringAsFixed(1);
+  }
+
   String initialDistanceValue() =>
       _distance != null ? _distance.toString() : '';
   bool initialTaillisValue() => _taillis ?? true;
 
   int initialStadeDureteValue() => _stadeDurete ?? 0;
   int initialStadeEcorceValue() => _stadeEcorce ?? 0;
+
+  String initialDiametre1Value() {
+    if (_diametre1 == null) {
+      return '';
+    }
+    return _diametre1 == _diametre1!.toInt()
+        ? _diametre1!.toInt().toString()
+        : _diametre1!.toStringAsFixed(1);
+  }
+
+  String initialDiametre2Value() {
+    if (_diametre2 == null) {
+      return '';
+    }
+    return _diametre2 == _diametre2!.toInt()
+        ? _diametre2!.toInt().toString()
+        : _diametre2!.toStringAsFixed(1);
+  }
 
   // String initialDescriptionValue() => _description;
 
@@ -628,7 +655,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}([.,]\d{0,1})?$')),
         ],
-        initialValue: _diametre1.toString(),
+        initialValue: initialDiametre1Value(),
         fieldInfo: 'Diamètre apparent',
         fieldUnit: 'cm',
         fieldRequired: true,
@@ -657,7 +684,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
           fieldName: 'Diametre2',
-          initialValue: _diametre2.toString(),
+          initialValue: initialDiametre2Value(),
           fieldRequired: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
