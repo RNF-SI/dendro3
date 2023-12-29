@@ -133,118 +133,151 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final selectedItemMesureDetails =
         ref.watch(selectedItemMesureDetailsProvider);
 
-    return Column(
-      children: [
-        Container(
-          height: 300,
-          padding: EdgeInsets.only(right: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            // border: Border(),
-            // borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: columnNameList.isEmpty
-              ? Text("Il n'y a pas de ${widget.displayTypeState} à afficher")
-              : DataTable2(
-                  columnSpacing: 12, // Adjusted for better spacing
-                  horizontalMargin: 6, // Consistent margin
-                  fixedLeftColumns: 1,
-                  scrollController: _controller,
-                  dividerThickness: 1,
-                  showCheckboxColumn: false, // Added dividers for clarity
-                  minWidth: _extendedList[0] ? null : arrayWidth,
-                  columns: _createColumns(
-                    columnNameList,
-                  ),
-                  rows: _createRows(
-                    cycleRowList,
-                    items,
-                    mapIdCycleNumCycle,
-                    selectedItemDetails,
-                  ),
-                  dataRowHeight:
-                      50, // Uncommented and adjusted for better row visibility
-                  decoration: BoxDecoration(
-                    color: Colors.white, // Consider using theme-based colors
-                  ),
-                  headingTextStyle: TextStyle(
-                    color: Colors.black54,
-                    fontWeight:
-                        FontWeight.bold, // Custom text style for headers
-                  ),
-                  dataTextStyle: TextStyle(
-                    color: Colors.black, // Custom text style for data
-                  ),
-                  // Additional customizations like row color, sorting functionality, etc.
-                ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ToggleButtons(
-              direction: Axis.horizontal,
-              onPressed: (int index) {
-                setState(() {
-                  for (int i = 0; i < _extendedList.length; i++) {
-                    _extendedList[i] = i == index;
-                  }
-                  ref.read(reducedToggleProvider.notifier).toggleChanged(index);
-                  ref
-                      .read(reducedMesureToggleProvider.notifier)
-                      .toggleChanged(index);
-                });
-              },
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              selectedBorderColor: Colors.red[700],
-              selectedColor: Colors.white,
-              fillColor: Colors.red[200],
-              color: Colors.red[400],
-              constraints: const BoxConstraints(
-                minHeight: 40.0,
-                minWidth: 80.0,
-              ),
-              isSelected: _extendedList,
-              children: <Widget>[Text('Synthese'), Text('Complet')],
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            height: 300,
+            padding: EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              // border: Border(),
+              // borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
-            SizedBox(width: 10),
-            Visibility(
-              visible: [0, 1].contains(
-                  reducedMesureList.indexWhere((mesure) => mesure == true)),
-              child: ToggleButtons(
-                isSelected: cycleToggleSelectedList.isNotEmpty
-                    ? cycleToggleSelectedList
-                    : [],
+            child: columnNameList.isEmpty
+                ? Text("Il n'y a pas de ${widget.displayTypeState} à afficher")
+                : DataTable2(
+                    columnSpacing: 12, // Adjusted for better spacing
+                    horizontalMargin: 6, // Consistent margin
+                    fixedLeftColumns: 1,
+                    scrollController: _controller,
+                    dividerThickness: 1,
+                    showCheckboxColumn: false, // Added dividers for clarity
+                    minWidth: _extendedList[0] ? null : arrayWidth,
+                    columns: _createColumns(
+                      columnNameList,
+                    ),
+                    rows: _createRows(
+                      cycleRowList,
+                      items,
+                      mapIdCycleNumCycle,
+                      selectedItemDetails,
+                    ),
+                    dataRowHeight:
+                        50, // Uncommented and adjusted for better row visibility
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Consider using theme-based colors
+                    ),
+                    headingTextStyle: TextStyle(
+                      color: Colors.black54,
+                      fontWeight:
+                          FontWeight.bold, // Custom text style for headers
+                    ),
+                    dataTextStyle: TextStyle(
+                      color: Colors.black, // Custom text style for data
+                    ),
+                    // Additional customizations like row color, sorting functionality, etc.
+                  ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ToggleButtons(
+                direction: Axis.horizontal,
                 onPressed: (int index) {
-                  ref
-                      .read(cycleSelectedToggleProvider.notifier)
-                      .cycleToggleChanged(index);
+                  setState(() {
+                    for (int i = 0; i < _extendedList.length; i++) {
+                      _extendedList[i] = i == index;
+                    }
+                    ref
+                        .read(reducedToggleProvider.notifier)
+                        .toggleChanged(index);
+                    ref
+                        .read(reducedMesureToggleProvider.notifier)
+                        .toggleChanged(index);
+                  });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.blue[700],
+                selectedBorderColor: Colors.red[700],
                 selectedColor: Colors.white,
-                fillColor: Colors.blue[200],
-                color: Colors.blue[400],
+                fillColor: Colors.red[200],
+                color: Colors.red[400],
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,
                 ),
-                children: <Widget>[
-                  ..._generateCircleAvatars(
-                    cycleList,
-                    widget.placette.corCyclesPlacettes!,
-                  ),
-                ],
+                isSelected: _extendedList,
+                children: <Widget>[Text('Synthese'), Text('Complet')],
               ),
-            ),
-          ],
-        ),
-        if (selectedItemDetails != null)
-          _buildSelectedItemDetails(
-            selectedItemDetails,
-            selectedItemMesureDetails,
-            mapIdCycleNumCycle,
+              SizedBox(width: 10),
+              Visibility(
+                visible: [0, 1].contains(
+                    reducedMesureList.indexWhere((mesure) => mesure == true)),
+                child: ToggleButtons(
+                  isSelected: cycleToggleSelectedList.isNotEmpty
+                      ? cycleToggleSelectedList
+                      : [],
+                  onPressed: (int index) {
+                    ref
+                        .read(cycleSelectedToggleProvider.notifier)
+                        .cycleToggleChanged(index);
+                  },
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  selectedBorderColor: Colors.blue[700],
+                  selectedColor: Colors.white,
+                  fillColor: Colors.blue[200],
+                  color: Colors.blue[400],
+                  constraints: const BoxConstraints(
+                    minHeight: 40.0,
+                    minWidth: 80.0,
+                  ),
+                  children: <Widget>[
+                    ..._generateCircleAvatars(
+                      cycleList,
+                      widget.placette.corCyclesPlacettes!,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-      ],
+          if (selectedItemDetails != null)
+            _buildSelectedItemDetails(
+              selectedItemDetails,
+              selectedItemMesureDetails,
+              mapIdCycleNumCycle,
+            ),
+        ],
+      ),
+
+      // Add the FloatingActionButton here
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Define the action to be performed when the FAB is pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return FormSaisiePlacettePage(
+                  formType: "add",
+                  type: widget.displayTypeState,
+                  placette: widget.placette,
+                  cycle: getCycleFromType('add', widget.dispCycleList),
+                  corCyclePlacette: getCorCyclePlacetteFromType(
+                    'add',
+                    widget.placette,
+                    widget.dispCycleList,
+                  ),
+                  saisisableObject1: null,
+                  saisisableObject2: null,
+                );
+              },
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Ajouter un ${widget.displayTypeState}',
+      ),
     );
   }
 

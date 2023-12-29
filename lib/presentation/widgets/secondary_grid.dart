@@ -97,7 +97,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               },
               child: Container(
                 width: 200, // Same width as other items
-                height: 200,
+                height: 120,
                 margin: EdgeInsets.symmetric(horizontal: 5),
                 child: Card(
                   color: Colors.greenAccent, // Different color to distinguish
@@ -145,8 +145,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         currentItem = filterMesureItem(currentItem, widget.displayTypeState);
 
         return Container(
-          width: 250,
-          height: 150, // Define the width for each item
+          width: 300,
+          height: 120, // Define the width for each item
           margin: EdgeInsets.symmetric(horizontal: 5),
           child: Card(
             child: Column(
@@ -192,8 +192,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                     physics:
                         NeverScrollableScrollPhysics(), // to disable GridView's scrolling
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, // Number of columns in the grid
-                      childAspectRatio: 3, // Aspect ratio of each grid cell
+                      crossAxisCount: 4, // Number of columns in the grid
+                      childAspectRatio: 2, // Aspect ratio of each grid cell
                     ),
                     itemCount: currentItem.entries.length,
                     itemBuilder: (context, itemIndex) {
