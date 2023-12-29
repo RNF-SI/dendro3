@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
@@ -6,6 +8,7 @@ import 'package:dendro3/domain/model/transect.dart';
 import 'package:flutter/material.dart';
 
 class SecondaryGrid extends StatefulWidget {
+  final Map<int, int> mapIdCycleNumCycle;
   final List<dynamic> mesuresList;
   final Function(int) onItemSelected;
   final Function(dynamic) onItemMesureAdded;
@@ -22,6 +25,7 @@ class SecondaryGrid extends StatefulWidget {
     required this.onItemMesureDeleted,
     required this.onItemMesureUpdated,
     required this.currentIndex,
+    required this.mapIdCycleNumCycle,
     required this.displayTypeState,
   }) : super(key: key);
 
@@ -78,28 +82,63 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       scrollDirection: Axis.horizontal,
       itemCount: widget.mesuresList.length + 1,
       itemBuilder: (context, index) {
-        // Check if this is the last item
         if (index == widget.mesuresList.length) {
-          // Return the "Add New Measure" element
-          return GestureDetector(
-            onTap: () {
-              // Handle the addition of a new measure here
-              widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
-            },
-            child: Container(
-              width: 200, // Same width as other items
-              height: 200,
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              child: Card(
-                color: Colors.greenAccent, // Different color to distinguish
-                child: Center(
-                  child: Icon(Icons.add,
-                      size: 50, color: Colors.white), // Add icon
+          var maxNumberCyclePlacette =
+              widget.mapIdCycleNumCycle.values.reduce(max);
+          var maxIdCyclePlacette = widget.mapIdCycleNumCycle.keys.firstWhere(
+              (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette);
+
+          // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
+          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette) {
+            // Return the "Add New Measure" element
+            return GestureDetector(
+              onTap: () {
+                widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
+              },
+              child: Container(
+                width: 200, // Same width as other items
+                height: 200,
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                child: Card(
+                  color: Colors.greenAccent, // Different color to distinguish
+                  child: Center(
+                    child: Icon(Icons.add,
+                        size: 50, color: Colors.white), // Add icon
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          } else {
+            return SizedBox
+                .shrink(); // Return an empty widget for non-last cycles
+          }
         }
+
+        // // Check if this is the last item
+        // if (index == widget.mesuresList.length) {
+        //   // Return the "Add New Measure" element
+        //   return GestureDetector(
+        //     onTap: () {
+        //       // Handle the addition of a new measure here
+        //       widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
+        //     },
+        //     child: Container(
+        //       width: 200, // Same width as other items
+        //       height: 200,
+        //       margin: const EdgeInsets.symmetric(horizontal: 5),
+        //       child: const Card(
+        //         color: Colors.greenAccent, // Different color to distinguish
+        //         child: Center(
+        //           child: Icon(
+        //             Icons.add,
+        //             size: 50,
+        //             color: Colors.white,
+        //           ), // Add icon
+        //         ),
+        //       ),
+        //     ),
+        //   );
+        // }
 
         Map<String, dynamic> currentItem = widget.mesuresList[index];
 

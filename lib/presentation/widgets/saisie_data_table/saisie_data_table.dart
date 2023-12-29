@@ -242,6 +242,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           _buildSelectedItemDetails(
             selectedItemDetails,
             selectedItemMesureDetails,
+            mapIdCycleNumCycle,
           ),
       ],
     );
@@ -250,6 +251,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   Widget _buildSelectedItemDetails(
     SaisisableObject? selectedItemDetailsCo,
     SaisisableObject? selectedItemMesureDetailsCo,
+    Map<int, int> mapIdCycleNumCycle,
   ) {
     // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
     // Check if selectedItemDetails is null
@@ -367,6 +369,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   child: SecondaryGrid(
                     mesuresList: mesuresList,
                     currentIndex: currentIndex,
+                    mapIdCycleNumCycle: mapIdCycleNumCycle,
                     displayTypeState: widget.displayTypeState,
                     onItemSelected: (int selectedIndex) {
                       ref.watch(selectedMesureIndexProvider.notifier).state =

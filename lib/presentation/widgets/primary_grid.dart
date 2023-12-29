@@ -84,14 +84,14 @@ class PrimaryGridWidget extends StatelessWidget {
               padding: EdgeInsets.all(4), // Reduced padding
               constraints: BoxConstraints(),
             ),
-            IconButton(
-              icon: Icon(Icons.add, color: Colors.green),
-              onPressed: () =>
-                  onItemAdded(simpleElements), // Using onItemMesureDeleted
-              iconSize: 20, // Reduced icon size
-              padding: EdgeInsets.all(4), // Reduced padding
-              constraints: BoxConstraints(),
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.add, color: Colors.green),
+            //   onPressed: () =>
+            //       onItemAdded(simpleElements), // Using onItemMesureDeleted
+            //   iconSize: 20, // Reduced icon size
+            //   padding: EdgeInsets.all(4), // Reduced padding
+            //   constraints: BoxConstraints(),
+            // ),
           ],
         ),
         Padding(
