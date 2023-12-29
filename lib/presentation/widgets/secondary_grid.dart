@@ -83,6 +83,9 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       itemCount: widget.mesuresList.length + 1,
       itemBuilder: (context, index) {
         if (index == widget.mesuresList.length) {
+          if (widget.mapIdCycleNumCycle.isEmpty) {
+            return SizedBox.shrink();
+          }
           var maxNumberCyclePlacette =
               widget.mapIdCycleNumCycle.values.reduce(max);
           var maxIdCyclePlacette = widget.mapIdCycleNumCycle.keys.firstWhere(
