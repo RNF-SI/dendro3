@@ -588,6 +588,7 @@ ObjectSaisieViewModel getViewModel(
         'formType': widget.formType,
       }));
     case 'Repères':
+    case 'Reperes':
       return ref.read(repereSaisieViewModelProvider({
         'corCyclePlacette': widget.corCyclePlacette,
         'repere': widget.saisisableObject1,
