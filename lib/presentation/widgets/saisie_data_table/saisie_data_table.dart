@@ -74,6 +74,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   SaisisableObject? selectedItemDetails;
   SaisisableObject? selectedItemMesureDetails;
 
+  int? _sortColumnIndex;
+  bool _sortAscending = true;
+
   @override
   void initState() {
     _extendedList = <bool>[true, false];
@@ -91,6 +94,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       ref.watch(cycleSelectedToggleProvider.notifier).setToggleList(
           ref.watch(cycleSelectedProvider.notifier).convertCyclesToToggles());
+
+      // create an object with 2 property: rowList and widget.placette.corCyclesPlacettes!.values
+      List<Map<String, int>> idCyclePlacetteIdCycleMapList = [];
+      for (var corCyclePlacette in widget.placette.corCyclesPlacettes!.values) {
+        idCyclePlacetteIdCycleMapList.add({
+          'idCyclePlacette': corCyclePlacette.idCyclePlacette,
+          'idCycle': corCyclePlacette.idCycle,
+        });
+      }
+
+      ref
+          .read(idCyclePlacetteIdCycleMapListProvider.notifier)
+          .update(idCyclePlacetteIdCycleMapList);
     });
 
     super.initState();
@@ -110,28 +126,29 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     final DisplayableList items = ref.watch(displayableListProvider);
 
-    final rowList = ref.watch(rowsProvider(items));
+    final rowList = ref.watch(rowsProvider);
 
-    // create an object with 2 property: rowList and widget.placette.corCyclesPlacettes!.values
-    List<Map<String, int>> idCyclePlacetteIdCycleMapList = [];
-    for (var corCyclePlacette in widget.placette.corCyclesPlacettes!.values) {
-      idCyclePlacetteIdCycleMapList.add({
-        'idCyclePlacette': corCyclePlacette.idCyclePlacette,
-        'idCycle': corCyclePlacette.idCycle,
-      });
-    }
+    final sortedCycleRowList = ref.watch(sortedCycleRowsProvider);
 
-    final cycleRowList = ref.watch(cycleRowsProvider({
-      'rowList': rowList,
-      'links': idCyclePlacetteIdCycleMapList,
-    }));
     final columnNameList = ref.watch(columnsProvider(rowList));
+
     final arrayWidth = ref.watch(arrayWidthProvider(columnNameList));
 
     final selectedItemDetails = ref.watch(selectedItemDetailsProvider);
 
     final selectedItemMesureDetails =
         ref.watch(selectedItemMesureDetailsProvider);
+
+    final _columns = _createColumns(
+      columnNameList,
+    );
+
+    final _rows = _createRows(
+      sortedCycleRowList,
+      items,
+      mapIdCycleNumCycle,
+      selectedItemDetails,
+    );
 
     return Scaffold(
       body: Column(
@@ -154,15 +171,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     dividerThickness: 1,
                     showCheckboxColumn: false, // Added dividers for clarity
                     minWidth: _extendedList[0] ? null : arrayWidth,
-                    columns: _createColumns(
-                      columnNameList,
-                    ),
-                    rows: _createRows(
-                      cycleRowList,
-                      items,
-                      mapIdCycleNumCycle,
-                      selectedItemDetails,
-                    ),
+                    columns: _columns,
+                    rows: _rows,
                     dataRowHeight:
                         50, // Uncommented and adjusted for better row visibility
                     decoration: BoxDecoration(
@@ -315,6 +325,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             currentIndex;
         mesuresList = entry.value;
       } else {
+        mesuresList = [];
         simpleElements.add(entry);
       }
     });
@@ -538,16 +549,15 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     if (selectedItem is Arbre) {
       selectedItem as Arbre;
-      ref.watch(selectedMesureIndexProvider.notifier).state =
-          selectedItem.arbresMesures!.findIndexOfArbreMesureFromIdArbreMesure(
-                  value['idArbreMesure']) ??
-              0;
+      ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
+              .arbresMesures!
+              .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
+          0;
     } else if (selectedItem is BmSup30) {
       selectedItem as BmSup30;
       ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
               .bmsSup30Mesures!
-              .findIndexOfBmSup30MesureFromIdBmSup30Mesure(
-                  value['idBmSup30Mesure']) ??
+              .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
           0;
     }
 
@@ -598,13 +608,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<DataColumn> columns = [];
 
     // Filter the column list first based on whether they should be included
-    List<String> filteredColumnList = columnList
-        .where((columnStr) =>
-            shouldIncludeColumn(columnStr, widget.displayTypeState))
-        .toList();
+    // List<String> filteredColumnList = columnList
+    //     .where((columnStr) =>
+    //         shouldIncludeColumn(columnStr, widget.displayTypeState))
+    //     .toList();
 
     List<String> columnTitles =
-        _getColumnTitlesForType(filteredColumnList, widget.displayTypeState);
+        _getColumnTitlesForType(columnList, widget.displayTypeState);
 
     // Ajouter d'abord la colonne "update"
     columns.add(
@@ -618,6 +628,23 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       columns.add(DataColumn2(
         label: Text(columnStr, style: TextStyle(fontSize: 12)),
         numeric: true,
+        onSort: (columnIndex, _) {
+          setState(() {
+            if (_sortColumnIndex == columnIndex) {
+              // If the same column is clicked again, toggle the sort direction
+              _sortAscending = !_sortAscending;
+            } else {
+              // If a different column is clicked, start with ascending order
+              _sortColumnIndex = columnIndex;
+              _sortAscending = true;
+            }
+          });
+
+          ref
+              .read(sortedCycleRowsProvider.notifier)
+              .sortRows(columnIndex - 1, _sortAscending);
+          // _onSortColumn(columnIndex, ascending);
+        },
       ));
     }
 
@@ -675,7 +702,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             mapIdCycleNumCycle[val].toString(),
             style: TextStyle(fontSize: 12),
           )));
-        } else if (shouldIncludeColumn(key, widget.displayTypeState)) {
+        } else {
           String displayValue;
           if (val is double) {
             displayValue = val == val.toInt()
@@ -739,22 +766,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     }).toList();
   }
 
-  bool shouldIncludeColumn(String columnName, String type) {
-    switch (type) {
-      case 'Arbres':
-        return Arbre.getDisplayableColumn(columnName);
-      case 'BmsSup30':
-        return BmSup30.getDisplayableColumn(columnName);
-      case 'Reperes':
-        return Repere.getDisplayableColumn(columnName);
-      case 'Regenerations':
-        return Regeneration.getDisplayableColumn(columnName);
-      case 'Transects':
-        return Transect.getDisplayableColumn(columnName);
-    }
-    return true;
-  }
-
   List<String> _getColumnTitlesForType(List<String> columnList, String type) {
     switch (type) {
       case 'Arbres':
@@ -767,6 +778,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         return Regeneration.changeColumnName(columnList);
       case 'Transects':
         return Transect.changeColumnName(columnList);
+      case 'Repères':
+        return Repere.changeColumnName(columnList);
       default:
         throw ArgumentError('Unknown type: ${type}');
     }
@@ -802,6 +815,7 @@ SaisisableObject getObjectFromType(
       return items.getObjectFromId(value['idBmSup30Orig']);
     case 'Regenerations':
       return items.getObjectFromId(value['idRegeneration']);
+    case 'Reperes':
     case 'Repères':
       return items.getObjectFromId(value['idRepere']);
     case 'Transects':

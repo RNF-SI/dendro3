@@ -1,4 +1,5 @@
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class DisplayableButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isActive = ref.watch(displayTypeProvider) == text;
+    final bool isActive = ref.watch(displayTypeStateProvider) == text;
 
     return Expanded(
       child: Container(
@@ -27,7 +28,7 @@ class DisplayableButton extends ConsumerWidget {
           ),
           onPressed: () {
             onPressed();
-            ref.watch(displayTypeProvider.notifier).state = text;
+            // ref.watch(displayTypeStateProvider.notifier).state = text;
           },
           child: FittedBox(
             fit: BoxFit

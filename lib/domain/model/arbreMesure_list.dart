@@ -50,9 +50,9 @@ class ArbreMesureList with _$ArbreMesureList {
     return null; // Retourne null si l'objet n'est pas trouvé
   }
 
-  int? findIndexOfArbreMesureFromIdArbreMesure(int targetIdArbreMesure) {
+  int? findIndexOfArbreMesureFromIdCycle(int targetIdCycle) {
     for (int i = 0; i < values.length; i++) {
-      if (values[i].idArbreMesure == targetIdArbreMesure) {
+      if (values[i].idCycle == targetIdCycle) {
         return i;
       }
     }

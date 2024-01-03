@@ -50,9 +50,9 @@ class BmSup30MesureList with _$BmSup30MesureList {
     return null; // Retourne null si l'objet n'est pas trouvé
   }
 
-  int? findIndexOfBmSup30MesureFromIdBmSup30Mesure(int targetIdBmSup30Mesure) {
+  int? findIndexOfBmSup30MesureFromIdCycle(int targetIdCycle) {
     for (int i = 0; i < values.length; i++) {
-      if (values[i].idBmSup30Mesure == targetIdBmSup30Mesure) {
+      if (values[i].idCycle == targetIdCycle) {
         return i;
       }
     }
