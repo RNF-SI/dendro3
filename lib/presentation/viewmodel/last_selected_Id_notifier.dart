@@ -26,5 +26,10 @@ class LastSelectedIdNotifier extends StateNotifier<LastSelectedIds> {
 
   getLastSelectedId(String type) => state.getIdForType(type);
 
+  // reset all selected ids
+  void reset() {
+    state = LastSelectedIds(ids: {});
+  }
+
   getObject() => state.ids;
 }

@@ -5,6 +5,7 @@ import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmode
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/displayable_button.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -157,7 +158,7 @@ Widget __buildAsyncPlacetteListWidget(
     success: (data) {
       final displayableListNotifier =
           ref.watch(displayableListProvider.notifier);
-      final displayTypeState = ref.watch(displayTypeProvider);
+      final displayTypeState = ref.watch(displayTypeStateProvider);
 
       return Column(
         children: [
@@ -175,6 +176,9 @@ Widget __buildAsyncPlacetteListWidget(
               children: [
                 DisplayableButton(
                   onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Arbres');
                     displayableListNotifier.setDisplayableListFromListProvider(
                         ref, 'Arbres');
                   },
@@ -182,6 +186,9 @@ Widget __buildAsyncPlacetteListWidget(
                 ),
                 DisplayableButton(
                   onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('BmsSup30');
                     displayableListNotifier.setDisplayableListFromListProvider(
                         ref, 'BmsSup30');
                   },
@@ -189,6 +196,9 @@ Widget __buildAsyncPlacetteListWidget(
                 ),
                 DisplayableButton(
                   onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Transects');
                     displayableListNotifier.setDisplayableListFromListProvider(
                         ref, 'Transects');
                   },
@@ -196,6 +206,9 @@ Widget __buildAsyncPlacetteListWidget(
                 ),
                 DisplayableButton(
                   onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Regenerations');
                     displayableListNotifier.setDisplayableListFromListProvider(
                         ref, 'Regenerations');
                   },
@@ -203,6 +216,9 @@ Widget __buildAsyncPlacetteListWidget(
                 ),
                 DisplayableButton(
                   onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Reperes');
                     displayableListNotifier.setDisplayableListFromListProvider(
                         ref, 'Reperes');
                   },
