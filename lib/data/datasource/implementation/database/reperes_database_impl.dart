@@ -37,7 +37,8 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     late final RepereEntity repereEntity;
     await db.transaction((txn) async {
       int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_repere) FROM $_tableName'));
+              await txn.rawQuery('SELECT MAX(id_repere) FROM $_tableName')) ??
+          0;
 
       repere['id_repere'] = maxId! + 1;
       await txn.insert(

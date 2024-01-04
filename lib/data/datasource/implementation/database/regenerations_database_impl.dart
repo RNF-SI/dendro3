@@ -38,10 +38,11 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     final db = await database;
     late final RegenerationEntity regenerationEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_regeneration) FROM $_tableName'));
+      int? maxId = Sqflite.firstIntValue(await txn
+              .rawQuery('SELECT MAX(id_regeneration) FROM $_tableName')) ??
+          0;
 
-      regeneration['id_regeneration'] = maxId! + 1;
+      regeneration['id_regeneration'] = maxId + 1;
       await txn.insert(
         _tableName,
         regeneration,

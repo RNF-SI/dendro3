@@ -73,15 +73,17 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     final db = await database;
     late final BmSup30Entity bmSup30Entity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_bm_sup_30) FROM $_tableName'));
+      int? maxId = Sqflite.firstIntValue(await txn
+              .rawQuery('SELECT MAX(id_bm_sup_30) FROM $_tableName')) ??
+          0;
 
       int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
-          'SELECT MAX(id_bm_sup_30_orig) FROM $_tableName WHERE id_placette = ?',
-          [bmSup30['id_placette']]));
+              'SELECT MAX(id_bm_sup_30_orig) FROM $_tableName WHERE id_placette = ?',
+              [bmSup30['id_placette']])) ??
+          0;
 
-      bmSup30['id_bm_sup_30'] = maxId! + 1;
-      bmSup30['id_bm_sup_30_orig'] = maxIdOrig! + 1;
+      bmSup30['id_bm_sup_30'] = maxId + 1;
+      bmSup30['id_bm_sup_30_orig'] = maxIdOrig + 1;
       await txn.insert(
         _tableName,
         bmSup30,
@@ -89,7 +91,7 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       );
 
       final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId + 1]);
       bmSup30Entity = results.first;
     });
     return bmSup30Entity;

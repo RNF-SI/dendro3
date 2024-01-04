@@ -69,14 +69,16 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
       int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_arbre) FROM $_tableName'));
+              await txn.rawQuery('SELECT MAX(id_arbre) FROM $_tableName')) ??
+          0;
 
       int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
-          'SELECT MAX(id_arbre_orig) FROM $_tableName WHERE id_placette = ?',
-          [arbre['id_placette']]));
+              'SELECT MAX(id_arbre_orig) FROM $_tableName WHERE id_placette = ?',
+              [arbre['id_placette']])) ??
+          0;
 
-      arbre['id_arbre'] = maxId! + 1;
-      arbre['id_arbre_orig'] = maxIdOrig! + 1;
+      arbre['id_arbre'] = maxId + 1;
+      arbre['id_arbre_orig'] = maxIdOrig + 1;
       await txn.insert(
         _tableName,
         arbre,
