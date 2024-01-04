@@ -170,7 +170,10 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                       padding: EdgeInsets.all(4), // Reduced padding
                       constraints: BoxConstraints(),
                     ),
-                    if (maxIdCyclePlacette == currentItem['idCycle'])
+                    // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
+                    // ou bien si il y a plus de 1 mesure de cet arbre
+                    if (maxIdCyclePlacette == currentItem['idCycle'] &&
+                        widget.mesuresList.length > 1)
                       IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
