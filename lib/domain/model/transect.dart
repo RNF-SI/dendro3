@@ -100,7 +100,7 @@ class Transect with _$Transect implements SaisisableObject {
 
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
-    return idTransectOrig == valueMap['idTransectOrig'];
+    return idTransect == valueMap['idTransect'];
   }
 
   static bool getDisplayableColumn(String columnName) {
@@ -129,8 +129,8 @@ class Transect with _$Transect implements SaisisableObject {
   static List<String> changeColumnName(List<String> columnNames) {
     return columnNames.map((columnName) {
       switch (columnName) {
-        case 'idTransect':
-          return 'idTransectOrigine';
+        // case 'idTransect':
+        //   return 'idTransectOrigine';
         case 'codeEssence':
           return 'Ess';
         case 'diametre':
