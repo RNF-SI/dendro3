@@ -229,7 +229,8 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     }
   }
 
-  Future<bool> deleteItemMesure(int idArbre, int idArbreMesure) async {
+  Future<bool> deleteItemMesure(
+      int idArbre, int idArbreMesure, int idCycle, int numCycle) async {
     try {
       // Find the Arbre that corresponds to the idArbre
       Arbre? targetedArbre;
@@ -250,20 +251,14 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       }
 
       // Execute the use case to delete the ArbreMesure
-      await _deleteArbreMesureUseCase.execute(idArbreMesure);
+      Arbre arbreAfterDeletion = await _deleteArbreMesureUseCase.execute(
+          targetedArbre, idArbreMesure, idArbre, idCycle, numCycle);
 
       // Update the ArbreList by removing the specific ArbreMesure
       List<Arbre> updatedArbres = [];
       for (var arbre in state.data!.values) {
         if (arbre.idArbre == idArbre) {
-          // Remove the ArbreMesure from the arbresMesures list
-          var updatedArbreMesures = arbre.arbresMesures!.values
-              .where((mesure) => mesure.idArbreMesure != idArbreMesure)
-              .toList();
-          // Create a new Arbre with the updated list
-          var updatedArbre = arbre.copyWith(
-              arbresMesures: ArbreMesureList(values: updatedArbreMesures));
-          updatedArbres.add(updatedArbre);
+          updatedArbres.add(arbreAfterDeletion);
         } else {
           updatedArbres.add(arbre);
         }

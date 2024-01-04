@@ -453,7 +453,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         selectedItemDetailsCo as Arbre;
                         result = await arbreListViewModel.deleteItemMesure(
                             selectedItemDetailsCo.idArbre,
-                            deletedItem['idArbreMesure']);
+                            deletedItem['idArbreMesure'],
+                            deletedItem['idCycle'],
+                            mapIdCycleNumCycle[deletedItem['idCycle']]!);
                       } else if (deletedItem.containsKey('idBmSup30Mesure')) {
                         final bmSup30ListViewModel = ref.read(
                             bmSup30ListViewModelStateNotifierProvider.notifier);
