@@ -223,6 +223,7 @@ final deleteArbreAndMesureUseCaseProvider =
 final deleteArbreMesureUseCaseProvider =
     Provider<DeleteArbreMesureUseCase>((ref) => DeleteArbreMesureUseCaseImpl(
           ref.watch(arbresMesuresRepositoryProvider),
+          ref.watch(arbresMesuresRepositoryProvider),
         ));
 
 final deleteBmSup30AndMesureUseCaseProvider =
