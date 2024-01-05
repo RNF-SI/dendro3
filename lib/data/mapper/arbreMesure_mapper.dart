@@ -66,13 +66,13 @@ class ArbreMesureMapper {
         liane: entity['liane'] as String?,
         diametreLiane: entity['diametre_liane'] as double?,
         coupe: entity['coupe'] as String?,
-        limite: entity['limite'] ?? logAndReturnNull<bool>('limite'),
+        limite: (entity['limitye'] as int?) == 1,
         idNomenclatureCodeSanitaire:
             entity['id_nomenclature_code_sanitaire'] as int?,
         codeEcolo: entity['code_ecolo'] as String?,
         refCodeEcolo: entity['ref_code_ecolo'] ??
             logAndReturnNull<String>('ref_code_ecolo'),
-        ratioHauteur: entity['ratio_hauteur'] as bool?,
+        ratioHauteur: (entity['ratio_hauteur'] as int?) == 1,
         observation: entity['observation'] as String?,
       );
     } catch (e) {

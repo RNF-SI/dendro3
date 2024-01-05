@@ -57,9 +57,9 @@ class BmSup30MesureMapper {
         diametreFin: entity['diametre_fin'] as double?,
         diametre130: entity['diametre_130'] as double?,
         longueur: entity['longueur'] ?? logAndReturnNull<double>('longueur'),
-        ratioHauteur: entity['ratio_hauteur'] as bool?,
+        ratioHauteur: (entity['ratio_hauteur'] as int?) == 1,
         contact: entity['contact'] ?? logAndReturnNull<double>('contact'),
-        chablis: entity['chablis'] ?? logAndReturnNull<bool>('chablis'),
+        chablis: (entity['chablis'] as int?) == 1,
         stadeDurete:
             entity['stade_durete'] ?? logAndReturnNull<int>('stade_durete'),
         stadeEcorce:
