@@ -381,7 +381,7 @@ class FormSaisiePlacettePageState
             Row(
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -443,7 +443,7 @@ class FormSaisiePlacettePageState
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: formWidget,
                 ),
               ],

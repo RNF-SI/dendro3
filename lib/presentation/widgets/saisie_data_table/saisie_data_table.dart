@@ -219,7 +219,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 isSelected: _extendedList,
                 children: <Widget>[Text('Synthese'), Text('Complet')],
               ),
-              SizedBox(width: 10),
+              SizedBox(width: 5),
               Visibility(
                 visible: [0, 1].contains(
                     reducedMesureList.indexWhere((mesure) => mesure == true)),
@@ -239,7 +239,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   color: Colors.blue[400],
                   constraints: const BoxConstraints(
                     minHeight: 40.0,
-                    minWidth: 80.0,
+                    minWidth: 40.0,
                   ),
                   children: <Widget>[
                     ..._generateCircleAvatars(

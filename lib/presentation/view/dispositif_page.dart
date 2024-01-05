@@ -342,27 +342,25 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                width: 50,
-                child: Row(
-                  children: cycleList.values
-                      .map<Widget>(
-                        (data) => CircleAvatar(
-                          backgroundColor: placette.corCyclesPlacettes!.values
-                                  .map((CorCyclePlacette corCycle) =>
-                                      corCycle.idCycle)
-                                  .contains(data.idCycle)
-                              ? Colors.green
-                              : Colors.red,
-                          foregroundColor: Colors.white,
-                          radius: 10,
-                          child: Text(
-                            data.numCycle.toString(),
-                          ),
+              Wrap(
+                spacing: 4, // space between adjacent chips
+                children: cycleList.values
+                    .map<Widget>(
+                      (data) => CircleAvatar(
+                        backgroundColor: placette.corCyclesPlacettes!.values
+                                .map((CorCyclePlacette corCycle) =>
+                                    corCycle.idCycle)
+                                .contains(data.idCycle)
+                            ? Colors.green
+                            : Colors.red,
+                        foregroundColor: Colors.white,
+                        radius: 10,
+                        child: Text(
+                          data.numCycle.toString(),
                         ),
-                      )
-                      .toList(),
-                ),
+                      ),
+                    )
+                    .toList(),
               ),
               SizedBox(
                 width: 76,
