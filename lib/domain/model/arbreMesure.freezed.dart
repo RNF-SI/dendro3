@@ -32,7 +32,7 @@ mixin _$ArbreMesure {
   bool get limite => throw _privateConstructorUsedError;
   int? get idNomenclatureCodeSanitaire => throw _privateConstructorUsedError;
   String? get codeEcolo => throw _privateConstructorUsedError;
-  String get refCodeEcolo => throw _privateConstructorUsedError;
+  String? get refCodeEcolo => throw _privateConstructorUsedError;
   bool? get ratioHauteur => throw _privateConstructorUsedError;
   String? get observation => throw _privateConstructorUsedError;
 
@@ -64,7 +64,7 @@ abstract class $ArbreMesureCopyWith<$Res> {
       bool limite,
       int? idNomenclatureCodeSanitaire,
       String? codeEcolo,
-      String refCodeEcolo,
+      String? refCodeEcolo,
       bool? ratioHauteur,
       String? observation});
 }
@@ -98,7 +98,7 @@ class _$ArbreMesureCopyWithImpl<$Res, $Val extends ArbreMesure>
     Object? limite = null,
     Object? idNomenclatureCodeSanitaire = freezed,
     Object? codeEcolo = freezed,
-    Object? refCodeEcolo = null,
+    Object? refCodeEcolo = freezed,
     Object? ratioHauteur = freezed,
     Object? observation = freezed,
   }) {
@@ -167,10 +167,10 @@ class _$ArbreMesureCopyWithImpl<$Res, $Val extends ArbreMesure>
           ? _value.codeEcolo
           : codeEcolo // ignore: cast_nullable_to_non_nullable
               as String?,
-      refCodeEcolo: null == refCodeEcolo
+      refCodeEcolo: freezed == refCodeEcolo
           ? _value.refCodeEcolo
           : refCodeEcolo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       ratioHauteur: freezed == ratioHauteur
           ? _value.ratioHauteur
           : ratioHauteur // ignore: cast_nullable_to_non_nullable
@@ -208,7 +208,7 @@ abstract class _$$_ArbreMesureCopyWith<$Res>
       bool limite,
       int? idNomenclatureCodeSanitaire,
       String? codeEcolo,
-      String refCodeEcolo,
+      String? refCodeEcolo,
       bool? ratioHauteur,
       String? observation});
 }
@@ -240,7 +240,7 @@ class __$$_ArbreMesureCopyWithImpl<$Res>
     Object? limite = null,
     Object? idNomenclatureCodeSanitaire = freezed,
     Object? codeEcolo = freezed,
-    Object? refCodeEcolo = null,
+    Object? refCodeEcolo = freezed,
     Object? ratioHauteur = freezed,
     Object? observation = freezed,
   }) {
@@ -309,10 +309,10 @@ class __$$_ArbreMesureCopyWithImpl<$Res>
           ? _value.codeEcolo
           : codeEcolo // ignore: cast_nullable_to_non_nullable
               as String?,
-      refCodeEcolo: null == refCodeEcolo
+      refCodeEcolo: freezed == refCodeEcolo
           ? _value.refCodeEcolo
           : refCodeEcolo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       ratioHauteur: freezed == ratioHauteur
           ? _value.ratioHauteur
           : ratioHauteur // ignore: cast_nullable_to_non_nullable
@@ -345,7 +345,7 @@ class _$_ArbreMesure extends _ArbreMesure {
       required this.limite,
       this.idNomenclatureCodeSanitaire,
       this.codeEcolo,
-      required this.refCodeEcolo,
+      this.refCodeEcolo,
       this.ratioHauteur,
       this.observation})
       : super._();
@@ -383,7 +383,7 @@ class _$_ArbreMesure extends _ArbreMesure {
   @override
   final String? codeEcolo;
   @override
-  final String refCodeEcolo;
+  final String? refCodeEcolo;
   @override
   final bool? ratioHauteur;
   @override
@@ -484,7 +484,7 @@ abstract class _ArbreMesure extends ArbreMesure {
       required final bool limite,
       final int? idNomenclatureCodeSanitaire,
       final String? codeEcolo,
-      required final String refCodeEcolo,
+      final String? refCodeEcolo,
       final bool? ratioHauteur,
       final String? observation}) = _$_ArbreMesure;
   const _ArbreMesure._() : super._();
@@ -522,7 +522,7 @@ abstract class _ArbreMesure extends ArbreMesure {
   @override
   String? get codeEcolo;
   @override
-  String get refCodeEcolo;
+  String? get refCodeEcolo;
   @override
   bool? get ratioHauteur;
   @override

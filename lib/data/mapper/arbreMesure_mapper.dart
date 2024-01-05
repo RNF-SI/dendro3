@@ -36,8 +36,7 @@ class ArbreMesureMapper {
         idNomenclatureCodeSanitaire:
             entity['id_nomenclature_code_sanitaire'] as int?,
         codeEcolo: entity['code_ecolo'] as String?,
-        refCodeEcolo: entity['ref_code_ecolo'] ??
-            logAndReturnNull<String>('ref_code_ecolo'),
+        refCodeEcolo: entity['ref_code_ecolo'] as String?,
         ratioHauteur: entity['ratio_hauteur'] as bool?,
         observation: entity['observation'] as String?,
       );
@@ -70,8 +69,7 @@ class ArbreMesureMapper {
         idNomenclatureCodeSanitaire:
             entity['id_nomenclature_code_sanitaire'] as int?,
         codeEcolo: entity['code_ecolo'] as String?,
-        refCodeEcolo: entity['ref_code_ecolo'] ??
-            logAndReturnNull<String>('ref_code_ecolo'),
+        refCodeEcolo: entity['ref_code_ecolo'] as String?,
         ratioHauteur: (entity['ratio_hauteur'] as int?) == 1,
         observation: entity['observation'] as String?,
       );

@@ -23,11 +23,11 @@ class BmSup30Mapper {
             logAndReturnNull<int>('id_bm_sup_30_orig'),
         idPlacette:
             entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
-        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+        idArbre: entity['id_arbre'] as int?,
         codeEssence:
             entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
-        azimut: entity['azimut'] ?? logAndReturnNull<double>('azimut'),
-        distance: entity['distance'] ?? logAndReturnNull<double>('distance'),
+        azimut: entity['azimut'] as double?,
+        distance: entity['distance'] as double?,
         orientation: entity['orientation'] as double?,
         azimutSouche: entity['azimut_souche'] as double?,
         distanceSouche: entity['distance_souche'] as double?,
@@ -54,11 +54,11 @@ class BmSup30Mapper {
             logAndReturnNull<int>('id_bm_sup_30_orig'),
         idPlacette:
             entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
-        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+        idArbre: entity['id_arbre'] as int?,
         codeEssence:
             entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
-        azimut: entity['azimut'] ?? logAndReturnNull<double>('azimut'),
-        distance: entity['distance'] ?? logAndReturnNull<double>('distance'),
+        azimut: entity['azimut'] as double?,
+        distance: entity['distance'] as double?,
         orientation: entity['orientation'] as double?,
         azimutSouche: entity['azimut_souche'] as double?,
         distanceSouche: entity['distance_souche'] as double?,

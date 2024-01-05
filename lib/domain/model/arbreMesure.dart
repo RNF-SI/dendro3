@@ -23,7 +23,7 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
     required bool limite,
     int? idNomenclatureCodeSanitaire,
     String? codeEcolo,
-    required String refCodeEcolo,
+    String? refCodeEcolo,
     bool? ratioHauteur,
     String? observation,
   }) = _ArbreMesure;
