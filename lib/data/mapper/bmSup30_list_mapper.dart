@@ -17,6 +17,13 @@ class BmSup30ListMapper {
     return BmSup30List(values: values);
   }
 
+  static BmSup30List transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => BmSup30Mapper.transformFromDBToModel(entity))
+        .toList();
+    return BmSup30List(values: values);
+  }
+
   static BmSup30ListEntity transformToMap(final BmSup30List model) =>
       model.values.map((value) => BmSup30Mapper.transformToMap(value)).toList();
 }

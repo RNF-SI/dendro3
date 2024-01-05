@@ -1,4 +1,5 @@
 import 'package:dendro3/data/entity/transects_entity.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/transect.dart';
 
 class TransectMapper {
@@ -11,26 +12,76 @@ class TransectMapper {
   //   );
   // }
 
-  static Transect transformFromApiToModel(final TransectEntity entity) {
-    return Transect(
-        idTransect: entity['id_transect'],
-        idCyclePlacette: entity['id_cycle_placette'],
-        idTransectOrig: entity['id_transect_orig'],
-        codeEssence: entity['code_essence'],
-        refTransect: entity['ref_transect'],
-        distance: entity['distance'],
-        orientation: entity['orientation'],
-        azimutSouche: entity['azimut_souche'],
-        distanceSouche: entity['distance_souche'],
-        diametre: entity['diametre'],
-        diametre130: entity['diametre_130'],
-        ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
-        contact: entity['contact'] == true ? true : false,
-        angle: entity['angle'],
-        chablis: entity['chablis'] == true ? true : false,
-        stadeDurete: entity['stade_durete'],
-        stadeEcorce: entity['stade_ecorce'],
-        observation: entity['observation']);
+  static Transect transformFromApiToModel(final Map<String, dynamic> entity) {
+    try {
+      return Transect(
+        idTransect:
+            entity['id_transect'] ?? logAndReturnNull<int>('id_transect'),
+        idCyclePlacette: entity['id_cycle_placette'] ??
+            logAndReturnNull<int>('id_cycle_placette'),
+        idTransectOrig: entity['id_transect_orig'] ??
+            logAndReturnNull<int>('id_transect_orig'),
+        codeEssence:
+            entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
+        refTransect:
+            entity['ref_transect'] ?? logAndReturnNull<String>('ref_transect'),
+        distance: entity['distance'] as double?,
+        orientation: entity['orientation'] as double?,
+        azimutSouche: entity['azimut_souche'] as double?,
+        distanceSouche: entity['distance_souche'] as double?,
+        diametre: entity['diametre'] ?? logAndReturnNull<double>('diametre'),
+        diametre130: entity['diametre130'] as double?,
+        ratioHauteur: entity['ratio_hauteur'] as bool?,
+        contact: entity['contact'] ?? logAndReturnNull<double>('contact'),
+        angle: entity['angle'] ?? logAndReturnNull<double>('angle'),
+        chablis: entity['chablis'] ?? logAndReturnNull<bool>('chablis'),
+        stadeDurete:
+            entity['stade_durete'] ?? logAndReturnNull<int>('stade_durete'),
+        stadeEcorce:
+            entity['stade_ecorce'] ?? logAndReturnNull<int>('stade_ecorce'),
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in Transect transformFromApiToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+      throw e;
+    }
+  }
+
+  static Transect transformFromDBToModel(final Map<String, dynamic> entity) {
+    try {
+      return Transect(
+        idTransect:
+            entity['id_transect'] ?? logAndReturnNull<int>('id_transect'),
+        idCyclePlacette: entity['id_cycle_placette'] ??
+            logAndReturnNull<int>('id_cycle_placette'),
+        idTransectOrig: entity['id_transect_orig'] ??
+            logAndReturnNull<int>('id_transect_orig'),
+        codeEssence:
+            entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
+        refTransect:
+            entity['ref_transect'] ?? logAndReturnNull<String>('ref_transect'),
+        distance: entity['distance'] as double?,
+        orientation: entity['orientation'] as double?,
+        azimutSouche: entity['azimut_souche'] as double?,
+        distanceSouche: entity['distance_souche'] as double?,
+        diametre: entity['diametre'] ?? logAndReturnNull<double>('diametre'),
+        diametre130: entity['diametre130'] as double?,
+        ratioHauteur: (entity['ratio_hauteur'] as int?) == 1,
+        contact: (entity['contact'] as int?) == 1,
+        angle: entity['angle'] ?? logAndReturnNull<double>('angle'),
+        chablis: (entity['chablis'] as int?) == 1,
+        stadeDurete:
+            entity['stade_durete'] ?? logAndReturnNull<int>('stade_durete'),
+        stadeEcorce:
+            entity['stade_ecorce'] ?? logAndReturnNull<int>('stade_ecorce'),
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in Transect transformFromDBToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+      throw e;
+    }
   }
 
   static TransectEntity transformToMap(final Transect model) {

@@ -18,6 +18,14 @@ class CorCyclePlacetteListMapper {
     return CorCyclePlacetteList(values: values);
   }
 
+  static CorCyclePlacetteList transformFromDBToModel(
+      final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => CorCyclePlacetteMapper.transformFromDBToModel(entity))
+        .toList();
+    return CorCyclePlacetteList(values: values);
+  }
+
   static CorCyclePlacetteListEntity transformToMap(
           final CorCyclePlacetteList model) =>
       model.values

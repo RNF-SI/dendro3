@@ -1,4 +1,5 @@
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/data/mapper/regeneration_list_mapper.dart';
 import 'package:dendro3/data/mapper/transect_list_mapper.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
@@ -41,30 +42,79 @@ class CorCyclePlacetteMapper {
   }
 
   static CorCyclePlacette transformFromApiToModel(
-      final CorCyclePlacetteEntity entity) {
-    return CorCyclePlacette(
-        idCyclePlacette: entity['id_cycle_placette'],
-        idCycle: entity['id_cycle'],
-        idPlacette: entity['id_placette'],
-        dateReleve: DateTime.parse(entity['date_releve']),
-        dateIntervention: entity['date_intervention'],
-        annee: entity['annee'],
-        natureIntervention: entity['nature_intervention'],
-        gestionPlacette: entity['gestion_placette'],
-        idNomenclatureCastor: entity['id_nomenclature_castor'],
-        idNomenclatureFrottis: entity['id_nomenclature_frottis'],
-        idNomenclatureBoutis: entity['id_nomenclature_boutis'],
-        recouvHerbesBasses: entity['recouv_herbes_basses'],
-        recouvHerbesHautes: entity['recouv_herbes_hautes'],
-        recouvBuissons: entity['recouv_buissons'],
-        recouvArbres: entity['recouv_arbres'],
+      final Map<String, dynamic> entity) {
+    try {
+      return CorCyclePlacette(
+        idCyclePlacette: entity['id_cycle_placette'] ??
+            logAndReturnNull<int>('id_cycle_placette'),
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        dateReleve: entity['date_releve'] != null
+            ? DateTime.parse(entity['date_releve'])
+            : null,
+        dateIntervention: entity['date_intervention'] as String?,
+        annee: entity['annee'] as int?,
+        natureIntervention: entity['nature_intervention'] as String?,
+        gestionPlacette: entity['gestion_placette'] as String?,
+        idNomenclatureCastor: entity['id_nomenclature_castor'] as int?,
+        idNomenclatureFrottis: entity['id_nomenclature_frottis'] as int?,
+        idNomenclatureBoutis: entity['id_nomenclature_boutis'] as int?,
+        recouvHerbesBasses: entity['recouv_herbes_basses'] as double?,
+        recouvHerbesHautes: entity['recouv_herbes_hautes'] as double?,
+        recouvBuissons: entity['recouv_buissons'] as double?,
+        recouvArbres: entity['recouv_arbres'] as double?,
         transects: entity.containsKey('transects')
             ? TransectListMapper.transformFromApiToModel(entity['transects'])
             : null,
         regenerations: entity.containsKey('regenerations')
             ? RegenerationListMapper.transformFromApiToModel(
                 entity['regenerations'])
-            : null);
+            : null,
+      );
+    } catch (e) {
+      print("Error in CorCyclePlacette transformFromApiToModel: $e");
+
+      throw e;
+    }
+  }
+
+  static CorCyclePlacette transformFromDBToModel(
+      final Map<String, dynamic> entity) {
+    try {
+      return CorCyclePlacette(
+        idCyclePlacette: entity['id_cycle_placette'] ??
+            logAndReturnNull<int>('id_cycle_placette'),
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        dateReleve: entity['date_releve'] != null
+            ? DateTime.parse(entity['date_releve'])
+            : null,
+        dateIntervention: entity['date_intervention'] as String?,
+        annee: entity['annee'] as int?,
+        natureIntervention: entity['nature_intervention'] as String?,
+        gestionPlacette: entity['gestion_placette'] as String?,
+        idNomenclatureCastor: entity['id_nomenclature_castor'] as int?,
+        idNomenclatureFrottis: entity['id_nomenclature_frottis'] as int?,
+        idNomenclatureBoutis: entity['id_nomenclature_boutis'] as int?,
+        recouvHerbesBasses: entity['recouv_herbes_basses'] as double?,
+        recouvHerbesHautes: entity['recouv_herbes_hautes'] as double?,
+        recouvBuissons: entity['recouv_buissons'] as double?,
+        recouvArbres: entity['recouv_arbres'] as double?,
+        transects: entity.containsKey('transects')
+            ? TransectListMapper.transformFromDBToModel(entity['transects'])
+            : null,
+        regenerations: entity.containsKey('regenerations')
+            ? RegenerationListMapper.transformFromDBToModel(
+                entity['regenerations'])
+            : null,
+      );
+    } catch (e) {
+      print("Error in CorCyclePlacette transformFromDBToModel: $e");
+
+      throw e;
+    }
   }
 
   static CorCyclePlacetteEntity transformToMap(final CorCyclePlacette model) {

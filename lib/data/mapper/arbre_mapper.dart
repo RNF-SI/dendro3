@@ -1,5 +1,6 @@
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/data/mapper/arbreMesure_list_mapper.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
 
@@ -31,21 +32,60 @@ class ArbreMapper {
     );
   }
 
-  // Function also converting arbreMesures
-  static Arbre transformFromApiToModel(final ArbreEntity entity) {
-    return Arbre(
-        idArbre: entity['id_arbre'],
-        idArbreOrig: entity['id_arbre_orig'],
-        idPlacette: entity['id_placette'],
-        codeEssence: entity['code_essence'],
-        azimut: entity['azimut'],
-        distance: entity['distance'],
-        taillis: entity['taillis'] == true ? true : false,
-        observation: entity['observation'],
+  // Function concentratingh only on arbre properties (and not on arbreMesures)
+  static Arbre transformFromApiToModel(final Map<String, dynamic> entity) {
+    try {
+      return Arbre(
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+        idArbreOrig:
+            entity['id_arbre_orig'] ?? logAndReturnNull<int>('id_arbre_orig'),
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        codeEssence:
+            entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
+        azimut: entity['azimut'] ?? logAndReturnNull<double>('azimut'),
+        distance: entity['distance'] ?? logAndReturnNull<double>('distance'),
+        taillis: entity['taillis'] as bool?,
+        observation: entity['observation'] as String?,
         arbresMesures: entity.containsKey('arbres_mesures')
             ? ArbreMesureListMapper.transformFromApiToModel(
                 entity['arbres_mesures'])
-            : null);
+            : null,
+      );
+    } catch (e) {
+      print("Error in Arbre transformFromApiToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
+  }
+
+  // Function concentratingh only on arbre properties (and not on arbreMesures)
+  static Arbre transformFromDBToModel(final Map<String, dynamic> entity) {
+    try {
+      return Arbre(
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+        idArbreOrig:
+            entity['id_arbre_orig'] ?? logAndReturnNull<int>('id_arbre_orig'),
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        codeEssence:
+            entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
+        azimut: entity['azimut'] ?? logAndReturnNull<double>('azimut'),
+        distance: entity['distance'] ?? logAndReturnNull<double>('distance'),
+        taillis: (entity['taillis'] as int?) == 1,
+        observation: entity['observation'] as String?,
+        arbresMesures: entity.containsKey('arbres_mesures')
+            ? ArbreMesureListMapper.transformFromDBToModel(
+                entity['arbres_mesures'])
+            : null,
+      );
+    } catch (e) {
+      print("Error in Arbre transformFromDBToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
   }
 
   static ArbreEntity transformToMap(final Arbre model) {

@@ -18,6 +18,13 @@ class RegenerationListMapper {
     return RegenerationList(values: values);
   }
 
+  static RegenerationList transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => RegenerationMapper.transformFromDBToModel(entity))
+        .toList();
+    return RegenerationList(values: values);
+  }
+
   static RegenerationListEntity transformToMap(final RegenerationList model) =>
       model.values
           .map((value) => RegenerationMapper.transformToMap(value))

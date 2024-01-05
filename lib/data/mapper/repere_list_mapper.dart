@@ -17,6 +17,13 @@ class RepereListMapper {
     return RepereList(values: values);
   }
 
+  static RepereList transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => RepereMapper.transformFromDBToModel(entity))
+        .toList();
+    return RepereList(values: values);
+  }
+
   static RepereListEntity transformToMap(final RepereList model) =>
       model.values.map((value) => RepereMapper.transformToMap(value)).toList();
 }

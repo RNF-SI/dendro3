@@ -17,6 +17,13 @@ class TransectListMapper {
     return TransectList(values: values);
   }
 
+  static TransectList transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => TransectMapper.transformFromDBToModel(entity))
+        .toList();
+    return TransectList(values: values);
+  }
+
   static TransectListEntity transformToMap(final TransectList model) =>
       model.values
           .map((value) => TransectMapper.transformToMap(value))

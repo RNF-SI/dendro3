@@ -17,6 +17,13 @@ class ArbreMesureListMapper {
     return ArbreMesureList(values: values);
   }
 
+  static ArbreMesureList transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => ArbreMesureMapper.transformFromDBToModel(entity))
+        .toList();
+    return ArbreMesureList(values: values);
+  }
+
   static ArbreMesureListEntity transformToMap(final ArbreMesureList model) =>
       model.values
           .map((value) => ArbreMesureMapper.transformToMap(value))
