@@ -294,7 +294,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _stadeEcorce = arbreMesure.stadeEcorce;
       _liane = arbreMesure.liane ?? '';
       _diametreLiane = arbreMesure.diametreLiane;
-      _coupe = previousCycleCoupe ?? '';
+      _coupe =
+          previousCycleCoupe != null ? previousCycleCoupe!.toUpperCase() : '';
       _limite = arbreMesure.limite ?? false;
       _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
       _codeEcolo = arbreMesure.codeEcolo ?? '';
@@ -932,6 +933,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           const MapEntry('', 'Sélectionnez une option'),
           const MapEntry('C', 'chablis'),
           const MapEntry('E', 'exploité'),
+          const MapEntry('F', 'Aucune coupe'),
         ],
         validator: (value, formData) {
           return null;
