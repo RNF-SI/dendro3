@@ -1,12 +1,15 @@
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/domain/repository/essences_repository.dart';
+import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
@@ -62,8 +65,12 @@ import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/is_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/is_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
@@ -250,3 +257,16 @@ final deleteRepereUseCaseProvider =
     Provider<DeleteRepereUseCase>((ref) => DeleteRepereUseCaseImpl(
           ref.watch(repereRepositoryProvider),
         ));
+
+final isCyclePlacetteCreatedUseCaseProvider =
+    Provider<IsCyclePlacetteCreatedUseCase>((ref) =>
+        IsCyclePlacetteCreatedUseCaseImpl(ref.watch(localStorageProvider)));
+
+final setCyclePlacetteCreatedUseCaseProvider =
+    Provider<SetCyclePlacetteCreatedUseCase>((ref) =>
+        SetCyclePlacetteCreatedUseCaseImpl(ref.watch(localStorageProvider)));
+
+final completeCyclePlacetteCreatedUseCaseProvider =
+    Provider<CompleteCyclePlacetteCreatedUseCase>((ref) =>
+        CompleteCyclePlacetteCreatedUseCaseImpl(
+            ref.watch(localStorageProvider)));

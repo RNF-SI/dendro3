@@ -2,7 +2,10 @@ import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
+import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
+import 'package:dendro3/domain/usecase/is_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
 // import 'package:dendro3/domain/model/arbre_list.dart';
 // import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
@@ -19,25 +22,30 @@ final corCyclePlacetteListViewModelStateNotifierProvider =
     StateNotifierProvider<CorCyclePlacetteListViewModel,
         State<CorCyclePlacetteList>>((ref) {
   return CorCyclePlacetteListViewModel(
-      // ref.watch(getArbreListUseCaseProvider),
-      ref.watch(createCorCyclePlacetteUseCaseProvider)
-      // ref.watch(createArbreAndMesureUseCaseProvider),
-      // ref.watch(updateArbreUseCaseProvider),
-      // ref.watch(deleteArbreUseCaseProvider),
-      // arbreListe,
-      );
+    ref.watch(createCorCyclePlacetteUseCaseProvider),
+    ref.watch(isCyclePlacetteCreatedUseCaseProvider),
+    ref.watch(setCyclePlacetteCreatedUseCaseProvider),
+    ref.watch(completeCyclePlacetteCreatedUseCaseProvider),
+  );
 });
 
 class CorCyclePlacetteListViewModel
     extends BaseListViewModel<State<CorCyclePlacetteList>> {
   // final GetArbreListUseCase _getArbreListUseCase;
   final CreateCorCyclePlacetteUseCase _createCorCyclePlacetteUseCase;
+  final IsCyclePlacetteCreatedUseCase _isCyclePlacetteCreatedUseCaseProvider;
+  final SetCyclePlacetteCreatedUseCase _setCyclePlacetteCreatedUseCaseProvider;
+  final CompleteCyclePlacetteCreatedUseCase
+      _completeCyclePlacetteCreatedUseCaseProvider;
   // final UpdateArbreUseCase _updateArbreUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
 
   CorCyclePlacetteListViewModel(
     // this._getArbreListUseCase,
     this._createCorCyclePlacetteUseCase,
+    this._isCyclePlacetteCreatedUseCaseProvider,
+    this._setCyclePlacetteCreatedUseCaseProvider,
+    this._completeCyclePlacetteCreatedUseCaseProvider,
     // this._updateArbreUseCase,
     // this._deleteArbreUseCase,
     // final ArbreList arbreListe
@@ -62,6 +70,14 @@ class CorCyclePlacetteListViewModel
   //     state = State.error(e);
   //   }
   // }
+  bool isCyclePlacetteCreated(int idCyclePlacette) {
+    return _isCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
+  }
+
+  Future<void> completeCycle(int idCyclePlacette) async {
+    // Update local storage to mark the cycle as complete
+    await _completeCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
+  }
 
   @override
   addItem(
@@ -85,6 +101,10 @@ class CorCyclePlacetteListViewModel
         item['recouvArbres'],
       );
       state = State.success(state.data!.addItemToList(newCorCyclePlacette));
+
+      // Mark the cycle as created using SetCycleCreatedUseCase
+      await _setCyclePlacetteCreatedUseCaseProvider
+          .execute(newCorCyclePlacette.idCyclePlacette);
     } on Exception catch (e) {
       state = State.error(e);
     }

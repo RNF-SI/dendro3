@@ -37,6 +37,7 @@ import 'package:dendro3/data/repository/cycles_repository_impl.dart';
 import 'package:dendro3/data/repository/dispositifs_repository_impl.dart';
 import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/data/repository/global_database_repository_impl.dart';
+import 'package:dendro3/data/repository/local_storage_repository_impl.dart';
 import 'package:dendro3/data/repository/nomenclatures_repository_impl.dart';
 import 'package:dendro3/data/repository/nomenclatures_types_repository_impl.dart';
 import 'package:dendro3/data/repository/placettes_repository_impl.dart';
@@ -55,6 +56,7 @@ import 'package:dendro3/data/repository/authentication_repository_impl.dart';
 import 'package:dendro3/domain/repository/authentication_repository.dart';
 import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/repository/global_database_repository.dart';
+import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:dendro3/domain/repository/nomenclatures_repository.dart';
 import 'package:dendro3/domain/repository/nomenclatures_types_repository.dart';
 import 'package:dendro3/domain/repository/placettes_repository.dart';
@@ -167,3 +169,6 @@ final TransectDatabaseProvider =
     Provider<TransectsDatabase>((_) => TransectsDatabaseImpl());
 final transectRepositoryProvider = Provider<TransectsRepository>(
     (ref) => TransectsRepositoryImpl(ref.watch(TransectDatabaseProvider)));
+
+final localStorageProvider =
+    Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());

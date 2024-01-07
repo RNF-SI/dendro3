@@ -1,3 +1,4 @@
+import 'package:dendro3/data/repository/local_storage_repository_impl.dart';
 import 'package:dendro3/presentation/view/auth_checker.dart';
 import 'package:dendro3/presentation/view/dispositif_page.dart';
 import 'package:dendro3/presentation/view/home_page.dart';
@@ -39,12 +40,14 @@ final _router = GoRouter(
   ],
 );
 
-void main() {
+void main() async {
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorageRepositoryImpl.init();
   runApp(
     ProviderScope(
       child: MainApp(),
