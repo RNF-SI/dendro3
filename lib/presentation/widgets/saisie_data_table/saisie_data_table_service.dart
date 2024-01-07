@@ -343,36 +343,45 @@ class SortedCycleRowNotifier extends StateNotifier<List<Map<String, dynamic>>> {
       : super(initialData);
 
   void sortRows(int sortColumnIndex, bool ascending) {
-    List<Map<String, dynamic>> sorted = [
-      ...state
-    ]; // Create a new instance by spreading the current state.
+    List<Map<String, dynamic>> sorted = [...state];
 
-    // Your sorting logic
     sorted.sort((a, b) {
-      // Implement sorting logic based on sortColumnIndex and ascending
       var aValue = a.values.elementAt(sortColumnIndex);
       var bValue = b.values.elementAt(sortColumnIndex);
 
-      // Custom comparison for boolean values
-      if (aValue is bool && bValue is bool) {
-        if (ascending) {
-          return aValue == bValue ? 0 : (aValue ? -1 : 1);
-        } else {
-          return aValue == bValue ? 0 : (aValue ? 1 : -1);
-        }
-      } else if (aValue is num && bValue is num) {
-        return ascending ? aValue.compareTo(bValue) : bValue.compareTo(aValue);
-      } else {
-        // Default comparison for non-boolean values
-        if (ascending) {
-          return aValue.toString().compareTo(bValue.toString());
-        } else {
-          return bValue.toString().compareTo(aValue.toString());
-        }
+      // Primary comparison
+      int compareResult = _compareValues(aValue, bValue, ascending);
+
+      // Secondary comparison based on idArbreOrig
+      if (compareResult == 0) {
+        compareResult = _compareValues(
+            a.values.elementAt(0), b.values.elementAt(0), ascending);
       }
+
+      // Tertiary comparison based on idCycle
+      if (compareResult == 0 &&
+          a.containsKey('idCycle') &&
+          b.containsKey('idCycle')) {
+        compareResult = _compareValues(a['idCycle'], b['idCycle'], ascending);
+      }
+
+      return compareResult;
     });
 
     state = sorted; // Update the state with the new sorted list.
+  }
+
+  // Helper method to compare two values with optional ascending order
+  int _compareValues(dynamic aValue, dynamic bValue, bool ascending) {
+    if (aValue is bool && bValue is bool) {
+      return ascending ? (aValue ? -1 : 1) : (aValue ? 1 : -1);
+    } else if (aValue is num && bValue is num) {
+      return ascending ? aValue.compareTo(bValue) : bValue.compareTo(aValue);
+    } else {
+      return ascending
+          ? aValue.toString().compareTo(bValue.toString())
+          : bValue.toString().compareTo(aValue.toString());
+    }
   }
 }
 
