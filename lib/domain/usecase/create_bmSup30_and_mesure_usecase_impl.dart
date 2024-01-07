@@ -20,7 +20,7 @@ class CreateBmSup30AndMesureUseCaseImpl
   @override
   Future<BmSup30> execute(
     int idPlacette,
-    int idArbre,
+    int? idArbre,
     String codeEssence,
     double azimut,
     double distance,

@@ -4,7 +4,7 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 abstract class CreateBmSup30AndMesureUseCase {
   Future<BmSup30> execute(
     int idPlacette,
-    int idArbre,
+    int? idArbre,
     String codeEssence,
     double azimut,
     double distance,
