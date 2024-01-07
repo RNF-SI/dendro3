@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class ReperesDatabaseImpl implements ReperesDatabase {
   static const _tableName = 't_reperes';
-  static const _columnId = 'id_reperes';
+  static const _columnId = 'id_repere';
 
   Future<Database> get database async {
     return await DB.instance.database;

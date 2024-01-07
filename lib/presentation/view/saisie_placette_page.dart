@@ -222,7 +222,7 @@ Widget __buildAsyncPlacetteListWidget(
                     displayableListNotifier.setDisplayableListFromListProvider(
                         ref, 'Reperes');
                   },
-                  text: "Repères",
+                  text: "Reperes",
                 ),
               ],
             ),

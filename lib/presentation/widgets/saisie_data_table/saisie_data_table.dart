@@ -785,6 +785,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         return Regeneration.changeColumnName(columnList);
       case 'Transects':
         return Transect.changeColumnName(columnList);
+      case 'Reperes':
       case 'Repères':
         return Repere.changeColumnName(columnList);
       default:

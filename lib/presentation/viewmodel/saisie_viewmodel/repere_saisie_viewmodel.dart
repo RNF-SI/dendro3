@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/repere.dart';
@@ -33,6 +34,7 @@ final repereSaisieViewModelProvider = Provider.autoDispose
       // regeInfoObj['placette'],
       regeInfoObj['repere'],
       regeInfoObj['formType'],
+      regeInfoObj['corCyclePlacette'],
 
       // ref.watch(getEssencesUseCaseProvider),
       repereListViewModel);
@@ -46,6 +48,8 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   late final RepereListViewModel _repereListViewModel;
 
   final String formType;
+
+  CorCyclePlacette? corCyclePlacette;
 
   final Ref ref;
   // Placette placette;
@@ -66,7 +70,7 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
     // this.placette,
     final Repere? repere,
     this.formType,
-
+    this.corCyclePlacette,
     // this._getEssencesUseCase,
     this._repereListViewModel,
     // this._insertArbreUseCase,
@@ -94,7 +98,7 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   @override
   Future<String> createObject() async {
     _repereListViewModel.addItem({
-      'idPlacette': _idPlacette,
+      'idPlacette': corCyclePlacette!.idPlacette,
       'azimut': _azimut,
       'distance': _distance,
       'diametre': _diametre,
@@ -113,31 +117,37 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   List<FieldConfig> getFormConfig() {
     return [
       TextFieldConfig(
-        fieldName: 'azimut',
+        fieldName: 'Azimut',
         initialValue: initialAzimut(),
         keyboardType: TextInputType.number,
         onChanged: (value) => _azimut = double.parse(value),
         hintText: "Veuillez entrer le code",
       ),
       TextFieldConfig(
-        fieldName: 'distance',
+        fieldName: 'Distance',
         initialValue: initialDistance(),
         keyboardType: TextInputType.number,
         onChanged: (value) => _distance = double.parse(value),
         hintText: "Veuillez entrer le code",
       ),
       TextFieldConfig(
-        fieldName: 'diametre',
+        fieldName: 'Diametre',
         initialValue: initialDiametre(),
         keyboardType: TextInputType.number,
         onChanged: (value) => _diametre = double.parse(value),
         hintText: "Veuillez entrer le code",
       ),
       TextFieldConfig(
-        fieldName: 'repere',
+        fieldName: 'Repere',
         initialValue: initialRepere(),
         onChanged: (value) => _repere = value,
         hintText: "Veuillez entrer le code",
+      ),
+      TextFieldConfig(
+        fieldName: 'Observation',
+        initialValue: initialObservation(),
+        onChanged: (value) => _observation = value,
+        hintText: "Champs Libre",
       ),
     ];
   }
