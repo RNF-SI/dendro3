@@ -732,40 +732,32 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           if (mapIdCycleNumCycle[value["idCycle"]] == 1) {
             return Colors.white;
           } else if (mapIdCycleNumCycle[value["idCycle"]] == 2) {
-            return Colors.blue[100];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3) {
             return Colors.blue[200];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4) {
-            return Colors.blue[300];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3) {
             return Colors.blue[400];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6) {
-            return Colors.blue;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4) {
             return Colors.blue[600];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8) {
-            return Colors.blue[700];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5) {
             return Colors.blue[800];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6) {
             return Colors.blue[900];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7) {
             return Colors.green;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8) {
             return Colors.lime;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9) {
             return Colors.amber;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10) {
             return Colors.cyan;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11) {
             return Colors.deepOrange;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 16) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12) {
             return Colors.deepPurple;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 17) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13) {
             return Colors.lightBlue;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 18) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14) {
             return Colors.lightGreen;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 19) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15) {
             return Colors.limeAccent;
           }
         }),
