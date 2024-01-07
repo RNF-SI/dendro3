@@ -57,14 +57,14 @@ class PrimaryGridWidget extends StatelessWidget {
               Flexible(
                 child: Text(
                   "$titleName:", // Use the modified title name
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               Flexible(
                 child: Text(
                   displayValue,
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 15),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -142,7 +142,7 @@ class PrimaryGridWidget extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 4,
-            childAspectRatio: 3,
+            childAspectRatio: 2.5,
             mainAxisSpacing: 1,
             crossAxisSpacing: 2,
             children: simpleWidgets,

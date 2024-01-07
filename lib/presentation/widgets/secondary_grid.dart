@@ -5,6 +5,7 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
+import 'package:dendro3/presentation/widgets/conditional_tooltip_text.dart';
 import 'package:flutter/material.dart';
 
 class SecondaryGrid extends StatefulWidget {
@@ -263,14 +264,14 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                             child: Text(
                               "$titleName:",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10),
+                                  fontWeight: FontWeight.bold, fontSize: 11),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Flexible(
                             child: Text(
                               displayValue,
-                              style: TextStyle(fontSize: 13),
+                              style: TextStyle(fontSize: 15),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
