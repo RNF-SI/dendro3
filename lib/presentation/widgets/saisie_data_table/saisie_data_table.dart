@@ -168,8 +168,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             child: columnNameList.isEmpty
                 ? Text("Il n'y a pas de ${widget.displayTypeState} à afficher")
                 : DataTable2(
-                    columnSpacing: 12, // Adjusted for better spacing
-                    horizontalMargin: 6, // Consistent margin
+                    columnSpacing: 0, // Adjusted for better spacing
+                    horizontalMargin: 1, // Consistent margin
                     fixedLeftColumns: 1,
                     scrollController: _controller,
                     dividerThickness: 1,
