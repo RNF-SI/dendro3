@@ -708,7 +708,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           isVisibleFn: (formData) {
             if (formData.isNotEmpty) {
               return (formData['Diametre1'] != null &&
-                      formData['Diametre1'] != '') ||
+                      formData['Diametre1'] != '' &&
+                      int.parse(formData['Diametre1']) > 30) ||
                   (_diametre1 != null && _diametre1! > 30);
             } else {
               return (_diametre1 != null && _diametre1! > 30);
