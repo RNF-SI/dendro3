@@ -30,6 +30,7 @@ import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
@@ -139,6 +140,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final selectedItemMesureDetails =
         ref.watch(selectedItemMesureDetailsProvider);
 
+    final corCyclePlacetteListViewModel =
+        ref.read(corCyclePlacetteListViewModelStateNotifierProvider.notifier);
+
     final _columns = _createColumns(
       columnNameList,
     );
@@ -245,6 +249,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     ..._generateCircleAvatars(
                       cycleList,
                       widget.placette.corCyclesPlacettes!,
+                      corCyclePlacetteListViewModel,
                     ),
                   ],
                 ),
@@ -787,24 +792,63 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     }
   }
 
+//   List<Widget> _generateCircleAvatars(
+//       List<Cycle> cycleList, CorCyclePlacetteList corCyclePlacetteList) {
+//     var list = cycleList
+//         .map<Widget>((data) => CircleAvatar(
+//               backgroundColor: corCyclePlacetteList.values
+//                       .map((CorCyclePlacette corCyclePlacette) =>
+//                           corCyclePlacette.idCycle)
+//                       .contains(data.idCycle)
+//                   ? Colors.green
+//                   : Colors.red,
+//               foregroundColor: Colors.white,
+//               radius: 10,
+//               child: Text(
+//                 data.numCycle.toString(),
+//               ),
+//             ))
+//         .toList();
+//     return list;
+//   }
+// }
   List<Widget> _generateCircleAvatars(
-      List<Cycle> cycleList, CorCyclePlacetteList corCyclePlacetteList) {
-    var list = cycleList
-        .map<Widget>((data) => CircleAvatar(
-              backgroundColor: corCyclePlacetteList.values
-                      .map((CorCyclePlacette corCyclePlacette) =>
-                          corCyclePlacette.idCycle)
-                      .contains(data.idCycle)
-                  ? Colors.green
-                  : Colors.red,
-              foregroundColor: Colors.white,
-              radius: 10,
-              child: Text(
-                data.numCycle.toString(),
-              ),
-            ))
-        .toList();
-    return list;
+    List<Cycle> cycleList,
+    CorCyclePlacetteList corCyclePlacetteList,
+    CorCyclePlacetteListViewModel corCyclePlacetteListViewModel,
+  ) {
+    return cycleList.map<Widget>((Cycle data) {
+      CorCyclePlacette? currentCorCyclePlacette;
+
+      // Iterate over corCyclePlacetteList to find the matching element
+      for (var corCyclePlacette in corCyclePlacetteList.values) {
+        if (corCyclePlacette.idCycle == data.idCycle) {
+          currentCorCyclePlacette = corCyclePlacette;
+          break; // Break the loop once the matching element is found
+        }
+      }
+
+      // Determine the cycle completion status
+      bool isCyclePlacetteCompleted = false;
+      if (currentCorCyclePlacette != null) {
+        isCyclePlacetteCompleted = corCyclePlacetteListViewModel
+            .isCyclePlacetteCreated(currentCorCyclePlacette.idCyclePlacette);
+      }
+
+      // Determine the background color
+      Color backgroundColor = isCyclePlacetteCompleted
+          ? Colors.yellow // Yellow for not completed
+          : (currentCorCyclePlacette != null
+              ? Colors.green
+              : Colors.red); // Green if CorCyclePlacette exists, otherwise red
+
+      return CircleAvatar(
+        backgroundColor: backgroundColor,
+        foregroundColor: Colors.white,
+        radius: 10,
+        child: Text(data.numCycle.toString()),
+      );
+    }).toList();
   }
 }
 
