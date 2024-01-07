@@ -174,6 +174,8 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
           return 'Azimut';
         case 'distance':
           return 'Distance';
+        case 'idCycle':
+          return 'NumCycle';
         case 'diametre':
           return 'Diam';
         case 'longueur':

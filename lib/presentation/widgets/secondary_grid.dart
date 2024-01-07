@@ -103,7 +103,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
           }
 
           // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
-          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette) {
+          if (widget.mesuresList.last['idCycle'] != maxNumberCyclePlacette) {
             // Return the "Add New Measure" element
             return GestureDetector(
               onTap: () {
@@ -155,6 +155,14 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         // }
 
         Map<String, dynamic> currentItem = widget.mesuresList[index];
+
+        // Replace idCycle with NumCycle
+        if (currentItem.containsKey('idCycle')) {
+          int? numCycle = widget.mapIdCycleNumCycle[currentItem['idCycle']];
+          if (numCycle != null) {
+            currentItem['idCycle'] = numCycle;
+          }
+        }
 
         currentItem = filterMesureItem(currentItem, widget.displayTypeState);
 
