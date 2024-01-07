@@ -5,7 +5,6 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:dendro3/presentation/widgets/conditional_tooltip_text.dart';
 import 'package:flutter/material.dart';
 
 class SecondaryGrid extends StatefulWidget {
