@@ -287,7 +287,9 @@ Widget _buildPlacetteListWidget(
       shrinkWrap: true,
       itemBuilder: (final BuildContext context, final int index) {
         return PlacetteItemCardWidget(
-            placette: placetteList[index], cycleList: cycleList);
+          placette: placetteList[index],
+          cycleList: cycleList,
+        );
       },
     );
   }
@@ -305,6 +307,8 @@ class PlacetteItemCardWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final corCyclePlacetteListViewModel =
+        ref.read(corCyclePlacetteListViewModelStateNotifierProvider.notifier);
     return InkWell(
       child: Card(
         child: Padding(
@@ -343,32 +347,45 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                 ),
               ),
               Wrap(
-                spacing: 4, // space between adjacent chips
-                children: cycleList.values
-                    .map<Widget>(
-                      (data) => CircleAvatar(
-                        backgroundColor: placette.corCyclesPlacettes!.values
-                                .map((CorCyclePlacette corCycle) =>
-                                    corCycle.idCycle)
-                                .contains(data.idCycle)
+                spacing: 4,
+                children: cycleList.values.map<Widget>((Cycle data) {
+                  CorCyclePlacette? currentCorCyclePlacette;
+
+                  // Iterate over corCyclePlacetteList to find the matching element
+                  for (var corCyclePlacette
+                      in placette.corCyclesPlacettes!.values) {
+                    if (corCyclePlacette.idCycle == data!.idCycle) {
+                      currentCorCyclePlacette = corCyclePlacette;
+                      break; // Break the loop once the matching element is found
+                    }
+                  }
+
+                  bool isCyclePlacetteCompleted = false;
+                  if (currentCorCyclePlacette != null) {
+                    isCyclePlacetteCompleted = corCyclePlacetteListViewModel
+                        .isCyclePlacetteCreated(currentCorCyclePlacette!
+                            .idCyclePlacette); // Adjust this line based on your actual logic
+                  }
+                  bool isCyclePlacetteFinished = placette
+                      .corCyclesPlacettes!.values
+                      .map((CorCyclePlacette corCycle) => corCycle.idCycle)
+                      .contains(data.idCycle);
+                  return CircleAvatar(
+                    backgroundColor: isCyclePlacetteCompleted
+                        ? Colors.yellow
+                        : isCyclePlacetteFinished
                             ? Colors.green
                             : Colors.red,
-                        foregroundColor: Colors.white,
-                        radius: 10,
-                        child: Text(
-                          data.numCycle.toString(),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                    foregroundColor: Colors.white,
+                    radius: 10,
+                    child: Text(data.numCycle.toString()),
+                  );
+                }).toList(),
               ),
               SizedBox(
                 width: 76,
                 child: IconButton(
                   onPressed: () {
-                    final corCyclePlacetteListViewModel = ref.read(
-                        corCyclePlacetteListViewModelStateNotifierProvider
-                            .notifier);
                     corCyclePlacetteListViewModel
                         .setCorCyclePlacetteList(placette.corCyclesPlacettes!);
                     final lastSelectedProvider =
