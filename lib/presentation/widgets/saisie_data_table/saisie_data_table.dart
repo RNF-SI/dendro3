@@ -707,7 +707,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
           cellList.add(DataCell(Text(
             mapIdCycleNumCycle[val].toString(),
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 15),
           )));
         } else {
           String displayValue;
@@ -720,7 +720,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           }
           cellList.add(DataCell(Text(
             displayValue,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 15),
           )));
         }
       });
