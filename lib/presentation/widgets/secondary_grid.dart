@@ -38,6 +38,13 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
   @override
   Widget build(BuildContext context) {
+    // Sort mesuresList based on the order of cycles in mapIdCycleNumCycle
+    widget.mesuresList.sort((a, b) {
+      int cycleNumA = widget.mapIdCycleNumCycle[a['idCycle']] ?? 0;
+      int cycleNumB = widget.mapIdCycleNumCycle[b['idCycle']] ?? 0;
+      return cycleNumA.compareTo(cycleNumB);
+    });
+
     currentIndex = widget.currentIndex;
     if (widget.mesuresList.isEmpty) {
       return SizedBox.shrink(); // Return an empty widget if the list is empty
