@@ -28,12 +28,17 @@ class HomePage extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: const [
-            UserDispositifList(),
-          ],
-        ),
+        child: UserDispositifList(),
       ),
+      // SafeArea(
+      //   child: Column(
+      //     children: const [
+      //       Expanded(
+      //         child: UserDispositifList(),
+      //       )
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
