@@ -6,6 +6,7 @@ import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,9 +43,8 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the ViewModel instance
-    final corCyclePlacetteListViewModel =
-        ref.watch(corCyclePlacetteListViewModelStateNotifierProvider.notifier);
+    final corCyclePlacetteLocalStorageStatusProvider = ref.watch(
+        corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
 
     // Determine the selected cycle's idCycle
     int selectedCycleIndex = cycleSelected.indexWhere((selected) => selected);
@@ -65,8 +65,8 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
 
     // Check if the cycle placette is new using idCyclePlacette
     bool isNewCycle = selectedCorCyclePlacette != null &&
-        corCyclePlacetteListViewModel
-            .isCyclePlacetteCreated(selectedCorCyclePlacette.idCyclePlacette);
+        corCyclePlacetteLocalStorageStatusProvider.isCyclePlacetteInProgress(
+            selectedCorCyclePlacette.idCyclePlacette);
 
     // Ensure that ViewModel instance is used correctly in _generateCircleAvatars
     return Column(children: [
@@ -91,7 +91,7 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
         children: _generateCircleAvatars(
           widget.dispCycleList!,
           widget.corCyclePlacetteList!,
-          corCyclePlacetteListViewModel, // Pass the ViewModel instance here
+          corCyclePlacetteLocalStorageStatusProvider, // Pass the ViewModel instance here
         ),
       ),
 
@@ -99,7 +99,7 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
       if (isNewCycle)
         ElevatedButton(
           onPressed: () async {
-            await corCyclePlacetteListViewModel
+            await corCyclePlacetteLocalStorageStatusProvider
                 .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
             setState(() {}); // Refresh the UI
           },
@@ -129,7 +129,8 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
 List<Widget> _generateCircleAvatars(
   CycleList dispCycleList,
   CorCyclePlacetteList corCyclePlacetteList,
-  CorCyclePlacetteListViewModel viewModel,
+  CorCyclePlacetteLocalStorageStatusNotifier
+      corCyclePlacetteLocalStorageStatusStateNotifier,
 ) {
   return dispCycleList.values.map<Widget>((Cycle data) {
     CorCyclePlacette? correspondingCorCyclePlacette;
@@ -144,8 +145,9 @@ List<Widget> _generateCircleAvatars(
 
     // Check if the cycle placette is new using idCyclePlacette
     bool isNewCycle = correspondingCorCyclePlacette != null
-        ? viewModel.isCyclePlacetteCreated(
-            correspondingCorCyclePlacette.idCyclePlacette)
+        ? corCyclePlacetteLocalStorageStatusStateNotifier
+            .isCyclePlacetteInProgress(
+                correspondingCorCyclePlacette.idCyclePlacette)
         : false;
 
     Color backgroundColor = isNewCycle

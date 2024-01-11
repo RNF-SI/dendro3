@@ -97,6 +97,7 @@ class PlacettePage extends ConsumerWidget {
                   builder: (BuildContext context) {
                     return SaisiePlacettePage(
                       placette: placette,
+                      corCyclePlacetteList: corCyclePlacetteList,
                       dispCycleList: dispCycleList,
                     );
                   },

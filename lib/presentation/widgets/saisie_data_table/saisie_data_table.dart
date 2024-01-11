@@ -31,6 +31,7 @@ import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
@@ -53,7 +54,7 @@ class SaisieDataTable extends ConsumerStatefulWidget {
     required this.placette,
     // required this.itemList,
     required this.dispCycleList,
-    // required this.corCyclePlacetteList,
+    required this.corCyclePlacetteList,
     required this.displayTypeState,
   });
 
@@ -61,7 +62,7 @@ class SaisieDataTable extends ConsumerStatefulWidget {
   // final int placetteId;
   final Placette placette;
   final CycleList dispCycleList;
-  // final CorCyclePlacetteList corCyclePlacetteList;
+  final CorCyclePlacetteList corCyclePlacetteList;
   final String displayTypeState;
 
   @override
@@ -77,6 +78,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
   int? _sortColumnIndex;
   bool _sortAscending = true;
+
+  // late CorCyclePlacetteList corCyclePlacetteList;
 
   @override
   void initState() {
@@ -98,7 +101,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       // create an object with 2 property: rowList and widget.placette.corCyclesPlacettes!.values
       List<Map<String, int>> idCyclePlacetteIdCycleMapList = [];
-      for (var corCyclePlacette in widget.placette.corCyclesPlacettes!.values) {
+      for (var corCyclePlacette in widget.corCyclePlacetteList.values) {
         idCyclePlacetteIdCycleMapList.add({
           'idCyclePlacette': corCyclePlacette.idCyclePlacette,
           'idCycle': corCyclePlacette.idCycle,
@@ -140,8 +143,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final selectedItemMesureDetails =
         ref.watch(selectedItemMesureDetailsProvider);
 
-    final corCyclePlacetteListViewModel =
-        ref.read(corCyclePlacetteListViewModelStateNotifierProvider.notifier);
+    final corCyclePlacetteLocalStorageStatusProvider = ref
+        .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
 
     final _columns = _createColumns(
       columnNameList,
@@ -248,8 +251,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   children: <Widget>[
                     ..._generateCircleAvatars(
                       cycleList,
-                      widget.placette.corCyclesPlacettes!,
-                      corCyclePlacetteListViewModel,
+                      widget.corCyclePlacetteList,
+                      corCyclePlacetteLocalStorageStatusProvider,
                     ),
                   ],
                 ),
@@ -280,7 +283,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   cycle: getCycleFromType('add', widget.dispCycleList),
                   corCyclePlacette: getCorCyclePlacetteFromType(
                     'add',
-                    widget.placette,
+                    widget.corCyclePlacetteList,
                     widget.dispCycleList,
                   ),
                   saisisableObject1: null,
@@ -360,7 +363,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                       ),
                       corCyclePlacette: getCorCyclePlacetteFromType(
                         'add',
-                        widget.placette,
+                        widget.corCyclePlacetteList,
                         widget.dispCycleList,
                       ),
                       saisisableObject1: null,
@@ -394,7 +397,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                       ),
                       corCyclePlacette: getCorCyclePlacetteFromType(
                         'add',
-                        widget.placette,
+                        widget.corCyclePlacetteList,
                         widget.dispCycleList,
                       ),
                       saisisableObject1: selectedItemDetailsCo,
@@ -440,7 +443,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             ),
                             corCyclePlacette: getCorCyclePlacetteFromType(
                               'add',
-                              widget.placette,
+                              widget.corCyclePlacetteList,
                               widget.dispCycleList,
                             ),
                             saisisableObject1: selectedItemDetailsCo,
@@ -520,7 +523,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             ),
                             corCyclePlacette: getCorCyclePlacetteFromType(
                               'add',
-                              widget.placette,
+                              widget.corCyclePlacetteList,
                               widget.dispCycleList,
                             ),
                             saisisableObject1: selectedItemDetailsCo,
@@ -808,7 +811,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
   List<Widget> _generateCircleAvatars(
     List<Cycle> cycleList,
     CorCyclePlacetteList corCyclePlacetteList,
-    CorCyclePlacetteListViewModel corCyclePlacetteListViewModel,
+    CorCyclePlacetteLocalStorageStatusNotifier
+        corCyclePlacetteLocalStorageStatusProvider,
   ) {
     return cycleList.map<Widget>((Cycle data) {
       CorCyclePlacette? currentCorCyclePlacette;
@@ -822,14 +826,14 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       }
 
       // Determine the cycle completion status
-      bool isCyclePlacetteCompleted = false;
+      bool isCyclePlacetteInProgress = false;
       if (currentCorCyclePlacette != null) {
-        isCyclePlacetteCompleted = corCyclePlacetteListViewModel
-            .isCyclePlacetteCreated(currentCorCyclePlacette.idCyclePlacette);
+        isCyclePlacetteInProgress = corCyclePlacetteLocalStorageStatusProvider
+            .isCyclePlacetteInProgress(currentCorCyclePlacette.idCyclePlacette);
       }
 
       // Determine the background color
-      Color backgroundColor = isCyclePlacetteCompleted
+      Color backgroundColor = isCyclePlacetteInProgress
           ? Colors.yellow // Yellow for not completed
           : (currentCorCyclePlacette != null
               ? Colors.green
@@ -887,12 +891,14 @@ Cycle? getCycleFromType(String formType, CycleList dispCycleList,
 }
 
 CorCyclePlacette? getCorCyclePlacetteFromType(
-    String formType, Placette placette, CycleList dispCycleList) {
+  String formType,
+  CorCyclePlacetteList corCyclePlacetteList,
+  CycleList dispCycleList,
+) {
   Cycle? cycle = dispCycleList.findIdOfCycleWithLargestNumCycle();
   // Get the idCyclePlacette of the corCyclePlacette corresponding to the cycle
   if (formType == 'add' || formType == 'newMesure') {
-    return placette.corCyclesPlacettes!
-        .getCorCyclePlacetteByIdCycle(cycle!.idCycle);
+    return corCyclePlacetteList.getCorCyclePlacetteByIdCycle(cycle!.idCycle);
   } else {
     return null;
   }

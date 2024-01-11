@@ -1,3 +1,4 @@
+import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
@@ -16,11 +17,13 @@ class SaisiePlacettePage extends ConsumerStatefulWidget {
   SaisiePlacettePage({
     Key? key,
     required this.placette,
+    required this.corCyclePlacetteList,
     required this.dispCycleList,
   }) : super(key: key);
 
   Placette placette;
   CycleList dispCycleList;
+  CorCyclePlacetteList corCyclePlacetteList;
 
   @override
   SaisiePlacettePageState createState() => SaisiePlacettePageState();
@@ -140,7 +143,12 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
       ),
       // body: null,
       body: __buildAsyncPlacetteListWidget(
-          context, ref, widget.placette, widget.dispCycleList),
+        context,
+        ref,
+        widget.placette,
+        widget.dispCycleList,
+        widget.corCyclePlacetteList,
+      ),
     );
   }
 }
@@ -150,6 +158,7 @@ Widget __buildAsyncPlacetteListWidget(
   WidgetRef ref,
   Placette placette,
   CycleList dispCycleList,
+  CorCyclePlacetteList corCyclePlacetteList,
 ) {
   final _viewModel =
       ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
@@ -166,7 +175,7 @@ Widget __buildAsyncPlacetteListWidget(
             child: SaisieDataTable(
               placette: placette,
               dispCycleList: dispCycleList,
-              // corCyclePlacetteList: placette.corCyclesPlacettes!,
+              corCyclePlacetteList: corCyclePlacetteList,
               displayTypeState: displayTypeState,
             ),
           ),
