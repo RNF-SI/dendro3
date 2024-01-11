@@ -87,4 +87,13 @@ class CorCyclePlacetteList
       values: values
           .where((corCyclePlacette) => corCyclePlacette.idCyclePlacette != id)
           .toList());
+
+  isEmpty() => values.isEmpty;
+
+  bool hasCorCyclePlacetteByIdCycleAndIdplacette(
+      final int idCycle, final int idPlacette) {
+    return values.any((corCyclePlacette) =>
+        corCyclePlacette.idCycle == idCycle &&
+        corCyclePlacette.idPlacette == idPlacette);
+  }
 }
