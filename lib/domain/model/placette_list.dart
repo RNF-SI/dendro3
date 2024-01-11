@@ -13,6 +13,10 @@ class PlacetteList with _$PlacetteList {
 
   int get length => values.length;
 
+  static PlacetteList empty() {
+    return const PlacetteList(values: []);
+  }
+
   PlacetteList addPlacette(final Placette placette) =>
       copyWith(values: [...values, placette]);
 
