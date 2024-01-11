@@ -39,6 +39,8 @@ import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider.dart';
+import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider_impl.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
@@ -269,4 +271,9 @@ final setCyclePlacetteCreatedUseCaseProvider =
 final completeCyclePlacetteCreatedUseCaseProvider =
     Provider<CompleteCyclePlacetteCreatedUseCase>((ref) =>
         CompleteCyclePlacetteCreatedUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final getCorCyclePlacetteLocalStorageUseCaseprovider =
+    Provider<GetInProgressCorCyclePlacetteLocalStorageUseCase>((ref) =>
+        GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));
