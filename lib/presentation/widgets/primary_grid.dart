@@ -5,12 +5,15 @@ import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:flutter/material.dart';
 
+import '../lib/simple_element.dart';
+
 class PrimaryGridWidget extends StatelessWidget {
-  final List<MapEntry<String, dynamic>> simpleElements;
+  final SimpleElement simpleElements;
   final Function(dynamic) onItemAdded;
   final Function(dynamic) onItemDeleted;
   final Function(dynamic) onItemUpdated;
   final String displayTypeState;
+  final Map<int, int> mapNumCyclePlacetteNumCycle;
 
   PrimaryGridWidget({
     Key? key,
@@ -19,10 +22,20 @@ class PrimaryGridWidget extends StatelessWidget {
     required this.onItemDeleted,
     required this.onItemUpdated,
     required this.displayTypeState,
+    required this.mapNumCyclePlacetteNumCycle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Replace idCyclePlacette value by with NumCycle value
+    if (simpleElements.containsKey('idCyclePlacette')) {
+      int? numCyclePlacette = mapNumCyclePlacetteNumCycle[
+          simpleElements.getValue('idCyclePlacette')!];
+      if (numCyclePlacette != null) {
+        simpleElements.setValue('idCyclePlacette', numCyclePlacette);
+      }
+    }
+
     // remove the elements of simpleElements that are not in the displayable columns
     simpleElements.removeWhere(
         (element) => !shouldIncludeColumn(element.key, displayTypeState));
@@ -33,7 +46,7 @@ class PrimaryGridWidget extends StatelessWidget {
 
     List<Widget> simpleWidgets = [];
     for (int i = 0; i < simpleElements.length; i++) {
-      MapEntry<String, dynamic> entry = simpleElements[i];
+      MapEntry<String, dynamic> entry = simpleElements.entries[i];
       String titleName = titleNames[i]; // Get the modified title name
 
       // Determine the display value

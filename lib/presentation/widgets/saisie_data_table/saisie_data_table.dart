@@ -27,6 +27,7 @@ import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
+import 'package:dendro3/presentation/lib/simple_element.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
@@ -124,6 +125,18 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       for (Cycle cycle in cycleList) cycle.idCycle: cycle.numCycle
     };
 
+    Map<int, int> mapNumCyclePlacetteNumCycle = {};
+
+    // create a Map with key idCyclePlacette and value numCycle
+    if (cycleList != null && cycleList.isNotEmpty) {
+      mapNumCyclePlacetteNumCycle = {
+        for (CorCyclePlacette corCyclePlacette
+            in widget.corCyclePlacetteList.values)
+          corCyclePlacette.idCyclePlacette: mapIdCycleNumCycle[corCyclePlacette
+              .idCycle]! // get the numCycle from mapIdCycleNumCycle
+      };
+    }
+
     // List<bool> reducedList = ref.watch(reducedToggleProvider);
     List<bool> reducedMesureList = ref.watch(reducedMesureToggleProvider);
     List<bool> cycleToggleSelectedList = ref.watch(cycleSelectedToggleProvider);
@@ -154,6 +167,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       sortedCycleRowList,
       items,
       mapIdCycleNumCycle,
+      mapNumCyclePlacetteNumCycle,
       selectedItemDetails,
     );
 
@@ -264,6 +278,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               selectedItemDetails,
               selectedItemMesureDetails,
               mapIdCycleNumCycle,
+              mapNumCyclePlacetteNumCycle,
             ),
         ],
       ),
@@ -303,6 +318,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     SaisisableObject? selectedItemDetailsCo,
     SaisisableObject? selectedItemMesureDetailsCo,
     Map<int, int> mapIdCycleNumCycle,
+    Map<int, int> mapNumCyclePlacetteNumCycle,
   ) {
     // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
     // Check if selectedItemDetails is null
@@ -310,7 +326,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       return Text("No item selected.");
     }
 
-    List<MapEntry<String, dynamic>> simpleElements = [];
+    SimpleElement simpleElements = SimpleElement();
     List<dynamic> mesuresList = [];
 
     // Extracting the data
@@ -334,7 +350,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         mesuresList = entry.value;
       } else {
         mesuresList = [];
-        simpleElements.add(entry);
+        simpleElements.addEntry(entry.key, entry.value);
       }
     });
 
@@ -350,6 +366,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             PrimaryGridWidget(
               simpleElements: simpleElements,
               displayTypeState: widget.displayTypeState,
+              mapNumCyclePlacetteNumCycle: mapNumCyclePlacetteNumCycle,
               onItemAdded: (dynamic item) {
                 Navigator.push(context, MaterialPageRoute<void>(
                   builder: (BuildContext context) {
@@ -665,6 +682,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<Map<String, dynamic>> valueList,
     DisplayableList items,
     Map<int, int> mapIdCycleNumCycle,
+    Map<int, int> mapNumCyclePlacetteNumCycle,
     SaisisableObject? selectedItemDetails,
   ) {
     return valueList.map<DataRow>((value) {
@@ -712,6 +730,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             mapIdCycleNumCycle[val].toString(),
             style: TextStyle(fontSize: 15),
           )));
+        } else if (key == "idCyclePlacette" &&
+            mapNumCyclePlacetteNumCycle.containsKey(val)) {
+          cellList.add(DataCell(Text(
+            mapNumCyclePlacetteNumCycle[val].toString(),
+            style: TextStyle(fontSize: 15),
+          )));
         } else {
           String displayValue;
           if (val is double) {
@@ -721,46 +745,68 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           } else {
             displayValue = val.toString();
           }
-          cellList.add(DataCell(Text(
-            displayValue,
-            style: TextStyle(fontSize: 15),
-          )));
+          cellList.add(
+            DataCell(
+              Text(
+                displayValue,
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+          );
         }
       });
 
       return DataRow(
         cells: cellList,
         color: MaterialStateProperty.resolveWith<Color?>((states) {
-          // Use a different Color for each idCycle of mapIdCycleNumCycle, according to numCycle
-          if (mapIdCycleNumCycle[value["idCycle"]] == 1) {
+          // Use a different Color for each Cycle
+          //For arbre or bmsup30 use mapIdCycleNumCycle, to get the numCycle
+          //For other type use mapIdCyclePlacetteNumCycle, to get the numCycle
+
+          if (mapIdCycleNumCycle[value["idCycle"]] == 1 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 1) {
             return Colors.white;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 2) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 2 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 2) {
             return Colors.blue[200];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 3) {
             return Colors.blue[400];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 4) {
             return Colors.blue[600];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 5) {
             return Colors.blue[800];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 6) {
             return Colors.blue[900];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 7) {
             return Colors.green;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 8) {
             return Colors.lime;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 9) {
             return Colors.amber;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 10) {
             return Colors.cyan;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 11) {
             return Colors.deepOrange;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 12) {
             return Colors.deepPurple;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 13) {
             return Colors.lightBlue;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 14) {
             return Colors.lightGreen;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15) {
+          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15 ||
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 15) {
             return Colors.limeAccent;
           }
         }),

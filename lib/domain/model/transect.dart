@@ -106,7 +106,7 @@ class Transect with _$Transect implements SaisisableObject {
   static bool getDisplayableColumn(String columnName) {
     return [
       'idTransect',
-      // 'idCyclePlacette',
+      'idCyclePlacette',
       // 'idTransectOrig',
       'codeEssence',
       'refTransect',
@@ -131,6 +131,8 @@ class Transect with _$Transect implements SaisisableObject {
       switch (columnName) {
         // case 'idTransect':
         //   return 'idTransectOrigine';
+        case 'idCyclePlacette':
+          return 'NumCycle';
         case 'codeEssence':
           return 'Ess';
         case 'diametre':
@@ -146,6 +148,8 @@ class Transect with _$Transect implements SaisisableObject {
       switch (columnName) {
         case 'idTransect':
           return 'idTransectOrigine';
+        case 'idCyclePlacette':
+          return 'NumCycle';
         case 'codeEssence':
           return 'Essence';
         case 'refTransect':

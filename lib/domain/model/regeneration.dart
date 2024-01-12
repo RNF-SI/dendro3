@@ -93,7 +93,7 @@ class Regeneration with _$Regeneration implements SaisisableObject {
   static bool getDisplayableColumn(String columnName) {
     return [
       'idRegeneration',
-      // 'idCyclePlacette',
+      'idCyclePlacette',
       'sousPlacette',
       'codeEssence',
       'recouvrement',
@@ -110,6 +110,8 @@ class Regeneration with _$Regeneration implements SaisisableObject {
   static List<String> changeColumnName(List<String> columnNames) {
     return columnNames.map((columnName) {
       switch (columnName) {
+        case 'idCyclePlacette':
+          return 'NumCycle';
         case 'sousPlacette':
           return 'sousPlacette';
         case 'codeEssence':
@@ -127,6 +129,8 @@ class Regeneration with _$Regeneration implements SaisisableObject {
       switch (columnName) {
         case 'idRegeneration':
           return 'id';
+        case 'idCyclePlacette':
+          return 'NumCycle';
         case 'sousPlacette':
           return 'Sous placette';
         case 'codeEssence':
