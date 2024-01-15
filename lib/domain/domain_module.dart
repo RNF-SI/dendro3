@@ -121,8 +121,10 @@ final getDispositifUseCaseProvider = Provider<GetDispositifUseCase>((ref) =>
     GetDispositifUseCaseImpl(ref.watch(dispositifsRepositoryProvider)));
 
 final deleteDispositifUseCaseProvider = Provider<DeleteDispositifUseCase>(
-    (ref) =>
-        DeleteDispositifUseCaseImpl(ref.watch(dispositifsRepositoryProvider)));
+    (ref) => DeleteDispositifUseCaseImpl(
+        ref.watch(dispositifsRepositoryProvider),
+        ref.watch(placettesRepositoryProvider),
+        ref.watch(cyclesRepositoryProvider)));
 
 final loginUseCaseProvider = Provider<LoginUseCase>(
     (ref) => LoginUseCaseImpl(ref.watch(authenticationRepositoryProvider)));

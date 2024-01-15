@@ -164,6 +164,11 @@ final corCyclePlacetteRepositoryProvider =
             ref.watch(transectRepositoryProvider),
             ref.watch(regenerationRepositoryProvider)));
 
+final RepereDatabaseProvider =
+    Provider<ReperesDatabase>((_) => ReperesDatabaseImpl());
+final repereRepositoryProvider = Provider<ReperesRepository>(
+    (ref) => ReperesRepositoryImpl(ref.watch(RepereDatabaseProvider)));
+
 final placettesProvider =
     Provider<PlacettesDatabase>((_) => PlacettesDatabaseImpl());
 final placettesRepositoryProvider = Provider<PlacettesRepository>((ref) =>
@@ -171,12 +176,8 @@ final placettesRepositoryProvider = Provider<PlacettesRepository>((ref) =>
         ref.watch(placettesProvider),
         ref.watch(arbresRepositoryProvider),
         ref.watch(bmsSup30RepositoryProvider),
+        ref.watch(repereRepositoryProvider),
         ref.watch(corCyclePlacetteRepositoryProvider)));
-
-final RepereDatabaseProvider =
-    Provider<ReperesDatabase>((_) => ReperesDatabaseImpl());
-final repereRepositoryProvider = Provider<ReperesRepository>(
-    (ref) => ReperesRepositoryImpl(ref.watch(RepereDatabaseProvider)));
 
 final localStorageProvider =
     Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());

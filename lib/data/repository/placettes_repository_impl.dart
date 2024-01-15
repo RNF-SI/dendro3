@@ -5,17 +5,20 @@ import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:dendro3/domain/repository/bmsSup30_repository.dart';
 import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/placettes_repository.dart';
+import 'package:dendro3/domain/repository/reperes_repository.dart';
 
 class PlacettesRepositoryImpl implements PlacettesRepository {
   final PlacettesDatabase database;
   final ArbresRepository arbresRepository;
   final BmsSup30Repository bmsRepository;
+  final ReperesRepository reperesRepository;
   final CorCyclesPlacettesRepository corCyclePlacetteRepository;
 
   const PlacettesRepositoryImpl(
     this.database,
     this.arbresRepository,
     this.bmsRepository,
+    this.reperesRepository,
     this.corCyclePlacetteRepository,
   );
 
@@ -33,7 +36,7 @@ class PlacettesRepositoryImpl implements PlacettesRepository {
   }
 
   @override
-  Future<void> deletePlacette(int placetteId) async {
+  Future<void> deletePlacetteAndSubObject(int placetteId) async {
     // delete all he arbres linked to the placette
     List<int> arbresIds =
         await arbresRepository.getArbreIdsForPlacette(placetteId);
@@ -47,6 +50,9 @@ class PlacettesRepositoryImpl implements PlacettesRepository {
     for (var bmId in bmsIds) {
       await bmsRepository.deleteBmSup30AndBmSup30MesureFromIdBmSup30(bmId);
     }
+
+    // delete repere from id placette
+    await reperesRepository.deleteRepereFromPlacetteId(placetteId);
 
     // delete all he corCyclePlacette linked to the placette
     List<int> corCyclePlacetteIds = await corCyclePlacetteRepository

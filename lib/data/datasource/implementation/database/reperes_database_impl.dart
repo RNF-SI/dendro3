@@ -94,4 +94,14 @@ class ReperesDatabaseImpl implements ReperesDatabase {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<void> deleteRepereFromPlacetteId(final int placetteId) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_placette = ?',
+      whereArgs: [placetteId],
+    );
+  }
 }

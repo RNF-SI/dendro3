@@ -56,4 +56,9 @@ class ReperesRepositoryImpl implements ReperesRepository {
   Future<void> deleteRepere(final int idRepere) async {
     await database.deleteRepere(idRepere);
   }
+
+  @override 
+  Future<void> deleteRepereFromPlacetteId(final int placetteId) async {
+    await database.deleteRepereFromPlacetteId(placetteId);
+  }
 }

@@ -107,4 +107,14 @@ class CyclesDatabaseImpl implements CyclesDatabase {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<void> deleteCycleFromDispositifId(final int dispositifId) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_dispositif = ?',
+      whereArgs: [dispositifId],
+    );
+  }
 }
