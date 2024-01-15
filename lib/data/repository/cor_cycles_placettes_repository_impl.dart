@@ -1,7 +1,9 @@
+import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
 import 'package:dendro3/data/mapper/corCyclePlacette_mapper.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
+import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:dendro3/domain/repository/regenerations_repository.dart';
 import 'package:dendro3/domain/repository/transects_repository.dart';
 
@@ -9,11 +11,13 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
   final CorCyclesPlacettesDatabase database;
   final TransectsRepository transectsRepository;
   final RegenerationsRepository regenerationsRepository;
+  final LocalStorageRepository _localStorageRepository;
 
   const CorCyclesPlacettesRepositoryImpl(
     this.database,
     this.transectsRepository,
     this.regenerationsRepository,
+    this._localStorageRepository,
   );
 
   @override
@@ -66,6 +70,10 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
         .deleteTransectsForCorCyclePlacette(corCyclePlacetteId);
     await regenerationsRepository
         .deleteRegenerationsForCorCyclePlacette(corCyclePlacetteId);
+
+    _localStorageRepository
+        .removeFromInProgressCorCyclePlacette(corCyclePlacetteId);
+
     await database.deleteCorCyclePlacette(corCyclePlacetteId);
   }
 }
