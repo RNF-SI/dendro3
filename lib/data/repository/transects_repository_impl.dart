@@ -101,4 +101,10 @@ class TransectsRepositoryImpl implements TransectsRepository {
   Future<void> deleteTransect(final int idTransect) async {
     await database.deleteTransect(idTransect);
   }
+
+  @override
+  Future<void> deleteTransectsForCorCyclePlacette(
+      final int idCyclePlacette) async {
+    await database.deleteTransectsForCorCyclePlacette(idCyclePlacette);
+  }
 }

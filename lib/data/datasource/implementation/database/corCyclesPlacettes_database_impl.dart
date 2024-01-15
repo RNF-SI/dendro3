@@ -138,4 +138,26 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
   //   );
   // }
 
+  @override
+  Future<List<int>> getCorCyclePlacetteIdsForPlacette(
+      final int placetteId) async {
+    final db = await database;
+    final results = await db.query(
+      _tableName,
+      columns: [_columnId],
+      where: 'id_placette = ?',
+      whereArgs: [placetteId],
+    );
+    return results.map((e) => e[_columnId] as int).toList();
+  }
+
+  @override
+  Future<void> deleteCorCyclePlacette(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
 }

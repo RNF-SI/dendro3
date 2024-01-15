@@ -8,6 +8,7 @@ import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dar
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
+import 'package:dendro3/data/mapper/placette_mapper.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -111,6 +112,30 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
     };
   }
 
+  // Method to get all placettes by dispositifId
+  @override
+  Future<List<PlacetteEntity>> getPlacettesByDispositifId(
+      final int dispositifId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _tableName,
+      where: 'id_dispositif = ?',
+      whereArgs: [dispositifId],
+    );
+
+    // Convert the List<Map<String, dynamic>> to List<PlacetteEntity>
+    return maps;
+  }
+
+  @override
+  Future<void> deletePlacette(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
   // @override
   // Future<void> updatePlacette(final PlacetteEntity placette) async {
   //   final db = await database;

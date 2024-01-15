@@ -77,4 +77,10 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
   Future<void> deleteRegeneration(final int idRegeneration) async {
     await database.deleteRegeneration(idRegeneration);
   }
+
+  @override
+  Future<void> deleteRegenerationsForCorCyclePlacette(
+      final int idCyclePlacette) async {
+    await database.deleteRegenerationsForCorCyclePlacette(idCyclePlacette);
+  }
 }

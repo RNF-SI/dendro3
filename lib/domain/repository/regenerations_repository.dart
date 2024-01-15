@@ -31,4 +31,6 @@ abstract class RegenerationsRepository {
   );
 
   Future<void> deleteRegeneration(final int idRegeneration);
+
+  Future<void> deleteRegenerationsForCorCyclePlacette(int corCyclePlacetteId);
 }

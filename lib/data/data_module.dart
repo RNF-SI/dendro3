@@ -95,11 +95,6 @@ final authenticationRepositoryProvider = Provider<AuthenticationRepository>(
     (ref) =>
         AuthenticationRepositoryImpl(ref.watch(authenticationApiProvider)));
 
-final placettesProvider =
-    Provider<PlacettesDatabase>((_) => PlacettesDatabaseImpl());
-final placettesRepositoryProvider = Provider<PlacettesRepository>(
-    (ref) => PlacettesRepositoryImpl(ref.watch(placettesProvider)));
-
 final cyclesDatabaseProvider =
     Provider<CyclesDatabase>((_) => CyclesDatabaseImpl());
 final cyclesApiProvider = Provider<CyclesApi>((_) => CyclesApiImpl());
@@ -125,21 +120,17 @@ final nomenclaturesTypesRepositoryProvider =
         NomenclaturesTypesRepositoryImpl(
             ref.watch(nomenclaturesTypesDatabaseProvider)));
 
-final arbresDatabaseProvider =
-    Provider<ArbresDatabase>((_) => ArbresDatabaseImpl());
-final arbresRepositoryProvider = Provider<ArbresRepository>(
-    (ref) => ArbresRepositoryImpl(ref.watch(arbresDatabaseProvider)));
-
 final arbresMesuresDatabaseProvider =
     Provider<ArbresMesuresDatabase>((_) => ArbresMesuresDatabaseImpl());
 final arbresMesuresRepositoryProvider = Provider<ArbresMesuresRepository>(
     (ref) =>
         ArbresMesuresRepositoryImpl(ref.watch(arbresMesuresDatabaseProvider)));
 
-final bmsSup30DatabaseProvider =
-    Provider<BmsSup30Database>((_) => BmsSup30DatabaseImpl());
-final bmsSup30RepositoryProvider = Provider<BmsSup30Repository>(
-    (ref) => BmsSup30RepositoryImpl(ref.watch(bmsSup30DatabaseProvider)));
+final arbresDatabaseProvider =
+    Provider<ArbresDatabase>((_) => ArbresDatabaseImpl());
+final arbresRepositoryProvider = Provider<ArbresRepository>((ref) =>
+    ArbresRepositoryImpl(ref.watch(arbresDatabaseProvider),
+        ref.watch(arbresMesuresRepositoryProvider)));
 
 final bmsSup30MesuresDatabaseProvider =
     Provider<BmsSup30MesuresDatabase>((_) => BmsSup30MesuresDatabaseImpl());
@@ -147,17 +138,11 @@ final bmsSup30MesuresRepositoryProvider = Provider<BmsSup30MesuresRepository>(
     (ref) => BmsSup30MesuresRepositoryImpl(
         ref.watch(bmsSup30MesuresDatabaseProvider)));
 
-final CorCyclePlacetteDatabaseProvider = Provider<CorCyclesPlacettesDatabase>(
-    (_) => CorCyclesPlacettesDatabaseImpl());
-final corCyclePlacetteRepositoryProvider =
-    Provider<CorCyclesPlacettesRepository>((ref) =>
-        CorCyclesPlacettesRepositoryImpl(
-            ref.watch(CorCyclePlacetteDatabaseProvider)));
-
-final RepereDatabaseProvider =
-    Provider<ReperesDatabase>((_) => ReperesDatabaseImpl());
-final repereRepositoryProvider = Provider<ReperesRepository>(
-    (ref) => ReperesRepositoryImpl(ref.watch(RepereDatabaseProvider)));
+final bmsSup30DatabaseProvider =
+    Provider<BmsSup30Database>((_) => BmsSup30DatabaseImpl());
+final bmsSup30RepositoryProvider = Provider<BmsSup30Repository>((ref) =>
+    BmsSup30RepositoryImpl(ref.watch(bmsSup30DatabaseProvider),
+        ref.watch(bmsSup30MesuresRepositoryProvider)));
 
 final RegenerationDatabaseProvider =
     Provider<RegenerationsDatabase>((_) => RegenerationsDatabaseImpl());
@@ -169,6 +154,29 @@ final TransectDatabaseProvider =
     Provider<TransectsDatabase>((_) => TransectsDatabaseImpl());
 final transectRepositoryProvider = Provider<TransectsRepository>(
     (ref) => TransectsRepositoryImpl(ref.watch(TransectDatabaseProvider)));
+
+final CorCyclePlacetteDatabaseProvider = Provider<CorCyclesPlacettesDatabase>(
+    (_) => CorCyclesPlacettesDatabaseImpl());
+final corCyclePlacetteRepositoryProvider =
+    Provider<CorCyclesPlacettesRepository>((ref) =>
+        CorCyclesPlacettesRepositoryImpl(
+            ref.watch(CorCyclePlacetteDatabaseProvider),
+            ref.watch(transectRepositoryProvider),
+            ref.watch(regenerationRepositoryProvider)));
+
+final placettesProvider =
+    Provider<PlacettesDatabase>((_) => PlacettesDatabaseImpl());
+final placettesRepositoryProvider = Provider<PlacettesRepository>((ref) =>
+    PlacettesRepositoryImpl(
+        ref.watch(placettesProvider),
+        ref.watch(arbresRepositoryProvider),
+        ref.watch(bmsSup30RepositoryProvider),
+        ref.watch(corCyclePlacetteRepositoryProvider)));
+
+final RepereDatabaseProvider =
+    Provider<ReperesDatabase>((_) => ReperesDatabaseImpl());
+final repereRepositoryProvider = Provider<ReperesRepository>(
+    (ref) => ReperesRepositoryImpl(ref.watch(RepereDatabaseProvider)));
 
 final localStorageProvider =
     Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());

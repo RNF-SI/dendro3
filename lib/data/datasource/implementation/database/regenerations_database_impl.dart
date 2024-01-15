@@ -2,6 +2,7 @@ import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -95,6 +96,16 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     await db.delete(
       _tableName,
       where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<void> deleteRegenerationsForCorCyclePlacette(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_cycle_placette = ?',
       whereArgs: [id],
     );
   }

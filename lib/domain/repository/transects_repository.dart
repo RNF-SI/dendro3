@@ -42,4 +42,6 @@ abstract class TransectsRepository {
   );
 
   Future<void> deleteTransect(final int idTransect);
+
+  Future<void> deleteTransectsForCorCyclePlacette(int corCyclePlacetteId);
 }

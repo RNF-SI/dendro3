@@ -17,4 +17,9 @@ abstract class CorCyclesPlacettesRepository {
     final double? recouv_buissons,
     final double? recouv_arbres,
   );
+
+  Future<List<int>> getCorCyclePlacetteIdsForPlacette(final int placetteId);
+
+  Future<void> deleteCorCyclePlacetteTransectAndRege(
+      final int corCyclePlacetteId);
 }

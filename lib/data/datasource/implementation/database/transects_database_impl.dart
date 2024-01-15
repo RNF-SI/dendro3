@@ -91,6 +91,15 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     );
   }
 
+  @override
+  Future<void> deleteTransectsForCorCyclePlacette(int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: 'id_cycle_placette = ?',
+      whereArgs: [id],
+    );
+  }
   // @override
   // Future<void> updateTransect(final TransectEntity transect) async {
   //   final db = await database;
