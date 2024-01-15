@@ -1,6 +1,7 @@
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/state/download_status.dart';
 import 'package:dendro3/presentation/view/dispositif_page.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,10 @@ class DownloadButton extends HookConsumerWidget {
             .stopDownloadDispositif(dispInfo);
         break;
       case DownloadStatus.downloaded:
+        ref
+            .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider
+                .notifier)
+            .reinitializeList();
         Navigator.push(context, MaterialPageRoute<void>(
           builder: (BuildContext context) {
             return DispositifPage(

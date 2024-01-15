@@ -58,4 +58,10 @@ class CorCyclePlacetteLocalStorageStatusNotifier
   refreshList() {
     state = state;
   }
+
+  void reinitializeList() {
+    List<int> inProgressIds =
+        _getCyclePlacetteLocalStorageUseCaseProvider.execute();
+    state = inProgressIds; // Notify listeners about the change
+  }
 }
