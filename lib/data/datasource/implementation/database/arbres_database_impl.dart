@@ -1,6 +1,7 @@
 import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/log_error.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
@@ -137,12 +138,18 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   @override
   Future<List<int>> getArbreIdsForPlacette(final int idPlacette) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      _tableName,
-      columns: [_columnId],
-      where: 'id_placette = ?',
-      whereArgs: [idPlacette],
-    );
-    return List.generate(maps.length, (i) => maps[i][_columnId]);
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+        _tableName,
+        columns: [_columnId],
+        where: 'id_placette = ?',
+        whereArgs: [idPlacette],
+      );
+      return List.generate(maps.length, (i) => maps[i][_columnId]);
+    } on Exception catch (e, stackTrace) {
+      logError(
+          e, stackTrace, 'getArbreIdsForPlacette', {'idPlacette': idPlacette});
+      return []; // or rethrow, depending on how you want to handle the error
+    }
   }
 }

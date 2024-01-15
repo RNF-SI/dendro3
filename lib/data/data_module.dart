@@ -155,14 +155,19 @@ final TransectDatabaseProvider =
 final transectRepositoryProvider = Provider<TransectsRepository>(
     (ref) => TransectsRepositoryImpl(ref.watch(TransectDatabaseProvider)));
 
+final localStorageProvider =
+    Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());
+
 final CorCyclePlacetteDatabaseProvider = Provider<CorCyclesPlacettesDatabase>(
     (_) => CorCyclesPlacettesDatabaseImpl());
 final corCyclePlacetteRepositoryProvider =
-    Provider<CorCyclesPlacettesRepository>((ref) =>
-        CorCyclesPlacettesRepositoryImpl(
-            ref.watch(CorCyclePlacetteDatabaseProvider),
-            ref.watch(transectRepositoryProvider),
-            ref.watch(regenerationRepositoryProvider)));
+    Provider<CorCyclesPlacettesRepository>(
+        (ref) => CorCyclesPlacettesRepositoryImpl(
+              ref.watch(CorCyclePlacetteDatabaseProvider),
+              ref.watch(transectRepositoryProvider),
+              ref.watch(regenerationRepositoryProvider),
+              ref.watch(localStorageProvider),
+            ));
 
 final RepereDatabaseProvider =
     Provider<ReperesDatabase>((_) => ReperesDatabaseImpl());
@@ -178,6 +183,3 @@ final placettesRepositoryProvider = Provider<PlacettesRepository>((ref) =>
         ref.watch(bmsSup30RepositoryProvider),
         ref.watch(repereRepositoryProvider),
         ref.watch(corCyclePlacetteRepositoryProvider)));
-
-final localStorageProvider =
-    Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());
