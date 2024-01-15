@@ -33,4 +33,8 @@ abstract class BmsSup30Repository {
   );
 
   Future<void> deleteBmSup30(final int idBmSup30);
+
+  Future<List<int>> getBmSup30IdsForPlacette(final int idPlacette);
+
+  Future<void> deleteBmSup30AndBmSup30MesureFromIdBmSup30(final int idBmSup30);
 }

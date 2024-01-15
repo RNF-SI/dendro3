@@ -137,4 +137,14 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<List<int>> getBmSup30IdsForPlacette(final int idPlacette) async {
+    final db = await database;
+    final results = await db.query(_tableName,
+        columns: ['$_columnId'],
+        where: 'id_placette = ?',
+        whereArgs: [idPlacette]);
+    return results.map((e) => e['$_columnId'] as int).toList();
+  }
 }

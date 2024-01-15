@@ -133,4 +133,16 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<List<int>> getArbreIdsForPlacette(final int idPlacette) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _tableName,
+      columns: [_columnId],
+      where: 'id_placette = ?',
+      whereArgs: [idPlacette],
+    );
+    return List.generate(maps.length, (i) => maps[i][_columnId]);
+  }
 }
