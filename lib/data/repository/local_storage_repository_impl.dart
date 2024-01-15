@@ -46,4 +46,13 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   List<int> getInProgressCorCyclePlacette() {
     return _getInProgressList();
   }
+
+  @override
+  Future<void> removeFromInProgressCorCyclePlacette(int idCyclePlacette) async {
+    List<int> inProgressList = _getInProgressList();
+    inProgressList.remove(idCyclePlacette);
+
+    await _preferences?.setStringList(inProgressCorCyclePlacetteKey,
+        inProgressList.map((e) => e.toString()).toList());
+  }
 }
