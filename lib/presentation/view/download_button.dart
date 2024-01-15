@@ -30,6 +30,8 @@ class DownloadButton extends HookConsumerWidget {
   bool get _isDownloaded =>
       dispInfo.downloadStatus == DownloadStatus.downloaded;
 
+  bool get _isRemoving => dispInfo.downloadStatus == DownloadStatus.removing;
+
   void _onPressed(BuildContext context, WidgetRef ref) {
     switch (dispInfo.downloadStatus) {
       case DownloadStatus.notDownloaded:
@@ -57,6 +59,10 @@ class DownloadButton extends HookConsumerWidget {
             );
           },
         ));
+        break;
+      case DownloadStatus.removing:
+        // Handle the removing state, perhaps do nothing or show a message
+        break;
     }
   }
 
@@ -83,6 +89,7 @@ class DownloadButton extends HookConsumerWidget {
                   isDownloaded: _isDownloaded,
                   isDownloading: _isDownloading,
                   isFetching: _isFetching,
+                  isRemoving: _isRemoving,
                 ),
                 Positioned.fill(
                   child: AnimatedOpacity(
@@ -121,6 +128,7 @@ class ButtonShapeWidget extends StatelessWidget {
     required this.isDownloading,
     required this.isDownloaded,
     required this.isFetching,
+    required this.isRemoving,
     required this.transitionDuration,
   });
 
@@ -128,6 +136,7 @@ class ButtonShapeWidget extends StatelessWidget {
   final bool isDownloaded;
   final bool isFetching;
   final Duration transitionDuration;
+  final bool isRemoving;
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +152,11 @@ class ButtonShapeWidget extends StatelessWidget {
       );
     }
 
+    String buttonText = isDownloaded ? 'OPEN' : 'GET';
+    if (isRemoving) {
+      buttonText = 'REMOVING...'; // New text for the removing state
+    }
+
     return AnimatedContainer(
       duration: transitionDuration,
       curve: Curves.ease,
@@ -155,7 +169,7 @@ class ButtonShapeWidget extends StatelessWidget {
           opacity: isDownloading || isFetching ? 0.0 : 1.0,
           curve: Curves.ease,
           child: Text(
-            isDownloaded ? 'OPEN' : 'GET',
+            buttonText,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.button?.copyWith(
                   fontWeight: FontWeight.bold,

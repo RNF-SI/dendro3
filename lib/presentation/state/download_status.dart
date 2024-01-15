@@ -3,4 +3,5 @@ enum DownloadStatus {
   fetchingDownload,
   downloading,
   downloaded,
+  removing
 }
