@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
+import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:dendro3/data/mapper/dispositif_list_mapper.dart';
 import 'package:dendro3/data/mapper/dispositif_mapper.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
@@ -100,4 +101,12 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
   @override
   Future<void> deleteDispositif(final int id) async =>
       await database.deleteDispositif(id);
+
+  @override
+  Future<void> exportDispositifData(int idDispositif) async {
+    // get dispositif and all data linked to the dispositif
+    DispositifEntity data = await database.getDispositifAllData(idDispositif);
+
+    await api.exportDispositifData(data);
+  }
 }

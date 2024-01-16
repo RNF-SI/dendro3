@@ -30,4 +30,6 @@ abstract class DispositifsRepository {
   Future<Dispositif> getDispositif(
     final int id,
   );
+
+  Future<void> exportDispositifData(int idDispositif);
 }

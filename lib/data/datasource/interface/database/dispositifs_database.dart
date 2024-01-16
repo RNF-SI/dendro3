@@ -8,4 +8,5 @@ abstract class DispositifsDatabase {
   Future<void> deleteDispositif(final int id);
   Future<DispositifListEntity> getUserDispositifs(final int id);
   Future<DispositifEntity> getDispositif(final int id);
+  Future<DispositifEntity> getDispositifAllData(final int id);
 }

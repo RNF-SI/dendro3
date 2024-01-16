@@ -6,6 +6,8 @@ import 'package:dendro3/data/datasource/implementation/database/global_database_
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
+import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
 import 'package:dendro3/data/mapper/placette_mapper.dart';
@@ -85,6 +87,28 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
           await CorCyclesPlacettesDatabaseImpl.getPlacetteCorCyclesPlacettes(
               db, placetteEntity['id_placette']);
       return {...placetteEntity, 'corCyclesPlacettes': corCyclesPlacettesObj};
+    }).toList());
+  }
+
+  static Future<PlacetteListEntity> getDispPlacettesAllData(
+      Database db, final int dispositifId) async {
+    PlacetteListEntity placetteList = await db.query(_tableName,
+        where: 'id_dispositif = ?', whereArgs: [dispositifId]);
+    List<PlacetteListEntity> placetteObj;
+    return Future.wait(placetteList.map((PlacetteEntity placetteEntity) async {
+      CorCyclePlacetteListEntity corCyclesPlacettesObj =
+          await CorCyclesPlacettesDatabaseImpl.getPlacetteCorCyclesPlacettes(
+              db, placetteEntity['id_placette']);
+      ArbreListEntity arbresObj = await ArbresDatabaseImpl.getPlacetteArbres(
+          db, placetteEntity['id_placette']);
+      BmSup30ListEntity bmsObj = await BmsSup30DatabaseImpl.getPlacetteBmSup30(
+          db, placetteEntity['id_placette']);
+      return {
+        ...placetteEntity,
+        'corCyclesPlacettes': corCyclesPlacettesObj,
+        'arbre': arbresObj,
+        'bms': bmsObj
+      };
     }).toList());
   }
 
