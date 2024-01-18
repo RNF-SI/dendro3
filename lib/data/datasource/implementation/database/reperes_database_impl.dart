@@ -1,4 +1,5 @@
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/reperes_database.dart';
 import 'package:dendro3/data/entity/reperes_entity.dart';
@@ -60,9 +61,12 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     final db = await database;
     late final RepereEntity transectEntity;
     await db.transaction((txn) async {
+      var updatedRepere = Map<String, dynamic>.from(repere)
+        ..['last_update'] = formatDateTime(DateTime.now());
+
       await txn.update(
         _tableName,
-        repere,
+        updatedRepere,
         where: '$_columnId = ?',
         whereArgs: [repere['id_repere']],
       );

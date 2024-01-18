@@ -1,4 +1,5 @@
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
@@ -64,9 +65,12 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     final db = await database;
     late final RegenerationEntity regenerationEntity;
     await db.transaction((txn) async {
+      var updatedRegeneration = Map<String, dynamic>.from(regeneration)
+        ..['last_update'] = formatDateTime(DateTime.now());
+
       await txn.update(
         _tableName,
-        regeneration,
+        updatedRegeneration,
         where: '$_columnId = ?',
         whereArgs: [regeneration['id_regeneration']],
       );

@@ -1,4 +1,5 @@
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
@@ -64,19 +65,22 @@ class TransectsDatabaseImpl implements TransectsDatabase {
 
   @override
   // Function called when one arbre is updated (not updating arbre mesure)
-  Future<TransectEntity> updateTransect(final TransectEntity arbre) async {
+  Future<TransectEntity> updateTransect(final TransectEntity transect) async {
     final db = await database;
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
+      var updatedTransect = Map<String, dynamic>.from(transect)
+        ..['last_update'] = formatDateTime(DateTime.now());
+
       await txn.update(
         _tableName,
-        arbre,
+        updatedTransect,
         where: '$_columnId = ?',
-        whereArgs: [arbre['id_transect']],
+        whereArgs: [transect['id_transect']],
       );
 
       final results = await txn.query(_tableName,
-          where: '$_columnId = ?', whereArgs: [arbre['id_transect']]);
+          where: '$_columnId = ?', whereArgs: [transect['id_transect']]);
       transectEntity = results.first;
     });
     return transectEntity;

@@ -1,5 +1,6 @@
 import 'package:dendro3/data/datasource/implementation/database/bmsSup30_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/data/datasource/implementation/database/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
@@ -102,9 +103,13 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     final db = await database;
     late final BmSup30Entity bmSup30Entity;
     await db.transaction((txn) async {
+      var updatedBmSup30 = Map<String, dynamic>.from(bmSup30)
+        ..['last_update'] =
+            formatDateTime(DateTime.now()); // Add current timestamp
+
       await txn.update(
         _tableName,
-        bmSup30,
+        updatedBmSup30,
         where: '$_columnId = ?',
         whereArgs: [bmSup30['id_bm_sup_30']],
       );
