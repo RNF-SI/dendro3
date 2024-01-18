@@ -55,8 +55,8 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
 
   static Future<List<BmSup30Entity>> getPlacetteBmSup30(
       Database db, final int placetteId) async {
-    BmSup30ListEntity bmSup30List = await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    BmSup30ListEntity bmSup30List = await db.query(_tableName,
+        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
 
     var bmSup30MesureObj;
     return Future.wait(bmSup30List.map((BmSup30Entity bmSup30Entity) async {
@@ -144,7 +144,7 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     final db = await database;
     final results = await db.query(_tableName,
         columns: ['$_columnId'],
-        where: 'id_placette = ?',
+        where: 'id_placette = ? AND deleted = 0',
         whereArgs: [idPlacette]);
     return results.map((e) => e['$_columnId'] as int).toList();
   }

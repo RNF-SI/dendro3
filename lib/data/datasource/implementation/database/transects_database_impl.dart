@@ -27,7 +27,8 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   static getCorCyclePlacetteTransects(
       Database db, final int corCyclePlacetteId) async {
     return await db.query(_tableName,
-        where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
+        where: 'id_cycle_placette = ? AND deleted = 0',
+        whereArgs: [corCyclePlacetteId]);
   }
 
   @override

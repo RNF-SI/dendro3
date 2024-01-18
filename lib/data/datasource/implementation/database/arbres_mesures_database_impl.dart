@@ -68,8 +68,11 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   static Future<ArbreMesureListEntity> getArbreArbresMesures(
       Database db, final int arbreId) async {
-    return await db
-        .query(_tableName, where: 'id_arbre = ?', whereArgs: [arbreId]);
+    return await db.query(
+      _tableName,
+      where: 'id_arbre = ? AND deleted = 0', // Exclude deleted records
+      whereArgs: [arbreId],
+    );
   }
 
   @override
@@ -86,7 +89,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
         db, cycle['id_dispositif'], cycle['num_cycle'] - 1);
     ArbreMesureListEntity arbreMesureList = await db.query(
       _tableName,
-      where: 'id_cycle = ? AND id_arbre = ?',
+      where: 'id_cycle = ? AND id_arbre = ? AND deleted = 0',
       whereArgs: [lastCycle['id_cycle'], idArbre],
       limit: 1,
     );

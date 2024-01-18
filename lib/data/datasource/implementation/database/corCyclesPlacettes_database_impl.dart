@@ -65,8 +65,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
 
   static Future<List<CorCyclePlacetteEntity>> getPlacetteCorCyclesPlacettes(
       Database db, final int placetteId) async {
-    CorCyclePlacetteListEntity corCyclePlacetteList = await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    CorCyclePlacetteListEntity corCyclePlacetteList = await db.query(_tableName,
+        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
 
     var transectObj;
 
@@ -145,7 +145,7 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     final results = await db.query(
       _tableName,
       columns: [_columnId],
-      where: 'id_placette = ?',
+      where: 'id_placette = ? AND deleted = 0',
       whereArgs: [placetteId],
     );
     return results.map((e) => e[_columnId] as int).toList();

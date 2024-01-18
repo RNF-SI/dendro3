@@ -50,8 +50,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
   static Future<List<ArbreEntity>> getPlacetteArbres(
       Database db, final int placetteId) async {
-    ArbreListEntity arbreList = await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    ArbreListEntity arbreList = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 0',
+      whereArgs: [placetteId],
+    );
 
     var arbreMesureObj;
 
@@ -143,7 +146,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       final List<Map<String, dynamic>> maps = await db.query(
         _tableName,
         columns: [_columnId],
-        where: 'id_placette = ?',
+        where: 'id_placette = ? AND deleted = 0',
         whereArgs: [idPlacette],
       );
       return List.generate(maps.length, (i) => maps[i][_columnId]);

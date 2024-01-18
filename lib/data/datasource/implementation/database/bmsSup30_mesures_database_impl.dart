@@ -29,8 +29,8 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
 
   static Future<BmSup30MesureListEntity> getbmSup30bmsSup30Mesures(
       Database db, final int bmsSup30Id) async {
-    return await db
-        .query(_tableName, where: 'id_bm_sup_30 = ?', whereArgs: [bmsSup30Id]);
+    return await db.query(_tableName,
+        where: 'id_bm_sup_30 = ? AND deleted = 0', whereArgs: [bmsSup30Id]);
   }
 
   @override

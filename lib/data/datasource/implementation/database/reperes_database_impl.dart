@@ -26,8 +26,8 @@ class ReperesDatabaseImpl implements ReperesDatabase {
 
   static Future<List<RepereEntity>> getPlacetteReperes(
       Database db, int placetteId) async {
-    return await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    return await db.query(_tableName,
+        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
   }
 
   @override
