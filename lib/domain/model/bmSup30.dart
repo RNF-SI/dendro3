@@ -126,6 +126,31 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
     ].contains(columnName);
   }
 
+  static bool getDisplayableGridTile(String columnName) {
+    return [
+      'idBmSup30Orig',
+      'idPlacette',
+      'idArbre',
+      'codeEssence',
+      'azimut',
+      'distance',
+      // 'orientation',
+      // 'azimutSouche',
+      // 'distanceSouche',
+      'numCycle',
+      'diametreIni',
+      'diametreMed',
+      'diametreFin',
+      // 'diametre130',
+      'longueur',
+      'contact',
+      'chablis',
+      'stadeDurete',
+      'stadeEcorce',
+      'observation',
+    ].contains(columnName);
+  }
+
   @override
   BmSup30Mesure getMesureFromIndex(int index) {
     return bmsSup30Mesures![index];
@@ -174,10 +199,10 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
           return 'Azimut';
         case 'distance':
           return 'Distance';
-        case 'idCycle':
-          return 'NumCycle';
         case 'diametre':
           return 'Diam';
+        case 'numCycle':
+          return 'NumCycle';
         case 'longueur':
           return 'Longueur';
         case 'stadeDurete':

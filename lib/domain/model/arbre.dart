@@ -113,6 +113,27 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
     ].contains(columnName);
   }
 
+  static bool getDisplayableGridTile(String columnName) {
+    return [
+      'idArbreOrig',
+      'codeEssence',
+      'azimut',
+      'distance',
+      'taillis',
+      'numCycle',
+      'diametre1',
+      'diametre2',
+      'type',
+      'hauteurTotale',
+      'stadeDurete',
+      'stadeEcorce',
+      'coupe',
+      'limite',
+      'codeEcolo',
+      'refCodeEcolo',
+    ].contains(columnName);
+  }
+
   @override
   ArbreMesure getMesureFromIndex(int index) {
     return arbresMesures![index];
@@ -163,12 +184,12 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
           return 'Diamètre 1';
         case 'type':
           return 'Type';
+        case 'numCycle':
+          return 'NumCycle';
         case 'taillis':
           return 'Taillis';
         case 'observation':
           return 'Observation';
-        case 'idCycle':
-          return 'NumCycle';
         case 'hauteurTotale':
           return 'Hauteur';
         case 'diametre2':
