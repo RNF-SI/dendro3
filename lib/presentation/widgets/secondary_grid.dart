@@ -103,7 +103,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
           }
 
           // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
-          if (widget.mesuresList.last['idCycle'] != maxNumberCyclePlacette) {
+          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette) {
             // Return the "Add New Measure" element
             return GestureDetector(
               onTap: () {
@@ -160,7 +160,14 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         if (currentItem.containsKey('idCycle')) {
           int? numCycle = widget.mapIdCycleNumCycle[currentItem['idCycle']];
           if (numCycle != null) {
-            currentItem['idCycle'] = numCycle;
+            Map<String, dynamic> updatedItem = {
+              'numCycle':
+                  numCycle, // Add numCycle property at the first position
+            };
+            // Copy the rest of the entries from the original currentItem map
+            updatedItem.addAll(currentItem);
+            // Update currentItem with the updated map
+            currentItem = updatedItem;
           }
         }
 
@@ -187,7 +194,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                     ),
                     // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
                     // ou bien si il y a plus de 1 mesure de cet arbre
-                    if (maxIdCyclePlacette == currentItem['idCycle'] &&
+                    if (maxNumberCyclePlacette == currentItem['numCycle'] &&
                         widget.mesuresList.length > 1)
                       IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
@@ -326,9 +333,9 @@ class _SecondaryGridState extends State<SecondaryGrid> {
   bool shouldIncludeColumn(String columnName, String type) {
     switch (type) {
       case 'Arbres':
-        return Arbre.getDisplayableColumn(columnName);
+        return Arbre.getDisplayableGridTile(columnName);
       case 'BmsSup30':
-        return BmSup30.getDisplayableColumn(columnName);
+        return BmSup30.getDisplayableGridTile(columnName);
       case 'Reperes':
         return Repere.getDisplayableColumn(columnName);
       case 'Regenerations':
