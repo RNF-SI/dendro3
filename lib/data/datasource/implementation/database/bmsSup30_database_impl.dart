@@ -131,8 +131,9 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
   @override
   Future<void> deleteBmSup30(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );

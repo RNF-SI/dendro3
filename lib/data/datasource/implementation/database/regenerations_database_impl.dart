@@ -93,8 +93,9 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   @override
   Future<void> deleteRegeneration(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -103,8 +104,9 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   @override
   Future<void> deleteRegenerationsForCorCyclePlacette(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the records as deleted
       where: 'id_cycle_placette = ?',
       whereArgs: [id],
     );

@@ -88,8 +88,9 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   @override
   Future<void> deleteRepere(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -98,8 +99,9 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   @override
   Future<void> deleteRepereFromPlacetteId(final int placetteId) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: 'id_placette = ?',
       whereArgs: [placetteId],
     );

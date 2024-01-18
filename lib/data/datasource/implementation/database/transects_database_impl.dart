@@ -84,8 +84,9 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   @override
   Future<void> deleteTransect(int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -94,8 +95,9 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   @override
   Future<void> deleteTransectsForCorCyclePlacette(int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: 'id_cycle_placette = ?',
       whereArgs: [id],
     );

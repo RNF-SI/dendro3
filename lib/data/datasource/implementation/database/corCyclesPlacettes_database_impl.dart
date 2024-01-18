@@ -154,8 +154,9 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
   @override
   Future<void> deleteCorCyclePlacette(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
     );

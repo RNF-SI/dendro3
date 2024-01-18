@@ -118,8 +118,9 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   @override
   Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: 'id_arbre = ?',
       whereArgs: [idArbre],
     );
@@ -128,8 +129,9 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   @override
   Future<void> deleteArbreMesure(final int idArbreMesure) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [idArbreMesure],
     );

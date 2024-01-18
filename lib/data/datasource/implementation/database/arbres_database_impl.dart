@@ -128,8 +128,9 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   @override
   Future<void> deleteArbre(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );

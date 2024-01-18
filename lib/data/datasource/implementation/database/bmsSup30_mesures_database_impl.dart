@@ -92,8 +92,9 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   @override
   Future<void> deleteBmSup30MesureFromIdBmSup30(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: 'id_bm_sup_30 = ?',
       whereArgs: [id],
     );
@@ -102,8 +103,9 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   @override
   Future<void> deleteBmSup30Mesure(final int id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
     );
