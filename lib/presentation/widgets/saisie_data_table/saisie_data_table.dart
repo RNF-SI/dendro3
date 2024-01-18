@@ -31,6 +31,9 @@ import 'package:dendro3/presentation/lib/simple_element.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
@@ -397,6 +400,26 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   // if (arbreDetails != null) {
                   arbreListViewModel.deleteItem(selectedItemDetailsCo.idArbre);
                   // }
+                } else if (selectedItemDetailsCo is BmSup30) {
+                  final bmSup30ListViewModel = ref
+                      .read(bmSup30ListViewModelStateNotifierProvider.notifier);
+                  bmSup30ListViewModel
+                      .deleteItem(selectedItemDetailsCo.idBmSup30);
+                } else if (selectedItemDetailsCo is Regeneration) {
+                  final regenerationListViewModel = ref.read(
+                      regenerationListViewModelStateNotifierProvider.notifier);
+                  regenerationListViewModel
+                      .deleteItem(selectedItemDetailsCo.idRegeneration);
+                } else if (selectedItemDetailsCo is Repere) {
+                  final repereListViewModel = ref
+                      .read(repereListViewModelStateNotifierProvider.notifier);
+                  repereListViewModel
+                      .deleteItem(selectedItemDetailsCo.idRepere);
+                } else if (selectedItemDetailsCo is Transect) {
+                  final transectListViewModel = ref.read(
+                      transectListViewModelStateNotifierProvider.notifier);
+                  transectListViewModel
+                      .deleteItem(selectedItemDetailsCo.idTransect);
                 }
               },
               onItemUpdated: (dynamic item) {
