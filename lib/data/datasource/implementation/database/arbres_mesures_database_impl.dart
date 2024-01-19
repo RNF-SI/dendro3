@@ -82,14 +82,35 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     );
   }
 
-  static Future<ArbreMesureListEntity> getArbreArbresMesuresForDataSync(
-      Database db, final int arbreId, String lastSyncTime) async {
-    return await db.query(
+  static Future<Map<String, List<ArbreMesureEntity>>>
+      getArbreArbresMesuresForDataSync(
+          Database db, final int arbreId, String lastSyncTime) async {
+    // Fetch newly created arbreMesures
+    List<ArbreMesureEntity> created_arbreMesures = await db.query(
       _tableName,
-      where:
-          'id_arbre = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
-      whereArgs: [arbreId, lastSyncTime, lastSyncTime, lastSyncTime],
+      where: 'id_arbre = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [arbreId, lastSyncTime],
     );
+
+    // Fetch updated arbreMesures
+    List<ArbreMesureEntity> updated_arbreMesures = await db.query(
+      _tableName,
+      where: 'id_arbre = ? AND last_update > ? AND deleted = 0',
+      whereArgs: [arbreId, lastSyncTime],
+    );
+
+    // Fetch deleted arbreMesures
+    List<ArbreMesureEntity> deleted_arbreMesures = await db.query(
+      _tableName,
+      where: 'id_arbre = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [arbreId, lastSyncTime],
+    );
+
+    return {
+      "created": created_arbreMesures,
+      "updated": updated_arbreMesures,
+      "deleted": deleted_arbreMesures,
+    };
   }
 
   @override

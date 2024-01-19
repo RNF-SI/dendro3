@@ -86,22 +86,57 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     }).toList());
   }
 
-  static Future<List<CorCyclePlacetteEntity>>
+  static Future<Map<String, List<Map<String, dynamic>>>>
       getPlacetteCorCyclesPlacettesForDataSync(
           Database db, final int placetteId, String lastSyncTime) async {
-    CorCyclePlacetteListEntity corCyclePlacetteList = await db.query(
+    // Fetch newly created CorCyclePlacette records
+    var created_corCyclePlacette = await db.query(
       _tableName,
-      where:
-          'id_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
-      whereArgs: [placetteId, lastSyncTime, lastSyncTime, lastSyncTime],
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
     );
 
-    return Future.wait(corCyclePlacetteList
-        .map((CorCyclePlacetteEntity corCyclePlacetteEntity) async {
-      TransectListEntity transectObj =
+    // Fetch updated CorCyclePlacette records
+    var updated_corCyclePlacette = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch deleted CorCyclePlacette records
+    var deleted_corCyclePlacette = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Process each list to include Transects and Regenerations
+    return {
+      "created": await _processCorCyclePlacetteWithDetails(
+        db,
+        created_corCyclePlacette,
+        lastSyncTime,
+      ),
+      "updated": await _processCorCyclePlacetteWithDetails(
+        db,
+        updated_corCyclePlacette,
+        lastSyncTime,
+      ),
+      "deleted":
+          deleted_corCyclePlacette, // Assuming no need to add details for deleted records
+    };
+  }
+
+// Helper function to process CorCyclePlacette and include Transects and Regenerations
+  static Future<List<Map<String, dynamic>>> _processCorCyclePlacetteWithDetails(
+      Database db,
+      List<CorCyclePlacetteEntity> corCyclePlacetteList,
+      String lastSyncTime) async {
+    return Future.wait(corCyclePlacetteList.map((corCyclePlacetteEntity) async {
+      var transectObj =
           await TransectsDatabaseImpl.getCorCyclePlacetteTransectsForDataSync(
               db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
-      RegenerationListEntity regenerationObj = await RegenerationsDatabaseImpl
+      var regenerationObj = await RegenerationsDatabaseImpl
           .getCorCyclePlacetteRegenerationsForDataSync(
               db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
       return {

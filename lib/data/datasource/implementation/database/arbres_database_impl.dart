@@ -67,17 +67,47 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     }).toList());
   }
 
-  static Future<List<ArbreEntity>> getPlacetteArbresForDataSync(
+  static Future<Map<String, List<ArbreEntity>>> getPlacetteArbresForDataSync(
       Database db, final int placetteId, String lastSyncTime) async {
-    ArbreListEntity arbreList = await db.query(
+    // Fetch newly created arbres (creation_date after lastSyncTime and not deleted)
+    List<ArbreEntity> created_arbres = await db.query(
       _tableName,
-      where:
-          'id_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
-      whereArgs: [placetteId, lastSyncTime, lastSyncTime, lastSyncTime],
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
     );
 
-    return Future.wait(arbreList.map((ArbreEntity arbreEntity) async {
-      ArbreMesureListEntity arbreMesureObj =
+    // Fetch updated arbres (last_update after lastSyncTime and not deleted)
+    List<ArbreEntity> updated_arbres = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch deleted arbres (deleted flag set and last_update after lastSyncTime)
+    List<ArbreEntity> deleted_arbres = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Process each list to include arbre_mesures, if needed
+    Map<String, List<ArbreEntity>> arbreData = {
+      "created":
+          await _processArbresWithMesures(db, created_arbres, lastSyncTime),
+      "updated":
+          await _processArbresWithMesures(db, updated_arbres, lastSyncTime),
+      "deleted":
+          deleted_arbres // Assuming no need to add arbre_mesures for deleted arbres
+    };
+
+    return arbreData;
+  }
+
+  // Helper function to process arbres and include their measures
+  static Future<List<ArbreEntity>> _processArbresWithMesures(
+      Database db, List<ArbreEntity> arbres, String lastSyncTime) async {
+    return Future.wait(arbres.map((ArbreEntity arbreEntity) async {
+      Map<String, List<ArbreMesureEntity>> arbreMesureObj =
           await ArbresMesuresDatabaseImpl.getArbreArbresMesuresForDataSync(
               db,
               arbreEntity["id_arbre"],

@@ -68,18 +68,45 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     }).toList());
   }
 
-  static Future<List<BmSup30Entity>> getPlacetteBmSup30ForDataSync(
-    Database db,
-    final int placetteId,
-    String lastSyncTime,
-  ) async {
-    BmSup30ListEntity bmSup30List = await db.query(_tableName,
-        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      getPlacetteBmSup30ForDataSync(
+          Database db, final int placetteId, String lastSyncTime) async {
+    // Fetch newly created, updated, and deleted BmSup30 records
+    var created_bmSup30 = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+    var updated_bmSup30 = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+    var deleted_bmSup30 = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
 
-    var bmSup30MesureObj;
-    return Future.wait(bmSup30List.map((BmSup30Entity bmSup30Entity) async {
-      bmSup30MesureObj = await BmsSup30MesuresDatabaseImpl
-          .getbmSup30bmsSup30MesuresForDataSync(
+    // Process each list to include bmSup30Mesures
+    return {
+      "created":
+          await _processBmSup30WithMesures(db, created_bmSup30, lastSyncTime),
+      "updated":
+          await _processBmSup30WithMesures(db, updated_bmSup30, lastSyncTime),
+      "deleted":
+          deleted_bmSup30, // Assuming no need to add bmSup30Mesures for deleted records
+    };
+  }
+
+// Helper function to process bmSup30 and include their measures
+  static Future<List<Map<String, dynamic>>> _processBmSup30WithMesures(
+      Database db, List<BmSup30Entity> bmSup30List, String lastSyncTime) async {
+    return Future.wait(
+        bmSup30List.map((BmSup30MesureEntity bmSup30Entity) async {
+      Map<String, BmSup30MesureListEntity> bmSup30MesureObj =
+          await BmsSup30MesuresDatabaseImpl
+              .getbmSup30bmsSup30MesuresForDataSync(
         db,
         bmSup30Entity["id_bm_sup_30"],
         lastSyncTime,

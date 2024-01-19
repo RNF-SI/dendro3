@@ -34,15 +34,32 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
         whereArgs: [corCyclePlacetteId]);
   }
 
-  static Future<RegenerationListEntity>
+  static Future<Map<String, List<RegenerationEntity>>>
       getCorCyclePlacetteRegenerationsForDataSync(Database db,
           final int corCyclePlacetteId, String lastSyncTime) async {
-    return await db.query(
+    var created_regenerations = await db.query(
       _tableName,
-      where:
-          'id_cycle_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
-      whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime, lastSyncTime],
+      where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
+
+    var updated_regenerations = await db.query(
+      _tableName,
+      where: 'id_cycle_placette = ? AND last_update > ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
+    );
+
+    var deleted_regenerations = await db.query(
+      _tableName,
+      where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
+    );
+
+    return {
+      "created": created_regenerations,
+      "updated": updated_regenerations,
+      "deleted": deleted_regenerations,
+    };
   }
 
   @override

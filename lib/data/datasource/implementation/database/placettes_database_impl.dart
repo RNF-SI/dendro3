@@ -100,26 +100,26 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
         where: 'id_dispositif = ?', whereArgs: [dispositifId]);
     List<PlacetteListEntity> placetteObj;
     return Future.wait(placetteList.map((PlacetteEntity placetteEntity) async {
-      CorCyclePlacetteListEntity corCyclesPlacettesObj =
+      Map<String, CorCyclePlacetteListEntity> corCyclesPlacettesObj =
           await CorCyclesPlacettesDatabaseImpl
               .getPlacetteCorCyclesPlacettesForDataSync(
         db,
         placetteEntity['id_placette'],
         lastSyncTime,
       );
-      ArbreListEntity arbresObj =
+      Map<String, ArbreListEntity> arbresObj =
           await ArbresDatabaseImpl.getPlacetteArbresForDataSync(
         db,
         placetteEntity['id_placette'],
         lastSyncTime,
       );
-      BmSup30ListEntity bmsObj =
+      Map<String, BmSup30ListEntity> bmsObj =
           await BmsSup30DatabaseImpl.getPlacetteBmSup30ForDataSync(
         db,
         placetteEntity['id_placette'],
         lastSyncTime,
       );
-      RepereListEntity repereObj =
+      Map<String, RepereListEntity> repereObj =
           await ReperesDatabaseImpl.getPlacetteReperesForDataSync(
         db,
         placetteEntity['id_placette'],

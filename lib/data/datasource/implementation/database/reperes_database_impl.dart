@@ -31,12 +31,34 @@ class ReperesDatabaseImpl implements ReperesDatabase {
         where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
   }
 
-  static Future<List<RepereEntity>> getPlacetteReperesForDataSync(
+  static Future<Map<String, List<RepereEntity>>> getPlacetteReperesForDataSync(
       Database db, int placetteId, String lastSyncTime) async {
-    return await db.query(_tableName,
-        where:
-            'id_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
-        whereArgs: [placetteId, lastSyncTime, lastSyncTime, lastSyncTime]);
+    // Fetch newly created Repere records
+    List<RepereEntity> created_reperes = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch updated Repere records
+    List<RepereEntity> updated_reperes = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch deleted Repere records
+    List<RepereEntity> deleted_reperes = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    return {
+      "created": created_reperes,
+      "updated": updated_reperes,
+      "deleted": deleted_reperes,
+    };
   }
 
   @override
