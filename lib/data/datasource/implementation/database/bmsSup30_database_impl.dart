@@ -68,6 +68,26 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     }).toList());
   }
 
+  static Future<List<BmSup30Entity>> getPlacetteBmSup30ForDataSync(
+    Database db,
+    final int placetteId,
+    String lastSyncTime,
+  ) async {
+    BmSup30ListEntity bmSup30List = await db.query(_tableName,
+        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
+
+    var bmSup30MesureObj;
+    return Future.wait(bmSup30List.map((BmSup30Entity bmSup30Entity) async {
+      bmSup30MesureObj = await BmsSup30MesuresDatabaseImpl
+          .getbmSup30bmsSup30MesuresForDataSync(
+        db,
+        bmSup30Entity["id_bm_sup_30"],
+        lastSyncTime,
+      );
+      return {...bmSup30Entity, 'bm_sup_30_mesures': bmSup30MesureObj};
+    }).toList());
+  }
+
   @override
   // called when one bms is added
   Future<BmSup30Entity> addBmSup30(BmSup30Entity bmSup30) async {

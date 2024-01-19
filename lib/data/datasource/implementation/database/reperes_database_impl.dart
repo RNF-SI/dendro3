@@ -31,6 +31,14 @@ class ReperesDatabaseImpl implements ReperesDatabase {
         where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
   }
 
+  static Future<List<RepereEntity>> getPlacetteReperesForDataSync(
+      Database db, int placetteId, String lastSyncTime) async {
+    return await db.query(_tableName,
+        where:
+            'id_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
+        whereArgs: [placetteId, lastSyncTime, lastSyncTime, lastSyncTime]);
+  }
+
   @override
   // Function called when one repere is added
   Future<RepereEntity> addRepere(final RepereEntity repere) async {

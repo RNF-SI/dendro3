@@ -34,6 +34,16 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
         where: 'id_bm_sup_30 = ? AND deleted = 0', whereArgs: [bmsSup30Id]);
   }
 
+  static Future<BmSup30MesureListEntity> getbmSup30bmsSup30MesuresForDataSync(
+      Database db, final int bmsSup30Id, String lastSyncTime) async {
+    return await db.query(
+      _tableName,
+      where:
+          'id_bm_sup_30 = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
+      whereArgs: [bmsSup30Id, lastSyncTime, lastSyncTime, lastSyncTime],
+    );
+  }
+
   @override
   Future<BmSup30MesureEntity> addBmSup30Mesure(
       BmSup30MesureEntity bmSup30Mesure) async {

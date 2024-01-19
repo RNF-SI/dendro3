@@ -82,6 +82,16 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     );
   }
 
+  static Future<ArbreMesureListEntity> getArbreArbresMesuresForDataSync(
+      Database db, final int arbreId, String lastSyncTime) async {
+    return await db.query(
+      _tableName,
+      where:
+          'id_arbre = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
+      whereArgs: [arbreId, lastSyncTime, lastSyncTime, lastSyncTime],
+    );
+  }
+
   @override
   Future<ArbreMesureEntity> getPreviousCycleMeasure(
       final int idArbre, final int? idCycle, int? numCycle) async {

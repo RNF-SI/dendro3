@@ -111,8 +111,12 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
 
   @override
   Future<void> exportDispositifData(int idDispositif) async {
+    String? lastSyncTime = await _localStorageRepository
+        .getLastSyncTimeForDispositif(idDispositif);
+
     // get dispositif and all data linked to the dispositif
-    DispositifEntity data = await database.getDispositifAllData(idDispositif);
+    DispositifEntity data =
+        await database.getDispositifAllData(idDispositif, lastSyncTime!);
 
     await api.exportDispositifData(data);
   }

@@ -10,6 +10,7 @@ import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
+import 'package:dendro3/data/entity/reperes_entity.dart';
 import 'package:dendro3/data/mapper/placette_mapper.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -91,23 +92,45 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
   }
 
   static Future<PlacetteListEntity> getDispPlacettesAllData(
-      Database db, final int dispositifId) async {
+    Database db,
+    final int dispositifId,
+    String lastSyncTime,
+  ) async {
     PlacetteListEntity placetteList = await db.query(_tableName,
         where: 'id_dispositif = ?', whereArgs: [dispositifId]);
     List<PlacetteListEntity> placetteObj;
     return Future.wait(placetteList.map((PlacetteEntity placetteEntity) async {
       CorCyclePlacetteListEntity corCyclesPlacettesObj =
-          await CorCyclesPlacettesDatabaseImpl.getPlacetteCorCyclesPlacettes(
-              db, placetteEntity['id_placette']);
-      ArbreListEntity arbresObj = await ArbresDatabaseImpl.getPlacetteArbres(
-          db, placetteEntity['id_placette']);
-      BmSup30ListEntity bmsObj = await BmsSup30DatabaseImpl.getPlacetteBmSup30(
-          db, placetteEntity['id_placette']);
+          await CorCyclesPlacettesDatabaseImpl
+              .getPlacetteCorCyclesPlacettesForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      ArbreListEntity arbresObj =
+          await ArbresDatabaseImpl.getPlacetteArbresForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      BmSup30ListEntity bmsObj =
+          await BmsSup30DatabaseImpl.getPlacetteBmSup30ForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      RepereListEntity repereObj =
+          await ReperesDatabaseImpl.getPlacetteReperesForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
       return {
         ...placetteEntity,
         'corCyclesPlacettes': corCyclesPlacettesObj,
         'arbre': arbresObj,
-        'bms': bmsObj
+        'bms': bmsObj,
+        'repere': repereObj
       };
     }).toList());
   }

@@ -32,6 +32,16 @@ class TransectsDatabaseImpl implements TransectsDatabase {
         whereArgs: [corCyclePlacetteId]);
   }
 
+  static Future<TransectListEntity> getCorCyclePlacetteTransectsForDataSync(
+      Database db, final int corCyclePlacetteId, String lastSyncTime) async {
+    return await db.query(
+      _tableName,
+      where:
+          'id_cycle_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
+      whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime, lastSyncTime],
+    );
+  }
+
   @override
   // Function called when one transect is added
   Future<TransectEntity> addTransect(final TransectEntity transect) async {

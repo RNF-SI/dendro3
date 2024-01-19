@@ -68,13 +68,10 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   }
 
   @override
-  Future<DateTime?> getLastSyncTimeForDispositif(int dispositifId) async {
+  Future<String?> getLastSyncTimeForDispositif(int dispositifId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String key = '$_lastSyncPrefix$dispositifId';
     final String? lastSyncString = prefs.getString(key);
-    if (lastSyncString != null) {
-      return DateTime.parse(lastSyncString);
-    }
-    return null;
+    return lastSyncString;
   }
 }

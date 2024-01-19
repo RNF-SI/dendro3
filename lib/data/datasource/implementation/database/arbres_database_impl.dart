@@ -67,6 +67,25 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     }).toList());
   }
 
+  static Future<List<ArbreEntity>> getPlacetteArbresForDataSync(
+      Database db, final int placetteId, String lastSyncTime) async {
+    ArbreListEntity arbreList = await db.query(
+      _tableName,
+      where:
+          'id_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime, lastSyncTime],
+    );
+
+    return Future.wait(arbreList.map((ArbreEntity arbreEntity) async {
+      ArbreMesureListEntity arbreMesureObj =
+          await ArbresMesuresDatabaseImpl.getArbreArbresMesuresForDataSync(
+              db,
+              arbreEntity["id_arbre"],
+              lastSyncTime); // Assuming you also update getArbreArbresMesures similarly
+      return {...arbreEntity, 'arbres_mesures': arbreMesureObj};
+    }).toList());
+  }
+
   @override
   // Function called when one arbre is added (not adding arbre mesure)
   Future<ArbreEntity> addArbre(final ArbreEntity arbre) async {

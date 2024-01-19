@@ -86,6 +86,32 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     }).toList());
   }
 
+  static Future<List<CorCyclePlacetteEntity>>
+      getPlacetteCorCyclesPlacettesForDataSync(
+          Database db, final int placetteId, String lastSyncTime) async {
+    CorCyclePlacetteListEntity corCyclePlacetteList = await db.query(
+      _tableName,
+      where:
+          'id_placette = ? AND (creation_date > ? OR last_update > ? OR (deleted = 1 AND last_update > ?))',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime, lastSyncTime],
+    );
+
+    return Future.wait(corCyclePlacetteList
+        .map((CorCyclePlacetteEntity corCyclePlacetteEntity) async {
+      TransectListEntity transectObj =
+          await TransectsDatabaseImpl.getCorCyclePlacetteTransectsForDataSync(
+              db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
+      RegenerationListEntity regenerationObj = await RegenerationsDatabaseImpl
+          .getCorCyclePlacetteRegenerationsForDataSync(
+              db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
+      return {
+        ...corCyclePlacetteEntity,
+        'transects': transectObj,
+        'regenerations': regenerationObj
+      };
+    }).toList());
+  }
+
   @override
   // Function called when one cor_cycle_placette is added (not add  transect or regeneration)
   Future<CorCyclePlacetteEntity> addCorCyclePlacette(
