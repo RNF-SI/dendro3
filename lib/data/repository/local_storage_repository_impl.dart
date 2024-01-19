@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   static SharedPreferences? _preferences;
   static const String inProgressCorCyclePlacetteKey =
       'inProgressCorCyclePlacetteIdList';
+  static const String _lastSyncPrefix = 'lastSyncTime_';
 
   static Future init() async {
     _preferences = await SharedPreferences.getInstance();
@@ -54,5 +56,25 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
 
     await _preferences?.setStringList(inProgressCorCyclePlacetteKey,
         inProgressList.map((e) => e.toString()).toList());
+  }
+
+  @override
+  Future<void> setLastSyncTimeForDispositif(
+      int dispositifId, DateTime time) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String key = '$_lastSyncPrefix$dispositifId';
+    String formattedTime = formatDateTime(time);
+    await prefs.setString(key, formattedTime);
+  }
+
+  @override
+  Future<DateTime?> getLastSyncTimeForDispositif(int dispositifId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String key = '$_lastSyncPrefix$dispositifId';
+    final String? lastSyncString = prefs.getString(key);
+    if (lastSyncString != null) {
+      return DateTime.parse(lastSyncString);
+    }
+    return null;
   }
 }

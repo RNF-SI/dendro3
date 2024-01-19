@@ -81,13 +81,19 @@ final globalDatabaseRepositoryProvider = Provider<GlobalDatabaseRepository>(
     (ref) => GlobalDatabaseRepositoryImpl(
         ref.watch(globalDatabaseProvider), ref.watch(globalApiProvider)));
 
+final localStorageProvider =
+    Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());
+
 final dispositifsDatabaseProvider =
     Provider<DispositifsDatabase>((_) => DispositifsDatabaseImpl());
 final dispositifsApiProvider =
     Provider<DispositifsApi>((_) => DispositifsApiImpl());
-final dispositifsRepositoryProvider = Provider<DispositifsRepository>((ref) =>
-    DispositifsRepositoryImpl(ref.watch(dispositifsDatabaseProvider),
-        ref.watch(dispositifsApiProvider)));
+final dispositifsRepositoryProvider =
+    Provider<DispositifsRepository>((ref) => DispositifsRepositoryImpl(
+          ref.watch(dispositifsDatabaseProvider),
+          ref.watch(dispositifsApiProvider),
+          ref.watch(localStorageProvider),
+        ));
 
 final authenticationApiProvider =
     Provider<AuthenticationApi>((_) => AuthenticationApiImpl());
@@ -154,9 +160,6 @@ final TransectDatabaseProvider =
     Provider<TransectsDatabase>((_) => TransectsDatabaseImpl());
 final transectRepositoryProvider = Provider<TransectsRepository>(
     (ref) => TransectsRepositoryImpl(ref.watch(TransectDatabaseProvider)));
-
-final localStorageProvider =
-    Provider<LocalStorageRepository>((ref) => LocalStorageRepositoryImpl());
 
 final CorCyclePlacetteDatabaseProvider = Provider<CorCyclesPlacettesDatabase>(
     (_) => CorCyclesPlacettesDatabaseImpl());

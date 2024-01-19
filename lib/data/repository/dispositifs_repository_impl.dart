@@ -9,12 +9,15 @@ import 'package:dendro3/domain/model/dispositif.dart';
 // import 'package:dendro3/domain/model/dispositif_id.dart';
 import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
+import 'package:dendro3/domain/repository/local_storage_repository.dart';
 
 class DispositifsRepositoryImpl implements DispositifsRepository {
   final DispositifsDatabase database;
   final DispositifsApi api;
+  final LocalStorageRepository _localStorageRepository;
 
-  const DispositifsRepositoryImpl(this.database, this.api);
+  const DispositifsRepositoryImpl(
+      this.database, this.api, this._localStorageRepository);
 
   @override
   Future<DispositifList> getDispositifList() async {
@@ -49,6 +52,10 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
   Future<Dispositif> downloadDispositifData(
     final int dispositifId,
   ) async {
+    // Store the current time as the last sync time for this dispositif
+    await _localStorageRepository.setLastSyncTimeForDispositif(
+        dispositifId, DateTime.now());
+
     final dispositifEntity = await api.getDispositifFromId(dispositifId);
     final mappedDispositif =
         DispositifMapper.transformFromApiToModel(dispositifEntity);
