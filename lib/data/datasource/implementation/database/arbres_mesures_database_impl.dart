@@ -95,8 +95,9 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     // Fetch updated arbreMesures
     List<ArbreMesureEntity> updated_arbreMesures = await db.query(
       _tableName,
-      where: 'id_arbre = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [arbreId, lastSyncTime],
+      where:
+          'id_arbre = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [arbreId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted arbreMesures

@@ -45,8 +45,9 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
 
     var updated_regenerations = await db.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [corCyclePlacetteId, lastSyncTime],
+      where:
+          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
     var deleted_regenerations = await db.query(

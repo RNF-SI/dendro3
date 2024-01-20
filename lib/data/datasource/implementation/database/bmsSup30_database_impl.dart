@@ -79,8 +79,9 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     );
     var updated_bmSup30 = await db.query(
       _tableName,
-      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [placetteId, lastSyncTime],
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
     var deleted_bmSup30 = await db.query(
       _tableName,

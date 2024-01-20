@@ -43,8 +43,9 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     // Fetch updated Repere records
     List<RepereEntity> updated_reperes = await db.query(
       _tableName,
-      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [placetteId, lastSyncTime],
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted Repere records

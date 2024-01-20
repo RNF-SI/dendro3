@@ -99,8 +99,9 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     // Fetch updated CorCyclePlacette records
     var updated_corCyclePlacette = await db.query(
       _tableName,
-      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [placetteId, lastSyncTime],
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted CorCyclePlacette records

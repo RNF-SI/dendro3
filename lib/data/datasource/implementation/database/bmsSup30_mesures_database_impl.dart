@@ -47,8 +47,9 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     // Fetch updated BmSup30Mesure records
     List<BmSup30MesureEntity> updated_bmSup30Mesure = await db.query(
       _tableName,
-      where: 'id_bm_sup_30 = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [bmsSup30Id, lastSyncTime],
+      where:
+          'id_bm_sup_30 = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [bmsSup30Id, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted BmSup30Mesure records

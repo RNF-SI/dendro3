@@ -79,8 +79,9 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     // Fetch updated arbres (last_update after lastSyncTime and not deleted)
     List<ArbreEntity> updated_arbres = await db.query(
       _tableName,
-      where: 'id_placette = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [placetteId, lastSyncTime],
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted arbres (deleted flag set and last_update after lastSyncTime)

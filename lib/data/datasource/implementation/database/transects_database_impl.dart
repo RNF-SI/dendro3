@@ -43,8 +43,9 @@ class TransectsDatabaseImpl implements TransectsDatabase {
 
     var updated_transects = await db.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND last_update > ? AND deleted = 0',
-      whereArgs: [corCyclePlacetteId, lastSyncTime],
+      where:
+          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
     var deleted_transects = await db.query(
