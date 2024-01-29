@@ -28,7 +28,7 @@ class ArbreMesureList with _$ArbreMesureList {
             .toList());
   }
 
-  ArbreMesureList removeArbreMesureById(final int id) => copyWith(
+  ArbreMesureList removeArbreMesureById(final String id) => copyWith(
       values: values
           .where((arbreMesure) => arbreMesure.idArbreMesure != id)
           .toList());

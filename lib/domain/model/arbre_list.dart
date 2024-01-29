@@ -63,7 +63,7 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
       }).toList();
 
   @override
-  Arbre getObjectFromId(final int id) {
+  Arbre getObjectFromId(final String id) {
     return values.firstWhere((arbre) => arbre.idArbreOrig == id);
   }
 
@@ -78,7 +78,7 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
   }
 
   @override
-  ArbreList removeItemFromList(final int id) {
+  ArbreList removeItemFromList(final String id) {
     return copyWith(
         values: values.where((arbre) => arbre.idArbre != id).toList());
   }

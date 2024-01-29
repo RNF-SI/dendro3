@@ -83,7 +83,7 @@ class CorCyclePlacetteList
   }
 
   @override
-  CorCyclePlacetteList removeItemFromList(final int id) => copyWith(
+  CorCyclePlacetteList removeItemFromList(final String id) => copyWith(
       values: values
           .where((corCyclePlacette) => corCyclePlacette.idCyclePlacette != id)
           .toList());
