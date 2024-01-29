@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BmSup30 {
-  int get idBmSup30 => throw _privateConstructorUsedError;
+  String get idBmSup30 => throw _privateConstructorUsedError;
   int get idBmSup30Orig => throw _privateConstructorUsedError;
   int get idPlacette => throw _privateConstructorUsedError;
   int? get idArbre => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $BmSup30CopyWith<$Res> {
       _$BmSup30CopyWithImpl<$Res, BmSup30>;
   @useResult
   $Res call(
-      {int idBmSup30,
+      {String idBmSup30,
       int idBmSup30Orig,
       int idPlacette,
       int? idArbre,
@@ -85,7 +85,7 @@ class _$BmSup30CopyWithImpl<$Res, $Val extends BmSup30>
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idBmSup30Orig: null == idBmSup30Orig
           ? _value.idBmSup30Orig
           : idBmSup30Orig // ignore: cast_nullable_to_non_nullable
@@ -154,7 +154,7 @@ abstract class _$$_BmSup30CopyWith<$Res> implements $BmSup30CopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int idBmSup30,
+      {String idBmSup30,
       int idBmSup30Orig,
       int idPlacette,
       int? idArbre,
@@ -198,7 +198,7 @@ class __$$_BmSup30CopyWithImpl<$Res>
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idBmSup30Orig: null == idBmSup30Orig
           ? _value.idBmSup30Orig
           : idBmSup30Orig // ignore: cast_nullable_to_non_nullable
@@ -266,7 +266,7 @@ class _$_BmSup30 extends _BmSup30 {
       : super._();
 
   @override
-  final int idBmSup30;
+  final String idBmSup30;
   @override
   final int idBmSup30Orig;
   @override
@@ -349,7 +349,7 @@ class _$_BmSup30 extends _BmSup30 {
 
 abstract class _BmSup30 extends BmSup30 {
   const factory _BmSup30(
-      {required final int idBmSup30,
+      {required final String idBmSup30,
       required final int idBmSup30Orig,
       required final int idPlacette,
       final int? idArbre,
@@ -364,7 +364,7 @@ abstract class _BmSup30 extends BmSup30 {
   const _BmSup30._() : super._();
 
   @override
-  int get idBmSup30;
+  String get idBmSup30;
   @override
   int get idBmSup30Orig;
   @override

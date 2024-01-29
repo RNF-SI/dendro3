@@ -82,7 +82,7 @@ class RegenerationList
   }
 
   @override
-  int getFirstElementIdOrig() {
+  String getFirstElementIdOrig() {
     return values.first.idRegeneration;
   }
 

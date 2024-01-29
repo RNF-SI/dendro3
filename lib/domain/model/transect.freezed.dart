@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Transect {
-  int get idTransect => throw _privateConstructorUsedError;
-  int get idCyclePlacette => throw _privateConstructorUsedError;
+  String get idTransect => throw _privateConstructorUsedError;
+  String get idCyclePlacette => throw _privateConstructorUsedError;
   int get idTransectOrig => throw _privateConstructorUsedError;
   String get codeEssence => throw _privateConstructorUsedError;
   String get refTransect => throw _privateConstructorUsedError;
@@ -46,8 +46,8 @@ abstract class $TransectCopyWith<$Res> {
       _$TransectCopyWithImpl<$Res, Transect>;
   @useResult
   $Res call(
-      {int idTransect,
-      int idCyclePlacette,
+      {String idTransect,
+      String idCyclePlacette,
       int idTransectOrig,
       String codeEssence,
       String refTransect,
@@ -102,11 +102,11 @@ class _$TransectCopyWithImpl<$Res, $Val extends Transect>
       idTransect: null == idTransect
           ? _value.idTransect
           : idTransect // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idTransectOrig: null == idTransectOrig
           ? _value.idTransectOrig
           : idTransectOrig // ignore: cast_nullable_to_non_nullable
@@ -183,8 +183,8 @@ abstract class _$$_TransectCopyWith<$Res> implements $TransectCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int idTransect,
-      int idCyclePlacette,
+      {String idTransect,
+      String idCyclePlacette,
       int idTransectOrig,
       String codeEssence,
       String refTransect,
@@ -237,11 +237,11 @@ class __$$_TransectCopyWithImpl<$Res>
       idTransect: null == idTransect
           ? _value.idTransect
           : idTransect // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idTransectOrig: null == idTransectOrig
           ? _value.idTransectOrig
           : idTransectOrig // ignore: cast_nullable_to_non_nullable
@@ -335,9 +335,9 @@ class _$_Transect extends _Transect {
       : super._();
 
   @override
-  final int idTransect;
+  final String idTransect;
   @override
-  final int idCyclePlacette;
+  final String idCyclePlacette;
   @override
   final int idTransectOrig;
   @override
@@ -447,8 +447,8 @@ class _$_Transect extends _Transect {
 
 abstract class _Transect extends Transect {
   const factory _Transect(
-      {required final int idTransect,
-      required final int idCyclePlacette,
+      {required final String idTransect,
+      required final String idCyclePlacette,
       required final int idTransectOrig,
       required final String codeEssence,
       required final String refTransect,
@@ -468,9 +468,9 @@ abstract class _Transect extends Transect {
   const _Transect._() : super._();
 
   @override
-  int get idTransect;
+  String get idTransect;
   @override
-  int get idCyclePlacette;
+  String get idCyclePlacette;
   @override
   int get idTransectOrig;
   @override

@@ -7,8 +7,8 @@ part 'regeneration.freezed.dart';
 @freezed
 class Regeneration with _$Regeneration implements SaisisableObject {
   const factory Regeneration(
-      {required int idRegeneration,
-      required int idCyclePlacette,
+      {required String idRegeneration,
+      required String idCyclePlacette,
       required int sousPlacette,
       required String codeEssence,
       required double recouvrement,

@@ -80,7 +80,7 @@ class TransectList
   }
 
   @override
-  int getFirstElementIdOrig() {
+  String getFirstElementIdOrig() {
     return values.first.idTransect;
   }
 

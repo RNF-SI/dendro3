@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CorCyclePlacette {
-  int get idCyclePlacette => throw _privateConstructorUsedError;
+  String get idCyclePlacette => throw _privateConstructorUsedError;
   int get idCycle => throw _privateConstructorUsedError;
   int get idPlacette => throw _privateConstructorUsedError;
   DateTime? get dateReleve => throw _privateConstructorUsedError;
@@ -46,7 +46,7 @@ abstract class $CorCyclePlacetteCopyWith<$Res> {
       _$CorCyclePlacetteCopyWithImpl<$Res, CorCyclePlacette>;
   @useResult
   $Res call(
-      {int idCyclePlacette,
+      {String idCyclePlacette,
       int idCycle,
       int idPlacette,
       DateTime? dateReleve,
@@ -103,7 +103,7 @@ class _$CorCyclePlacetteCopyWithImpl<$Res, $Val extends CorCyclePlacette>
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCycle: null == idCycle
           ? _value.idCycle
           : idCycle // ignore: cast_nullable_to_non_nullable
@@ -205,7 +205,7 @@ abstract class _$$_CorCyclePlacetteCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int idCyclePlacette,
+      {String idCyclePlacette,
       int idCycle,
       int idPlacette,
       DateTime? dateReleve,
@@ -262,7 +262,7 @@ class __$$_CorCyclePlacetteCopyWithImpl<$Res>
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCycle: null == idCycle
           ? _value.idCycle
           : idCycle // ignore: cast_nullable_to_non_nullable
@@ -355,7 +355,7 @@ class _$_CorCyclePlacette extends _CorCyclePlacette {
       : super._();
 
   @override
-  final int idCyclePlacette;
+  final String idCyclePlacette;
   @override
   final int idCycle;
   @override
@@ -463,7 +463,7 @@ class _$_CorCyclePlacette extends _CorCyclePlacette {
 
 abstract class _CorCyclePlacette extends CorCyclePlacette {
   const factory _CorCyclePlacette(
-      {required final int idCyclePlacette,
+      {required final String idCyclePlacette,
       required final int idCycle,
       required final int idPlacette,
       final DateTime? dateReleve,
@@ -483,7 +483,7 @@ abstract class _CorCyclePlacette extends CorCyclePlacette {
   const _CorCyclePlacette._() : super._();
 
   @override
-  int get idCyclePlacette;
+  String get idCyclePlacette;
   @override
   int get idCycle;
   @override

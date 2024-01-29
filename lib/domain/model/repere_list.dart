@@ -71,7 +71,7 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   }
 
   @override
-  int getFirstElementIdOrig() {
+  String getFirstElementIdOrig() {
     return values.first.idRepere;
   }
 

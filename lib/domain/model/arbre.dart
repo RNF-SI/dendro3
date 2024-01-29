@@ -10,7 +10,7 @@ part 'arbre.freezed.dart';
 @freezed
 class Arbre with _$Arbre implements SaisisableObjectMesure {
   const factory Arbre(
-      {required int idArbre,
+      {required String idArbre,
       required int idArbreOrig,
       required int idPlacette,
       required String codeEssence,

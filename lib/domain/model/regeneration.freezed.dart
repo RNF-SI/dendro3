@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Regeneration {
-  int get idRegeneration => throw _privateConstructorUsedError;
-  int get idCyclePlacette => throw _privateConstructorUsedError;
+  String get idRegeneration => throw _privateConstructorUsedError;
+  String get idCyclePlacette => throw _privateConstructorUsedError;
   int get sousPlacette => throw _privateConstructorUsedError;
   String get codeEssence => throw _privateConstructorUsedError;
   double get recouvrement => throw _privateConstructorUsedError;
@@ -41,8 +41,8 @@ abstract class $RegenerationCopyWith<$Res> {
       _$RegenerationCopyWithImpl<$Res, Regeneration>;
   @useResult
   $Res call(
-      {int idRegeneration,
-      int idCyclePlacette,
+      {String idRegeneration,
+      String idCyclePlacette,
       int sousPlacette,
       String codeEssence,
       double recouvrement,
@@ -85,11 +85,11 @@ class _$RegenerationCopyWithImpl<$Res, $Val extends Regeneration>
       idRegeneration: null == idRegeneration
           ? _value.idRegeneration
           : idRegeneration // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       sousPlacette: null == sousPlacette
           ? _value.sousPlacette
           : sousPlacette // ignore: cast_nullable_to_non_nullable
@@ -143,8 +143,8 @@ abstract class _$$_RegenerationCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int idRegeneration,
-      int idCyclePlacette,
+      {String idRegeneration,
+      String idCyclePlacette,
       int sousPlacette,
       String codeEssence,
       double recouvrement,
@@ -185,11 +185,11 @@ class __$$_RegenerationCopyWithImpl<$Res>
       idRegeneration: null == idRegeneration
           ? _value.idRegeneration
           : idRegeneration // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       sousPlacette: null == sousPlacette
           ? _value.sousPlacette
           : sousPlacette // ignore: cast_nullable_to_non_nullable
@@ -253,9 +253,9 @@ class _$_Regeneration extends _Regeneration {
       : super._();
 
   @override
-  final int idRegeneration;
+  final String idRegeneration;
   @override
-  final int idCyclePlacette;
+  final String idCyclePlacette;
   @override
   final int sousPlacette;
   @override
@@ -336,8 +336,8 @@ class _$_Regeneration extends _Regeneration {
 
 abstract class _Regeneration extends Regeneration {
   const factory _Regeneration(
-      {required final int idRegeneration,
-      required final int idCyclePlacette,
+      {required final String idRegeneration,
+      required final String idCyclePlacette,
       required final int sousPlacette,
       required final String codeEssence,
       required final double recouvrement,
@@ -351,9 +351,9 @@ abstract class _Regeneration extends Regeneration {
   const _Regeneration._() : super._();
 
   @override
-  int get idRegeneration;
+  String get idRegeneration;
   @override
-  int get idCyclePlacette;
+  String get idCyclePlacette;
   @override
   int get sousPlacette;
   @override

@@ -7,8 +7,8 @@ part 'transect.freezed.dart';
 @freezed
 class Transect with _$Transect implements SaisisableObject {
   const factory Transect({
-    required int idTransect,
-    required int idCyclePlacette,
+    required String idTransect,
+    required String idCyclePlacette,
     required int idTransectOrig,
     required String codeEssence,
     required String refTransect,

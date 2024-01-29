@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Repere {
-  int get idRepere => throw _privateConstructorUsedError;
+  String get idRepere => throw _privateConstructorUsedError;
   int get idPlacette => throw _privateConstructorUsedError;
   double? get azimut => throw _privateConstructorUsedError;
   double? get distance => throw _privateConstructorUsedError;
@@ -34,7 +34,7 @@ abstract class $RepereCopyWith<$Res> {
       _$RepereCopyWithImpl<$Res, Repere>;
   @useResult
   $Res call(
-      {int idRepere,
+      {String idRepere,
       int idPlacette,
       double? azimut,
       double? distance,
@@ -68,7 +68,7 @@ class _$RepereCopyWithImpl<$Res, $Val extends Repere>
       idRepere: null == idRepere
           ? _value.idRepere
           : idRepere // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idPlacette: null == idPlacette
           ? _value.idPlacette
           : idPlacette // ignore: cast_nullable_to_non_nullable
@@ -104,7 +104,7 @@ abstract class _$$_RepereCopyWith<$Res> implements $RepereCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int idRepere,
+      {String idRepere,
       int idPlacette,
       double? azimut,
       double? distance,
@@ -135,7 +135,7 @@ class __$$_RepereCopyWithImpl<$Res>
       idRepere: null == idRepere
           ? _value.idRepere
           : idRepere // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idPlacette: null == idPlacette
           ? _value.idPlacette
           : idPlacette // ignore: cast_nullable_to_non_nullable
@@ -178,7 +178,7 @@ class _$_Repere extends _Repere {
       : super._();
 
   @override
-  final int idRepere;
+  final String idRepere;
   @override
   final int idPlacette;
   @override
@@ -229,7 +229,7 @@ class _$_Repere extends _Repere {
 
 abstract class _Repere extends Repere {
   const factory _Repere(
-      {required final int idRepere,
+      {required final String idRepere,
       required final int idPlacette,
       final double? azimut,
       final double? distance,
@@ -239,7 +239,7 @@ abstract class _Repere extends Repere {
   const _Repere._() : super._();
 
   @override
-  int get idRepere;
+  String get idRepere;
   @override
   int get idPlacette;
   @override

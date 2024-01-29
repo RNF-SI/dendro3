@@ -10,7 +10,7 @@ part 'bmSup30.freezed.dart';
 @freezed
 class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
   const factory BmSup30(
-      {required int idBmSup30,
+      {required String idBmSup30,
       required int idBmSup30Orig,
       required int idPlacette,
       int? idArbre,

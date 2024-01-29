@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ArbreMesure {
-  int get idArbreMesure => throw _privateConstructorUsedError;
-  int get idArbre => throw _privateConstructorUsedError;
+  String get idArbreMesure => throw _privateConstructorUsedError;
+  String get idArbre => throw _privateConstructorUsedError;
   int get idCycle => throw _privateConstructorUsedError;
   double? get diametre1 => throw _privateConstructorUsedError;
   double? get diametre2 => throw _privateConstructorUsedError;
@@ -48,8 +48,8 @@ abstract class $ArbreMesureCopyWith<$Res> {
       _$ArbreMesureCopyWithImpl<$Res, ArbreMesure>;
   @useResult
   $Res call(
-      {int idArbreMesure,
-      int idArbre,
+      {String idArbreMesure,
+      String idArbre,
       int idCycle,
       double? diametre1,
       double? diametre2,
@@ -106,11 +106,11 @@ class _$ArbreMesureCopyWithImpl<$Res, $Val extends ArbreMesure>
       idArbreMesure: null == idArbreMesure
           ? _value.idArbreMesure
           : idArbreMesure // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idArbre: null == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCycle: null == idCycle
           ? _value.idCycle
           : idCycle // ignore: cast_nullable_to_non_nullable
@@ -192,8 +192,8 @@ abstract class _$$_ArbreMesureCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int idArbreMesure,
-      int idArbre,
+      {String idArbreMesure,
+      String idArbre,
       int idCycle,
       double? diametre1,
       double? diametre2,
@@ -248,11 +248,11 @@ class __$$_ArbreMesureCopyWithImpl<$Res>
       idArbreMesure: null == idArbreMesure
           ? _value.idArbreMesure
           : idArbreMesure // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idArbre: null == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCycle: null == idCycle
           ? _value.idCycle
           : idCycle // ignore: cast_nullable_to_non_nullable
@@ -351,9 +351,9 @@ class _$_ArbreMesure extends _ArbreMesure {
       : super._();
 
   @override
-  final int idArbreMesure;
+  final String idArbreMesure;
   @override
-  final int idArbre;
+  final String idArbre;
   @override
   final int idCycle;
   @override
@@ -468,8 +468,8 @@ class _$_ArbreMesure extends _ArbreMesure {
 
 abstract class _ArbreMesure extends ArbreMesure {
   const factory _ArbreMesure(
-      {required final int idArbreMesure,
-      required final int idArbre,
+      {required final String idArbreMesure,
+      required final String idArbre,
       required final int idCycle,
       final double? diametre1,
       final double? diametre2,
@@ -490,9 +490,9 @@ abstract class _ArbreMesure extends ArbreMesure {
   const _ArbreMesure._() : super._();
 
   @override
-  int get idArbreMesure;
+  String get idArbreMesure;
   @override
-  int get idArbre;
+  String get idArbre;
   @override
   int get idCycle;
   @override
