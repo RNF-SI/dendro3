@@ -321,7 +321,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     SaisisableObject? selectedItemDetailsCo,
     SaisisableObject? selectedItemMesureDetailsCo,
     Map<int, int> mapIdCycleNumCycle,
-    Map<int, int> mapNumCyclePlacetteNumCycle,
+    Map<String, int> mapNumCyclePlacetteNumCycle,
   ) {
     // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
     // Check if selectedItemDetails is null
