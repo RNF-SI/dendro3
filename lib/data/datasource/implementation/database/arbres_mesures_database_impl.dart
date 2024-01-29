@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -24,18 +25,16 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     final db = await database;
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_arbre_mesure) FROM $_tableName'));
-
-      arbreMesure['id_arbre_mesure'] = maxId! + 1;
+      String idArbreMesureUuid = generateUuid();
+      arbreMesure['id_arbre_mesure'] = idArbreMesureUuid;
       await txn.insert(
         _tableName,
         arbreMesure,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [idArbreMesureUuid]);
       arbreEntity = results.first;
     });
     return arbreEntity;

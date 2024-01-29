@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -160,10 +161,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
         formatter.format(corCyclePlacette["date_releve"]);
 
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX($_columnId) FROM $_tableName'));
-
-      corCyclePlacette[_columnId] = maxId! + 1;
+      String corCyclePlacetteUuid = generateUuid();
+      corCyclePlacette[_columnId] = corCyclePlacetteUuid;
 
       await txn.insert(
         _tableName,
@@ -171,8 +170,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [corCyclePlacetteUuid]);
       corCyclePlacetteEntity = results.first;
     });
     return corCyclePlacetteEntity;

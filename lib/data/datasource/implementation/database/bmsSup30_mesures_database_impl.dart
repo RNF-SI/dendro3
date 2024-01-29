@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -72,18 +73,17 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     final db = await database;
     late final BmSup30Entity bmsup30Entity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(await txn
-          .rawQuery('SELECT MAX(id_bm_sup_30_mesure) FROM $_tableName'));
+      String idBmSup30MesureUUID = generateUuid();
+      bmSup30Mesure['id_bm_sup_30_mesure'] = idBmSup30MesureUUID;
 
-      bmSup30Mesure['id_bm_sup_30_mesure'] = maxId! + 1;
       await txn.insert(
         _tableName,
         bmSup30Mesure,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [idBmSup30MesureUUID]);
       bmsup30Entity = results.first;
     });
     return bmsup30Entity;

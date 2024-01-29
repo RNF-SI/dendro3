@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -67,17 +68,9 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     final db = await database;
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-              await txn.rawQuery('SELECT MAX(id_transect) FROM $_tableName')) ??
-          0;
+      String transectUuid = generateUuid();
 
-      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
-              'SELECT MAX(id_transect_orig) FROM $_tableName WHERE id_cycle_placette = ?',
-              [transect['id_cycle_placette']])) ??
-          0;
-
-      transect['id_transect'] = maxId + 1;
-      transect['id_transect_orig'] = maxIdOrig + 1;
+      transect['id_transect'] = transectUuid;
 
       await txn.insert(
         _tableName,
@@ -85,8 +78,8 @@ class TransectsDatabaseImpl implements TransectsDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [transectUuid]);
       transectEntity = results.first;
     });
     return transectEntity;

@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -68,11 +69,9 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     final db = await database;
     late final RepereEntity repereEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-              await txn.rawQuery('SELECT MAX(id_repere) FROM $_tableName')) ??
-          0;
+      String repereUuid = generateUuid();
 
-      repere['id_repere'] = maxId! + 1;
+      repere['id_repere'] = repereUuid;
       await txn.insert(
         _tableName,
         repere,
@@ -80,7 +79,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
       );
 
       final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [repereUuid]);
       repereEntity = results.first;
     });
     return repereEntity;

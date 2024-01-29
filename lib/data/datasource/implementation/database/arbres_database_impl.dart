@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
@@ -123,16 +124,14 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     final db = await database;
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-              await txn.rawQuery('SELECT MAX(id_arbre) FROM $_tableName')) ??
-          0;
+      String idArbreUuid = generateUuid();
 
       int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
               'SELECT MAX(id_arbre_orig) FROM $_tableName WHERE id_placette = ?',
               [arbre['id_placette']])) ??
           0;
 
-      arbre['id_arbre'] = maxId + 1;
+      arbre['id_arbre'] = idArbreUuid;
       arbre['id_arbre_orig'] = maxIdOrig + 1;
       await txn.insert(
         _tableName,
@@ -141,7 +140,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       );
 
       final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [idArbreUuid]);
       arbreEntity = results.first;
     });
     return arbreEntity;
