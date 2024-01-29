@@ -9,7 +9,7 @@ class CompleteCyclePlacetteCreatedUseCaseImpl
   CompleteCyclePlacetteCreatedUseCaseImpl(this.localStorageRepository);
 
   @override
-  Future<void> execute(int cycleId) async {
+  Future<void> execute(String cycleId) async {
     await localStorageRepository.completeCyclePlacetteCreated(cycleId);
   }
 }
