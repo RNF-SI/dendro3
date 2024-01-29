@@ -1,8 +1,8 @@
 abstract class LocalStorageRepository {
-  Future<void> setCyclePlacetteCreated(int idCyclePlacette);
-  Future<void> completeCyclePlacetteCreated(int idCyclePlacette);
-  bool isCyclePlacetteCreated(int idCyclePlacette);
-  List<int> getInProgressCorCyclePlacette();
+  Future<void> setCyclePlacetteCreated(String idCyclePlacette);
+  Future<void> completeCyclePlacetteCreated(String idCyclePlacette);
+  bool isCyclePlacetteCreated(String idCyclePlacette);
+  List<String> getInProgressCorCyclePlacette();
   Future<void> removeFromInProgressCorCyclePlacette(String idCyclePlacette);
   Future<void> setLastSyncTimeForDispositif(
       int dispositifId, DateTime dateTime);
