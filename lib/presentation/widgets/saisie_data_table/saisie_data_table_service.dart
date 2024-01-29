@@ -206,15 +206,15 @@ final displayedCycleProvider = StateProvider.autoDispose<List<int>>(
 
 // Provider for idCyclePlacetteIdCycleMapList
 final idCyclePlacetteIdCycleMapListProvider = StateNotifierProvider<
-    IdCyclePlacetteIdCycleMapListNotifier, List<Map<String, int>>>((ref) {
+    IdCyclePlacetteIdCycleMapListNotifier, List<Map<String, dynamic>>>((ref) {
   return IdCyclePlacetteIdCycleMapListNotifier();
 });
 
 class IdCyclePlacetteIdCycleMapListNotifier
-    extends StateNotifier<List<Map<String, int>>> {
+    extends StateNotifier<List<Map<String, dynamic>>> {
   IdCyclePlacetteIdCycleMapListNotifier() : super([]);
 
-  void update(List<Map<String, int>> newList) {
+  void update(List<Map<String, dynamic>> newList) {
     state = newList;
   }
 }
@@ -223,7 +223,7 @@ final cycleRowsProvider =
     Provider.autoDispose<List<Map<String, dynamic>>>((ref) {
   // List<Map<String, dynamic>> rowList = objProperties['rowList'];
   // List<Map<String, int>> links = objProperties['links'];
-  List<Map<String, int>> links =
+  List<Map<String, dynamic>> links =
       ref.watch(idCyclePlacetteIdCycleMapListProvider);
 
   List<Map<String, dynamic>> rowList = ref.watch(rowsProvider);
@@ -425,7 +425,7 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
     this.items,
     this._lastSelectedProvider,
   ) : super(null) {
-    int lastSelectedId;
+    String lastSelectedId;
 
     // Check if a map is empy
     if (items.isEmpty()) {

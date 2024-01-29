@@ -104,7 +104,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           ref.watch(cycleSelectedProvider.notifier).convertCyclesToToggles());
 
       // create an object with 2 property: rowList and widget.placette.corCyclesPlacettes!.values
-      List<Map<String, int>> idCyclePlacetteIdCycleMapList = [];
+      List<Map<String, dynamic>> idCyclePlacetteIdCycleMapList = [];
       for (var corCyclePlacette in widget.corCyclePlacetteList.values) {
         idCyclePlacetteIdCycleMapList.add({
           'idCyclePlacette': corCyclePlacette.idCyclePlacette,
@@ -128,7 +128,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       for (Cycle cycle in cycleList) cycle.idCycle: cycle.numCycle
     };
 
-    Map<int, int> mapNumCyclePlacetteNumCycle = {};
+    Map<String, int> mapNumCyclePlacetteNumCycle = {};
 
     // create a Map with key idCyclePlacette and value numCycle
     if (cycleList != null && cycleList.isNotEmpty) {
@@ -705,7 +705,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     List<Map<String, dynamic>> valueList,
     DisplayableList items,
     Map<int, int> mapIdCycleNumCycle,
-    Map<int, int> mapNumCyclePlacetteNumCycle,
+    Map<String, int> mapNumCyclePlacetteNumCycle,
     SaisisableObject? selectedItemDetails,
   ) {
     return valueList.map<DataRow>((value) {

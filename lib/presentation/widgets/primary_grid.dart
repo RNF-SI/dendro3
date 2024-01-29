@@ -13,7 +13,7 @@ class PrimaryGridWidget extends StatelessWidget {
   final Function(dynamic) onItemDeleted;
   final Function(dynamic) onItemUpdated;
   final String displayTypeState;
-  final Map<int, int> mapNumCyclePlacetteNumCycle;
+  final Map<String, int> mapNumCyclePlacetteNumCycle;
 
   PrimaryGridWidget({
     Key? key,
