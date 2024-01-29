@@ -1,3 +1,3 @@
 abstract class IsCyclePlacetteCreatedUseCase {
-  bool execute(int cycleId);
+  bool execute(String cyclePlacetteId);
 }

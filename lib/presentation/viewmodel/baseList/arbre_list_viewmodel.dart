@@ -120,7 +120,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["observationMesure"],
       );
       // _LastSelectedIdNotifier.setLastSelectedId('Arbres', newArbre.idArbreOrig);
-      _lastSelectedProvider.setLastSelectedId('Arbres', newArbre.idArbreOrig);
+      _lastSelectedProvider.setLastSelectedId('Arbres', newArbre.idArbre);
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.addItemToList(newArbre));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -169,7 +169,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["ratioHauteur"],
         item["observationMesure"],
       );
-      _lastSelectedProvider.setLastSelectedId('Arbres', newArbre.idArbreOrig);
+      _lastSelectedProvider.setLastSelectedId('Arbres', newArbre.idArbre);
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
@@ -207,7 +207,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
         item["ratioHauteur"],
         item["observationMesure"],
       );
-      _lastSelectedProvider.setLastSelectedId('Arbres', newArbre.idArbreOrig);
+      _lastSelectedProvider.setLastSelectedId('Arbres', newArbre.idArbre);
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newArbre));
@@ -218,7 +218,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   }
 
   @override
-  Future<void> deleteItem(int id) async {
+  Future<void> deleteItem(String id) async {
     try {
       await _deleteArbreAndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('Arbres', null);
@@ -230,7 +230,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   }
 
   Future<bool> deleteItemMesure(
-      int idArbre, int idArbreMesure, int idCycle, int numCycle) async {
+      String idArbre, String idArbreMesure, int idCycle, int numCycle) async {
     try {
       // Find the Arbre that corresponds to the idArbre
       Arbre? targetedArbre;

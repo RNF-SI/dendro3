@@ -11,7 +11,7 @@ enum CorCyclePlacetteStatus { finished, started, notStarted }
 
 final corCyclePlacetteLocalStorageStatusStateNotifierProvider =
     StateNotifierProvider<CorCyclePlacetteLocalStorageStatusNotifier,
-        List<int>>((ref) {
+        List<String>>((ref) {
   return CorCyclePlacetteLocalStorageStatusNotifier(
     ref.watch(getCorCyclePlacetteLocalStorageUseCaseprovider),
     ref.watch(setCyclePlacetteCreatedUseCaseProvider),
@@ -20,7 +20,7 @@ final corCyclePlacetteLocalStorageStatusStateNotifierProvider =
 });
 
 class CorCyclePlacetteLocalStorageStatusNotifier
-    extends StateNotifier<List<int>> {
+    extends StateNotifier<List<String>> {
   final GetInProgressCorCyclePlacetteLocalStorageUseCase
       _getCyclePlacetteLocalStorageUseCaseProvider;
   final SetCyclePlacetteCreatedUseCase _setCyclePlacetteCreatedUseCaseProvider;
@@ -37,20 +37,20 @@ class CorCyclePlacetteLocalStorageStatusNotifier
   }
 
   void _initializeList() {
-    List<int> inProgressIds =
+    List<String> inProgressIds =
         _getCyclePlacetteLocalStorageUseCaseProvider.execute();
     state = inProgressIds;
   }
 
-  Future<void> completeCycle(int idCyclePlacette) async {
+  Future<void> completeCycle(String idCyclePlacette) async {
     await _completeCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
     state = List.from(state)..remove(idCyclePlacette);
   }
 
-  bool isCyclePlacetteInProgress(int idCyclePlacette) =>
+  bool isCyclePlacetteInProgress(String idCyclePlacette) =>
       state.contains(idCyclePlacette);
 
-  Future<void> startCyclePlacette(int idCyclePlacette) async {
+  Future<void> startCyclePlacette(String idCyclePlacette) async {
     await _setCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
     state = List.from(state)..add(idCyclePlacette);
   }
@@ -60,7 +60,7 @@ class CorCyclePlacetteLocalStorageStatusNotifier
   }
 
   void reinitializeList() {
-    List<int> inProgressIds =
+    List<String> inProgressIds =
         _getCyclePlacetteLocalStorageUseCaseProvider.execute();
     state = inProgressIds; // Notify listeners about the change
   }

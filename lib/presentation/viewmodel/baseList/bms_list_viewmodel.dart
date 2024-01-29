@@ -113,8 +113,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
         item["observationMesure"],
       );
       // final aa = state.data!.addBmSup30(newBmSup30);
-      _lastSelectedProvider.setLastSelectedId(
-          'BmsSup30', newBmSup30.idBmSup30Orig);
+      _lastSelectedProvider.setLastSelectedId('BmsSup30', newBmSup30.idBmSup30);
       state = State.success(state.data!.addItemToList(newBmSup30));
       _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
@@ -160,7 +159,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
       // _lastSelectedArbreId = newArbre.idArbreOrig;
       _lastSelectedProvider.setLastSelectedId(
         'BmsSup30',
-        newBmSup30.idBmSup30Orig,
+        newBmSup30.idBmSup30,
       );
 
       state = State.success(state.data!.updateItemInList(newBmSup30));
@@ -191,8 +190,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
         item["observationMesure"],
       );
       // _lastSelectedArbreId = newArbre.idArbreOrig;
-      _lastSelectedProvider.setLastSelectedId(
-          'BmsSup30', newBmSup30.idBmSup30Orig);
+      _lastSelectedProvider.setLastSelectedId('BmsSup30', newBmSup30.idBmSup30);
 
       // final aa = state.data!.addArbre(newArbre);
       state = State.success(state.data!.updateItemInList(newBmSup30));
@@ -211,12 +209,12 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   }
 
   @override
-  Future<void> deleteItem(int id) {
+  Future<void> deleteItem(String id) {
     // TODO: implement deleteItem
     throw UnimplementedError();
   }
 
-  Future<void> deleteItemMesure(int id) async {
+  Future<void> deleteItemMesure(String id) async {
     try {
       await _deleteBmSup30MesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('BmsSup30', null);

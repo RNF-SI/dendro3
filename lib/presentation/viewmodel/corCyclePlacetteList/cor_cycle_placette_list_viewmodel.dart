@@ -101,7 +101,7 @@ class CorCyclePlacetteListViewModel
   }
 
   @override
-  Future<void> deleteItem(int id) {
+  Future<void> deleteItem(String id) {
     // TODO: implement deleteItem
     throw UnimplementedError();
   }

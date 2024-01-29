@@ -8,7 +8,7 @@ class IsCyclePlacetteCreatedUseCaseImpl
   IsCyclePlacetteCreatedUseCaseImpl(this.localStorageRepository);
 
   @override
-  bool execute(int cycleId) {
-    return localStorageRepository.isCyclePlacetteCreated(cycleId);
+  bool execute(String cyclePlacetteId) {
+    return localStorageRepository.isCyclePlacetteCreated(cyclePlacetteId);
   }
 }

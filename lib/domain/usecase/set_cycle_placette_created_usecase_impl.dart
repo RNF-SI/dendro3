@@ -8,7 +8,7 @@ class SetCyclePlacetteCreatedUseCaseImpl
   SetCyclePlacetteCreatedUseCaseImpl(this.localStorageRepository);
 
   @override
-  Future<void> execute(int cycleId) async {
-    await localStorageRepository.setCyclePlacetteCreated(cycleId);
+  Future<void> execute(String idCyclePlacette) async {
+    await localStorageRepository.setCyclePlacetteCreated(idCyclePlacette);
   }
 }

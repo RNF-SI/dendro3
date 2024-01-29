@@ -1,3 +1,3 @@
 abstract class SetCyclePlacetteCreatedUseCase {
-  Future<void> execute(int cycleId);
+  Future<void> execute(String cycleId);
 }

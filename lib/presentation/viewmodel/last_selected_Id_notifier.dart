@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LastSelectedIds {
-  final Map<String, int?> ids;
+  final Map<String, String?> ids;
 
   LastSelectedIds({required this.ids});
 
-  int? getIdForType(String type) => ids[type];
+  String? getIdForType(String type) => ids[type];
 
-  LastSelectedIds updateId(String type, int? id) {
+  LastSelectedIds updateId(String type, String? id) {
     return LastSelectedIds(ids: Map.from(ids)..[type] = id);
   }
 }
@@ -20,7 +20,7 @@ final lastSelectedIdProvider =
 class LastSelectedIdNotifier extends StateNotifier<LastSelectedIds> {
   LastSelectedIdNotifier() : super(LastSelectedIds(ids: {}));
 
-  void setLastSelectedId(String type, int? id) {
+  void setLastSelectedId(String type, String? id) {
     state = state.updateId(type, id);
   }
 

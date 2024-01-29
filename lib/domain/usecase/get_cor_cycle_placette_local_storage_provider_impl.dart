@@ -9,7 +9,7 @@ class GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl
       this.localStorageRepository);
 
   @override
-  List<int> execute() {
+  List<String> execute() {
     return localStorageRepository.getInProgressCorCyclePlacette();
   }
 }
