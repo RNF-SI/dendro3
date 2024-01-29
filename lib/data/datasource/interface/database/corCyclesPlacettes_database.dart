@@ -7,7 +7,7 @@ abstract class CorCyclesPlacettesDatabase {
   // Future<void> updateCorCyclePlacette(final CorCyclePlacetteEntity corCyclePlacetteEntity);
   // Future<void> deleteCorCyclePlacette(final int id);
 
-  Future<List<int>> getCorCyclePlacetteIdsForPlacette(final int placetteId);
+  Future<List<String>> getCorCyclePlacetteIdsForPlacette(final int placetteId);
 
-  Future<void> deleteCorCyclePlacette(int corCyclePlacetteId);
+  Future<void> deleteCorCyclePlacette(String corCyclePlacetteId);
 }

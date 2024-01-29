@@ -9,6 +9,6 @@ abstract class BmsSup30MesuresDatabase {
   Future<BmSup30MesureEntity> updateBmSup30Mesure(
       final BmSup30MesureEntity bmSup30MesureEntity);
 
-  Future<void> deleteBmSup30MesureFromIdBmSup30(final int idBmSup30Id);
-  Future<void> deleteBmSup30Mesure(final int id);
+  Future<void> deleteBmSup30MesureFromIdBmSup30(final String idBmSup30Id);
+  Future<void> deleteBmSup30Mesure(final String id);
 }
