@@ -19,7 +19,7 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
   @override
   Future<BmSup30> insertBmSup30(
       int idPlacette,
-      String? idArbre,
+      int? idArbre,
       String codeEssence,
       double azimut,
       double distance,

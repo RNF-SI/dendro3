@@ -97,7 +97,7 @@ class BmSup30Mapper {
 
   static BmSup30Entity transformToNewEntityMap(
     final int idPlacette,
-    final String? idArbre,
+    final int? idArbre,
     final String codeEssence,
     final double azimut,
     final double distance,

@@ -8,7 +8,7 @@ import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 abstract class BmsSup30Repository {
   Future<BmSup30> insertBmSup30(
     final int idPlacette,
-    final String? idArbre,
+    final int? idArbre,
     final String codeEssence,
     final double azimut,
     final double distance,
