@@ -15,44 +15,44 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   }
 
   @override
-  Future<void> setCyclePlacetteCreated(int idCyclePlacette) async {
-    List<int> inProgressList = _getInProgressList();
+  Future<void> setCyclePlacetteCreated(String idCyclePlacette) async {
+    List<String> inProgressList = _getInProgressList();
     inProgressList.add(idCyclePlacette);
     await _preferences?.setStringList(inProgressCorCyclePlacetteKey,
         inProgressList.map((e) => e.toString()).toList());
   }
 
   @override
-  Future<void> completeCyclePlacetteCreated(int idCyclePlacette) async {
-    List<int> inProgressList = _getInProgressList();
+  Future<void> completeCyclePlacetteCreated(String idCyclePlacette) async {
+    List<String> inProgressList = _getInProgressList();
     inProgressList.remove(idCyclePlacette);
     await _preferences?.setStringList(inProgressCorCyclePlacetteKey,
         inProgressList.map((e) => e.toString()).toList());
   }
 
   @override
-  bool isCyclePlacetteCreated(int idCyclePlacette) {
-    List<int> inProgressList = _getInProgressList();
+  bool isCyclePlacetteCreated(String idCyclePlacette) {
+    List<String> inProgressList = _getInProgressList();
     return !inProgressList.contains(idCyclePlacette);
   }
 
-  List<int> _getInProgressList() {
+  List<String> _getInProgressList() {
     return _preferences
             ?.getStringList(inProgressCorCyclePlacetteKey)
-            ?.map((e) => int.parse(e))
+            ?.map((e) => e.toString())
             .toList() ??
         [];
   }
 
   @override
-  List<int> getInProgressCorCyclePlacette() {
+  List<String> getInProgressCorCyclePlacette() {
     return _getInProgressList();
   }
 
   @override
   Future<void> removeFromInProgressCorCyclePlacette(
       String idCyclePlacette) async {
-    List<int> inProgressList = _getInProgressList();
+    List<String> inProgressList = _getInProgressList();
     inProgressList.remove(idCyclePlacette);
 
     await _preferences?.setStringList(inProgressCorCyclePlacetteKey,
