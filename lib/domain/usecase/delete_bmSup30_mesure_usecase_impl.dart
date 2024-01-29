@@ -7,7 +7,7 @@ class DeleteBmSup30MesureUseCaseImpl implements DeleteBmSup30MesureUseCase {
   DeleteBmSup30MesureUseCaseImpl(this._bmSup30MesuresRepository);
 
   @override
-  Future<void> execute(int id) async {
+  Future<void> execute(String id) async {
     await _bmSup30MesuresRepository.deleteBmsSup30Mesure(id);
   }
 }

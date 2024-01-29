@@ -9,8 +9,8 @@ class UpdateRegenerationUseCaseImpl implements UpdateRegenerationUseCase {
 
   @override
   Future<Regeneration> execute(
-    final int idRegeneration,
-    final int idCyclePlacette,
+    final String idRegeneration,
+    final String idCyclePlacette,
     final int sousPlacette,
     final String codeEssence,
     final double recouvrement,

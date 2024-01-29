@@ -13,7 +13,7 @@ class DeleteBmSup30AndMesureUseCaseImpl
   );
 
   @override
-  Future<void> execute(int id) async {
+  Future<void> execute(String id) async {
     await bmsup30Repository.deleteBmSup30(id);
     await bmsup30MesureRepositoryMesure.deleteBmsSup30Mesure(id);
   }

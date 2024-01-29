@@ -20,7 +20,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
   @override
   Future<Arbre> execute(
     Arbre arbre,
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     int idPlacette,
     String codeEssence,
@@ -28,7 +28,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
     double distance,
     bool? taillis,
     String? observation,
-    final int idArbreMesure,
+    final String idArbreMesure,
     final int? idCycle,
     int? numCycle,
     double? diametre1,

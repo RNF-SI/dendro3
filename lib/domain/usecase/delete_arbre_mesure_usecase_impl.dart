@@ -16,8 +16,8 @@ class DeleteArbreMesureUseCaseImpl implements DeleteArbreMesureUseCase {
   @override
   Future<Arbre> execute(
     Arbre arbre,
-    int arbreMesureId,
-    int arbreId,
+    String arbreMesureId,
+    String arbreId,
     final int? idCycle,
     int? numCycle,
   ) async {

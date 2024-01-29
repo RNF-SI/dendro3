@@ -5,7 +5,7 @@ abstract class UpdateArbreAndMesureUseCase {
   Future<Arbre> execute(
     Arbre arbre,
     // final int idArbreOrig,
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     final int idPlacette,
     final String codeEssence,
@@ -13,7 +13,7 @@ abstract class UpdateArbreAndMesureUseCase {
     final double distance,
     final bool? taillis,
     final String? observation,
-    final int idArbreMesure,
+    final String idArbreMesure,
     final int? idCycle,
     int? numCycle,
     double? diametre1,
