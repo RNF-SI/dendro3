@@ -26,7 +26,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   }
 
   static getCorCyclePlacetteTransects(
-      Database db, final int corCyclePlacetteId) async {
+      Database db, final String corCyclePlacetteId) async {
     return await db.query(_tableName,
         where: 'id_cycle_placette = ? AND deleted = 0',
         whereArgs: [corCyclePlacetteId]);
@@ -34,7 +34,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
 
   static Future<Map<String, List<TransectEntity>>>
       getCorCyclePlacetteTransectsForDataSync(Database db,
-          final int corCyclePlacetteId, String lastSyncTime) async {
+          final String corCyclePlacetteId, String lastSyncTime) async {
     var created_transects = await db.query(
       _tableName,
       where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
@@ -116,7 +116,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   }
 
   @override
-  Future<void> deleteTransect(int id) async {
+  Future<void> deleteTransect(String id) async {
     final db = await database;
     await db.update(
       _tableName,
@@ -127,7 +127,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   }
 
   @override
-  Future<void> deleteTransectsForCorCyclePlacette(int id) async {
+  Future<void> deleteTransectsForCorCyclePlacette(String id) async {
     final db = await database;
     await db.update(
       _tableName,

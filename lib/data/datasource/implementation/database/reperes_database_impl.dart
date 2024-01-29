@@ -121,7 +121,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   // }
 
   @override
-  Future<void> deleteRepere(final int id) async {
+  Future<void> deleteRepere(final String id) async {
     final db = await database;
     await db.update(
       _tableName,

@@ -128,9 +128,9 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
       return {
         ...placetteEntity,
         'corCyclesPlacettes': corCyclesPlacettesObj,
-        'arbre': arbresObj,
+        'arbres': arbresObj,
         'bms': bmsObj,
-        'repere': repereObj
+        'reperes': repereObj
       };
     }).toList());
   }

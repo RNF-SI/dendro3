@@ -182,7 +182,7 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
   // }
 
   @override
-  Future<void> deleteBmSup30(final int id) async {
+  Future<void> deleteBmSup30(final String id) async {
     final db = await database;
     await db.update(
       _tableName,
@@ -193,12 +193,12 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
   }
 
   @override
-  Future<List<int>> getBmSup30IdsForPlacette(final int idPlacette) async {
+  Future<List<String>> getBmSup30IdsForPlacette(final int idPlacette) async {
     final db = await database;
     final results = await db.query(_tableName,
         columns: ['$_columnId'],
         where: 'id_placette = ? AND deleted = 0',
         whereArgs: [idPlacette]);
-    return results.map((e) => e['$_columnId'] as int).toList();
+    return results.map((e) => e['$_columnId'] as String).toList();
   }
 }

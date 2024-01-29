@@ -29,14 +29,14 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   }
 
   static Future<BmSup30MesureListEntity> getbmSup30bmsSup30Mesures(
-      Database db, final int bmsSup30Id) async {
+      Database db, final String bmsSup30Id) async {
     return await db.query(_tableName,
         where: 'id_bm_sup_30 = ? AND deleted = 0', whereArgs: [bmsSup30Id]);
   }
 
   static Future<Map<String, BmSup30MesureListEntity>>
       getbmSup30bmsSup30MesuresForDataSync(
-          Database db, final int bmsSup30Id, String lastSyncTime) async {
+          Database db, final String bmsSup30Id, String lastSyncTime) async {
     // Fetch newly created BmSup30Mesure records
     List<BmSup30MesureEntity> created_bmSup30Mesure = await db.query(
       _tableName,
@@ -127,7 +127,7 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   // }
 
   @override
-  Future<void> deleteBmSup30MesureFromIdBmSup30(final int id) async {
+  Future<void> deleteBmSup30MesureFromIdBmSup30(final String id) async {
     final db = await database;
     await db.update(
       _tableName,
@@ -138,7 +138,7 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   }
 
   @override
-  Future<void> deleteBmSup30Mesure(final int id) async {
+  Future<void> deleteBmSup30Mesure(final String id) async {
     final db = await database;
     await db.update(
       _tableName,

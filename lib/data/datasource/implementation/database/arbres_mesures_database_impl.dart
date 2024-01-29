@@ -74,7 +74,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   static Future<ArbreMesureListEntity> getArbreArbresMesures(
-      Database db, final int arbreId) async {
+      Database db, final String arbreId) async {
     return await db.query(
       _tableName,
       where: 'id_arbre = ? AND deleted = 0', // Exclude deleted records
@@ -84,7 +84,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   static Future<Map<String, List<ArbreMesureEntity>>>
       getArbreArbresMesuresForDataSync(
-          Database db, final int arbreId, String lastSyncTime) async {
+          Database db, final String arbreId, String lastSyncTime) async {
     // Fetch newly created arbreMesures
     List<ArbreMesureEntity> created_arbreMesures = await db.query(
       _tableName,
@@ -116,7 +116,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   @override
   Future<ArbreMesureEntity> getPreviousCycleMeasure(
-      final int idArbre, final int? idCycle, int? numCycle) async {
+      final String idArbre, final int? idCycle, int? numCycle) async {
     final db = await database;
 
     if (idCycle == null) {
@@ -137,7 +137,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   @override
   Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
-      final int idArbreMesure, final String? coupe) async {
+      final String idArbreMesure, final String? coupe) async {
     final db = await database;
     late final ArbreMesureEntity arbreMesureEntity;
 
@@ -163,7 +163,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   @override
-  Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
+  Future<void> deleteArbreMesureFromIdArbre(final String idArbre) async {
     final db = await database;
     await db.update(
       _tableName,
@@ -174,7 +174,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   @override
-  Future<void> deleteArbreMesure(final int idArbreMesure) async {
+  Future<void> deleteArbreMesure(final String idArbreMesure) async {
     final db = await database;
     await db.update(
       _tableName,

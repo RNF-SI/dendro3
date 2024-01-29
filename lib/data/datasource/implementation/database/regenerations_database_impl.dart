@@ -28,7 +28,7 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   }
 
   static getCorCyclePlacetteRegenerations(
-      Database db, final int corCyclePlacetteId) async {
+      Database db, final String corCyclePlacetteId) async {
     return await db.query(_tableName,
         where: 'id_cycle_placette = ? AND deleted = 0',
         whereArgs: [corCyclePlacetteId]);
@@ -36,7 +36,7 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
 
   static Future<Map<String, List<RegenerationEntity>>>
       getCorCyclePlacetteRegenerationsForDataSync(Database db,
-          final int corCyclePlacetteId, String lastSyncTime) async {
+          final String corCyclePlacetteId, String lastSyncTime) async {
     var created_regenerations = await db.query(
       _tableName,
       where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
@@ -125,7 +125,7 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   // }
 
   @override
-  Future<void> deleteRegeneration(final int id) async {
+  Future<void> deleteRegeneration(final String id) async {
     final db = await database;
     await db.update(
       _tableName,
@@ -136,7 +136,7 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   }
 
   @override
-  Future<void> deleteRegenerationsForCorCyclePlacette(final int id) async {
+  Future<void> deleteRegenerationsForCorCyclePlacette(final String id) async {
     final db = await database;
     await db.update(
       _tableName,

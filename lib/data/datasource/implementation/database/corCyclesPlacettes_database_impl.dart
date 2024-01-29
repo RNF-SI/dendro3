@@ -201,7 +201,7 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
   // }
 
   @override
-  Future<List<int>> getCorCyclePlacetteIdsForPlacette(
+  Future<List<String>> getCorCyclePlacetteIdsForPlacette(
       final int placetteId) async {
     final db = await database;
     final results = await db.query(
@@ -210,11 +210,11 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       where: 'id_placette = ? AND deleted = 0',
       whereArgs: [placetteId],
     );
-    return results.map((e) => e[_columnId] as int).toList();
+    return results.map((e) => e[_columnId] as String).toList();
   }
 
   @override
-  Future<void> deleteCorCyclePlacette(final int id) async {
+  Future<void> deleteCorCyclePlacette(final String id) async {
     final db = await database;
     await db.update(
       _tableName,

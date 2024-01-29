@@ -184,7 +184,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   // }
 
   @override
-  Future<void> deleteArbre(final int id) async {
+  Future<void> deleteArbre(final String id) async {
     final db = await database;
     await db.update(
       _tableName,
@@ -195,7 +195,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   }
 
   @override
-  Future<List<int>> getArbreIdsForPlacette(final int idPlacette) async {
+  Future<List<String>> getArbreIdsForPlacette(final int idPlacette) async {
     final db = await database;
     try {
       final List<Map<String, dynamic>> maps = await db.query(
