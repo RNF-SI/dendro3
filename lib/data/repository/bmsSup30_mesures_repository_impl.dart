@@ -14,7 +14,7 @@ class BmsSup30MesuresRepositoryImpl implements BmsSup30MesuresRepository {
 
   @override
   Future<BmSup30Mesure> insertBmSup30Mesure(
-      final int idBmSup30,
+      final String idBmSup30,
       final int idCycle,
       double? diametreIni,
       double? diametreMed,
@@ -49,8 +49,8 @@ class BmsSup30MesuresRepositoryImpl implements BmsSup30MesuresRepository {
 
   @override
   Future<BmSup30Mesure> updateBmSup30Mesure(
-      final int idBmSup30Mesure,
-      final int idBmSup30,
+      final String idBmSup30Mesure,
+      final String idBmSup30,
       final int idCycle,
       double? diametreIni,
       double? diametreMed,
@@ -84,12 +84,12 @@ class BmsSup30MesuresRepositoryImpl implements BmsSup30MesuresRepository {
   }
 
   @override
-  Future<void> deleteBmSup30FromIdBmSup30(int idBmSup30Mesure) async {
+  Future<void> deleteBmSup30FromIdBmSup30(String idBmSup30Mesure) async {
     await database.deleteBmSup30MesureFromIdBmSup30(idBmSup30Mesure);
   }
 
   @override
-  Future<void> deleteBmsSup30Mesure(int idBmSup30Mesure) async {
+  Future<void> deleteBmsSup30Mesure(String idBmSup30Mesure) async {
     await database.deleteBmSup30Mesure(idBmSup30Mesure);
   }
 }

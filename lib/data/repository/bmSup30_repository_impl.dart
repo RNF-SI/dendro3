@@ -19,7 +19,7 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
   @override
   Future<BmSup30> insertBmSup30(
       int idPlacette,
-      int? idArbre,
+      String? idArbre,
       String codeEssence,
       double azimut,
       double distance,
@@ -45,7 +45,7 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
 
   @override
   Future<BmSup30> updateBmSup30(
-      int idBmSup30,
+      String idBmSup30,
       int idBmSup30Orig,
       int idPlacette,
       int? idArbre,
@@ -74,17 +74,18 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
   }
 
   @override
-  Future<void> deleteBmSup30(int idBmSup30) {
+  Future<void> deleteBmSup30(String idBmSup30) {
     return database.deleteBmSup30(idBmSup30);
   }
 
   @override
-  Future<List<int>> getBmSup30IdsForPlacette(int idPlacette) async {
+  Future<List<String>> getBmSup30IdsForPlacette(int idPlacette) async {
     return await database.getBmSup30IdsForPlacette(idPlacette);
   }
 
   @override
-  Future<void> deleteBmSup30AndBmSup30MesureFromIdBmSup30(int idBmSup30) async {
+  Future<void> deleteBmSup30AndBmSup30MesureFromIdBmSup30(
+      String idBmSup30) async {
     await bmsSup30MesuresRepository.deleteBmSup30FromIdBmSup30(idBmSup30);
     await database.deleteBmSup30(idBmSup30);
   }

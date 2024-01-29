@@ -59,13 +59,13 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
   }
 
   @override
-  Future<List<int>> getCorCyclePlacetteIdsForPlacette(int placetteId) {
+  Future<List<String>> getCorCyclePlacetteIdsForPlacette(int placetteId) {
     return database.getCorCyclePlacetteIdsForPlacette(placetteId);
   }
 
   @override
   Future<void> deleteCorCyclePlacetteTransectAndRege(
-      int corCyclePlacetteId) async {
+      String corCyclePlacetteId) async {
     await transectsRepository
         .deleteTransectsForCorCyclePlacette(corCyclePlacetteId);
     await regenerationsRepository

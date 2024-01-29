@@ -42,7 +42,7 @@ class ArbresRepositoryImpl implements ArbresRepository {
 
   @override
   Future<Arbre> updateArbre(
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     final int idPlacette,
     final String codeEssence,
@@ -66,17 +66,17 @@ class ArbresRepositoryImpl implements ArbresRepository {
   }
 
   @override
-  Future<void> deleteArbre(final int idArbre) async {
+  Future<void> deleteArbre(final String idArbre) async {
     await database.deleteArbre(idArbre);
   }
 
   @override
-  Future<List<int>> getArbreIdsForPlacette(int idPlacette) async {
+  Future<List<String>> getArbreIdsForPlacette(int idPlacette) async {
     return await database.getArbreIdsForPlacette(idPlacette);
   }
 
   @override
-  Future<void> deleteArbreAndArbreMesureFromIdArbre(int idArbre) async {
+  Future<void> deleteArbreAndArbreMesureFromIdArbre(String idArbre) async {
     await arbresMesuresRepository.deleteArbreMesureFromIdArbre(idArbre);
     await database.deleteArbre(idArbre);
   }

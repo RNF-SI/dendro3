@@ -13,7 +13,7 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
   @override
   Future<Regeneration> insertRegeneration(
       // final int idRegeneration,
-      final int idCyclePlacette,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,
@@ -43,8 +43,8 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
 
   @override
   Future<Regeneration> updateRegeneration(
-      final int idRegeneration,
-      final int idCyclePlacette,
+      final String idRegeneration,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,
@@ -74,13 +74,13 @@ class RegenerationsRepositoryImpl implements RegenerationsRepository {
   }
 
   @override
-  Future<void> deleteRegeneration(final int idRegeneration) async {
+  Future<void> deleteRegeneration(final String idRegeneration) async {
     await database.deleteRegeneration(idRegeneration);
   }
 
   @override
   Future<void> deleteRegenerationsForCorCyclePlacette(
-      final int idCyclePlacette) async {
+      final String idCyclePlacette) async {
     await database.deleteRegenerationsForCorCyclePlacette(idCyclePlacette);
   }
 }

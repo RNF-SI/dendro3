@@ -38,14 +38,14 @@ class PlacettesRepositoryImpl implements PlacettesRepository {
   @override
   Future<void> deletePlacetteAndSubObject(int placetteId) async {
     // delete all he arbres linked to the placette
-    List<int> arbresIds =
+    List<String> arbresIds =
         await arbresRepository.getArbreIdsForPlacette(placetteId);
     for (var arbreId in arbresIds) {
       await arbresRepository.deleteArbreAndArbreMesureFromIdArbre(arbreId);
     }
 
     // delete all he bms linked to the placette
-    List<int> bmsIds = await bmsRepository.getBmSup30IdsForPlacette(placetteId);
+    List<String> bmsIds = await bmsRepository.getBmSup30IdsForPlacette(placetteId);
 
     for (var bmId in bmsIds) {
       await bmsRepository.deleteBmSup30AndBmSup30MesureFromIdBmSup30(bmId);
@@ -55,7 +55,7 @@ class PlacettesRepositoryImpl implements PlacettesRepository {
     await reperesRepository.deleteRepereFromPlacetteId(placetteId);
 
     // delete all he corCyclePlacette linked to the placette
-    List<int> corCyclePlacetteIds = await corCyclePlacetteRepository
+    List<String> corCyclePlacetteIds = await corCyclePlacetteRepository
         .getCorCyclePlacetteIdsForPlacette(placetteId);
     for (var corCyclePlacetteId in corCyclePlacetteIds) {
       await corCyclePlacetteRepository

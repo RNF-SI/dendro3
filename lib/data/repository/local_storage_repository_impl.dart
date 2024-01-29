@@ -50,7 +50,8 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   }
 
   @override
-  Future<void> removeFromInProgressCorCyclePlacette(int idCyclePlacette) async {
+  Future<void> removeFromInProgressCorCyclePlacette(
+      String idCyclePlacette) async {
     List<int> inProgressList = _getInProgressList();
     inProgressList.remove(idCyclePlacette);
 

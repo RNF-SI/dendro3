@@ -19,7 +19,7 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
 
   @override
   Future<ArbreMesure> insertArbreMesure(
-    final int? idArbre,
+    final String? idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,
@@ -65,8 +65,8 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
 
   @override
   Future<ArbreMesure> updateArbreMesure(
-    final int? idArbreMesure,
-    final int? idArbre,
+    final String? idArbreMesure,
+    final String? idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,
@@ -113,7 +113,7 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
 
   @override
   Future<ArbreMesure> getPreviousCycleMeasure(
-    final int idArbre,
+    final String idArbre,
     final int? idCycle,
     int? numCycle,
   ) async {
@@ -124,7 +124,7 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
 
   @override
   Future<ArbreMesure> updateLastArbreMesureCoupe(
-    final int idArbreMesure,
+    final String idArbreMesure,
     final String? coupe,
   ) async {
     final arbreEntity =
@@ -133,12 +133,12 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
   }
 
   @override
-  Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
+  Future<void> deleteArbreMesureFromIdArbre(final String idArbre) async {
     await database.deleteArbreMesureFromIdArbre(idArbre);
   }
 
   @override
-  Future<void> deleteArbreMesure(final int idArbre) async {
+  Future<void> deleteArbreMesure(final String idArbre) async {
     await database.deleteArbreMesure(idArbre);
   }
 }
