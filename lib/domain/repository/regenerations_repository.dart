@@ -2,7 +2,7 @@ import 'package:dendro3/domain/model/regeneration.dart';
 
 abstract class RegenerationsRepository {
   Future<Regeneration> insertRegeneration(
-    final int idCyclePlacette,
+    final String idCyclePlacette,
     final int sousPlacette,
     final String codeEssence,
     final double recouvrement,
@@ -16,8 +16,8 @@ abstract class RegenerationsRepository {
   );
 
   Future<Regeneration> updateRegeneration(
-    final int idRegeneration,
-    final int idCyclePlacette,
+    final String idRegeneration,
+    final String idCyclePlacette,
     final int sousPlacette,
     final String codeEssence,
     final double recouvrement,
@@ -30,7 +30,8 @@ abstract class RegenerationsRepository {
     String? observation,
   );
 
-  Future<void> deleteRegeneration(final int idRegeneration);
+  Future<void> deleteRegeneration(final String idRegeneration);
 
-  Future<void> deleteRegenerationsForCorCyclePlacette(int corCyclePlacetteId);
+  Future<void> deleteRegenerationsForCorCyclePlacette(
+      String corCyclePlacetteId);
 }

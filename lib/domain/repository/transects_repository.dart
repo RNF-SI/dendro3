@@ -2,7 +2,7 @@ import 'package:dendro3/domain/model/transect.dart';
 
 abstract class TransectsRepository {
   Future<Transect> insertTransect(
-    final int idCyclePlacette,
+    final String idCyclePlacette,
     final String codeEssence,
     final String refTransect,
     double? distance,
@@ -21,8 +21,8 @@ abstract class TransectsRepository {
   );
 
   Future<Transect> updateTransect(
-    final int idTransect,
-    final int idCyclePlacette,
+    final String idTransect,
+    final String idCyclePlacette,
     final int idTransectOrig,
     final String codeEssence,
     final String refTransect,
@@ -41,7 +41,7 @@ abstract class TransectsRepository {
     String? observation,
   );
 
-  Future<void> deleteTransect(final int idTransect);
+  Future<void> deleteTransect(final String idTransect);
 
-  Future<void> deleteTransectsForCorCyclePlacette(int corCyclePlacetteId);
+  Future<void> deleteTransectsForCorCyclePlacette(String corCyclePlacetteId);
 }

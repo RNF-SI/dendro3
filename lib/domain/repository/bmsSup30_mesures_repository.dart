@@ -2,7 +2,7 @@ import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 
 abstract class BmsSup30MesuresRepository {
   Future<BmSup30Mesure> insertBmSup30Mesure(
-    final int idBmSup30,
+    final String idBmSup30,
     final int idCycle,
     final double? diametreIni,
     final double? diametreMed,
@@ -18,8 +18,8 @@ abstract class BmsSup30MesuresRepository {
   );
 
   Future<BmSup30Mesure> updateBmSup30Mesure(
-    final int idBmSup30Mesure,
-    final int idBmSup30,
+    final String idBmSup30Mesure,
+    final String idBmSup30,
     final int idCycle,
     final double? diametreIni,
     final double? diametreMed,
@@ -34,6 +34,6 @@ abstract class BmsSup30MesuresRepository {
     final String? observation,
   );
 
-  Future<void> deleteBmSup30FromIdBmSup30(final int idBmSup30Mesure);
-  Future<void> deleteBmsSup30Mesure(final int idBmSup30Mesure);
+  Future<void> deleteBmSup30FromIdBmSup30(final String idBmSup30Mesure);
+  Future<void> deleteBmsSup30Mesure(final String idBmSup30Mesure);
 }

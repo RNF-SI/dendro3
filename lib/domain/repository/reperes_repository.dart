@@ -10,7 +10,7 @@ abstract class ReperesRepository {
     String? observation,
   );
   Future<Repere> updateRepere(
-    final int idRepere,
+    final String idRepere,
     final int idPlacette,
     double? azimut,
     double? distance,
@@ -18,7 +18,7 @@ abstract class ReperesRepository {
     String? repere,
     String? observation,
   );
-  Future<void> deleteRepere(final int idRepere);
+  Future<void> deleteRepere(final String idRepere);
 
   Future<void> deleteRepereFromPlacetteId(final int placetteId);
 }
