@@ -55,7 +55,7 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   // Placette placette;
   // Cycle cycle;
 
-  int? _idRepere;
+  String? _idRepere;
   int? _idPlacette;
   double? _azimut;
   double? _distance;
@@ -85,7 +85,7 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
     if (formType == 'add') {
       _isNewRepere = true;
     } else {
-      _idPlacette = repere!.idRepere;
+      _idRepere = repere!.idRepere;
       _idPlacette = repere!.idPlacette;
       _azimut = repere.azimut;
       _distance = repere.distance;

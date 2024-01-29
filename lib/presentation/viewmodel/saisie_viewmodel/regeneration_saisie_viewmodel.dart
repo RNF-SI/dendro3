@@ -59,8 +59,8 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
 
   CorCyclePlacette? corCyclePlacette;
 
-  late int? _idRegeneration;
-  int? _idCyclePlacette;
+  late String? _idRegeneration;
+  String? _idCyclePlacette;
   int? _sousPlacette;
   var _codeEssence = '';
   double? _recouvrement;

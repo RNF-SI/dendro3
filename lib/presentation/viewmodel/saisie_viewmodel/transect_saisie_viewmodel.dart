@@ -77,9 +77,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   var _codeEssence = '';
 
   // late TransectId idTransect;
-  late int? _idTransect;
+  late String? _idTransect;
 
-  int? _idCyclePlacette;
+  String? _idCyclePlacette;
   int? _idTransectOrig;
   String? _refTransect;
   double? _distance;

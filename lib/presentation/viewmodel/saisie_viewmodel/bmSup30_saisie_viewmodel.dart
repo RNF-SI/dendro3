@@ -81,7 +81,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
 
   // late BmSup30Id _idBmSup30;
   // var _idBmSup30Orig;
-  late int? _idBmSup30;
+  late String? _idBmSup30;
   int? _idBmSup30Orig;
   var _idPlacette;
   var _idArbre;
@@ -96,7 +96,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
 
   // late BmSup30MesureId idBmSup30Mesure='';
   // var _idBmSup30 = '';
-  late int? _idBmSup30Mesure;
+  late String? _idBmSup30Mesure;
   int? _idCycle;
   double? _diametreIni;
   double? _diametreMed;

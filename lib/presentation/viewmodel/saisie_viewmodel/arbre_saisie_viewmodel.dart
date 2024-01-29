@@ -93,7 +93,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   Arbre? arbre;
 
-  late int? _idArbre;
+  late String? _idArbre;
   int? _idArbreOrig;
   var _idPlacette;
   var _codeEssence = '';
@@ -104,7 +104,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   // late ArbreMesureId idArbreMesure='';
   // var _idArbre = '';
-  late int? _idArbreMesure;
+  late String? _idArbreMesure;
   int? _idCycle;
   double? _diametre1;
   double? _diametre2;
