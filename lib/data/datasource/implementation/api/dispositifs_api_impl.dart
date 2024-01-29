@@ -9,8 +9,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
-const String apiBase = "http://10.0.2.2:8000";
-// const String apiBase = "https://192.168.122.1:8000";
+// const String apiBase = "http://10.0.2.2:8000";
+const String apiBase = "http://192.168.1.64:8000";
 
 class DispositifsApiImpl implements DispositifsApi {
   @override

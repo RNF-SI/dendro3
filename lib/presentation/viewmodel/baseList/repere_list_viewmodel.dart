@@ -8,7 +8,7 @@ import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
+import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final repereListProvider = Provider<RepereList>((ref) {
@@ -18,7 +18,7 @@ final repereListProvider = Provider<RepereList>((ref) {
 
 final repereListViewModelStateNotifierProvider =
     StateNotifierProvider<RepereListViewModel, State<RepereList>>((ref) {
-  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return RepereListViewModel(
@@ -29,13 +29,13 @@ final repereListViewModelStateNotifierProvider =
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
-    lastModifiedProvider,
+    lastSelectedProvider,
     displayableListNotifier,
   );
 });
 
 class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
-  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -51,7 +51,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
     this._updateRepereUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
     this._displayableListNotifier,
   ) : super(const State.init()) {}
 
@@ -74,7 +74,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
           item["repere"],
           item["observation"]);
 
-      _lastModifiedProvider.setLastModifiedId('Reperes', newRepere.idRepere);
+      _lastSelectedProvider.setLastSelectedId('Reperes', newRepere.idRepere);
       state = State.success(state.data!.addItemToList(newRepere));
       _displayableListNotifier.setDisplayableList(state.data!);
     } on Exception catch (e) {
@@ -98,7 +98,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
           item["repere"],
           item["observation"]);
 
-      _lastModifiedProvider.setLastModifiedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Reperes', updatedRepere.idRepere);
       state = State.success(state.data!.updateItemInList(updatedRepere));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -108,7 +108,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
   }
 
   @override
-  Future<void> deleteItem(int id) {
+  Future<void> deleteItem(String id) {
     // TODO: implement deleteItem
     throw UnimplementedError();
   }

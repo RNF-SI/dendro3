@@ -54,24 +54,7 @@ class PlacettePage extends ConsumerWidget {
                     throw UnimplementedError();
                 }
               },
-              itemBuilder: (context) => [
-                // popupmenu item 1
-                // PopupMenuItem(
-                // value: 'open_remove_dialog',
-                // child: Row(
-                //   children: const [
-                //     Icon(Icons.delete, color: Colors.red),
-                //     SizedBox(
-                //       // sized box with width 10
-                //       width: 10,
-                //     ),
-                //     Text("Supprimer localement",
-                //         style: TextStyle(color: Colors.red))
-                //   ],
-                // ),
-                // ),
-                // popupmenu item 2
-              ],
+              itemBuilder: (context) => [],
               offset: Offset(0, 50),
               color: Colors.white,
               elevation: 2,
@@ -107,17 +90,20 @@ class PlacettePage extends ConsumerWidget {
         floatingActionButton: PlacetteFAB(
           distance: 112.0,
           children: [
-            ActionButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return SaisiePlacettePage(
-                    placette: placette,
-                    dispCycleList: dispCycleList,
-                  );
-                },
-              )),
-              icon: const Icon(Icons.add),
-            ),
+            if (corCyclePlacetteList.length == dispCycleList.length)
+              ActionButton(
+                onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return SaisiePlacettePage(
+                      placette: placette,
+                      corCyclePlacetteList: corCyclePlacetteList,
+                      dispCycleList: dispCycleList,
+                    );
+                  },
+                )),
+                icon: const Icon(Icons.add),
+              ),
             ActionButton(
               onPressed: () => null,
               icon: const Icon(Icons.play_arrow),
@@ -130,42 +116,97 @@ class PlacettePage extends ConsumerWidget {
 }
 
 Widget __buildPlacetteResumeWidget(
-    final BuildContext context, final WidgetRef ref, final Placette placette) {
-  return GridView.count(
-      // Create a grid with 2 columns. If you change the scrollDirection to
-      // horizontal, this produces 2 rows.
-      crossAxisCount: 2,
-      childAspectRatio: (1 / .2),
-      children: [
-        buildPropertyTextWidget('idPlacette', placette.idPlacette),
-        buildPropertyTextWidget('idDispositif', placette.idDispositif),
-        buildPropertyTextWidget('idPlacetteOrig', placette.idPlacetteOrig),
-        buildPropertyTextWidget('strate', placette.strate),
-        buildPropertyTextWidget('pente', placette.pente),
-        buildPropertyTextWidget('poidsPlacette', placette.poidsPlacette),
-        buildPropertyTextWidget('correctionPente', placette.correctionPente),
-        buildPropertyTextWidget('exposition', placette.exposition),
-        buildPropertyTextWidget('profondeurApp', placette.profondeurApp),
-        buildPropertyTextWidget('profondeurHydr', placette.profondeurHydr),
-        buildPropertyTextWidget('texture', placette.texture),
-        buildPropertyTextWidget('habitat', placette.habitat),
-        buildPropertyTextWidget('station', placette.station),
-        buildPropertyTextWidget('typologie', placette.typologie),
-        buildPropertyTextWidget('groupe', placette.groupe),
-        buildPropertyTextWidget('groupe1', placette.groupe1),
-        buildPropertyTextWidget('groupe2', placette.groupe2),
-        buildPropertyTextWidget('refHabitat', placette.refHabitat),
-        buildPropertyTextWidget('precisionHabitat', placette.precisionHabitat),
-        buildPropertyTextWidget('refStation', placette.refStation),
-        buildPropertyTextWidget('refTypologie', placette.refTypologie),
-        buildPropertyTextWidget('descriptifGroupe', placette.descriptifGroupe),
-        buildPropertyTextWidget(
-            'descriptifGroupe1', placette.descriptifGroupe1),
-        buildPropertyTextWidget(
-            'descriptifGroupe2', placette.descriptifGroupe2),
-        buildPropertyTextWidget('precisionGps', placette.precisionGps),
-        buildPropertyTextWidget('cheminement', placette.cheminement)
-      ]);
+    BuildContext context, WidgetRef ref, Placette placette) {
+  // A list of properties to display in the grid
+  List<Map<String, dynamic>> properties = [
+    {'property': 'idPlacette', 'value': placette.idPlacette},
+    {'property': 'idDispositif', 'value': placette.idDispositif},
+    {'property': 'idPlacetteOrig', 'value': placette.idPlacetteOrig},
+    {'property': 'strate', 'value': placette.strate},
+    {'property': 'pente', 'value': placette.pente},
+    {'property': 'poidsPlacette', 'value': placette.poidsPlacette},
+    {'property': 'correctionPente', 'value': placette.correctionPente},
+    {'property': 'exposition', 'value': placette.exposition},
+    {'property': 'profondeurApp', 'value': placette.profondeurApp},
+    {'property': 'profondeurHydr', 'value': placette.profondeurHydr},
+    {'property': 'texture', 'value': placette.texture},
+    {'property': 'habitat', 'value': placette.habitat},
+    {
+      'property': 'station',
+      'value': placette.station,
+      'isLong': true,
+    },
+    {'property': 'typologie', 'value': placette.typologie},
+    {'property': 'groupe', 'value': placette.groupe},
+    {'property': 'groupe1', 'value': placette.groupe1},
+    {'property': 'groupe2', 'value': placette.groupe2},
+    {'property': 'refHabitat', 'value': placette.refHabitat},
+    {
+      'property': 'precisionHabitat',
+      'value': placette.precisionHabitat,
+      'isLong': true
+    },
+    {
+      'property': 'refStation',
+      'value': placette.refStation,
+      'isLong': true,
+    },
+    {'property': 'refTypologie', 'value': placette.refTypologie},
+    {'property': 'descriptifGroupe', 'value': placette.descriptifGroupe},
+    {'property': 'descriptifGroupe1', 'value': placette.descriptifGroupe1},
+    {'property': 'descriptifGroupe2', 'value': placette.descriptifGroupe2},
+    {'property': 'precisionGps', 'value': placette.precisionGps},
+    {'property': 'cheminement', 'value': placette.cheminement},
+  ];
+
+  List<Map<String, dynamic>> regularProperties = [];
+  List<Map<String, dynamic>> longTextProperties = [];
+
+  // Populate the lists based on the 'isLong' flag
+  properties.forEach((property) {
+    if (property.containsKey('isLong') && property['isLong']) {
+      longTextProperties.add(property);
+    } else {
+      regularProperties.add(property);
+    }
+  });
+
+  return CustomScrollView(
+    slivers: [
+      // Grid for regular properties
+      SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 6, // Adjust as needed
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            var property = regularProperties[index];
+            return buildPropertyTextWidget(
+              property['property'],
+              property['value'],
+            );
+          },
+          childCount: regularProperties.length,
+        ),
+      ),
+
+      // List for long text properties
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            var property = longTextProperties[index];
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: buildLongPropertyTextWidget(
+                  property['property'], property['value']),
+            );
+          },
+          childCount: longTextProperties.length,
+        ),
+      ),
+    ],
+  );
 }
 
 @immutable

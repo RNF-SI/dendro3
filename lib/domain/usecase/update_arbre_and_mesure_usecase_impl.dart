@@ -20,7 +20,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
   @override
   Future<Arbre> execute(
     Arbre arbre,
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     int idPlacette,
     String codeEssence,
@@ -28,7 +28,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
     double distance,
     bool? taillis,
     String? observation,
-    final int idArbreMesure,
+    final String idArbreMesure,
     final int? idCycle,
     int? numCycle,
     double? diametre1,
@@ -59,18 +59,18 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       observation,
     );
 
-    // if (coupe != null && coupe.isNotEmpty) {
-    //   // Récupération de la mesure précédente grace au numCycle
-    //   //
-
-    //   ArbreMesure previousCycleMeasure = await _arbreMesureRepository
-    //       .getPreviousCycleMeasure(arbre.idArbre, idCycle, numCycle);
-    //   if (previousCycleMeasure != null) {
-    //     // Mise à jour du champ "coupe" de la mesure précédente
-    //     await _arbreMesureRepository.updateLastArbreMesureCoupe(
-    //         arbre.idArbre, idCycle, coupe);
-    //   }
-    // }
+    ArbreMesure? updatedPreviousCycleMeasure;
+    if (coupe != null && coupe.isNotEmpty) {
+      // Récupération de la mesure précédente grace au numCycle
+      ArbreMesure previousCycleMeasure = await _arbreMesureRepository
+          .getPreviousCycleMeasure(arbre.idArbre, idCycle, numCycle);
+      if (previousCycleMeasure != null) {
+        // Mise à jour du champ "coupe" de la mesure précédente
+        updatedPreviousCycleMeasure =
+            await _arbreMesureRepository.updateLastArbreMesureCoupe(
+                previousCycleMeasure.idArbreMesure, coupe);
+      }
+    }
 
     ArbreMesure arbreMesureUpdated =
         await _arbreMesureRepository.updateArbreMesure(
@@ -86,7 +86,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       stadeEcorce,
       liane,
       diametreLiane,
-      coupe,
+      '',
       limite,
       idNomenclatureCodeSanitaire,
       codeEcolo,
@@ -104,7 +104,17 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       updatedMesures[mesureIndex] = arbreMesureUpdated;
     }
 
+    // Mise à jour de la liste des mesures
+    List<ArbreMesure> updatedMesuresWithPrevious = updatedMesures.map((mesure) {
+      // Remplace la mesure existante si elle correspond à la mesure précédente mise à jour
+      if (updatedPreviousCycleMeasure != null &&
+          mesure.idArbreMesure == updatedPreviousCycleMeasure.idArbreMesure) {
+        return updatedPreviousCycleMeasure;
+      }
+      return mesure;
+    }).toList();
+
     return arbreUpdated.copyWith(
-        arbresMesures: ArbreMesureList(values: updatedMesures));
+        arbresMesures: ArbreMesureList(values: updatedMesuresWithPrevious));
   }
 }

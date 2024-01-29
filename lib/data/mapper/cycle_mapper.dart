@@ -1,5 +1,6 @@
 import 'package:dendro3/data/entity/cycles_entity.dart';
 import 'package:dendro3/data/mapper/corCyclePlacette_list_mapper.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:intl/intl.dart';
 
@@ -13,24 +14,60 @@ class CycleMapper {
   //   );
   // }
 
-  static Cycle transformFromApiToModel(final CycleEntity entity) {
-    return Cycle(
-        idCycle: entity['id_cycle'],
-        idDispositif: entity['id_dispositif'],
-        numCycle: entity['num_cycle'],
-        coeff: entity['coeff'],
+  static Cycle transformFromApiToModel(final Map<String, dynamic> entity) {
+    try {
+      return Cycle(
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        idDispositif:
+            entity['id_dispositif'] ?? logAndReturnNull<int>('id_dispositif'),
+        numCycle: entity['num_cycle'] ?? logAndReturnNull<int>('num_cycle'),
+        coeff: entity['coeff'] as int?,
         dateDebut: entity['date_debut'] != null
             ? DateTime.parse(entity['date_debut'])
             : null,
         dateFin: entity['date_fin'] != null
             ? DateTime.parse(entity['date_fin'])
             : null,
-        diamLim: entity['diam_lim'],
-        monitor: entity['monitor'],
+        diamLim: entity['diam_lim'] as double?,
+        monitor: entity['monitor'] as String?,
         corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
             ? CorCyclePlacetteListMapper.transformFromApiToModel(
                 entity['corCyclesPlacettes'])
-            : null);
+            : null,
+      );
+    } catch (e) {
+      print("Error in Cycle transformFromApiToModel: $e");
+
+      throw e;
+    }
+  }
+
+  static Cycle transformFromDBToModel(final Map<String, dynamic> entity) {
+    try {
+      return Cycle(
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        idDispositif:
+            entity['id_dispositif'] ?? logAndReturnNull<int>('id_dispositif'),
+        numCycle: entity['num_cycle'] ?? logAndReturnNull<int>('num_cycle'),
+        coeff: entity['coeff'] as int?,
+        dateDebut: entity['date_debut'] != null
+            ? DateTime.parse(entity['date_debut'])
+            : null,
+        dateFin: entity['date_fin'] != null
+            ? DateTime.parse(entity['date_fin'])
+            : null,
+        diamLim: entity['diam_lim'] as double?,
+        monitor: entity['monitor'] as String?,
+        corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
+            ? CorCyclePlacetteListMapper.transformFromDBToModel(
+                entity['corCyclesPlacettes'])
+            : null,
+      );
+    } catch (e) {
+      print("Error in Cycle transformFromDBToModel: $e");
+
+      throw e;
+    }
   }
 
   static CycleEntity transformToMap(final Cycle model) {

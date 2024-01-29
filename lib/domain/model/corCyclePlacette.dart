@@ -7,7 +7,7 @@ part 'corCyclePlacette.freezed.dart';
 @freezed
 class CorCyclePlacette with _$CorCyclePlacette {
   const factory CorCyclePlacette(
-      {required int idCyclePlacette,
+      {required String idCyclePlacette,
       required int idCycle,
       required int idPlacette,
       DateTime? dateReleve,

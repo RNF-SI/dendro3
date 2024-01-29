@@ -3,7 +3,7 @@ import 'package:dendro3/domain/model/repere.dart';
 
 abstract class CreateRegenerationUseCase {
   Future<Regeneration> execute(
-      final int idCyclePlacette,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,

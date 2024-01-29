@@ -1,12 +1,15 @@
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/data/repository/essences_repository_impl.dart';
 import 'package:dendro3/domain/repository/essences_repository.dart';
+import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
@@ -36,6 +39,8 @@ import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider.dart';
+import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider_impl.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase_impl.dart';
 // import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
@@ -62,8 +67,12 @@ import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/is_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/is_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
+import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
@@ -112,8 +121,10 @@ final getDispositifUseCaseProvider = Provider<GetDispositifUseCase>((ref) =>
     GetDispositifUseCaseImpl(ref.watch(dispositifsRepositoryProvider)));
 
 final deleteDispositifUseCaseProvider = Provider<DeleteDispositifUseCase>(
-    (ref) =>
-        DeleteDispositifUseCaseImpl(ref.watch(dispositifsRepositoryProvider)));
+    (ref) => DeleteDispositifUseCaseImpl(
+        ref.watch(dispositifsRepositoryProvider),
+        ref.watch(placettesRepositoryProvider),
+        ref.watch(cyclesRepositoryProvider)));
 
 final loginUseCaseProvider = Provider<LoginUseCase>(
     (ref) => LoginUseCaseImpl(ref.watch(authenticationRepositoryProvider)));
@@ -223,6 +234,7 @@ final deleteArbreAndMesureUseCaseProvider =
 final deleteArbreMesureUseCaseProvider =
     Provider<DeleteArbreMesureUseCase>((ref) => DeleteArbreMesureUseCaseImpl(
           ref.watch(arbresMesuresRepositoryProvider),
+          ref.watch(arbresMesuresRepositoryProvider),
         ));
 
 final deleteBmSup30AndMesureUseCaseProvider =
@@ -249,3 +261,21 @@ final deleteRepereUseCaseProvider =
     Provider<DeleteRepereUseCase>((ref) => DeleteRepereUseCaseImpl(
           ref.watch(repereRepositoryProvider),
         ));
+
+final isCyclePlacetteCreatedUseCaseProvider =
+    Provider<IsCyclePlacetteCreatedUseCase>((ref) =>
+        IsCyclePlacetteCreatedUseCaseImpl(ref.watch(localStorageProvider)));
+
+final setCyclePlacetteCreatedUseCaseProvider =
+    Provider<SetCyclePlacetteCreatedUseCase>((ref) =>
+        SetCyclePlacetteCreatedUseCaseImpl(ref.watch(localStorageProvider)));
+
+final completeCyclePlacetteCreatedUseCaseProvider =
+    Provider<CompleteCyclePlacetteCreatedUseCase>((ref) =>
+        CompleteCyclePlacetteCreatedUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final getCorCyclePlacetteLocalStorageUseCaseprovider =
+    Provider<GetInProgressCorCyclePlacetteLocalStorageUseCase>((ref) =>
+        GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));

@@ -9,8 +9,8 @@ class UpdateTransectUseCaseImpl implements UpdateTransectUseCase {
 
   @override
   Future<Transect> execute(
-    final int idTransect,
-    final int idCyclePlacette,
+    final String idTransect,
+    final String idCyclePlacette,
     final int idTransectOrig,
     final String codeEssence,
     final String refTransect,

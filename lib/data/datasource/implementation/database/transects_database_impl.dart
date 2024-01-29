@@ -1,4 +1,6 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
@@ -25,9 +27,39 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   }
 
   static getCorCyclePlacetteTransects(
-      Database db, final int corCyclePlacetteId) async {
+      Database db, final String corCyclePlacetteId) async {
     return await db.query(_tableName,
-        where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
+        where: 'id_cycle_placette = ? AND deleted = 0',
+        whereArgs: [corCyclePlacetteId]);
+  }
+
+  static Future<Map<String, List<TransectEntity>>>
+      getCorCyclePlacetteTransectsForDataSync(Database db,
+          final String corCyclePlacetteId, String lastSyncTime) async {
+    var created_transects = await db.query(
+      _tableName,
+      where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
+    );
+
+    var updated_transects = await db.query(
+      _tableName,
+      where:
+          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
+    );
+
+    var deleted_transects = await db.query(
+      _tableName,
+      where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
+    );
+
+    return {
+      "created": created_transects,
+      "updated": updated_transects,
+      "deleted": deleted_transects,
+    };
   }
 
   @override
@@ -36,15 +68,9 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     final db = await database;
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_transect) FROM $_tableName'));
+      String transectUuid = generateUuid();
 
-      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
-          'SELECT MAX(id_transect_orig) FROM $_tableName WHERE id_cycle_placette = ?',
-          [transect['id_cycle_placette']]));
-
-      transect['id_transect'] = maxId! + 1;
-      transect['id_transect_orig'] = maxIdOrig == null ? 1 : maxIdOrig + 1;
+      transect['id_transect'] = transectUuid;
 
       await txn.insert(
         _tableName,
@@ -52,8 +78,8 @@ class TransectsDatabaseImpl implements TransectsDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [transectUuid]);
       transectEntity = results.first;
     });
     return transectEntity;
@@ -61,34 +87,48 @@ class TransectsDatabaseImpl implements TransectsDatabase {
 
   @override
   // Function called when one arbre is updated (not updating arbre mesure)
-  Future<TransectEntity> updateTransect(final TransectEntity arbre) async {
+  Future<TransectEntity> updateTransect(final TransectEntity transect) async {
     final db = await database;
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
+      var updatedTransect = Map<String, dynamic>.from(transect)
+        ..['last_update'] = formatDateTime(DateTime.now());
+
       await txn.update(
         _tableName,
-        arbre,
+        updatedTransect,
         where: '$_columnId = ?',
-        whereArgs: [arbre['id_transect']],
+        whereArgs: [transect['id_transect']],
       );
 
       final results = await txn.query(_tableName,
-          where: '$_columnId = ?', whereArgs: [arbre['id_transect']]);
+          where: '$_columnId = ?', whereArgs: [transect['id_transect']]);
       transectEntity = results.first;
     });
     return transectEntity;
   }
 
   @override
-  Future<void> deleteTransect(int id) async {
+  Future<void> deleteTransect(String id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
     );
   }
 
+  @override
+  Future<void> deleteTransectsForCorCyclePlacette(String id) async {
+    final db = await database;
+    await db.update(
+      _tableName,
+      {'deleted': 1},
+      where: 'id_cycle_placette = ?',
+      whereArgs: [id],
+    );
+  }
   // @override
   // Future<void> updateTransect(final TransectEntity transect) async {
   //   final db = await database;

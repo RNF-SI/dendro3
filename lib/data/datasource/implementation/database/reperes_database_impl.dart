@@ -1,4 +1,6 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/reperes_database.dart';
 import 'package:dendro3/data/entity/reperes_entity.dart';
@@ -7,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 
 class ReperesDatabaseImpl implements ReperesDatabase {
   static const _tableName = 't_reperes';
-  static const _columnId = 'id_reperes';
+  static const _columnId = 'id_repere';
 
   Future<Database> get database async {
     return await DB.instance.database;
@@ -26,8 +28,39 @@ class ReperesDatabaseImpl implements ReperesDatabase {
 
   static Future<List<RepereEntity>> getPlacetteReperes(
       Database db, int placetteId) async {
-    return await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    return await db.query(_tableName,
+        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
+  }
+
+  static Future<Map<String, List<RepereEntity>>> getPlacetteReperesForDataSync(
+      Database db, int placetteId, String lastSyncTime) async {
+    // Fetch newly created Repere records
+    List<RepereEntity> created_reperes = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch updated Repere records
+    List<RepereEntity> updated_reperes = await db.query(
+      _tableName,
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
+    );
+
+    // Fetch deleted Repere records
+    List<RepereEntity> deleted_reperes = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    return {
+      "created": created_reperes,
+      "updated": updated_reperes,
+      "deleted": deleted_reperes,
+    };
   }
 
   @override
@@ -36,10 +69,9 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     final db = await database;
     late final RepereEntity repereEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_repere) FROM $_tableName'));
+      String repereUuid = generateUuid();
 
-      repere['id_repere'] = maxId! + 1;
+      repere['id_repere'] = repereUuid;
       await txn.insert(
         _tableName,
         repere,
@@ -47,7 +79,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
       );
 
       final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [repereUuid]);
       repereEntity = results.first;
     });
     return repereEntity;
@@ -59,9 +91,12 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     final db = await database;
     late final RepereEntity transectEntity;
     await db.transaction((txn) async {
+      var updatedRepere = Map<String, dynamic>.from(repere)
+        ..['last_update'] = formatDateTime(DateTime.now());
+
       await txn.update(
         _tableName,
-        repere,
+        updatedRepere,
         where: '$_columnId = ?',
         whereArgs: [repere['id_repere']],
       );
@@ -85,12 +120,24 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   // }
 
   @override
-  Future<void> deleteRepere(final int id) async {
+  Future<void> deleteRepere(final String id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<void> deleteRepereFromPlacetteId(final int placetteId) async {
+    final db = await database;
+    await db.update(
+      _tableName,
+      {'deleted': 1},
+      where: 'id_placette = ?',
+      whereArgs: [placetteId],
     );
   }
 }

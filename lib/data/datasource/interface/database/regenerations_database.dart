@@ -8,5 +8,7 @@ abstract class RegenerationsDatabase {
       final RegenerationEntity regenerationEntity);
 
   // Future<void> updateRegeneration(final RegenerationEntity regenerationEntity);
-  Future<void> deleteRegeneration(final int id);
+  Future<void> deleteRegeneration(final String id);
+
+  Future<void> deleteRegenerationsForCorCyclePlacette(String idCyclePlacette);
 }

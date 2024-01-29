@@ -6,6 +6,7 @@ import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,19 +30,45 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
   PlacetteCycleWidgetState();
 
   late List<bool> cycleSelected;
-  late final CorCyclePlacetteListViewModel corCyclePlacetteListViewModel;
 
   @override
   void initState() {
+    super.initState();
     cycleSelected =
         widget.dispCycleList!.values.map<bool>((Cycle data) => false).toList();
-    cycleSelected[0] = true;
-
-    super.initState();
+    if (cycleSelected.isNotEmpty) {
+      cycleSelected[0] = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final corCyclePlacetteLocalStorageStatusProvider = ref.watch(
+        corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
+
+    // Determine the selected cycle's idCycle
+    int selectedCycleIndex = cycleSelected.indexWhere((selected) => selected);
+    Cycle? selectedCycle = selectedCycleIndex != -1
+        ? widget.dispCycleList!.values.elementAt(selectedCycleIndex)
+        : null;
+
+    CorCyclePlacette? selectedCorCyclePlacette;
+
+    // Iterate over corCyclePlacetteList to find the matching element
+    for (var corCyclePlacette in widget.corCyclePlacetteList.values) {
+      if (selectedCycle != null &&
+          corCyclePlacette.idCycle == selectedCycle!.idCycle) {
+        selectedCorCyclePlacette = corCyclePlacette;
+        break; // Break the loop once the matching element is found
+      }
+    }
+
+    // Check if the cycle placette is new using idCyclePlacette
+    bool isNewCycle = selectedCorCyclePlacette != null &&
+        corCyclePlacetteLocalStorageStatusProvider.isCyclePlacetteInProgress(
+            selectedCorCyclePlacette.idCyclePlacette);
+
+    // Ensure that ViewModel instance is used correctly in _generateCircleAvatars
     return Column(children: [
       ToggleButtons(
         isSelected: cycleSelected,
@@ -61,13 +88,26 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
           minHeight: 40.0,
           minWidth: 80.0,
         ),
-        children: <Widget>[
-          ..._generateCircleAvatars(
-            widget.dispCycleList!,
-            widget.corCyclePlacetteList!,
-          ),
-        ],
+        children: _generateCircleAvatars(
+          widget.dispCycleList!,
+          widget.corCyclePlacetteList!,
+          corCyclePlacetteLocalStorageStatusProvider, // Pass the ViewModel instance here
+        ),
       ),
+
+      // Conditionally render the "Mark as Complete" button
+      if (isNewCycle)
+        ElevatedButton(
+          onPressed: () async {
+            await corCyclePlacetteLocalStorageStatusProvider
+                .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
+            setState(() {}); // Refresh the UI
+          },
+          child: const Text('Marquer comme complet'),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.blue)),
+        ),
+
       // Afficher le grid seulement si le corcycle existe pour la placette
       // Sinon Afficher un text et un bouton
       widget.corCyclePlacetteList!.values
@@ -89,22 +129,41 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
 List<Widget> _generateCircleAvatars(
   CycleList dispCycleList,
   CorCyclePlacetteList corCyclePlacetteList,
+  CorCyclePlacetteLocalStorageStatusNotifier
+      corCyclePlacetteLocalStorageStatusStateNotifier,
 ) {
-  var list = dispCycleList.values
-      .map<Widget>((data) => CircleAvatar(
-            backgroundColor: corCyclePlacetteList.values
-                    .map((CorCyclePlacette corCycle) => corCycle.idCycle)
-                    .contains(data.idCycle)
-                ? Colors.green
-                : Colors.red,
-            foregroundColor: Colors.white,
-            radius: 10,
-            child: Text(
-              data.numCycle.toString(),
-            ),
-          ))
-      .toList();
-  return list;
+  return dispCycleList.values.map<Widget>((Cycle data) {
+    CorCyclePlacette? correspondingCorCyclePlacette;
+
+    // Iterate over corCyclePlacetteList to find the matching element
+    for (var corCyclePlacette in corCyclePlacetteList.values) {
+      if (corCyclePlacette.idCycle == data.idCycle) {
+        correspondingCorCyclePlacette = corCyclePlacette;
+        break; // Break the loop once the matching element is found
+      }
+    }
+
+    // Check if the cycle placette is new using idCyclePlacette
+    bool isNewCycle = correspondingCorCyclePlacette != null
+        ? corCyclePlacetteLocalStorageStatusStateNotifier
+            .isCyclePlacetteInProgress(
+                correspondingCorCyclePlacette.idCyclePlacette)
+        : false;
+
+    Color backgroundColor = isNewCycle
+        ? Colors.yellow // New cycle color
+        : correspondingCorCyclePlacette != null
+            ? Colors.green // Existing cycle
+            : Colors.red; // Cycle not found
+    return CircleAvatar(
+      backgroundColor: backgroundColor,
+      foregroundColor: Colors.white,
+      radius: 10,
+      child: Text(
+        data.numCycle.toString(),
+      ),
+    );
+  }).toList();
 }
 
 Widget __buildGridText(CorCyclePlacette corCyclePlacette) {

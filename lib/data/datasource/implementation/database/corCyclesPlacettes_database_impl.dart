@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
@@ -65,8 +66,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
 
   static Future<List<CorCyclePlacetteEntity>> getPlacetteCorCyclesPlacettes(
       Database db, final int placetteId) async {
-    CorCyclePlacetteListEntity corCyclePlacetteList = await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    CorCyclePlacetteListEntity corCyclePlacetteList = await db.query(_tableName,
+        where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
 
     var transectObj;
 
@@ -78,6 +79,68 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       RegenerationListEntity regenerationObj =
           await RegenerationsDatabaseImpl.getCorCyclePlacetteRegenerations(
               db, corCyclePlacetteEntity["id_cycle_placette"]);
+      return {
+        ...corCyclePlacetteEntity,
+        'transects': transectObj,
+        'regenerations': regenerationObj
+      };
+    }).toList());
+  }
+
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      getPlacetteCorCyclesPlacettesForDataSync(
+          Database db, final int placetteId, String lastSyncTime) async {
+    // Fetch newly created CorCyclePlacette records
+    var created_corCyclePlacette = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch updated CorCyclePlacette records
+    var updated_corCyclePlacette = await db.query(
+      _tableName,
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
+    );
+
+    // Fetch deleted CorCyclePlacette records
+    var deleted_corCyclePlacette = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Process each list to include Transects and Regenerations
+    return {
+      "created": await _processCorCyclePlacetteWithDetails(
+        db,
+        created_corCyclePlacette,
+        lastSyncTime,
+      ),
+      "updated": await _processCorCyclePlacetteWithDetails(
+        db,
+        updated_corCyclePlacette,
+        lastSyncTime,
+      ),
+      "deleted":
+          deleted_corCyclePlacette, // Assuming no need to add details for deleted records
+    };
+  }
+
+// Helper function to process CorCyclePlacette and include Transects and Regenerations
+  static Future<List<Map<String, dynamic>>> _processCorCyclePlacetteWithDetails(
+      Database db,
+      List<CorCyclePlacetteEntity> corCyclePlacetteList,
+      String lastSyncTime) async {
+    return Future.wait(corCyclePlacetteList.map((corCyclePlacetteEntity) async {
+      var transectObj =
+          await TransectsDatabaseImpl.getCorCyclePlacetteTransectsForDataSync(
+              db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
+      var regenerationObj = await RegenerationsDatabaseImpl
+          .getCorCyclePlacetteRegenerationsForDataSync(
+              db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
       return {
         ...corCyclePlacetteEntity,
         'transects': transectObj,
@@ -98,10 +161,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
         formatter.format(corCyclePlacette["date_releve"]);
 
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX($_columnId) FROM $_tableName'));
-
-      corCyclePlacette[_columnId] = maxId! + 1;
+      String corCyclePlacetteUuid = generateUuid();
+      corCyclePlacette[_columnId] = corCyclePlacetteUuid;
 
       await txn.insert(
         _tableName,
@@ -109,8 +170,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [corCyclePlacetteUuid]);
       corCyclePlacetteEntity = results.first;
     });
     return corCyclePlacetteEntity;
@@ -138,4 +199,27 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
   //   );
   // }
 
+  @override
+  Future<List<String>> getCorCyclePlacetteIdsForPlacette(
+      final int placetteId) async {
+    final db = await database;
+    final results = await db.query(
+      _tableName,
+      columns: [_columnId],
+      where: 'id_placette = ? AND deleted = 0',
+      whereArgs: [placetteId],
+    );
+    return results.map((e) => e[_columnId] as String).toList();
+  }
+
+  @override
+  Future<void> deleteCorCyclePlacette(final String id) async {
+    final db = await database;
+    await db.update(
+      _tableName,
+      {'deleted': 1},
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
 }

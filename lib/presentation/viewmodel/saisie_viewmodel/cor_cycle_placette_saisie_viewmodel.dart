@@ -121,52 +121,54 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       // initialValue: "",
       // hintText: 'Veuillez entrer le code'),
       DateFieldConfig(
-        fieldName: "dateReleve",
+        fieldName: "Date de Releve",
         onDateSelected: (DateTime date) {
           _dateReleve = date;
         },
       ),
       TextFieldConfig(
-        fieldName: "dateIntervention",
+        fieldName: "Date Intervention",
+        fieldInfo: "Date de dernière intervention sylvicole",
+        fieldUnit: "année",
         initialValue: "",
         hintText: 'Veuillez entrer le code',
         onChanged: (p0) => _dateIntervention = p0,
       ),
+      // TextFieldConfig(
+      //   fieldName: "Année",
+      //   initialValue: "",
+      //   hintText: "Veuillez entrer l'année",
+      //   keyboardType: TextInputType.number,
+      //   inputFormatters: [
+      //     FilteringTextInputFormatter.digitsOnly,
+      //     FilteringTextInputFormatter.allow(RegExp(r"[0-9]{0,4}$"))
+      //   ],
+      //   onChanged: (value) => setAnnee(value),
+      // ),
       TextFieldConfig(
-        fieldName: "annee",
-        initialValue: "",
-        hintText: "Veuillez entrer l'année",
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          FilteringTextInputFormatter.allow(RegExp(r"[0-9]{0,4}$"))
-        ],
-        onChanged: (value) => setAnnee(value),
-      ),
-      TextFieldConfig(
-        fieldName: "natureIntervention",
+        fieldName: "Nature de l'intervention",
+        fieldInfo: "Ex: Coupe Rase, Coupe d'éclaircie, ...",
         initialValue: "",
         hintText: 'Veuillez entrer le code',
         onChanged: (p0) => _natureIntervention = p0,
       ),
 
       DropdownFieldConfig<dynamic>(
-        fieldName: 'gestionPlacette',
-        value: _gestionPlacette != null ? _gestionPlacette.toString() : '',
-        items: [
-          const MapEntry('', 'Sélectionnez une option'),
-          const MapEntry('gérée', 'Gérée'),
-          const MapEntry('Non gérée', 'Non gérée'),
-        ],
-        validator: (value, formData) {
-          return null;
-        },
-        onChanged: (value) {
-          _gestionPlacette = value;
-        },
-        fieldInfo:
-            "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
-      ),
+          fieldName: 'gestionPlacette',
+          value: _gestionPlacette != null ? _gestionPlacette.toString() : '',
+          items: [
+            const MapEntry('', 'Sélectionnez une option'),
+            const MapEntry('gérée', 'Gérée'),
+            const MapEntry('Non gérée', 'Non gérée'),
+          ],
+          validator: (value, formData) {
+            return null;
+          },
+          onChanged: (value) {
+            _gestionPlacette = value;
+          },
+          fieldInfo:
+              "Géré: Parcelle soumise à exploitation sylvicole; \nNon Gérée: Peuplement en libre évolution garantie sur le long terme"),
 
       // TextFieldConfig(
       //     fieldName: "idNomenclatureCastor",

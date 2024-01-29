@@ -7,13 +7,15 @@ import 'package:dendro3/data/mapper/arbre_mapper.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 // import 'package:dendro3/domain/model/arbre_id.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
+import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ArbresRepositoryImpl implements ArbresRepository {
   final ArbresDatabase database;
+  final ArbresMesuresRepository arbresMesuresRepository;
 
-  const ArbresRepositoryImpl(this.database);
+  const ArbresRepositoryImpl(this.database, this.arbresMesuresRepository);
 
   @override
   Future<Arbre> insertArbre(
@@ -40,7 +42,7 @@ class ArbresRepositoryImpl implements ArbresRepository {
 
   @override
   Future<Arbre> updateArbre(
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     final int idPlacette,
     final String codeEssence,
@@ -64,7 +66,18 @@ class ArbresRepositoryImpl implements ArbresRepository {
   }
 
   @override
-  Future<void> deleteArbre(final int idArbre) async {
+  Future<void> deleteArbre(final String idArbre) async {
+    await database.deleteArbre(idArbre);
+  }
+
+  @override
+  Future<List<String>> getArbreIdsForPlacette(int idPlacette) async {
+    return await database.getArbreIdsForPlacette(idPlacette);
+  }
+
+  @override
+  Future<void> deleteArbreAndArbreMesureFromIdArbre(String idArbre) async {
+    await arbresMesuresRepository.deleteArbreMesureFromIdArbre(idArbre);
     await database.deleteArbre(idArbre);
   }
 }

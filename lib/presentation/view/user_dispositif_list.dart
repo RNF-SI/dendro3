@@ -35,8 +35,7 @@ class UserDispositifList extends ConsumerWidget {
       return ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: dispositifInfoList.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: (final BuildContext context, final int index) {
           return DispositifItemCardWidget(
               dispositifInfo: dispositifInfoList[index]);

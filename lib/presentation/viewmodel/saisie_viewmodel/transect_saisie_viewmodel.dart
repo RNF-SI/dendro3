@@ -77,9 +77,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   var _codeEssence = '';
 
   // late TransectId idTransect;
-  late int? _idTransect;
+  late String? _idTransect;
 
-  int? _idCyclePlacette;
+  String? _idCyclePlacette;
   int? _idTransectOrig;
   String? _refTransect;
   double? _distance;
@@ -188,7 +188,6 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       _orientation = transect.orientation;
       _azimutSouche = transect.azimutSouche;
       _distanceSouche = transect.distanceSouche;
-      _diametre = transect.diametre;
       _diametre130 = transect.diametre130;
       _ratioHauteur = transect.ratioHauteur;
       _contact = transect.contact;
@@ -198,6 +197,24 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       _stadeEcorce = transect.stadeEcorce;
       _observation = transect.observation;
     }
+  }
+
+  String initialDiametreValue() {
+    if (_diametre == null) {
+      return '';
+    }
+    return _diametre == _diametre!.toInt()
+        ? _diametre!.toInt().toString()
+        : _diametre!.toStringAsFixed(1);
+  }
+
+  String initialAngleValue() {
+    if (_angle == null) {
+      return '';
+    }
+    return _angle == _angle!.toInt()
+        ? _angle!.toInt().toString()
+        : _angle!.toStringAsFixed(1);
   }
 
   @override
@@ -350,7 +367,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
           }
           return null;
         },
-        initialValue: _diametre != null ? _diametre.toString() : '',
+        initialValue: initialDiametreValue(),
       ),
 
       // TextFieldConfig(
@@ -531,15 +548,11 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   String initialDistanceSoucheValue() =>
       _distanceSouche != null ? _distanceSouche.toString() : '';
 
-  initialDiametreValue() {}
-
   initialDiametre130Value() {}
 
   bool initialRatioHauteur() => _ratioHauteur ?? false;
 
   bool initialContact() => _contact ?? false;
-
-  String initialAngleValue() => _angle != null ? _angle.toString() : '';
 
   bool initialChablis() => _chablis ?? false;
 

@@ -17,6 +17,13 @@ class CycleListMapper {
     return CycleList(values: values);
   }
 
+  static CycleList transformFromDBToModel(final List<dynamic> entities) {
+    final values = entities
+        .map((entity) => CycleMapper.transformFromDBToModel(entity))
+        .toList();
+    return CycleList(values: values);
+  }
+
   static CycleListEntity transformToMap(final CycleList model) =>
       model.values.map((value) => CycleMapper.transformToMap(value)).toList();
 }

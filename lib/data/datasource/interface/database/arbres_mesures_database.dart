@@ -8,19 +8,19 @@ abstract class ArbresMesuresDatabase {
       final ArbreMesureEntity arbreMesureEntity);
 
   Future<ArbreMesureEntity> getPreviousCycleMeasure(
-    final int idArbre,
+    final String idArbre,
     final int? idCycle,
     int? numCycle,
   );
 
   Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
-    final int idArbreMesure,
+    final String idArbreMesure,
     final String? coupe,
   );
 
-  Future<void> deleteArbreMesureFromIdArbre(final int idArbre);
+  Future<void> deleteArbreMesureFromIdArbre(final String idArbre);
 
-  Future<void> deleteArbreMesure(final int idArbreMesure);
+  Future<void> deleteArbreMesure(final String idArbreMesure);
 
   // Future<ArbreMesureListEntity> allArbresMesures();
   // Future<ArbreMesureEntity> insertArbreMesure(

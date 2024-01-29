@@ -9,7 +9,8 @@ import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const String apiBase = "http://10.0.2.2:8000";
+// const String apiBase = "http://10.0.2.2:8000";
+const String apiBase = "http://192.168.1.64:8000";
 
 class GlobalApiImpl implements GlobalApi {
   @override

@@ -12,7 +12,7 @@ class CreateTransectUseCaseImpl implements CreateTransectUseCase {
 
   @override
   Future<Transect> execute(
-    final int idCyclePlacette,
+    final String idCyclePlacette,
     final String codeEssence,
     final String refTransect,
     double? distance,

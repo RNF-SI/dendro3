@@ -7,8 +7,8 @@ part 'arbreMesure.freezed.dart';
 @freezed
 class ArbreMesure with _$ArbreMesure implements SaisisableObject {
   const factory ArbreMesure({
-    required int idArbreMesure,
-    required int idArbre,
+    required String idArbreMesure,
+    required String idArbre,
     required int idCycle,
     double? diametre1,
     double? diametre2,
@@ -23,7 +23,7 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
     required bool limite,
     int? idNomenclatureCodeSanitaire,
     String? codeEcolo,
-    required String refCodeEcolo,
+    String? refCodeEcolo,
     bool? ratioHauteur,
     String? observation,
   }) = _ArbreMesure;

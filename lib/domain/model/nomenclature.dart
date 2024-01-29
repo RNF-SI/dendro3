@@ -35,6 +35,6 @@ class Nomenclature with _$Nomenclature {
   const Nomenclature._();
 
   bool codeEcoloFilterByLabelDefault(String filter) {
-    return this.labelDefault.contains(filter);
+    return this.labelDefault.toLowerCase().contains(filter.toLowerCase());
   }
 }

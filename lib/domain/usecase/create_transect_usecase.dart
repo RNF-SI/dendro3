@@ -2,7 +2,7 @@ import 'package:dendro3/domain/model/transect.dart';
 
 abstract class CreateTransectUseCase {
   Future<Transect> execute(
-    final int idCyclePlacette,
+    final String idCyclePlacette,
     final String codeEssence,
     final String refTransect,
     double? distance,

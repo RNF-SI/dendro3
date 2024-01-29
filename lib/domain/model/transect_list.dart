@@ -75,12 +75,12 @@ class TransectList
   // TransectList filterByIncomplete() => copyWith(
   //     values: values.where((transect) => !transect.isCompleted).toList());
   @override
-  getObjectFromId(final int id) {
+  getObjectFromId(final String id) {
     return values.firstWhere((transect) => transect.idTransect == id);
   }
 
   @override
-  int getFirstElementIdOrig() {
+  String getFirstElementIdOrig() {
     return values.first.idTransect;
   }
 
@@ -90,7 +90,7 @@ class TransectList
   }
 
   @override
-  TransectList removeItemFromList(final int idTransect) {
+  TransectList removeItemFromList(final String idTransect) {
     return copyWith(
         values: values
             .where((transect) => transect.idTransect != idTransect)

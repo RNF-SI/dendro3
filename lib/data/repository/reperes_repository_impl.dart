@@ -31,7 +31,7 @@ class ReperesRepositoryImpl implements ReperesRepository {
 
   @override
   Future<Repere> updateRepere(
-      final int idRepere,
+      final String idRepere,
       final int idPlacette,
       double? azimut,
       double? distance,
@@ -53,7 +53,12 @@ class ReperesRepositoryImpl implements ReperesRepository {
   }
 
   @override
-  Future<void> deleteRepere(final int idRepere) async {
+  Future<void> deleteRepere(final String idRepere) async {
     await database.deleteRepere(idRepere);
+  }
+
+  @override
+  Future<void> deleteRepereFromPlacetteId(final int placetteId) async {
+    await database.deleteRepereFromPlacetteId(placetteId);
   }
 }

@@ -7,7 +7,7 @@ class DeleteRepereUseCaseImpl implements DeleteRepereUseCase {
   DeleteRepereUseCaseImpl(this._repereRepository);
 
   @override
-  Future<void> execute(int id) async {
+  Future<void> execute(String id) async {
     await _repereRepository.deleteRepere(id);
   }
 }

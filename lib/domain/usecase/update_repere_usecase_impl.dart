@@ -9,7 +9,7 @@ class UpdateRepereUseCaseImpl implements UpdateRepereUseCase {
 
   @override
   Future<Repere> execute(
-    final int idRepere,
+    final String idRepere,
     final int idPlacette,
     double? azimut,
     double? distance,

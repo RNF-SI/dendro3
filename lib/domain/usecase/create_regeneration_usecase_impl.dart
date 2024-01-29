@@ -12,7 +12,7 @@ class CreateRegenerationUseCaseImpl implements CreateRegenerationUseCase {
 
   @override
   Future<Regeneration> execute(
-      final int idCyclePlacette,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,

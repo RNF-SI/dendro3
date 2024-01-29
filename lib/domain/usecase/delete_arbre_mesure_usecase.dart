@@ -1,3 +1,11 @@
+import 'package:dendro3/domain/model/arbre.dart';
+
 abstract class DeleteArbreMesureUseCase {
-  Future<void> execute(int id);
+  Future<Arbre> execute(
+    Arbre arbre,
+    String id,
+    String arbreId,
+    final int? idCycle,
+    int? numCycle,
+  );
 }

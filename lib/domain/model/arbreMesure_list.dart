@@ -28,7 +28,7 @@ class ArbreMesureList with _$ArbreMesureList {
             .toList());
   }
 
-  ArbreMesureList removeArbreMesureById(final int id) => copyWith(
+  ArbreMesureList removeArbreMesureById(final String id) => copyWith(
       values: values
           .where((arbreMesure) => arbreMesure.idArbreMesure != id)
           .toList());
@@ -50,10 +50,19 @@ class ArbreMesureList with _$ArbreMesureList {
     return null; // Retourne null si l'objet n'est pas trouvé
   }
 
-  int? findIndexOfArbreMesureFromIdArbreMesure(int targetIdArbreMesure) {
+  int? findIndexOfArbreMesureFromIdCycle(int targetIdCycle) {
     for (int i = 0; i < values.length; i++) {
-      if (values[i].idArbreMesure == targetIdArbreMesure) {
+      if (values[i].idCycle == targetIdCycle) {
         return i;
+      }
+    }
+    return null; // Retourne null si l'objet n'est pas trouvé
+  }
+
+  ArbreMesure? getMesureFromIdCycle(idCycle) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].idCycle == idCycle) {
+        return values[i];
       }
     }
     return null; // Retourne null si l'objet n'est pas trouvé

@@ -4,4 +4,5 @@ abstract class DispositifsApi {
   Future<DispositifListEntity> getAllDispositifs();
   Future<DispositifListEntity> getUserDispositifs(final int userId);
   Future<DispositifEntity> getDispositifFromId(final int dispId);
+  Future<void> exportDispositifData(final DispositifEntity data);
 }

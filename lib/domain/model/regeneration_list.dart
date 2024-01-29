@@ -76,13 +76,13 @@ class RegenerationList
   }
 
   @override
-  getObjectFromId(final int id) {
+  getObjectFromId(final String id) {
     return values
         .firstWhere((regeneration) => regeneration.idRegeneration == id);
   }
 
   @override
-  int getFirstElementIdOrig() {
+  String getFirstElementIdOrig() {
     return values.first.idRegeneration;
   }
 
@@ -104,7 +104,7 @@ class RegenerationList
   }
 
   @override
-  RegenerationList removeItemFromList(final int idRegeneration) {
+  RegenerationList removeItemFromList(final String idRegeneration) {
     return copyWith(
         values: values
             .where(

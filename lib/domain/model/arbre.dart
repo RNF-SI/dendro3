@@ -1,14 +1,16 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
+import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'arbre.freezed.dart';
 
 @freezed
-class Arbre with _$Arbre implements SaisisableObject {
+class Arbre with _$Arbre implements SaisisableObjectMesure {
   const factory Arbre(
-      {required int idArbre,
+      {required String idArbre,
       required int idArbreOrig,
       required int idPlacette,
       required String codeEssence,
@@ -88,5 +90,117 @@ class Arbre with _$Arbre implements SaisisableObject {
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idArbreOrig == valueMap['idArbreOrig'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idArbreOrig',
+      'codeEssence',
+      'azimut',
+      'distance',
+      'taillis',
+      'idCycle',
+      'diametre1',
+      'diametre2',
+      'type',
+      'hauteurTotale',
+      'stadeDurete',
+      'stadeEcorce',
+      'coupe',
+      'limite',
+      'codeEcolo',
+      'refCodeEcolo',
+    ].contains(columnName);
+  }
+
+  static bool getDisplayableGridTile(String columnName) {
+    return [
+      'idArbreOrig',
+      'codeEssence',
+      'azimut',
+      'distance',
+      'taillis',
+      'numCycle',
+      'diametre1',
+      'diametre2',
+      'type',
+      'hauteurTotale',
+      'stadeDurete',
+      'stadeEcorce',
+      'coupe',
+      'limite',
+      'codeEcolo',
+      'refCodeEcolo',
+    ].contains(columnName);
+  }
+
+  @override
+  ArbreMesure getMesureFromIndex(int index) {
+    return arbresMesures![index];
+  }
+
+  @override
+  ArbreMesure? getMesureFromIdCycle(int idCycle) {
+    return arbresMesures!.getMesureFromIdCycle(idCycle);
+  }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idArbreOrig':
+          return 'Num';
+        case 'codeEssence':
+          return 'Ess';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Dist';
+        case 'idCycle':
+          return 'NumCycle';
+        case 'diametre1':
+          return 'Diam1';
+        case 'type':
+          return 'Type';
+        case 'taillis':
+          return 'Taillis';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idArbreOrig':
+          return 'Num';
+        case 'codeEssence':
+          return 'Essence';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Distance';
+        case 'diametre1':
+          return 'Diamètre 1';
+        case 'type':
+          return 'Type';
+        case 'numCycle':
+          return 'NumCycle';
+        case 'taillis':
+          return 'Taillis';
+        case 'observation':
+          return 'Observation';
+        case 'hauteurTotale':
+          return 'Hauteur';
+        case 'diametre2':
+          return 'Diametre 2';
+        case 'stadeDurete':
+          return 'Stade Dureté';
+        case 'stadeEcorce':
+          return 'Stade Ecorce';
+        default:
+          return columnName;
+      }
+    }).toList();
   }
 }

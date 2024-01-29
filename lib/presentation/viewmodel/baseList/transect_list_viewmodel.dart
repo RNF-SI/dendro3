@@ -7,7 +7,7 @@ import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/last_modified_Id_notifier.dart';
+import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final transectListProvider = Provider<TransectList>((ref) {
@@ -17,7 +17,7 @@ final transectListProvider = Provider<TransectList>((ref) {
 
 final transectListViewModelStateNotifierProvider =
     StateNotifierProvider<TransectListViewModel, State<TransectList>>((ref) {
-  final lastModifiedProvider = ref.watch(lastModifiedIdProvider.notifier);
+  final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
 
   return TransectListViewModel(
@@ -27,13 +27,13 @@ final transectListViewModelStateNotifierProvider =
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
-    lastModifiedProvider,
+    lastSelectedProvider,
     displayableListNotifier,
   );
 });
 
 class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
-  late final LastModifiedIdNotifier _lastModifiedProvider;
+  late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
@@ -47,7 +47,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
     this._updateTransectUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste,
-    this._lastModifiedProvider,
+    this._lastSelectedProvider,
     this._displayableListNotifier,
   ) : super(const State.init()) {}
 
@@ -82,7 +82,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["stadeEcorce"],
         item["observation"],
       );
-      _lastModifiedProvider.setLastModifiedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Transects', newTransect.idTransect);
       state = State.success(state.data!.addItemToList(newTransect));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -119,7 +119,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
         item["observation"],
       );
 
-      _lastModifiedProvider.setLastModifiedId(
+      _lastSelectedProvider.setLastSelectedId(
           'Transects', updatedTransect.idTransect);
       state = State.success(state.data!.updateItemInList(updatedTransect));
       _displayableListNotifier.setDisplayableList(state.data!);
@@ -129,7 +129,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
   }
 
   @override
-  Future<void> deleteItem(int id) {
+  Future<void> deleteItem(String id) {
     // TODO: implement deleteItem
     throw UnimplementedError();
   }

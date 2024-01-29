@@ -7,7 +7,7 @@ class DeleteRegenerationUseCaseImpl implements DeleteRegenerationUseCase {
   DeleteRegenerationUseCaseImpl(this._regenerationRepository);
 
   @override
-  Future<void> execute(int regenerationId) async {
+  Future<void> execute(String regenerationId) async {
     await _regenerationRepository.deleteRegeneration(regenerationId);
   }
 }

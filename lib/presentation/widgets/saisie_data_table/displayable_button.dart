@@ -1,4 +1,5 @@
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class DisplayableButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isActive = ref.watch(displayTypeProvider) == text;
+    final bool isActive = ref.watch(displayTypeStateProvider) == text;
 
     return Expanded(
       child: Container(
@@ -19,17 +20,29 @@ class DisplayableButton extends ConsumerWidget {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
-                return isActive
-                    ? Colors.green // The color when button is active.
-                    : Colors.blue; // Use the component's default.
+                return isActive ? Colors.green : Colors.blue;
               },
             ),
+            // Reducing padding inside the button
+            padding: MaterialStateProperty.all(EdgeInsets.all(4)),
           ),
           onPressed: () {
             onPressed();
-            ref.watch(displayTypeProvider.notifier).state = text;
+            // ref.watch(displayTypeStateProvider.notifier).state = text;
           },
-          child: Text(text),
+          child: FittedBox(
+            fit: BoxFit
+                .scaleDown, // Scales down text size to fit within the button
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14, // You can adjust the font size
+              ),
+              maxLines: 1, // Ensures text is in a single line
+              overflow:
+                  TextOverflow.ellipsis, // Adds ellipsis for overflow text
+            ),
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:dendro3/data/entity/regenerations_entity.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 
 class RegenerationMapper {
@@ -11,20 +12,65 @@ class RegenerationMapper {
   //   );
   // }
 
-  static Regeneration transformFromApiToModel(final RegenerationEntity entity) {
-    return Regeneration(
-        idRegeneration: entity['id_regeneration'],
-        idCyclePlacette: entity['id_cycle_placette'],
-        sousPlacette: entity['sous_placette'],
-        codeEssence: entity['code_essence'],
-        recouvrement: entity['recouvrement'],
-        classe1: entity['classe1'],
-        classe2: entity['classe2'],
-        classe3: entity['classe3'],
+  static Regeneration transformFromApiToModel(
+      final Map<String, dynamic> entity) {
+    try {
+      return Regeneration(
+        idRegeneration: entity['id_regeneration'] ??
+            logAndReturnNull<String>('id_regeneration'),
+        idCyclePlacette: entity['id_cycle_placette'] ??
+            logAndReturnNull<String>('id_cycle_placette'),
+        sousPlacette:
+            entity['sous_placette'] ?? logAndReturnNull<int>('sous_placette'),
+        codeEssence:
+            entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
+        recouvrement:
+            entity['recouvrement'] ?? logAndReturnNull<double>('recouvrement'),
+        classe1: entity['classe1'] ?? logAndReturnNull<int>('classe1'),
+        classe2: entity['classe2'] ?? logAndReturnNull<int>('classe2'),
+        classe3: entity['classe3'] ?? logAndReturnNull<int>('classe3'),
         taillis: entity['taillis'] == true ? true : false,
         abroutissement: entity['abroutissement'] == true ? true : false,
-        idNomenclatureAbroutissement: entity['id_nomenclature_abroutissement'],
-        observation: entity['observation']);
+        idNomenclatureAbroutissement:
+            entity['id_nomenclature_abroutissement'] as int?,
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in Regeneration transformFromApiToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+      throw e;
+    }
+  }
+
+  static Regeneration transformFromDBToModel(
+      final Map<String, dynamic> entity) {
+    try {
+      return Regeneration(
+        idRegeneration: entity['id_regeneration'] ??
+            logAndReturnNull<String>('id_regeneration'),
+        idCyclePlacette: entity['id_cycle_placette'] ??
+            logAndReturnNull<String>('id_cycle_placette'),
+        sousPlacette:
+            entity['sous_placette'] ?? logAndReturnNull<int>('sous_placette'),
+        codeEssence:
+            entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
+        recouvrement:
+            entity['recouvrement'] ?? logAndReturnNull<double>('recouvrement'),
+        classe1: entity['classe1'] ?? logAndReturnNull<int>('classe1'),
+        classe2: entity['classe2'] ?? logAndReturnNull<int>('classe2'),
+        classe3: entity['classe3'] ?? logAndReturnNull<int>('classe3'),
+        taillis: (entity['taillis'] as int?) == 1,
+        abroutissement: (entity['abroutissement'] as int?) == 1,
+        idNomenclatureAbroutissement:
+            entity['id_nomenclature_abroutissement'] as int?,
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in Regeneration transformFromDBToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
   }
 
   static RegenerationEntity transformToMap(final Regeneration model) {
@@ -45,7 +91,7 @@ class RegenerationMapper {
   }
 
   static RegenerationEntity transformToNewEntityMap(
-      final int idCyclePlacette,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,
@@ -73,8 +119,8 @@ class RegenerationMapper {
   }
 
   static RegenerationEntity transformToEntityMap(
-      final int idRegeneration,
-      final int idCyclePlacette,
+      final String idRegeneration,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,

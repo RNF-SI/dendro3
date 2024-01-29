@@ -1,4 +1,5 @@
 import 'package:dendro3/data/entity/reperes_entity.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/repere.dart';
 
 class RepereMapper {
@@ -11,15 +12,42 @@ class RepereMapper {
   //   );
   // }
 
-  static Repere transformFromApiToModel(final RepereEntity entity) {
-    return Repere(
-        idRepere: entity['id_repere'],
-        idPlacette: entity['id_placette'],
-        azimut: entity['azimut'],
-        distance: entity['distance'],
-        diametre: entity['diametre'],
-        repere: entity['repere'],
-        observation: entity['observation']);
+  static Repere transformFromApiToModel(final Map<String, dynamic> entity) {
+    try {
+      return Repere(
+        idRepere: entity['id_repere'] ?? logAndReturnNull<String>('id_repere'),
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        azimut: entity['azimut'] as double?,
+        distance: entity['distance'] as double?,
+        diametre: entity['diametre'] as double?,
+        repere: entity['repere'] as String?,
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in Repere transformFromApiToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+      throw e;
+    }
+  }
+
+  static Repere transformFromDBToModel(final Map<String, dynamic> entity) {
+    try {
+      return Repere(
+        idRepere: entity['id_repere'] ?? logAndReturnNull<String>('id_repere'),
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        azimut: entity['azimut'] as double?,
+        distance: entity['distance'] as double?,
+        diametre: entity['diametre'] as double?,
+        repere: entity['repere'] as String?,
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in Repere transformFromDBToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+      throw e;
+    }
   }
 
   static RepereEntity transformToMap(final Repere model) {
@@ -54,7 +82,7 @@ class RepereMapper {
   }
 
   static RepereEntity transformToEntityMap(
-    int idRepere,
+    String idRepere,
     int idPlacette,
     double? azimut,
     double? distance,

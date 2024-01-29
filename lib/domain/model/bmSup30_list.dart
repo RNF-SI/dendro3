@@ -71,7 +71,7 @@ class BmSup30List
       }).toList();
 
   @override
-  getObjectFromId(final int id) {
+  getObjectFromId(final String id) {
     return values.firstWhere((bmSup30) => bmSup30.idBmSup30Orig == id);
   }
 
@@ -86,7 +86,7 @@ class BmSup30List
   }
 
   @override
-  BmSup30List removeItemFromList(final int id) {
+  BmSup30List removeItemFromList(final String id) {
     return copyWith(values: values.where((bm) => bm.idBmSup30 != id).toList());
   }
 }

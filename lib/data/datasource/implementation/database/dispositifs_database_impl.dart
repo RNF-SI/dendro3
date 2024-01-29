@@ -100,4 +100,19 @@ class DispositifsDatabaseImpl implements DispositifsDatabase {
     final cycleObj = await CyclesDatabaseImpl.getDispCycles(db, id);
     return {...dispList[0], 'placettes': placettesObj, 'cycles': cycleObj};
   }
+
+  @override
+  Future<DispositifEntity> getDispositifAllData(
+    final int id,
+    String lastSyncTime,
+  ) async {
+    final db = await database;
+    DispositifListEntity dispList = await db.query(_tableName,
+        where: '$_columnId = ?', whereArgs: [id], limit: 1);
+
+    final placettesObj = await PlacettesDatabaseImpl.getDispPlacettesAllData(
+        db, id, lastSyncTime);
+    final cycleObj = await CyclesDatabaseImpl.getDispCycles(db, id);
+    return {...dispList[0], 'placettes': placettesObj, 'cycles': cycleObj};
+  }
 }

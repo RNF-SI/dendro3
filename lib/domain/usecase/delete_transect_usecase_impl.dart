@@ -7,7 +7,7 @@ class DeleteTransectUseCaseImpl implements DeleteTransectUseCase {
   DeleteTransectUseCaseImpl(this._transectRepository);
 
   @override
-  Future<void> execute(int transectId) async {
+  Future<void> execute(String transectId) async {
     await _transectRepository.deleteTransect(transectId);
   }
 }

@@ -7,8 +7,8 @@ part 'regeneration.freezed.dart';
 @freezed
 class Regeneration with _$Regeneration implements SaisisableObject {
   const factory Regeneration(
-      {required int idRegeneration,
-      required int idCyclePlacette,
+      {required String idRegeneration,
+      required String idCyclePlacette,
       required int sousPlacette,
       required String codeEssence,
       required double recouvrement,
@@ -88,5 +88,60 @@ class Regeneration with _$Regeneration implements SaisisableObject {
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idRegeneration == valueMap['idRegeneration'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idRegeneration',
+      'idCyclePlacette',
+      'sousPlacette',
+      'codeEssence',
+      'recouvrement',
+      'classe1',
+      'classe2',
+      'classe3',
+      'taillis',
+      'abroutissement',
+      // 'idNomenclatureAbroutissement',
+      'observation',
+    ].contains(columnName);
+  }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idCyclePlacette':
+          return 'NumCycle';
+        case 'sousPlacette':
+          return 'sousPlacette';
+        case 'codeEssence':
+          return 'Ess';
+        case 'taillis':
+          return 'Taillis';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idRegeneration':
+          return 'id';
+        case 'idCyclePlacette':
+          return 'NumCycle';
+        case 'sousPlacette':
+          return 'Sous placette';
+        case 'codeEssence':
+          return 'Essence';
+        case 'taillis':
+          return 'Taillis';
+        case 'observation':
+          return 'Observation';
+        default:
+          return columnName;
+      }
+    }).toList();
   }
 }

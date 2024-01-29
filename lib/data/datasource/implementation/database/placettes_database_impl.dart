@@ -6,8 +6,12 @@ import 'package:dendro3/data/datasource/implementation/database/global_database_
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
+import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
+import 'package:dendro3/data/entity/reperes_entity.dart';
+import 'package:dendro3/data/mapper/placette_mapper.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -87,6 +91,50 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
     }).toList());
   }
 
+  static Future<PlacetteListEntity> getDispPlacettesAllData(
+    Database db,
+    final int dispositifId,
+    String lastSyncTime,
+  ) async {
+    PlacetteListEntity placetteList = await db.query(_tableName,
+        where: 'id_dispositif = ?', whereArgs: [dispositifId]);
+    List<PlacetteListEntity> placetteObj;
+    return Future.wait(placetteList.map((PlacetteEntity placetteEntity) async {
+      Map<String, CorCyclePlacetteListEntity> corCyclesPlacettesObj =
+          await CorCyclesPlacettesDatabaseImpl
+              .getPlacetteCorCyclesPlacettesForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      Map<String, ArbreListEntity> arbresObj =
+          await ArbresDatabaseImpl.getPlacetteArbresForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      Map<String, BmSup30ListEntity> bmsObj =
+          await BmsSup30DatabaseImpl.getPlacetteBmSup30ForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      Map<String, RepereListEntity> repereObj =
+          await ReperesDatabaseImpl.getPlacetteReperesForDataSync(
+        db,
+        placetteEntity['id_placette'],
+        lastSyncTime,
+      );
+      return {
+        ...placetteEntity,
+        'corCyclesPlacettes': corCyclesPlacettesObj,
+        'arbres': arbresObj,
+        'bms': bmsObj,
+        'reperes': repereObj
+      };
+    }).toList());
+  }
+
   @override
   Future<PlacetteEntity> getPlacette(final int placetteId) async {
     final db = await database;
@@ -111,6 +159,30 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
     };
   }
 
+  // Method to get all placettes by dispositifId
+  @override
+  Future<List<PlacetteEntity>> getPlacettesByDispositifId(
+      final int dispositifId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _tableName,
+      where: 'id_dispositif = ?',
+      whereArgs: [dispositifId],
+    );
+
+    // Convert the List<Map<String, dynamic>> to List<PlacetteEntity>
+    return maps;
+  }
+
+  @override
+  Future<void> deletePlacette(final int id) async {
+    final db = await database;
+    await db.delete(
+      _tableName,
+      where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
   // @override
   // Future<void> updatePlacette(final PlacetteEntity placette) async {
   //   final db = await database;

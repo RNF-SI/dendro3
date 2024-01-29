@@ -1,6 +1,7 @@
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/state/download_status.dart';
 import 'package:dendro3/presentation/view/dispositif_page.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class DownloadButton extends HookConsumerWidget {
   bool get _isDownloaded =>
       dispInfo.downloadStatus == DownloadStatus.downloaded;
 
+  bool get _isRemoving => dispInfo.downloadStatus == DownloadStatus.removing;
+
   void _onPressed(BuildContext context, WidgetRef ref) {
     switch (dispInfo.downloadStatus) {
       case DownloadStatus.notDownloaded:
@@ -45,6 +48,10 @@ class DownloadButton extends HookConsumerWidget {
             .stopDownloadDispositif(dispInfo);
         break;
       case DownloadStatus.downloaded:
+        ref
+            .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider
+                .notifier)
+            .reinitializeList();
         Navigator.push(context, MaterialPageRoute<void>(
           builder: (BuildContext context) {
             return DispositifPage(
@@ -52,6 +59,10 @@ class DownloadButton extends HookConsumerWidget {
             );
           },
         ));
+        break;
+      case DownloadStatus.removing:
+        // Handle the removing state, perhaps do nothing or show a message
+        break;
     }
   }
 
@@ -78,6 +89,7 @@ class DownloadButton extends HookConsumerWidget {
                   isDownloaded: _isDownloaded,
                   isDownloading: _isDownloading,
                   isFetching: _isFetching,
+                  isRemoving: _isRemoving,
                 ),
                 Positioned.fill(
                   child: AnimatedOpacity(
@@ -116,6 +128,7 @@ class ButtonShapeWidget extends StatelessWidget {
     required this.isDownloading,
     required this.isDownloaded,
     required this.isFetching,
+    required this.isRemoving,
     required this.transitionDuration,
   });
 
@@ -123,6 +136,7 @@ class ButtonShapeWidget extends StatelessWidget {
   final bool isDownloaded;
   final bool isFetching;
   final Duration transitionDuration;
+  final bool isRemoving;
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +152,11 @@ class ButtonShapeWidget extends StatelessWidget {
       );
     }
 
+    String buttonText = isDownloaded ? 'OPEN' : 'GET';
+    if (isRemoving) {
+      buttonText = 'REMOVING...'; // New text for the removing state
+    }
+
     return AnimatedContainer(
       duration: transitionDuration,
       curve: Curves.ease,
@@ -150,7 +169,7 @@ class ButtonShapeWidget extends StatelessWidget {
           opacity: isDownloading || isFetching ? 0.0 : 1.0,
           curve: Curves.ease,
           child: Text(
-            isDownloaded ? 'OPEN' : 'GET',
+            buttonText,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.button?.copyWith(
                   fontWeight: FontWeight.bold,

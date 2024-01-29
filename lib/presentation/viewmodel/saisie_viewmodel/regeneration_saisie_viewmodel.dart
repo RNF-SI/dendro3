@@ -59,8 +59,8 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
 
   CorCyclePlacette? corCyclePlacette;
 
-  late int? _idRegeneration;
-  int? _idCyclePlacette;
+  late String? _idRegeneration;
+  String? _idCyclePlacette;
   int? _sousPlacette;
   var _codeEssence = '';
   double? _recouvrement;
@@ -305,8 +305,6 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
 
   // fonction d'Initialisation
   int initialSousPlacette() => _sousPlacette ?? 0;
-  String initialRecouvrement() =>
-      _recouvrement != null ? _recouvrement.toString() : '';
   int initialClasse1() => _classe1 ?? 0;
   int initialClasse2() => _classe2 ?? 0;
   int initialClasse3() => _classe3 ?? 0;
@@ -315,6 +313,14 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   int initialIdNomenclatureAbroutissement() =>
       _idNomenclatureAbroutissement ?? 0;
   String initialObservation() => _observation ?? '';
+  String initialRecouvrement() {
+    if (_recouvrement == null) {
+      return '';
+    }
+    return _recouvrement == _recouvrement!.toInt()
+        ? _recouvrement!.toInt().toString()
+        : _recouvrement!.toStringAsFixed(1);
+  }
 
   // Fonction setters
   setCodeEssence(final String value) => _codeEssence = value;

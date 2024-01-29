@@ -11,7 +11,7 @@ class TransectsRepositoryImpl implements TransectsRepository {
 
   @override
   Future<Transect> insertTransect(
-    final int idCyclePlacette,
+    final String idCyclePlacette,
     final String codeEssence,
     final String refTransect,
     double? distance,
@@ -53,8 +53,8 @@ class TransectsRepositoryImpl implements TransectsRepository {
 
   @override
   Future<Transect> updateTransect(
-    final idTransect,
-    final int idCyclePlacette,
+    final String idTransect,
+    final String idCyclePlacette,
     final int idTransectOrig,
     final String codeEssence,
     final String refTransect,
@@ -98,7 +98,13 @@ class TransectsRepositoryImpl implements TransectsRepository {
   }
 
   @override
-  Future<void> deleteTransect(final int idTransect) async {
+  Future<void> deleteTransect(final String idTransect) async {
     await database.deleteTransect(idTransect);
+  }
+
+  @override
+  Future<void> deleteTransectsForCorCyclePlacette(
+      final String idCyclePlacette) async {
+    await database.deleteTransectsForCorCyclePlacette(idCyclePlacette);
   }
 }

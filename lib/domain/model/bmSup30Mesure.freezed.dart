@@ -16,8 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BmSup30Mesure {
-  int get idBmSup30Mesure => throw _privateConstructorUsedError;
-  int get idBmSup30 => throw _privateConstructorUsedError;
+  String get idBmSup30Mesure => throw _privateConstructorUsedError;
+  String get idBmSup30 => throw _privateConstructorUsedError;
   int get idCycle => throw _privateConstructorUsedError;
   double? get diametreIni => throw _privateConstructorUsedError;
   double? get diametreMed => throw _privateConstructorUsedError;
@@ -43,8 +43,8 @@ abstract class $BmSup30MesureCopyWith<$Res> {
       _$BmSup30MesureCopyWithImpl<$Res, BmSup30Mesure>;
   @useResult
   $Res call(
-      {int idBmSup30Mesure,
-      int idBmSup30,
+      {String idBmSup30Mesure,
+      String idBmSup30,
       int idCycle,
       double? diametreIni,
       double? diametreMed,
@@ -91,11 +91,11 @@ class _$BmSup30MesureCopyWithImpl<$Res, $Val extends BmSup30Mesure>
       idBmSup30Mesure: null == idBmSup30Mesure
           ? _value.idBmSup30Mesure
           : idBmSup30Mesure // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCycle: null == idCycle
           ? _value.idCycle
           : idCycle // ignore: cast_nullable_to_non_nullable
@@ -157,8 +157,8 @@ abstract class _$$_BmSup30MesureCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int idBmSup30Mesure,
-      int idBmSup30,
+      {String idBmSup30Mesure,
+      String idBmSup30,
       int idCycle,
       double? diametreIni,
       double? diametreMed,
@@ -203,11 +203,11 @@ class __$$_BmSup30MesureCopyWithImpl<$Res>
       idBmSup30Mesure: null == idBmSup30Mesure
           ? _value.idBmSup30Mesure
           : idBmSup30Mesure // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idCycle: null == idCycle
           ? _value.idCycle
           : idCycle // ignore: cast_nullable_to_non_nullable
@@ -281,9 +281,9 @@ class _$_BmSup30Mesure extends _BmSup30Mesure {
       : super._();
 
   @override
-  final int idBmSup30Mesure;
+  final String idBmSup30Mesure;
   @override
-  final int idBmSup30;
+  final String idBmSup30;
   @override
   final int idCycle;
   @override
@@ -373,8 +373,8 @@ class _$_BmSup30Mesure extends _BmSup30Mesure {
 
 abstract class _BmSup30Mesure extends BmSup30Mesure {
   const factory _BmSup30Mesure(
-      {required final int idBmSup30Mesure,
-      required final int idBmSup30,
+      {required final String idBmSup30Mesure,
+      required final String idBmSup30,
       required final int idCycle,
       final double? diametreIni,
       final double? diametreMed,
@@ -390,9 +390,9 @@ abstract class _BmSup30Mesure extends BmSup30Mesure {
   const _BmSup30Mesure._() : super._();
 
   @override
-  int get idBmSup30Mesure;
+  String get idBmSup30Mesure;
   @override
-  int get idBmSup30;
+  String get idBmSup30;
   @override
   int get idCycle;
   @override

@@ -1,6 +1,9 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
+import 'package:dendro3/data/datasource/implementation/database/log_error.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
@@ -49,8 +52,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
   static Future<List<ArbreEntity>> getPlacetteArbres(
       Database db, final int placetteId) async {
-    ArbreListEntity arbreList = await db
-        .query(_tableName, where: 'id_placette = ?', whereArgs: [placetteId]);
+    ArbreListEntity arbreList = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 0',
+      whereArgs: [placetteId],
+    );
 
     var arbreMesureObj;
 
@@ -62,21 +68,71 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     }).toList());
   }
 
+  static Future<Map<String, List<ArbreEntity>>> getPlacetteArbresForDataSync(
+      Database db, final int placetteId, String lastSyncTime) async {
+    // Fetch newly created arbres (creation_date after lastSyncTime and not deleted)
+    List<ArbreEntity> created_arbres = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Fetch updated arbres (last_update after lastSyncTime and not deleted)
+    List<ArbreEntity> updated_arbres = await db.query(
+      _tableName,
+      where:
+          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
+    );
+
+    // Fetch deleted arbres (deleted flag set and last_update after lastSyncTime)
+    List<ArbreEntity> deleted_arbres = await db.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+
+    // Process each list to include arbre_mesures, if needed
+    Map<String, List<ArbreEntity>> arbreData = {
+      "created":
+          await _processArbresWithMesures(db, created_arbres, lastSyncTime),
+      "updated":
+          await _processArbresWithMesures(db, updated_arbres, lastSyncTime),
+      "deleted":
+          deleted_arbres // Assuming no need to add arbre_mesures for deleted arbres
+    };
+
+    return arbreData;
+  }
+
+  // Helper function to process arbres and include their measures
+  static Future<List<ArbreEntity>> _processArbresWithMesures(
+      Database db, List<ArbreEntity> arbres, String lastSyncTime) async {
+    return Future.wait(arbres.map((ArbreEntity arbreEntity) async {
+      Map<String, List<ArbreMesureEntity>> arbreMesureObj =
+          await ArbresMesuresDatabaseImpl.getArbreArbresMesuresForDataSync(
+              db,
+              arbreEntity["id_arbre"],
+              lastSyncTime); // Assuming you also update getArbreArbresMesures similarly
+      return {...arbreEntity, 'arbres_mesures': arbreMesureObj};
+    }).toList());
+  }
+
   @override
   // Function called when one arbre is added (not adding arbre mesure)
   Future<ArbreEntity> addArbre(final ArbreEntity arbre) async {
     final db = await database;
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_arbre) FROM $_tableName'));
+      String idArbreUuid = generateUuid();
 
       int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
-          'SELECT MAX(id_arbre_orig) FROM $_tableName WHERE id_placette = ?',
-          [arbre['id_placette']]));
+              'SELECT MAX(id_arbre_orig) FROM $_tableName WHERE id_placette = ?',
+              [arbre['id_placette']])) ??
+          0;
 
-      arbre['id_arbre'] = maxId! + 1;
-      arbre['id_arbre_orig'] = maxIdOrig! + 1;
+      arbre['id_arbre'] = idArbreUuid;
+      arbre['id_arbre_orig'] = maxIdOrig + 1;
       await txn.insert(
         _tableName,
         arbre,
@@ -84,7 +140,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       );
 
       final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+          .query(_tableName, where: '$_columnId = ?', whereArgs: [idArbreUuid]);
       arbreEntity = results.first;
     });
     return arbreEntity;
@@ -96,9 +152,13 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     final db = await database;
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
+      var updatedArbre = Map<String, dynamic>.from(arbre)
+        ..['last_update'] =
+            formatDateTime(DateTime.now()); // Add current timestamp
+
       await txn.update(
         _tableName,
-        arbre,
+        updatedArbre,
         where: '$_columnId = ?',
         whereArgs: [arbre['id_arbre']],
       );
@@ -123,12 +183,31 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   // }
 
   @override
-  Future<void> deleteArbre(final int id) async {
+  Future<void> deleteArbre(final String id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );
+  }
+
+  @override
+  Future<List<String>> getArbreIdsForPlacette(final int idPlacette) async {
+    final db = await database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+        _tableName,
+        columns: [_columnId],
+        where: 'id_placette = ? AND deleted = 0',
+        whereArgs: [idPlacette],
+      );
+      return List.generate(maps.length, (i) => maps[i][_columnId]);
+    } on Exception catch (e, stackTrace) {
+      logError(
+          e, stackTrace, 'getArbreIdsForPlacette', {'idPlacette': idPlacette});
+      return []; // or rethrow, depending on how you want to handle the error
+    }
   }
 }

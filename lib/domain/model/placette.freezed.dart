@@ -27,16 +27,16 @@ mixin _$Placette {
   String? get profondeurApp => throw _privateConstructorUsedError;
   double? get profondeurHydr => throw _privateConstructorUsedError;
   String? get texture => throw _privateConstructorUsedError;
-  String get habitat => throw _privateConstructorUsedError;
+  String? get habitat => throw _privateConstructorUsedError;
   String? get station => throw _privateConstructorUsedError;
   String? get typologie => throw _privateConstructorUsedError;
   String? get groupe => throw _privateConstructorUsedError;
   String? get groupe1 => throw _privateConstructorUsedError;
   String? get groupe2 => throw _privateConstructorUsedError;
-  String get refHabitat => throw _privateConstructorUsedError;
+  String? get refHabitat => throw _privateConstructorUsedError;
   String? get precisionHabitat => throw _privateConstructorUsedError;
   String? get refStation => throw _privateConstructorUsedError;
-  String get refTypologie => throw _privateConstructorUsedError;
+  String? get refTypologie => throw _privateConstructorUsedError;
   String? get descriptifGroupe => throw _privateConstructorUsedError;
   String? get descriptifGroupe1 => throw _privateConstructorUsedError;
   String? get descriptifGroupe2 => throw _privateConstructorUsedError;
@@ -70,16 +70,16 @@ abstract class $PlacetteCopyWith<$Res> {
       String? profondeurApp,
       double? profondeurHydr,
       String? texture,
-      String habitat,
+      String? habitat,
       String? station,
       String? typologie,
       String? groupe,
       String? groupe1,
       String? groupe2,
-      String refHabitat,
+      String? refHabitat,
       String? precisionHabitat,
       String? refStation,
-      String refTypologie,
+      String? refTypologie,
       String? descriptifGroupe,
       String? descriptifGroupe1,
       String? descriptifGroupe2,
@@ -120,16 +120,16 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
     Object? profondeurApp = freezed,
     Object? profondeurHydr = freezed,
     Object? texture = freezed,
-    Object? habitat = null,
+    Object? habitat = freezed,
     Object? station = freezed,
     Object? typologie = freezed,
     Object? groupe = freezed,
     Object? groupe1 = freezed,
     Object? groupe2 = freezed,
-    Object? refHabitat = null,
+    Object? refHabitat = freezed,
     Object? precisionHabitat = freezed,
     Object? refStation = freezed,
-    Object? refTypologie = null,
+    Object? refTypologie = freezed,
     Object? descriptifGroupe = freezed,
     Object? descriptifGroupe1 = freezed,
     Object? descriptifGroupe2 = freezed,
@@ -185,10 +185,10 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
           ? _value.texture
           : texture // ignore: cast_nullable_to_non_nullable
               as String?,
-      habitat: null == habitat
+      habitat: freezed == habitat
           ? _value.habitat
           : habitat // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       station: freezed == station
           ? _value.station
           : station // ignore: cast_nullable_to_non_nullable
@@ -209,10 +209,10 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
           ? _value.groupe2
           : groupe2 // ignore: cast_nullable_to_non_nullable
               as String?,
-      refHabitat: null == refHabitat
+      refHabitat: freezed == refHabitat
           ? _value.refHabitat
           : refHabitat // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       precisionHabitat: freezed == precisionHabitat
           ? _value.precisionHabitat
           : precisionHabitat // ignore: cast_nullable_to_non_nullable
@@ -221,10 +221,10 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
           ? _value.refStation
           : refStation // ignore: cast_nullable_to_non_nullable
               as String?,
-      refTypologie: null == refTypologie
+      refTypologie: freezed == refTypologie
           ? _value.refTypologie
           : refTypologie // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       descriptifGroupe: freezed == descriptifGroupe
           ? _value.descriptifGroupe
           : descriptifGroupe // ignore: cast_nullable_to_non_nullable
@@ -333,16 +333,16 @@ abstract class _$$_PlacetteCopyWith<$Res> implements $PlacetteCopyWith<$Res> {
       String? profondeurApp,
       double? profondeurHydr,
       String? texture,
-      String habitat,
+      String? habitat,
       String? station,
       String? typologie,
       String? groupe,
       String? groupe1,
       String? groupe2,
-      String refHabitat,
+      String? refHabitat,
       String? precisionHabitat,
       String? refStation,
-      String refTypologie,
+      String? refTypologie,
       String? descriptifGroupe,
       String? descriptifGroupe1,
       String? descriptifGroupe2,
@@ -385,16 +385,16 @@ class __$$_PlacetteCopyWithImpl<$Res>
     Object? profondeurApp = freezed,
     Object? profondeurHydr = freezed,
     Object? texture = freezed,
-    Object? habitat = null,
+    Object? habitat = freezed,
     Object? station = freezed,
     Object? typologie = freezed,
     Object? groupe = freezed,
     Object? groupe1 = freezed,
     Object? groupe2 = freezed,
-    Object? refHabitat = null,
+    Object? refHabitat = freezed,
     Object? precisionHabitat = freezed,
     Object? refStation = freezed,
-    Object? refTypologie = null,
+    Object? refTypologie = freezed,
     Object? descriptifGroupe = freezed,
     Object? descriptifGroupe1 = freezed,
     Object? descriptifGroupe2 = freezed,
@@ -450,10 +450,10 @@ class __$$_PlacetteCopyWithImpl<$Res>
           ? _value.texture
           : texture // ignore: cast_nullable_to_non_nullable
               as String?,
-      habitat: null == habitat
+      habitat: freezed == habitat
           ? _value.habitat
           : habitat // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       station: freezed == station
           ? _value.station
           : station // ignore: cast_nullable_to_non_nullable
@@ -474,10 +474,10 @@ class __$$_PlacetteCopyWithImpl<$Res>
           ? _value.groupe2
           : groupe2 // ignore: cast_nullable_to_non_nullable
               as String?,
-      refHabitat: null == refHabitat
+      refHabitat: freezed == refHabitat
           ? _value.refHabitat
           : refHabitat // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       precisionHabitat: freezed == precisionHabitat
           ? _value.precisionHabitat
           : precisionHabitat // ignore: cast_nullable_to_non_nullable
@@ -486,10 +486,10 @@ class __$$_PlacetteCopyWithImpl<$Res>
           ? _value.refStation
           : refStation // ignore: cast_nullable_to_non_nullable
               as String?,
-      refTypologie: null == refTypologie
+      refTypologie: freezed == refTypologie
           ? _value.refTypologie
           : refTypologie // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       descriptifGroupe: freezed == descriptifGroupe
           ? _value.descriptifGroupe
           : descriptifGroupe // ignore: cast_nullable_to_non_nullable
@@ -545,16 +545,16 @@ class _$_Placette extends _Placette {
       this.profondeurApp,
       this.profondeurHydr,
       this.texture,
-      required this.habitat,
+      this.habitat,
       this.station,
       this.typologie,
       this.groupe,
       this.groupe1,
       this.groupe2,
-      required this.refHabitat,
+      this.refHabitat,
       this.precisionHabitat,
       this.refStation,
-      required this.refTypologie,
+      this.refTypologie,
       this.descriptifGroupe,
       this.descriptifGroupe1,
       this.descriptifGroupe2,
@@ -589,7 +589,7 @@ class _$_Placette extends _Placette {
   @override
   final String? texture;
   @override
-  final String habitat;
+  final String? habitat;
   @override
   final String? station;
   @override
@@ -601,13 +601,13 @@ class _$_Placette extends _Placette {
   @override
   final String? groupe2;
   @override
-  final String refHabitat;
+  final String? refHabitat;
   @override
   final String? precisionHabitat;
   @override
   final String? refStation;
   @override
-  final String refTypologie;
+  final String? refTypologie;
   @override
   final String? descriptifGroupe;
   @override
@@ -744,16 +744,16 @@ abstract class _Placette extends Placette {
       final String? profondeurApp,
       final double? profondeurHydr,
       final String? texture,
-      required final String habitat,
+      final String? habitat,
       final String? station,
       final String? typologie,
       final String? groupe,
       final String? groupe1,
       final String? groupe2,
-      required final String refHabitat,
+      final String? refHabitat,
       final String? precisionHabitat,
       final String? refStation,
-      required final String refTypologie,
+      final String? refTypologie,
       final String? descriptifGroupe,
       final String? descriptifGroupe1,
       final String? descriptifGroupe2,
@@ -788,7 +788,7 @@ abstract class _Placette extends Placette {
   @override
   String? get texture;
   @override
-  String get habitat;
+  String? get habitat;
   @override
   String? get station;
   @override
@@ -800,13 +800,13 @@ abstract class _Placette extends Placette {
   @override
   String? get groupe2;
   @override
-  String get refHabitat;
+  String? get refHabitat;
   @override
   String? get precisionHabitat;
   @override
   String? get refStation;
   @override
-  String get refTypologie;
+  String? get refTypologie;
   @override
   String? get descriptifGroupe;
   @override

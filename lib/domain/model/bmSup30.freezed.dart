@@ -16,13 +16,13 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BmSup30 {
-  int get idBmSup30 => throw _privateConstructorUsedError;
+  String get idBmSup30 => throw _privateConstructorUsedError;
   int get idBmSup30Orig => throw _privateConstructorUsedError;
   int get idPlacette => throw _privateConstructorUsedError;
-  int get idArbre => throw _privateConstructorUsedError;
+  int? get idArbre => throw _privateConstructorUsedError;
   String get codeEssence => throw _privateConstructorUsedError;
-  double get azimut => throw _privateConstructorUsedError;
-  double get distance => throw _privateConstructorUsedError;
+  double? get azimut => throw _privateConstructorUsedError;
+  double? get distance => throw _privateConstructorUsedError;
   double? get orientation => throw _privateConstructorUsedError;
   double? get azimutSouche => throw _privateConstructorUsedError;
   double? get distanceSouche => throw _privateConstructorUsedError;
@@ -39,13 +39,13 @@ abstract class $BmSup30CopyWith<$Res> {
       _$BmSup30CopyWithImpl<$Res, BmSup30>;
   @useResult
   $Res call(
-      {int idBmSup30,
+      {String idBmSup30,
       int idBmSup30Orig,
       int idPlacette,
-      int idArbre,
+      int? idArbre,
       String codeEssence,
-      double azimut,
-      double distance,
+      double? azimut,
+      double? distance,
       double? orientation,
       double? azimutSouche,
       double? distanceSouche,
@@ -71,10 +71,10 @@ class _$BmSup30CopyWithImpl<$Res, $Val extends BmSup30>
     Object? idBmSup30 = null,
     Object? idBmSup30Orig = null,
     Object? idPlacette = null,
-    Object? idArbre = null,
+    Object? idArbre = freezed,
     Object? codeEssence = null,
-    Object? azimut = null,
-    Object? distance = null,
+    Object? azimut = freezed,
+    Object? distance = freezed,
     Object? orientation = freezed,
     Object? azimutSouche = freezed,
     Object? distanceSouche = freezed,
@@ -85,7 +85,7 @@ class _$BmSup30CopyWithImpl<$Res, $Val extends BmSup30>
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idBmSup30Orig: null == idBmSup30Orig
           ? _value.idBmSup30Orig
           : idBmSup30Orig // ignore: cast_nullable_to_non_nullable
@@ -94,22 +94,22 @@ class _$BmSup30CopyWithImpl<$Res, $Val extends BmSup30>
           ? _value.idPlacette
           : idPlacette // ignore: cast_nullable_to_non_nullable
               as int,
-      idArbre: null == idArbre
+      idArbre: freezed == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       codeEssence: null == codeEssence
           ? _value.codeEssence
           : codeEssence // ignore: cast_nullable_to_non_nullable
               as String,
-      azimut: null == azimut
+      azimut: freezed == azimut
           ? _value.azimut
           : azimut // ignore: cast_nullable_to_non_nullable
-              as double,
-      distance: null == distance
+              as double?,
+      distance: freezed == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       orientation: freezed == orientation
           ? _value.orientation
           : orientation // ignore: cast_nullable_to_non_nullable
@@ -154,13 +154,13 @@ abstract class _$$_BmSup30CopyWith<$Res> implements $BmSup30CopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int idBmSup30,
+      {String idBmSup30,
       int idBmSup30Orig,
       int idPlacette,
-      int idArbre,
+      int? idArbre,
       String codeEssence,
-      double azimut,
-      double distance,
+      double? azimut,
+      double? distance,
       double? orientation,
       double? azimutSouche,
       double? distanceSouche,
@@ -184,10 +184,10 @@ class __$$_BmSup30CopyWithImpl<$Res>
     Object? idBmSup30 = null,
     Object? idBmSup30Orig = null,
     Object? idPlacette = null,
-    Object? idArbre = null,
+    Object? idArbre = freezed,
     Object? codeEssence = null,
-    Object? azimut = null,
-    Object? distance = null,
+    Object? azimut = freezed,
+    Object? distance = freezed,
     Object? orientation = freezed,
     Object? azimutSouche = freezed,
     Object? distanceSouche = freezed,
@@ -198,7 +198,7 @@ class __$$_BmSup30CopyWithImpl<$Res>
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idBmSup30Orig: null == idBmSup30Orig
           ? _value.idBmSup30Orig
           : idBmSup30Orig // ignore: cast_nullable_to_non_nullable
@@ -207,22 +207,22 @@ class __$$_BmSup30CopyWithImpl<$Res>
           ? _value.idPlacette
           : idPlacette // ignore: cast_nullable_to_non_nullable
               as int,
-      idArbre: null == idArbre
+      idArbre: freezed == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       codeEssence: null == codeEssence
           ? _value.codeEssence
           : codeEssence // ignore: cast_nullable_to_non_nullable
               as String,
-      azimut: null == azimut
+      azimut: freezed == azimut
           ? _value.azimut
           : azimut // ignore: cast_nullable_to_non_nullable
-              as double,
-      distance: null == distance
+              as double?,
+      distance: freezed == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       orientation: freezed == orientation
           ? _value.orientation
           : orientation // ignore: cast_nullable_to_non_nullable
@@ -254,10 +254,10 @@ class _$_BmSup30 extends _BmSup30 {
       {required this.idBmSup30,
       required this.idBmSup30Orig,
       required this.idPlacette,
-      required this.idArbre,
+      this.idArbre,
       required this.codeEssence,
-      required this.azimut,
-      required this.distance,
+      this.azimut,
+      this.distance,
       this.orientation,
       this.azimutSouche,
       this.distanceSouche,
@@ -266,19 +266,19 @@ class _$_BmSup30 extends _BmSup30 {
       : super._();
 
   @override
-  final int idBmSup30;
+  final String idBmSup30;
   @override
   final int idBmSup30Orig;
   @override
   final int idPlacette;
   @override
-  final int idArbre;
+  final int? idArbre;
   @override
   final String codeEssence;
   @override
-  final double azimut;
+  final double? azimut;
   @override
-  final double distance;
+  final double? distance;
   @override
   final double? orientation;
   @override
@@ -349,13 +349,13 @@ class _$_BmSup30 extends _BmSup30 {
 
 abstract class _BmSup30 extends BmSup30 {
   const factory _BmSup30(
-      {required final int idBmSup30,
+      {required final String idBmSup30,
       required final int idBmSup30Orig,
       required final int idPlacette,
-      required final int idArbre,
+      final int? idArbre,
       required final String codeEssence,
-      required final double azimut,
-      required final double distance,
+      final double? azimut,
+      final double? distance,
       final double? orientation,
       final double? azimutSouche,
       final double? distanceSouche,
@@ -364,19 +364,19 @@ abstract class _BmSup30 extends BmSup30 {
   const _BmSup30._() : super._();
 
   @override
-  int get idBmSup30;
+  String get idBmSup30;
   @override
   int get idBmSup30Orig;
   @override
   int get idPlacette;
   @override
-  int get idArbre;
+  int? get idArbre;
   @override
   String get codeEssence;
   @override
-  double get azimut;
+  double? get azimut;
   @override
-  double get distance;
+  double? get distance;
   @override
   double? get orientation;
   @override

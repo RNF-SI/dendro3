@@ -7,8 +7,6 @@ import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.da
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final displayTypeProvider = StateProvider<String>((ref) => 'Arbres');
-
 final displayableListProvider =
     StateNotifierProvider<DisplayableListNotifier, DisplayableList>((ref) {
   return DisplayableListNotifier(ref);
@@ -29,7 +27,6 @@ class DisplayableListNotifier extends StateNotifier<DisplayableList> {
         state = ref.read(bmSup30ListProvider);
         break;
       case 'Transects':
-      case 'BmsInf30':
         state = ref.read(transectListProvider);
         break;
       case 'Regenerations':

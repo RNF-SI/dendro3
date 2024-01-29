@@ -1,7 +1,10 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -26,9 +29,39 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   }
 
   static getCorCyclePlacetteRegenerations(
-      Database db, final int corCyclePlacetteId) async {
+      Database db, final String corCyclePlacetteId) async {
     return await db.query(_tableName,
-        where: 'id_cycle_placette = ?', whereArgs: [corCyclePlacetteId]);
+        where: 'id_cycle_placette = ? AND deleted = 0',
+        whereArgs: [corCyclePlacetteId]);
+  }
+
+  static Future<Map<String, List<RegenerationEntity>>>
+      getCorCyclePlacetteRegenerationsForDataSync(Database db,
+          final String corCyclePlacetteId, String lastSyncTime) async {
+    var created_regenerations = await db.query(
+      _tableName,
+      where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
+    );
+
+    var updated_regenerations = await db.query(
+      _tableName,
+      where:
+          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
+    );
+
+    var deleted_regenerations = await db.query(
+      _tableName,
+      where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [corCyclePlacetteId, lastSyncTime],
+    );
+
+    return {
+      "created": created_regenerations,
+      "updated": updated_regenerations,
+      "deleted": deleted_regenerations,
+    };
   }
 
   @override
@@ -38,18 +71,17 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     final db = await database;
     late final RegenerationEntity regenerationEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_regeneration) FROM $_tableName'));
+      String regenerationUuid = generateUuid();
 
-      regeneration['id_regeneration'] = maxId! + 1;
+      regeneration['id_regeneration'] = regenerationUuid;
       await txn.insert(
         _tableName,
         regeneration,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [regenerationUuid]);
       regenerationEntity = results.first;
     });
     return regenerationEntity;
@@ -61,9 +93,12 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     final db = await database;
     late final RegenerationEntity regenerationEntity;
     await db.transaction((txn) async {
+      var updatedRegeneration = Map<String, dynamic>.from(regeneration)
+        ..['last_update'] = formatDateTime(DateTime.now());
+
       await txn.update(
         _tableName,
-        regeneration,
+        updatedRegeneration,
         where: '$_columnId = ?',
         whereArgs: [regeneration['id_regeneration']],
       );
@@ -89,11 +124,23 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   // }
 
   @override
-  Future<void> deleteRegeneration(final int id) async {
+  Future<void> deleteRegeneration(final String id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
+      whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<void> deleteRegenerationsForCorCyclePlacette(final String id) async {
+    final db = await database;
+    await db.update(
+      _tableName,
+      {'deleted': 1}, // Mark the records as deleted
+      where: 'id_cycle_placette = ?',
       whereArgs: [id],
     );
   }

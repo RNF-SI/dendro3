@@ -4,5 +4,6 @@ abstract class TransectsDatabase {
   // Future<TransectListEntity> allTransects();
   Future<TransectEntity> addTransect(final TransectEntity transectEntity);
   Future<TransectEntity> updateTransect(final TransectEntity transectEntity);
-  Future<void> deleteTransect(final int id);
+  Future<void> deleteTransect(final String id);
+  Future<void> deleteTransectsForCorCyclePlacette(String corCyclePlacetteId);
 }

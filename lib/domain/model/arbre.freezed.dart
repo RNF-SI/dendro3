@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Arbre {
-  int get idArbre => throw _privateConstructorUsedError;
+  String get idArbre => throw _privateConstructorUsedError;
   int get idArbreOrig => throw _privateConstructorUsedError;
   int get idPlacette => throw _privateConstructorUsedError;
   String get codeEssence => throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ abstract class $ArbreCopyWith<$Res> {
       _$ArbreCopyWithImpl<$Res, Arbre>;
   @useResult
   $Res call(
-      {int idArbre,
+      {String idArbre,
       int idArbreOrig,
       int idPlacette,
       String codeEssence,
@@ -76,7 +76,7 @@ class _$ArbreCopyWithImpl<$Res, $Val extends Arbre>
       idArbre: null == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idArbreOrig: null == idArbreOrig
           ? _value.idArbreOrig
           : idArbreOrig // ignore: cast_nullable_to_non_nullable
@@ -132,7 +132,7 @@ abstract class _$$_ArbreCopyWith<$Res> implements $ArbreCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int idArbre,
+      {String idArbre,
       int idArbreOrig,
       int idPlacette,
       String codeEssence,
@@ -169,7 +169,7 @@ class __$$_ArbreCopyWithImpl<$Res> extends _$ArbreCopyWithImpl<$Res, _$_Arbre>
       idArbre: null == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       idArbreOrig: null == idArbreOrig
           ? _value.idArbreOrig
           : idArbreOrig // ignore: cast_nullable_to_non_nullable
@@ -222,7 +222,7 @@ class _$_Arbre extends _Arbre {
       : super._();
 
   @override
-  final int idArbre;
+  final String idArbre;
   @override
   final int idArbreOrig;
   @override
@@ -280,7 +280,7 @@ class _$_Arbre extends _Arbre {
 
 abstract class _Arbre extends Arbre {
   const factory _Arbre(
-      {required final int idArbre,
+      {required final String idArbre,
       required final int idArbreOrig,
       required final int idPlacette,
       required final String codeEssence,
@@ -292,7 +292,7 @@ abstract class _Arbre extends Arbre {
   const _Arbre._() : super._();
 
   @override
-  int get idArbre;
+  String get idArbre;
   @override
   int get idArbreOrig;
   @override

@@ -7,7 +7,7 @@ import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 
 abstract class ArbresMesuresRepository {
   Future<ArbreMesure> insertArbreMesure(
-    final int idArbre,
+    final String idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,
@@ -28,8 +28,8 @@ abstract class ArbresMesuresRepository {
   );
 
   Future<ArbreMesure> updateArbreMesure(
-    final int idArbreMesure,
-    final int idArbre,
+    final String idArbreMesure,
+    final String idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,
@@ -51,17 +51,17 @@ abstract class ArbresMesuresRepository {
 
   // Implements getPreviousCycleMeasure
   Future<ArbreMesure> getPreviousCycleMeasure(
-    final int idArbre,
+    final String idArbre,
     final int? idCycle,
     int? numCycle,
   );
 
   Future<ArbreMesure> updateLastArbreMesureCoupe(
-    final int idArbreMesure,
+    final String idArbreMesure,
     final String? coupe,
   );
 
-  Future<void> deleteArbreMesureFromIdArbre(final int idArbre);
+  Future<void> deleteArbreMesureFromIdArbre(final String idArbre);
 
-  Future<void> deleteArbreMesure(final int idArbreMesure);
+  Future<void> deleteArbreMesure(final String idArbreMesure);
 }

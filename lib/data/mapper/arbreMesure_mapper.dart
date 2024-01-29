@@ -1,5 +1,6 @@
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/placette.dart';
 
@@ -13,33 +14,71 @@ class ArbreMesureMapper {
   //   );
   // }
 
-  static ArbreMesure transformFromApiToModel(final ArbreMesureEntity entity) {
-    return ArbreMesure(
-        idArbreMesure: entity['id_arbre_mesure'],
-        idArbre: entity['id_arbre'],
-        idCycle: entity['id_cycle'],
-        diametre1: entity['diametre1'],
-        diametre2: entity['diametre2'],
-        type: entity['type'],
-        hauteurTotale: entity['hauteur_totale'],
-        hauteurBranche: entity['hauteur_branche'],
-        stadeDurete: entity['stade_durete'],
-        stadeEcorce: entity['stade_ecorce'],
-        liane: entity['liane'],
-        diametreLiane: entity['diametre_liane'],
-        coupe: entity['coupe'],
-        limite:
-            (entity['limite'] == true || entity['limite'] == 1) ? true : false,
-        idNomenclatureCodeSanitaire: entity['id_nomenclature_code_sanitaire'],
-        codeEcolo: entity['code_ecolo'],
-        refCodeEcolo: entity['ref_code_ecolo'],
-        ratioHauteur: (entity['ratio_hauteur'] == true ||
-                entity['ratio_hauteur'] == 1)
-            ? true
-            : (entity['ratio_hauteur'] == false || entity['ratio_hauteur'] == 0)
-                ? false
-                : null,
-        observation: entity['observation']);
+  static ArbreMesure transformFromApiToModel(
+      final Map<String, dynamic> entity) {
+    try {
+      return ArbreMesure(
+        idArbreMesure: entity['id_arbre_mesure'] ??
+            logAndReturnNull<String>('id_arbre_mesure'),
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<String>('id_arbre'),
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        diametre1: entity['diametre1'] as double?,
+        diametre2: entity['diametre2'] as double?,
+        type: entity['type'] as String?,
+        hauteurTotale: entity['hauteur_totale'] as double?,
+        hauteurBranche: entity['hauteur_branche'] as double?,
+        stadeDurete: entity['stade_durete'] as int?,
+        stadeEcorce: entity['stade_ecorce'] as int?,
+        liane: entity['liane'] as String?,
+        diametreLiane: entity['diametre_liane'] as double?,
+        coupe: entity['coupe'] as String?,
+        limite: entity['limite'] ?? logAndReturnNull<bool>('limite'),
+        idNomenclatureCodeSanitaire:
+            entity['id_nomenclature_code_sanitaire'] as int?,
+        codeEcolo: entity['code_ecolo'] as String?,
+        refCodeEcolo: entity['ref_code_ecolo'] as String?,
+        ratioHauteur: entity['ratio_hauteur'] as bool?,
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in ArbreMesure transformFromApiToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
+  }
+
+  static ArbreMesure transformFromDBToModel(final Map<String, dynamic> entity) {
+    try {
+      return ArbreMesure(
+        idArbreMesure: entity['id_arbre_mesure'] ??
+            logAndReturnNull<String>('id_arbre_mesure'),
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<String>('id_arbre'),
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        diametre1: entity['diametre1'] as double?,
+        diametre2: entity['diametre2'] as double?,
+        type: entity['type'] as String?,
+        hauteurTotale: entity['hauteur_totale'] as double?,
+        hauteurBranche: entity['hauteur_branche'] as double?,
+        stadeDurete: entity['stade_durete'] as int?,
+        stadeEcorce: entity['stade_ecorce'] as int?,
+        liane: entity['liane'] as String?,
+        diametreLiane: entity['diametre_liane'] as double?,
+        coupe: entity['coupe'] as String?,
+        limite: (entity['limitye'] as int?) == 1,
+        idNomenclatureCodeSanitaire:
+            entity['id_nomenclature_code_sanitaire'] as int?,
+        codeEcolo: entity['code_ecolo'] as String?,
+        refCodeEcolo: entity['ref_code_ecolo'] as String?,
+        ratioHauteur: (entity['ratio_hauteur'] as int?) == 1,
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in ArbreMesure transformFromDBToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
   }
 
   static ArbreMesureEntity transformToMap(final ArbreMesure model) {
@@ -67,7 +106,7 @@ class ArbreMesureMapper {
   }
 
   static ArbreMesureEntity transformToNewEntityMap(
-    final int? idArbre,
+    final String? idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,
@@ -109,8 +148,8 @@ class ArbreMesureMapper {
   }
 
   static ArbreMesureEntity transformToEntityMap(
-    final int? idArbreMesure,
-    final int? idArbre,
+    final String? idArbreMesure,
+    final String? idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,

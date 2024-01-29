@@ -2,6 +2,16 @@
 ------- TABLES ---------
 ------------------------
 
+-- Table contenant les différentes essences
+CREATE TABLE bib_essences (
+  code_essence character varying(4) NOT NULL PRIMARY KEY,
+  cd_nom integer,
+  nom character varying,
+  nom_latin character varying,
+  ess_reg character varying(4),
+  couleur character varying(25)
+);
+
 -- Table des dispositifs
 CREATE TABLE t_dispositifs (
   id_dispositif serial NOT NULL PRIMARY KEY,
@@ -53,11 +63,15 @@ CREATE TABLE t_reperes (
   diametre real,
   repere character varying,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_reperes_t_placettes
     FOREIGN KEY (id_placette) REFERENCES t_placettes (id_placette)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+
 
 CREATE TABLE t_cycles (
   id_cycle serial NOT NULL PRIMARY KEY,
@@ -85,6 +99,9 @@ CREATE TABLE t_arbres (
   distance real,
   taillis boolean,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_arbres_t_placettes
     FOREIGN KEY (id_placette) REFERENCES t_placettes (id_placette)
     ON UPDATE CASCADE
@@ -114,6 +131,9 @@ CREATE TABLE t_arbres_mesures (
   ref_code_ecolo character varying,
   ratio_hauteur boolean,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_arbres_mesures_t_arbres
     FOREIGN KEY (id_arbre) REFERENCES t_arbres (id_arbre)
     ON UPDATE CASCADE
@@ -123,6 +143,7 @@ CREATE TABLE t_arbres_mesures (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+
 
 CREATE INDEX idx_t_arbres_mesures_id_cycle on t_arbres_mesures (id_cycle);
 
@@ -139,6 +160,9 @@ CREATE TABLE t_regenerations (
   abroutissement boolean,
   id_nomenclature_abroutissement integer,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_regenerations_cor_cycles_placettes
     FOREIGN KEY (id_cycle_placette) REFERENCES cor_cycles_placettes (id_cycle_placette)
     ON UPDATE CASCADE
@@ -159,16 +183,6 @@ CREATE TABLE t_categories (
     ON DELETE CASCADE
 );
 
--- Table contenant les différentes essences
-CREATE TABLE bib_essences (
-  code_essence character varying(4) NOT NULL PRIMARY KEY,
-  cd_nom integer,
-  nom character varying,
-  nom_latin character varying,
-  ess_reg character varying(4),
-  couleur character varying(25)
-);
-
 CREATE TABLE t_bm_sup_30 (
   id_bm_sup_30 serial NOT NULL PRIMARY KEY,
   id_bm_sup_30_orig integer,
@@ -181,6 +195,9 @@ CREATE TABLE t_bm_sup_30 (
   azimut_souche real,
   distance_souche real,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_bm_sup_30_t_placettes
     FOREIGN KEY (id_placette) REFERENCES t_placettes (id_placette)
     ON UPDATE CASCADE
@@ -205,6 +222,9 @@ CREATE TABLE t_bm_sup_30_mesures (
   stade_durete integer,
   stade_ecorce integer,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_bm_sup_30_mesures_t_bm_sup_30
     FOREIGN KEY (id_bm_sup_30) REFERENCES t_bm_sup_30 (id_bm_sup_30)
     ON UPDATE CASCADE
@@ -213,9 +233,7 @@ CREATE TABLE t_bm_sup_30_mesures (
     FOREIGN KEY (id_cycle) REFERENCES t_cycles (id_cycle)
     ON UPDATE CASCADE
     ON DELETE CASCADE
-
 );
-
 -- Table des transects : une ligne par bois mort
 CREATE TABLE t_transects (
   id_transect serial NOT NULL PRIMARY KEY,
@@ -236,6 +254,9 @@ CREATE TABLE t_transects (
   stade_durete integer,
   stade_ecorce integer,
   observation text,
+  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_transects_cor_cycles_placettes
     FOREIGN KEY (id_cycle_placette) REFERENCES cor_cycles_placettes (id_cycle_placette)
     ON UPDATE CASCADE
@@ -288,6 +309,9 @@ CREATE TABLE cor_cycles_placettes (
     recouv_herbes_hautes real,
     recouv_buissons real,
     recouv_arbres real,
+    creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+    last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+    deleted BOOLEAN DEFAULT 0,
     CONSTRAINT fk_cor_cycles_placettes_t_cycles
       FOREIGN KEY (id_cycle) REFERENCES t_cycles (id_cycle)
       ON UPDATE CASCADE

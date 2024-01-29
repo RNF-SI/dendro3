@@ -66,12 +66,12 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   }
 
   @override
-  getObjectFromId(final int id) {
+  getObjectFromId(final String id) {
     return values.firstWhere((repere) => repere.idRepere == id);
   }
 
   @override
-  int getFirstElementIdOrig() {
+  String getFirstElementIdOrig() {
     return values.first.idRepere;
   }
 
@@ -81,7 +81,7 @@ class RepereList with _$RepereList implements ViewModelObject, DisplayableList {
   }
 
   @override
-  RepereList removeItemFromList(final int idRepere) {
+  RepereList removeItemFromList(final String idRepere) {
     return copyWith(
         values: values.where((repere) => repere.idRepere != idRepere).toList());
   }

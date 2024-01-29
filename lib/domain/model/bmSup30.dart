@@ -1,20 +1,22 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
+import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
+import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bmSup30.freezed.dart';
 
 @freezed
-class BmSup30 with _$BmSup30 implements SaisisableObject {
+class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
   const factory BmSup30(
-      {required int idBmSup30,
+      {required String idBmSup30,
       required int idBmSup30Orig,
       required int idPlacette,
-      required int idArbre,
+      int? idArbre,
       required String codeEssence,
-      required double azimut,
-      required double distance,
+      double? azimut,
+      double? distance,
       double? orientation,
       double? azimutSouche,
       double? distanceSouche,
@@ -97,5 +99,119 @@ class BmSup30 with _$BmSup30 implements SaisisableObject {
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idBmSup30Orig == valueMap['idBmSup30Orig'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idBmSup30Orig',
+      'idPlacette',
+      'idArbre',
+      'codeEssence',
+      'azimut',
+      'distance',
+      // 'orientation',
+      // 'azimutSouche',
+      // 'distanceSouche',
+      'idCycle',
+      'diametreIni',
+      'diametreMed',
+      'diametreFin',
+      // 'diametre130',
+      'longueur',
+      'contact',
+      'chablis',
+      'stadeDurete',
+      'stadeEcorce',
+      'observation',
+    ].contains(columnName);
+  }
+
+  static bool getDisplayableGridTile(String columnName) {
+    return [
+      'idBmSup30Orig',
+      'idPlacette',
+      'idArbre',
+      'codeEssence',
+      'azimut',
+      'distance',
+      // 'orientation',
+      // 'azimutSouche',
+      // 'distanceSouche',
+      'numCycle',
+      'diametreIni',
+      'diametreMed',
+      'diametreFin',
+      // 'diametre130',
+      'longueur',
+      'contact',
+      'chablis',
+      'stadeDurete',
+      'stadeEcorce',
+      'observation',
+    ].contains(columnName);
+  }
+
+  @override
+  BmSup30Mesure getMesureFromIndex(int index) {
+    return bmsSup30Mesures![index];
+  }
+
+  @override
+  BmSup30Mesure? getMesureFromIdCycle(int idCycle) {
+    return bmsSup30Mesures!.getMesureFromIdCycle(idCycle);
+  }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idBmSup30Orig':
+          return 'id';
+        case 'idArbre':
+          return 'NumArbre';
+        case 'codeEssence':
+          return 'Ess';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Dist';
+        case 'diametre':
+          return 'Diam';
+        case 'longueur':
+          return 'Long';
+        case 'idCycle':
+          return 'NumCycle';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idBmSup30Orig':
+          return 'id';
+        case 'idArbre':
+          return 'Num arbre';
+        case 'codeEssence':
+          return 'Essence';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Distance';
+        case 'diametre':
+          return 'Diam';
+        case 'numCycle':
+          return 'NumCycle';
+        case 'longueur':
+          return 'Longueur';
+        case 'stadeDurete':
+          return 'Stade Dureté';
+        case 'stadeEcorce':
+          return 'Stade Ecorce';
+        default:
+          return columnName;
+      }
+    }).toList();
   }
 }

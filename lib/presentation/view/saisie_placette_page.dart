@@ -1,3 +1,4 @@
+import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
@@ -5,6 +6,7 @@ import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmode
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/displayable_button.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,11 +17,13 @@ class SaisiePlacettePage extends ConsumerStatefulWidget {
   SaisiePlacettePage({
     Key? key,
     required this.placette,
+    required this.corCyclePlacetteList,
     required this.dispCycleList,
   }) : super(key: key);
 
   Placette placette;
   CycleList dispCycleList;
+  CorCyclePlacetteList corCyclePlacetteList;
 
   @override
   SaisiePlacettePageState createState() => SaisiePlacettePageState();
@@ -139,7 +143,12 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
       ),
       // body: null,
       body: __buildAsyncPlacetteListWidget(
-          context, ref, widget.placette, widget.dispCycleList),
+        context,
+        ref,
+        widget.placette,
+        widget.dispCycleList,
+        widget.corCyclePlacetteList,
+      ),
     );
   }
 }
@@ -149,6 +158,7 @@ Widget __buildAsyncPlacetteListWidget(
   WidgetRef ref,
   Placette placette,
   CycleList dispCycleList,
+  CorCyclePlacetteList corCyclePlacetteList,
 ) {
   final _viewModel =
       ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
@@ -157,54 +167,74 @@ Widget __buildAsyncPlacetteListWidget(
     success: (data) {
       final displayableListNotifier =
           ref.watch(displayableListProvider.notifier);
-      final displayTypeState = ref.watch(displayTypeProvider);
+      final displayTypeState = ref.watch(displayTypeStateProvider);
 
       return Column(
         children: [
-          SaisieDataTable(
-            placette: placette,
-            dispCycleList: dispCycleList,
-            // corCyclePlacetteList: placette.corCyclesPlacettes!,
-            displayTypeState: displayTypeState,
+          Expanded(
+            child: SaisieDataTable(
+              placette: placette,
+              dispCycleList: dispCycleList,
+              corCyclePlacetteList: corCyclePlacetteList,
+              displayTypeState: displayTypeState,
+            ),
           ),
-          Row(
-            children: [
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Arbres');
-                },
-                text: "Arbres",
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'BmsSup30');
-                },
-                text: "BmsSup30",
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Transects');
-                },
-                text: "BmsInf30",
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Regenerations');
-                },
-                text: 'Regenerations',
-              ),
-              DisplayableButton(
-                onPressed: () {
-                  displayableListNotifier.setDisplayableListFromListProvider(
-                      ref, 'Reperes');
-                },
-                text: "Repères",
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                DisplayableButton(
+                  onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Arbres');
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Arbres');
+                  },
+                  text: "Arbres",
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('BmsSup30');
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'BmsSup30');
+                  },
+                  text: "BmsSup30",
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Transects');
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Transects');
+                  },
+                  text: "Transects",
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Regenerations');
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Regenerations');
+                  },
+                  text: 'Regenerations',
+                ),
+                DisplayableButton(
+                  onPressed: () {
+                    ref
+                        .read(displayTypeStateProvider.notifier)
+                        .update('Reperes');
+                    displayableListNotifier.setDisplayableListFromListProvider(
+                        ref, 'Reperes');
+                  },
+                  text: "Reperes",
+                ),
+              ],
+            ),
           )
         ],
       );

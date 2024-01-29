@@ -1,4 +1,5 @@
 import 'package:dendro3/domain/model/arbre.dart';
+import 'package:dendro3/domain/model/arbre_list.dart';
 
 abstract class ArbresRepository {
   Future<Arbre> insertArbre(
@@ -11,7 +12,7 @@ abstract class ArbresRepository {
   );
 
   Future<Arbre> updateArbre(
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     final int idPlacette,
     final String codeEssence,
@@ -21,5 +22,8 @@ abstract class ArbresRepository {
     final String? observation,
   );
 
-  Future<void> deleteArbre(final int idArbre);
+  Future<void> deleteArbre(final String idArbre);
+
+  Future<List<String>> getArbreIdsForPlacette(final int idPlacette);
+  Future<void> deleteArbreAndArbreMesureFromIdArbre(final String idArbre);
 }

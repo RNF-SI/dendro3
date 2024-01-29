@@ -2,18 +2,22 @@ import 'dart:io';
 
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
+import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:dendro3/data/mapper/dispositif_list_mapper.dart';
 import 'package:dendro3/data/mapper/dispositif_mapper.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 // import 'package:dendro3/domain/model/dispositif_id.dart';
 import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
+import 'package:dendro3/domain/repository/local_storage_repository.dart';
 
 class DispositifsRepositoryImpl implements DispositifsRepository {
   final DispositifsDatabase database;
   final DispositifsApi api;
+  final LocalStorageRepository _localStorageRepository;
 
-  const DispositifsRepositoryImpl(this.database, this.api);
+  const DispositifsRepositoryImpl(
+      this.database, this.api, this._localStorageRepository);
 
   @override
   Future<DispositifList> getDispositifList() async {
@@ -48,6 +52,10 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
   Future<Dispositif> downloadDispositifData(
     final int dispositifId,
   ) async {
+    // Store the current time as the last sync time for this dispositif
+    await _localStorageRepository.setLastSyncTimeForDispositif(
+        dispositifId, DateTime.now());
+
     final dispositifEntity = await api.getDispositifFromId(dispositifId);
     final mappedDispositif =
         DispositifMapper.transformFromApiToModel(dispositifEntity);
@@ -100,4 +108,16 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
   @override
   Future<void> deleteDispositif(final int id) async =>
       await database.deleteDispositif(id);
+
+  @override
+  Future<void> exportDispositifData(int idDispositif) async {
+    String? lastSyncTime = await _localStorageRepository
+        .getLastSyncTimeForDispositif(idDispositif);
+
+    // get dispositif and all data linked to the dispositif
+    DispositifEntity data =
+        await database.getDispositifAllData(idDispositif, lastSyncTime!);
+
+    await api.exportDispositifData(data);
+  }
 }

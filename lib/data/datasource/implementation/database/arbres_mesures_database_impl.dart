@@ -1,4 +1,6 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
 import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
@@ -23,18 +25,16 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     final db = await database;
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(
-          await txn.rawQuery('SELECT MAX(id_arbre_mesure) FROM $_tableName'));
-
-      arbreMesure['id_arbre_mesure'] = maxId! + 1;
+      String idArbreMesureUuid = generateUuid();
+      arbreMesure['id_arbre_mesure'] = idArbreMesureUuid;
       await txn.insert(
         _tableName,
         arbreMesure,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [idArbreMesureUuid]);
       arbreEntity = results.first;
     });
     return arbreEntity;
@@ -42,19 +42,25 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   @override
   Future<ArbreMesureEntity> updateArbreMesure(
-      final ArbreMesureEntity arbre) async {
+      final ArbreMesureEntity arbreMesure) async {
     final db = await database;
     late final ArbreMesureEntity arbreMesureEntity;
+
     await db.transaction((txn) async {
+      // Create a copy of the arbreMesure map and add/modify the last_update field
+      var updatedArbreMesure = Map<String, dynamic>.from(arbreMesure)
+        ..['last_update'] =
+            formatDateTime(DateTime.now()); // Add current timestamp
+
       await txn.update(
         _tableName,
-        arbre,
+        updatedArbreMesure, // Use the updated map with the new last_update value
         where: '$_columnId = ?',
-        whereArgs: [arbre['id_arbre_mesure']],
+        whereArgs: [arbreMesure['id_arbre_mesure']],
       );
 
       final results = await txn.query(_tableName,
-          where: '$_columnId = ?', whereArgs: [arbre['id_arbre_mesure']]);
+          where: '$_columnId = ?', whereArgs: [arbreMesure['id_arbre_mesure']]);
       arbreMesureEntity = results.first;
     });
     return arbreMesureEntity;
@@ -67,14 +73,49 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   static Future<ArbreMesureListEntity> getArbreArbresMesures(
-      Database db, final int arbreId) async {
-    return await db
-        .query(_tableName, where: 'id_arbre = ?', whereArgs: [arbreId]);
+      Database db, final String arbreId) async {
+    return await db.query(
+      _tableName,
+      where: 'id_arbre = ? AND deleted = 0', // Exclude deleted records
+      whereArgs: [arbreId],
+    );
+  }
+
+  static Future<Map<String, List<ArbreMesureEntity>>>
+      getArbreArbresMesuresForDataSync(
+          Database db, final String arbreId, String lastSyncTime) async {
+    // Fetch newly created arbreMesures
+    List<ArbreMesureEntity> created_arbreMesures = await db.query(
+      _tableName,
+      where: 'id_arbre = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [arbreId, lastSyncTime],
+    );
+
+    // Fetch updated arbreMesures
+    List<ArbreMesureEntity> updated_arbreMesures = await db.query(
+      _tableName,
+      where:
+          'id_arbre = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [arbreId, lastSyncTime, lastSyncTime],
+    );
+
+    // Fetch deleted arbreMesures
+    List<ArbreMesureEntity> deleted_arbreMesures = await db.query(
+      _tableName,
+      where: 'id_arbre = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [arbreId, lastSyncTime],
+    );
+
+    return {
+      "created": created_arbreMesures,
+      "updated": updated_arbreMesures,
+      "deleted": deleted_arbreMesures,
+    };
   }
 
   @override
   Future<ArbreMesureEntity> getPreviousCycleMeasure(
-      final int idArbre, final int? idCycle, int? numCycle) async {
+      final String idArbre, final int? idCycle, int? numCycle) async {
     final db = await database;
 
     if (idCycle == null) {
@@ -86,7 +127,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
         db, cycle['id_dispositif'], cycle['num_cycle'] - 1);
     ArbreMesureListEntity arbreMesureList = await db.query(
       _tableName,
-      where: 'id_cycle = ? AND id_arbre = ?',
+      where: 'id_cycle = ? AND id_arbre = ? AND deleted = 0',
       whereArgs: [lastCycle['id_cycle'], idArbre],
       limit: 1,
     );
@@ -95,18 +136,23 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   @override
   Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
-    final int idArbreMesure,
-    final String? coupe,
-  ) async {
+      final String idArbreMesure, final String? coupe) async {
     final db = await database;
     late final ArbreMesureEntity arbreMesureEntity;
+
     await db.transaction((txn) async {
+      var updateData = {
+        'coupe': coupe,
+        'last_update': formatDateTime(DateTime.now())
+      };
+
       await txn.update(
         _tableName,
-        {'coupe': coupe},
+        updateData,
         where: '$_columnId = ?',
         whereArgs: [idArbreMesure],
       );
+
       final results = await txn.query(_tableName,
           where: '$_columnId = ?', whereArgs: [idArbreMesure]);
       arbreMesureEntity = results.first;
@@ -116,20 +162,22 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   @override
-  Future<void> deleteArbreMesureFromIdArbre(final int idArbre) async {
+  Future<void> deleteArbreMesureFromIdArbre(final String idArbre) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: 'id_arbre = ?',
       whereArgs: [idArbre],
     );
   }
 
   @override
-  Future<void> deleteArbreMesure(final int idArbreMesure) async {
+  Future<void> deleteArbreMesure(final String idArbreMesure) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1}, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [idArbreMesure],
     );

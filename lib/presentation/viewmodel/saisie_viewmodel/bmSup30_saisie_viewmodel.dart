@@ -81,7 +81,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
 
   // late BmSup30Id _idBmSup30;
   // var _idBmSup30Orig;
-  late int? _idBmSup30;
+  late String? _idBmSup30;
   int? _idBmSup30Orig;
   var _idPlacette;
   var _idArbre;
@@ -96,7 +96,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
 
   // late BmSup30MesureId idBmSup30Mesure='';
   // var _idBmSup30 = '';
-  late int? _idBmSup30Mesure;
+  late String? _idBmSup30Mesure;
   int? _idCycle;
   double? _diametreIni;
   double? _diametreMed;
@@ -319,19 +319,55 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   }
 
   String initialIdPlacetteValue() => _idPlacette.toString();
-  String initialIdArbreValue() => _idArbre.toString();
-  String initialAzimutValue() => _azimut != null ? _azimut.toString() : '';
+
+  String initialIdArbreValue() {
+    if (_idArbre == null) {
+      return '';
+    }
+    return _idArbre.toString();
+  }
+
+  String initialAzimutValue() {
+    if (_azimut == null) {
+      return '';
+    }
+    // Check if azimut is a whole number and display it as an integer if so
+    return _azimut == _azimut!.toInt()
+        ? _azimut!.toInt().toString()
+        : _azimut!.toStringAsFixed(1);
+  }
+
   String initialDistanceValue() =>
       _distance != null ? _distance.toString() : '';
 
   String initialObservationValue() => _observation ?? '';
 
-  String initialDiametreIniValue() =>
-      _diametreIni != null ? _diametreIni.toString() : '';
-  String initialDiametreMedValue() =>
-      _diametreMed != null ? _diametreMed.toString() : '';
-  String initialDiametreFinValue() =>
-      _diametreFin != null ? _diametreFin.toString() : '';
+  String initialDiametreIniValue() {
+    if (_diametreIni == null) {
+      return '';
+    }
+    return _diametreIni == _diametreIni!.toInt()
+        ? _diametreIni!.toInt().toString()
+        : _diametreIni!.toStringAsFixed(1);
+  }
+
+  String initialDiametreMedValue() {
+    if (_diametreMed == null) {
+      return '';
+    }
+    return _diametreMed == _diametreMed!.toInt()
+        ? _diametreMed!.toInt().toString()
+        : _diametreMed!.toStringAsFixed(1);
+  }
+
+  String initialDiametreFinValue() {
+    if (_diametreFin == null) {
+      return '';
+    }
+    return _diametreFin == _diametreFin!.toInt()
+        ? _diametreFin!.toInt().toString()
+        : _diametreFin!.toStringAsFixed(1);
+  }
 
   int initialStadeDureteValue() => _stadeDurete ?? 0;
   int initialStadeEcorceValue() => _stadeEcorce ?? 0;
@@ -344,6 +380,15 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
 
   String initialDistanceSouche() =>
       _distanceSouche != null ? _distanceSouche.toString() : '';
+
+  String initialContactValue() {
+    if (_contact == null) {
+      return '';
+    }
+    return _contact == _contact!.toInt()
+        ? _contact!.toInt().toString()
+        : _contact!.toStringAsFixed(1);
+  }
 
   // bool initialLimiteValue() => _taillis ?? true;
   bool initialRatioHauteurValue() => _ratioHauteur == true ? true : false;
@@ -443,7 +488,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
             'Lorsque 2 pièce de BMsup30 appartiennent au même individu, indiquer le même Arbre',
         initialValue: initialIdArbreValue(),
         hintText: 'Veuillez entrer le code',
-        // validator: ...,
+        onChanged: (value) => _idArbre = int.parse(value),
       ),
       DropdownSearchConfig(
         fieldName: 'Code Essence',
@@ -662,7 +707,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'Contact',
         fieldUnit: '%',
-        initialValue: _contact.toString(),
+        initialValue: initialContactValue(),
         fieldRequired: true,
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [

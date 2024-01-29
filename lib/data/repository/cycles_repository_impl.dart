@@ -35,4 +35,11 @@ class CyclesRepositoryImpl implements CyclesRepository {
       }
     });
   }
+
+  @override
+  Future<void> deleteCycleFromDispositifId(
+    final int dispositifId,
+  ) async {
+    await database.deleteCycleFromDispositifId(dispositifId);
+  }
 }

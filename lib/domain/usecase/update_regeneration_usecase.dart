@@ -2,8 +2,8 @@ import 'package:dendro3/domain/model/regeneration.dart';
 
 abstract class UpdateRegenerationUseCase {
   Future<Regeneration> execute(
-    int idRegeneration,
-    int idCyclePlacette,
+    String idRegeneration,
+    String idCyclePlacette,
     int sousPlacette,
     String codeEssence,
     double recouvrement,

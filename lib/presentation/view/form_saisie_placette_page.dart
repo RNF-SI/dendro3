@@ -45,6 +45,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final Cycle? cycle;
   final CorCyclePlacette? corCyclePlacette;
   final String formType;
+  final String? previousCycleCoupe;
 
   FormSaisiePlacettePage({
     Key? key,
@@ -55,6 +56,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
     this.saisisableObject2,
     required this.cycle,
     required this.corCyclePlacette,
+    this.previousCycleCoupe,
     // required this.placette,
     // required this.dispCycleList,
   }) : super(key: key);
@@ -190,6 +192,11 @@ class FormSaisiePlacettePageState
             filled: true,
             hintText: field.hintText,
             suffixText: field.fieldUnit,
+            errorStyle: const TextStyle(
+              fontSize: 16, // Set the font size of the error message
+              color: Colors.red, // You can also change the color if needed
+            ),
+            errorMaxLines: 3,
           ),
         );
       } else if (field is DropdownSearchConfig && !field.isMultiSelection) {
@@ -374,7 +381,7 @@ class FormSaisiePlacettePageState
             Row(
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 4,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -436,7 +443,7 @@ class FormSaisiePlacettePageState
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: formWidget,
                 ),
               ],
@@ -542,7 +549,11 @@ class CheckboxFormField extends FormField<bool> {
             });
 }
 
-ObjectSaisieViewModel getViewModel(ref, String type, widget) {
+ObjectSaisieViewModel getViewModel(
+  ref,
+  String type,
+  widget,
+) {
   switch (type) {
     case 'Arbres':
       return ref.read(arbreSaisieViewModelProvider({
@@ -551,6 +562,7 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
         'arbre': widget.saisisableObject1,
         'arbreMesure': widget.saisisableObject2,
         'formType': widget.formType,
+        'previousCycleCoupe': widget.previousCycleCoupe,
       }));
     // return ArbreViewModel();
     case 'BmsSup30':
@@ -564,7 +576,6 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
     // return BmsViewModel();
     // ...other types
     case 'Transects':
-    case 'BmsInf30':
       return ref.read(transectSaisieViewModelProvider({
         'corCyclePlacette': widget.corCyclePlacette,
         'transect': widget.saisisableObject1,
@@ -577,6 +588,7 @@ ObjectSaisieViewModel getViewModel(ref, String type, widget) {
         'formType': widget.formType,
       }));
     case 'Repères':
+    case 'Reperes':
       return ref.read(repereSaisieViewModelProvider({
         'corCyclePlacette': widget.corCyclePlacette,
         'repere': widget.saisisableObject1,

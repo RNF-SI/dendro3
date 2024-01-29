@@ -20,7 +20,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
   @override
   Future<BmSup30> execute(
     BmSup30 bmsup30,
-    int idBmSup30,
+    String idBmSup30,
     int idBmSup30Orig,
     int idPlacette,
     int idArbre,
@@ -31,7 +31,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
     double? azimutSouche,
     double? distanceSouche,
     String? observation,
-    int idBmSup30Mesure,
+    String idBmSup30Mesure,
     int idCycle,
     double? diametreIni,
     double? diametreMed,

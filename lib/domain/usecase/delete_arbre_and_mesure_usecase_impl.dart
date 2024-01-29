@@ -12,7 +12,7 @@ class DeleteArbreAndMesureUseCaseImpl implements DeleteArbreAndMesureUseCase {
   );
 
   @override
-  Future<void> execute(int arbreId) async {
+  Future<void> execute(String arbreId) async {
     await arbreRepository.deleteArbre(arbreId);
     await arbreMesureRepository.deleteArbreMesureFromIdArbre(arbreId);
   }

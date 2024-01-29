@@ -45,6 +45,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
       arbreInfoObj['formType'],
+      arbreInfoObj['previousCycleCoupe'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -64,6 +65,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   final Ref ref;
 
   final String formType;
+
+  final String? previousCycleCoupe;
   // late TodoId _id;
   // var _title = '';
   // var _description = '';
@@ -90,7 +93,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   Arbre? arbre;
 
-  late int? _idArbre;
+  late String? _idArbre;
   int? _idArbreOrig;
   var _idPlacette;
   var _codeEssence = '';
@@ -101,7 +104,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   // late ArbreMesureId idArbreMesure='';
   // var _idArbre = '';
-  late int? _idArbreMesure;
+  late String? _idArbreMesure;
   int? _idCycle;
   double? _diametre1;
   double? _diametre2;
@@ -130,6 +133,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this.arbre,
     final ArbreMesure? arbreMesure,
     this.formType,
+    this.previousCycleCoupe,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -290,7 +294,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _stadeEcorce = arbreMesure.stadeEcorce;
       _liane = arbreMesure.liane ?? '';
       _diametreLiane = arbreMesure.diametreLiane;
-      _coupe = arbreMesure.coupe ?? '';
+      _coupe =
+          previousCycleCoupe != null ? previousCycleCoupe!.toUpperCase() : '';
       _limite = arbreMesure.limite ?? false;
       _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
       _codeEcolo = arbreMesure.codeEcolo ?? '';
@@ -406,7 +411,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': '',
+        'coupe': _coupe,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -436,13 +441,49 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   //     .first;
   // Essence initialCodeEssenceValue() => _initialEssence;
   String initialIdPlacetteValue() => _idPlacette.toString();
-  String initialAzimutValue() => _azimut != null ? _azimut.toString() : '';
+  String initialAzimutValue() {
+    if (_azimut == null) {
+      return '';
+    }
+    // Check if azimut is a whole number and display it as an integer if so
+    return _azimut == _azimut!.toInt()
+        ? _azimut!.toInt().toString()
+        : _azimut!.toStringAsFixed(1);
+  }
+
   String initialDistanceValue() =>
       _distance != null ? _distance.toString() : '';
   bool initialTaillisValue() => _taillis ?? true;
 
   int initialStadeDureteValue() => _stadeDurete ?? 0;
   int initialStadeEcorceValue() => _stadeEcorce ?? 0;
+
+  String initialDiametre1Value() {
+    if (_diametre1 == null) {
+      return '';
+    }
+    return _diametre1 == _diametre1!.toInt()
+        ? _diametre1!.toInt().toString()
+        : _diametre1!.toStringAsFixed(1);
+  }
+
+  String initialDiametre2Value() {
+    if (_diametre2 == null) {
+      return '';
+    }
+    return _diametre2 == _diametre2!.toInt()
+        ? _diametre2!.toInt().toString()
+        : _diametre2!.toStringAsFixed(1);
+  }
+
+  String initialHauteurTotaleValue() {
+    if (_hauteurTotale == null) {
+      return '';
+    }
+    return _hauteurTotale == _hauteurTotale!.toInt()
+        ? _hauteurTotale!.toInt().toString()
+        : _hauteurTotale!.toStringAsFixed(1);
+  }
 
   // String initialDescriptionValue() => _description;
 
@@ -628,7 +669,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}([.,]\d{0,1})?$')),
         ],
-        initialValue: _diametre1.toString(),
+        initialValue: initialDiametre1Value(),
         fieldInfo: 'Diamètre apparent',
         fieldUnit: 'cm',
         fieldRequired: true,
@@ -657,7 +698,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
           fieldName: 'Diametre2',
-          initialValue: _diametre2.toString(),
+          initialValue: initialDiametre2Value(),
           fieldRequired: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
@@ -665,10 +706,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             DecimalTextInputFormatter(decimalRange: 1),
           ],
           isVisibleFn: (formData) {
-            return (formData['Diametre1'] != null &&
-                    formData['Diametre1'] != '') ||
-                // double.tryParse(formData['Diametre1']) != null ||
-                (_diametre1 != null && _diametre1! > 30);
+            if (formData.isNotEmpty) {
+              return (formData['Diametre1'] != null &&
+                      formData['Diametre1'] != '' &&
+                      int.parse(formData['Diametre1']) > 30) ||
+                  (_diametre1 != null && _diametre1! > 30);
+            } else {
+              return (_diametre1 != null && _diametre1! > 30);
+            }
           },
           hintText: "Entrer le diametre2",
           fieldUnit: 'cm',
@@ -695,7 +740,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         value: _type,
         items: [
           const MapEntry('', 'Sélectionnez une option'),
-          const MapEntry('1', '1- arbre'),
+          const MapEntry('1', '1- arbre mort sur pied'),
           const MapEntry('2', '2- chandelle'),
           const MapEntry('3', '3- souche'),
           const MapEntry('4', '4- souche anthropique'),
@@ -713,7 +758,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           }
         },
         fieldInfo:
-            "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
+            "Complété uniquement si l'arbre est mort\n(Plus de branche vivante).\nTypes:\n1 - arbre mort sur pied\n2 - chandelle (plus de branches et hauteurs <1.3m\n3 - souche (plus de branche et hauteur <1.3m\n4 - souche anthropique\n5 - souche naturelle)",
       ),
       // TextFieldConfig(
       //   fieldName: 'type',
@@ -730,7 +775,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       TextFieldConfig(
         fieldName: 'Hauteur',
-        initialValue: _hauteurTotale.toString(),
+        initialValue: initialHauteurTotaleValue(),
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
@@ -738,8 +783,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         ],
         fieldRequired: true,
         isVisibleFn: (formData) {
-          return (formData['Type'] != null && formData['Type'] != '') ||
-              (_type != '');
+          if (formData.isNotEmpty) {
+            return (formData['Type'] != null && formData['Type'] != '') ||
+                (_type != '');
+          } else {
+            return (_type != '');
+          }
         },
         fieldUnit: 'm',
         hintText: "Entrer la hauteur",
@@ -798,8 +847,12 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         itemAsString: (dynamic e) => e.labelDefault,
         isVisibleFn: (formData) {
-          return (formData['Type'] != null && formData['Type'] != '') ||
-              (_type != '');
+          if (formData.isNotEmpty) {
+            return (formData['Type'] != null && formData['Type'] != '') ||
+                (_type != '');
+          } else {
+            return (_type != '');
+          }
         },
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
@@ -831,9 +884,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
+
         isVisibleFn: (formData) {
-          return (formData['Type'] != null && formData['Type'] != '') ||
-              (_type != '');
+          if (formData.isNotEmpty) {
+            return (formData['Type'] != null && formData['Type'] != '') ||
+                (_type != '');
+          } else {
+            return (_type != '');
+          }
         },
         onChanged: (dynamic? data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
@@ -876,18 +934,30 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           const MapEntry('', 'Sélectionnez une option'),
           const MapEntry('C', 'chablis'),
           const MapEntry('E', 'exploité'),
+          const MapEntry('F', 'Aucune coupe'),
         ],
         validator: (value, formData) {
           return null;
         },
-        isVisibleFn: (formData) =>
-            (formData['Type'] != null) &&
-            (formData['Type'] != '') &&
-            (cycle.numCycle != 1),
+        isVisibleFn: (formData) {
+          if (formData.isNotEmpty) {
+            if (cycle.numCycle == 1) {
+              return false;
+            } else if (((formData['Type'] != null) &&
+                    (formData['Type'] != '')) ||
+                (_type != '')) {
+              return true;
+            } else
+              return false;
+          } else if (cycle.numCycle == 1) {
+            return false;
+          } else {
+            return true;
+          }
+        },
         onChanged: (value) => setCoupe(value),
-        importantMessage: formType == 'newMesure'
-            ? "En cas de coupe, l'information que vous saissirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})"
-            : null,
+        importantMessage:
+            "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})",
       ),
 
       // TextFieldConfig(
@@ -902,6 +972,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'limite',
         initialValue: initialLimiteValue(),
         onSaved: (value) => setLimite(value!),
+        fieldInfo:
+            "Arbre n'ayant pas les caractéristiques pour être échantillonné. Ne sera pas pris en compte dans l'analyse",
       ),
 
       // TextFieldConfig(

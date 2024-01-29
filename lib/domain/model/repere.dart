@@ -7,7 +7,7 @@ part 'repere.freezed.dart';
 @freezed
 class Repere with _$Repere implements SaisisableObject {
   const factory Repere(
-      {required int idRepere,
+      {required String idRepere,
       required int idPlacette,
       double? azimut,
       double? distance,
@@ -76,5 +76,59 @@ class Repere with _$Repere implements SaisisableObject {
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
     return idRepere == valueMap['idRepere'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idRepere',
+      // 'idPlacette',
+      'azimut',
+      'distance',
+      'diametre',
+      'repere',
+      'observation'
+    ].contains(columnName);
+  }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idRepere':
+          return 'id';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Dist';
+        case 'diametre':
+          return 'Diam';
+        case 'repere':
+          return 'Repere';
+        case 'observation':
+          return 'Obs';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idRepere':
+          return 'id';
+        case 'azimut':
+          return 'Azimut';
+        case 'distance':
+          return 'Dist';
+        case 'diametre':
+          return 'Diam';
+        case 'repere':
+          return 'Repere';
+        case 'observation':
+          return 'Obs';
+        default:
+          return columnName;
+      }
+    }).toList();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
+import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 
 class BmSup30MesureMapper {
@@ -12,23 +13,65 @@ class BmSup30MesureMapper {
   // }
 
   static BmSup30Mesure transformFromApiToModel(
-      final BmSup30MesureEntity entity) {
-    return BmSup30Mesure(
-      idBmSup30Mesure: entity['id_bm_sup_30_mesure'],
-      idBmSup30: entity['id_bm_sup_30'],
-      idCycle: entity['id_cycle'],
-      diametreIni: entity['diametre_ini'],
-      diametreMed: entity['diametre_med'],
-      diametreFin: entity['diametre_fin'],
-      diametre130: entity['diametre_130'],
-      longueur: entity['longueur'],
-      ratioHauteur: entity['ratio_hauteur'] == true ? true : false,
-      contact: entity['contact'],
-      chablis: entity['chablis'] == true ? true : false,
-      stadeDurete: entity['stade_durete'],
-      stadeEcorce: entity['stade_ecorce'],
-      observation: entity['observation'],
-    );
+      final Map<String, dynamic> entity) {
+    try {
+      return BmSup30Mesure(
+        idBmSup30Mesure: entity['id_bm_sup_30_mesure'] ??
+            logAndReturnNull<String>('id_bm_sup_30_mesure'),
+        idBmSup30:
+            entity['id_bm_sup_30'] ?? logAndReturnNull<String>('id_bm_sup_30'),
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        diametreIni: entity['diametre_ini'] as double?,
+        diametreMed: entity['diametre_med'] as double?,
+        diametreFin: entity['diametre_fin'] as double?,
+        diametre130: entity['diametre_130'] as double?,
+        longueur: entity['longueur'] ?? logAndReturnNull<double>('longueur'),
+        ratioHauteur: entity['ratio_hauteur'] as bool?,
+        contact: entity['contact'] ?? logAndReturnNull<double>('contact'),
+        chablis: entity['chablis'] ?? logAndReturnNull<bool>('chablis'),
+        stadeDurete:
+            entity['stade_durete'] ?? logAndReturnNull<int>('stade_durete'),
+        stadeEcorce:
+            entity['stade_ecorce'] ?? logAndReturnNull<int>('stade_ecorce'),
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in BmSup30Mesure transformFromApiToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
+  }
+
+  static BmSup30Mesure transformFromDBToModel(
+      final Map<String, dynamic> entity) {
+    try {
+      return BmSup30Mesure(
+        idBmSup30Mesure: entity['id_bm_sup_30_mesure'] ??
+            logAndReturnNull<String>('id_bm_sup_30_mesure'),
+        idBmSup30:
+            entity['id_bm_sup_30'] ?? logAndReturnNull<String>('id_bm_sup_30'),
+        idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
+        diametreIni: entity['diametre_ini'] as double?,
+        diametreMed: entity['diametre_med'] as double?,
+        diametreFin: entity['diametre_fin'] as double?,
+        diametre130: entity['diametre_130'] as double?,
+        longueur: entity['longueur'] ?? logAndReturnNull<double>('longueur'),
+        ratioHauteur: (entity['ratio_hauteur'] as int?) == 1,
+        contact: entity['contact'] ?? logAndReturnNull<double>('contact'),
+        chablis: (entity['chablis'] as int?) == 1,
+        stadeDurete:
+            entity['stade_durete'] ?? logAndReturnNull<int>('stade_durete'),
+        stadeEcorce:
+            entity['stade_ecorce'] ?? logAndReturnNull<int>('stade_ecorce'),
+        observation: entity['observation'] as String?,
+      );
+    } catch (e) {
+      print("Error in BmSup30Mesure transformFromDBToModel: $e");
+      print("Entity causing error: ${entity.toString()}");
+
+      throw e;
+    }
   }
 
   // Function concentratingh only on arbre properties (and not on arbreMesures)
@@ -77,7 +120,7 @@ class BmSup30MesureMapper {
   }
 
   static BmSup30MesureEntity transformToNewEntityMap(
-      final int idBmSup30,
+      final String idBmSup30,
       final int idCycle,
       double? diametreIni,
       double? diametreMed,
@@ -108,8 +151,8 @@ class BmSup30MesureMapper {
   }
 
   static BmSup30MesureEntity transformToEntityMap(
-      final int idBmSup30Mesure,
-      final int idBmSup30,
+      final String idBmSup30Mesure,
+      final String idBmSup30,
       final int idCycle,
       double? diametreIni,
       double? diametreMed,

@@ -1,3 +1,3 @@
 abstract class DeleteTransectUseCase {
-  Future<void> execute(int id);
+  Future<void> execute(String id);
 }

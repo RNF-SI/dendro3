@@ -146,7 +146,16 @@ class UserDispositifsViewModel
   deleteDispositif(final DispositifInfo dispositifInfo) async {
     try {
       if (dispositifInfo.downloadStatus == DownloadStatus.downloaded) {
+        // Update the status to 'removing' before starting the deletion
+        final removingDispositifInfo =
+            dispositifInfo.copyWith(downloadStatus: DownloadStatus.removing);
+        state = custom_async_state.State.success(
+            state.data!.updateDispositifInfo(removingDispositifInfo));
+
+        // Perform the deletion
         await _deleteDispositifUseCase.execute(dispositifInfo.dispositif.id);
+
+        // Update the status back to 'notDownloaded' after deletion is complete
         final newDispositifInfo = dispositifInfo.copyWith(
             downloadStatus: DownloadStatus.notDownloaded);
         state = custom_async_state.State.success(

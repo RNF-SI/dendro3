@@ -8,7 +8,7 @@ abstract class DisplayableList {
     DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
   });
 
-  getObjectFromId(final int id);
+  getObjectFromId(final String id);
 
   getFirstElementIdOrig();
 
@@ -26,7 +26,7 @@ class EmptyDisplayableList extends DisplayableList {
   }
 
   @override
-  getObjectFromId(final int id) {
+  getObjectFromId(final String id) {
     // Return null or an appropriate default object.
     return null;
   }

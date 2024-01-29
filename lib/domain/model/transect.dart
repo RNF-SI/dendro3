@@ -7,8 +7,8 @@ part 'transect.freezed.dart';
 @freezed
 class Transect with _$Transect implements SaisisableObject {
   const factory Transect({
-    required int idTransect,
-    required int idCyclePlacette,
+    required String idTransect,
+    required String idCyclePlacette,
     required int idTransectOrig,
     required String codeEssence,
     required String refTransect,
@@ -100,6 +100,79 @@ class Transect with _$Transect implements SaisisableObject {
 
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
-    return idTransectOrig == valueMap['idTransectOrig'];
+    return idTransect == valueMap['idTransect'];
+  }
+
+  static bool getDisplayableColumn(String columnName) {
+    return [
+      'idTransect',
+      'idCyclePlacette',
+      // 'idTransectOrig',
+      'codeEssence',
+      'refTransect',
+      // 'distance',
+      // 'orientation',
+      // 'azimutSouche',
+      // 'distanceSouche',
+      'diametre',
+      // 'diametre130',
+      // 'ratioHauteur',
+      'contact',
+      'angle',
+      'chablis',
+      'stadeDurete',
+      'stadeEcorce',
+      'observation',
+    ].contains(columnName);
+  }
+
+  static List<String> changeColumnName(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        // case 'idTransect':
+        //   return 'idTransectOrigine';
+        case 'idCyclePlacette':
+          return 'NumCycle';
+        case 'codeEssence':
+          return 'Ess';
+        case 'diametre':
+          return 'Diam';
+        default:
+          return columnName;
+      }
+    }).toList();
+  }
+
+  static List<String> changeTitleGridNames(List<String> columnNames) {
+    return columnNames.map((columnName) {
+      switch (columnName) {
+        case 'idTransect':
+          return 'idTransectOrigine';
+        case 'idCyclePlacette':
+          return 'NumCycle';
+        case 'codeEssence':
+          return 'Essence';
+        case 'refTransect':
+          return 'Transect';
+        case 'distance':
+          return 'Distance';
+        case 'diametre':
+          return 'Diamètre';
+        case 'contact':
+          return 'Contact';
+        case 'angle':
+          return 'Angle';
+        case 'chablis':
+          return 'Chablis';
+        case 'StadeDurete':
+          return 'Stade Dureté';
+        case 'stadeEcorce':
+          return 'Stade Ecorce';
+        case 'observation':
+          return 'Observation';
+        default:
+          return columnName;
+      }
+    }).toList();
   }
 }

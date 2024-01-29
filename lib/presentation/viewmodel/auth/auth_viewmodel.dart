@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 
 import 'package:dendro3/domain/model/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain/model/authentication.dart';
 
@@ -43,13 +44,24 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
 
   Stream<User?> get authStateChange => controller.stream;
 
-  Future<void> signInWithEmailAndPassword(final String identifiant,
-      final String password, BuildContext context) async {
+  Future<void> signInWithEmailAndPassword(
+    final String identifiant,
+    final String password,
+    BuildContext context,
+  ) async {
     try {
       state = const dendroState.State.loading();
-      await _loginUseCase
-          .execute(identifiant, password)
-          .then((evt) => controller.add(evt));
+      await _loginUseCase.execute(identifiant, password).then((evt) async {
+        controller.add(evt);
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
+          print('Login state saved'); // Added for debugging purposes
+        } catch (e) {
+          print(
+              'Error saving login state: $e'); // Error handling for SharedPreferences
+        }
+      });
     } on DioError catch (e) {
       var errorObj = {};
       var errorText;
@@ -116,6 +128,25 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
         ),
       );
       // state = State.error(e);
+    }
+  }
+
+  // Method to handle user logout
+  Future<void> signOut() async {
+    try {
+      // Clear user data
+      user = null;
+      controller.add(user);
+
+      // Update shared preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', false);
+
+      // Update state
+      state = const dendroState.State.init();
+    } catch (e) {
+      // Handle any exceptions here
+      print('Error during logout: $e');
     }
   }
 }

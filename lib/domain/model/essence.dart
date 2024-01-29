@@ -20,6 +20,6 @@ class Essence with _$Essence {
   const Essence._();
 
   bool essenceFilterByCodeEssence(String filter) {
-    return this.codeEssence.toString().contains(filter);
+    return this.codeEssence.toLowerCase().contains(filter.toLowerCase());
   }
 }

@@ -1,4 +1,6 @@
+import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
@@ -28,9 +30,41 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   }
 
   static Future<BmSup30MesureListEntity> getbmSup30bmsSup30Mesures(
-      Database db, final int bmsSup30Id) async {
-    return await db
-        .query(_tableName, where: 'id_bm_sup_30 = ?', whereArgs: [bmsSup30Id]);
+      Database db, final String bmsSup30Id) async {
+    return await db.query(_tableName,
+        where: 'id_bm_sup_30 = ? AND deleted = 0', whereArgs: [bmsSup30Id]);
+  }
+
+  static Future<Map<String, BmSup30MesureListEntity>>
+      getbmSup30bmsSup30MesuresForDataSync(
+          Database db, final String bmsSup30Id, String lastSyncTime) async {
+    // Fetch newly created BmSup30Mesure records
+    List<BmSup30MesureEntity> created_bmSup30Mesure = await db.query(
+      _tableName,
+      where: 'id_bm_sup_30 = ? AND creation_date > ? AND deleted = 0',
+      whereArgs: [bmsSup30Id, lastSyncTime],
+    );
+
+    // Fetch updated BmSup30Mesure records
+    List<BmSup30MesureEntity> updated_bmSup30Mesure = await db.query(
+      _tableName,
+      where:
+          'id_bm_sup_30 = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+      whereArgs: [bmsSup30Id, lastSyncTime, lastSyncTime],
+    );
+
+    // Fetch deleted BmSup30Mesure records
+    List<BmSup30MesureEntity> deleted_bmSup30Mesure = await db.query(
+      _tableName,
+      where: 'id_bm_sup_30 = ? AND deleted = 1 AND last_update > ?',
+      whereArgs: [bmsSup30Id, lastSyncTime],
+    );
+
+    return {
+      "created": created_bmSup30Mesure,
+      "updated": updated_bmSup30Mesure,
+      "deleted": deleted_bmSup30Mesure,
+    };
   }
 
   @override
@@ -39,18 +73,17 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     final db = await database;
     late final BmSup30Entity bmsup30Entity;
     await db.transaction((txn) async {
-      int? maxId = Sqflite.firstIntValue(await txn
-          .rawQuery('SELECT MAX(id_bm_sup_30_mesure) FROM $_tableName'));
+      String idBmSup30MesureUUID = generateUuid();
+      bmSup30Mesure['id_bm_sup_30_mesure'] = idBmSup30MesureUUID;
 
-      bmSup30Mesure['id_bm_sup_30_mesure'] = maxId! + 1;
       await txn.insert(
         _tableName,
         bmSup30Mesure,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      final results = await txn
-          .query(_tableName, where: '$_columnId = ?', whereArgs: [maxId! + 1]);
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?', whereArgs: [idBmSup30MesureUUID]);
       bmsup30Entity = results.first;
     });
     return bmsup30Entity;
@@ -63,9 +96,13 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     final db = await database;
     late final BmSup30MesureEntity bmSup30MesureEntity;
     await db.transaction((txn) async {
+      var updatedBmSup30Mesure = Map<String, dynamic>.from(bmSup30Mesure)
+        ..['last_update'] =
+            formatDateTime(DateTime.now()); // Add current timestamp
+
       await txn.update(
         _tableName,
-        bmSup30Mesure,
+        updatedBmSup30Mesure,
         where: '$_columnId = ?',
         whereArgs: [bmSup30Mesure['id_bm_sup_30_mesure']],
       );
@@ -90,20 +127,22 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   // }
 
   @override
-  Future<void> deleteBmSup30MesureFromIdBmSup30(final int id) async {
+  Future<void> deleteBmSup30MesureFromIdBmSup30(final String id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: 'id_bm_sup_30 = ?',
       whereArgs: [id],
     );
   }
 
   @override
-  Future<void> deleteBmSup30Mesure(final int id) async {
+  Future<void> deleteBmSup30Mesure(final String id) async {
     final db = await database;
-    await db.delete(
+    await db.update(
       _tableName,
+      {'deleted': 1},
       where: '$_columnId = ?',
       whereArgs: [id],
     );
