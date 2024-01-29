@@ -17,9 +17,9 @@ class RegenerationMapper {
     try {
       return Regeneration(
         idRegeneration: entity['id_regeneration'] ??
-            logAndReturnNull<int>('id_regeneration'),
+            logAndReturnNull<String>('id_regeneration'),
         idCyclePlacette: entity['id_cycle_placette'] ??
-            logAndReturnNull<int>('id_cycle_placette'),
+            logAndReturnNull<String>('id_cycle_placette'),
         sousPlacette:
             entity['sous_placette'] ?? logAndReturnNull<int>('sous_placette'),
         codeEssence:
@@ -47,9 +47,9 @@ class RegenerationMapper {
     try {
       return Regeneration(
         idRegeneration: entity['id_regeneration'] ??
-            logAndReturnNull<int>('id_regeneration'),
+            logAndReturnNull<String>('id_regeneration'),
         idCyclePlacette: entity['id_cycle_placette'] ??
-            logAndReturnNull<int>('id_cycle_placette'),
+            logAndReturnNull<String>('id_cycle_placette'),
         sousPlacette:
             entity['sous_placette'] ?? logAndReturnNull<int>('sous_placette'),
         codeEssence:
@@ -91,7 +91,7 @@ class RegenerationMapper {
   }
 
   static RegenerationEntity transformToNewEntityMap(
-      final int idCyclePlacette,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,
@@ -119,8 +119,8 @@ class RegenerationMapper {
   }
 
   static RegenerationEntity transformToEntityMap(
-      final int idRegeneration,
-      final int idCyclePlacette,
+      final String idRegeneration,
+      final String idCyclePlacette,
       final int sousPlacette,
       final String codeEssence,
       final double recouvrement,

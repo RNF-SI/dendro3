@@ -17,9 +17,9 @@ class BmSup30MesureMapper {
     try {
       return BmSup30Mesure(
         idBmSup30Mesure: entity['id_bm_sup_30_mesure'] ??
-            logAndReturnNull<int>('id_bm_sup_30_mesure'),
+            logAndReturnNull<String>('id_bm_sup_30_mesure'),
         idBmSup30:
-            entity['id_bm_sup_30'] ?? logAndReturnNull<int>('id_bm_sup_30'),
+            entity['id_bm_sup_30'] ?? logAndReturnNull<String>('id_bm_sup_30'),
         idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
         diametreIni: entity['diametre_ini'] as double?,
         diametreMed: entity['diametre_med'] as double?,
@@ -48,9 +48,9 @@ class BmSup30MesureMapper {
     try {
       return BmSup30Mesure(
         idBmSup30Mesure: entity['id_bm_sup_30_mesure'] ??
-            logAndReturnNull<int>('id_bm_sup_30_mesure'),
+            logAndReturnNull<String>('id_bm_sup_30_mesure'),
         idBmSup30:
-            entity['id_bm_sup_30'] ?? logAndReturnNull<int>('id_bm_sup_30'),
+            entity['id_bm_sup_30'] ?? logAndReturnNull<String>('id_bm_sup_30'),
         idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
         diametreIni: entity['diametre_ini'] as double?,
         diametreMed: entity['diametre_med'] as double?,
@@ -120,7 +120,7 @@ class BmSup30MesureMapper {
   }
 
   static BmSup30MesureEntity transformToNewEntityMap(
-      final int idBmSup30,
+      final String idBmSup30,
       final int idCycle,
       double? diametreIni,
       double? diametreMed,
@@ -151,8 +151,8 @@ class BmSup30MesureMapper {
   }
 
   static BmSup30MesureEntity transformToEntityMap(
-      final int idBmSup30Mesure,
-      final int idBmSup30,
+      final String idBmSup30Mesure,
+      final String idBmSup30,
       final int idCycle,
       double? diametreIni,
       double? diametreMed,

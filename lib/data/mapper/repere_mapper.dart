@@ -15,7 +15,7 @@ class RepereMapper {
   static Repere transformFromApiToModel(final Map<String, dynamic> entity) {
     try {
       return Repere(
-        idRepere: entity['id_repere'] ?? logAndReturnNull<int>('id_repere'),
+        idRepere: entity['id_repere'] ?? logAndReturnNull<String>('id_repere'),
         idPlacette:
             entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
         azimut: entity['azimut'] as double?,
@@ -34,7 +34,7 @@ class RepereMapper {
   static Repere transformFromDBToModel(final Map<String, dynamic> entity) {
     try {
       return Repere(
-        idRepere: entity['id_repere'] ?? logAndReturnNull<int>('id_repere'),
+        idRepere: entity['id_repere'] ?? logAndReturnNull<String>('id_repere'),
         idPlacette:
             entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
         azimut: entity['azimut'] as double?,
@@ -82,7 +82,7 @@ class RepereMapper {
   }
 
   static RepereEntity transformToEntityMap(
-    int idRepere,
+    String idRepere,
     int idPlacette,
     double? azimut,
     double? distance,

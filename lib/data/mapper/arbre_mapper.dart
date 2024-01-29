@@ -36,7 +36,7 @@ class ArbreMapper {
   static Arbre transformFromApiToModel(final Map<String, dynamic> entity) {
     try {
       return Arbre(
-        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<String>('id_arbre'),
         idArbreOrig:
             entity['id_arbre_orig'] ?? logAndReturnNull<int>('id_arbre_orig'),
         idPlacette:
@@ -64,7 +64,7 @@ class ArbreMapper {
   static Arbre transformFromDBToModel(final Map<String, dynamic> entity) {
     try {
       return Arbre(
-        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<String>('id_arbre'),
         idArbreOrig:
             entity['id_arbre_orig'] ?? logAndReturnNull<int>('id_arbre_orig'),
         idPlacette:
@@ -126,7 +126,7 @@ class ArbreMapper {
   }
 
   static ArbreEntity transformToEntityMap(
-    final int idArbre,
+    final String idArbre,
     final int idArbreOrig,
     final int idPlacette,
     final String codeEssence,

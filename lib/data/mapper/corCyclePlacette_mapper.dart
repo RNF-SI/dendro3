@@ -46,7 +46,7 @@ class CorCyclePlacetteMapper {
     try {
       return CorCyclePlacette(
         idCyclePlacette: entity['id_cycle_placette'] ??
-            logAndReturnNull<int>('id_cycle_placette'),
+            logAndReturnNull<String>('id_cycle_placette'),
         idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
         idPlacette:
             entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
@@ -84,7 +84,7 @@ class CorCyclePlacetteMapper {
     try {
       return CorCyclePlacette(
         idCyclePlacette: entity['id_cycle_placette'] ??
-            logAndReturnNull<int>('id_cycle_placette'),
+            logAndReturnNull<String>('id_cycle_placette'),
         idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
         idPlacette:
             entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),

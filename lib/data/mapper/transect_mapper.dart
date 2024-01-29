@@ -16,9 +16,9 @@ class TransectMapper {
     try {
       return Transect(
         idTransect:
-            entity['id_transect'] ?? logAndReturnNull<int>('id_transect'),
+            entity['id_transect'] ?? logAndReturnNull<String>('id_transect'),
         idCyclePlacette: entity['id_cycle_placette'] ??
-            logAndReturnNull<int>('id_cycle_placette'),
+            logAndReturnNull<String>('id_cycle_placette'),
         idTransectOrig: entity['id_transect_orig'] ??
             logAndReturnNull<int>('id_transect_orig'),
         codeEssence:
@@ -52,9 +52,9 @@ class TransectMapper {
     try {
       return Transect(
         idTransect:
-            entity['id_transect'] ?? logAndReturnNull<int>('id_transect'),
+            entity['id_transect'] ?? logAndReturnNull<String>('id_transect'),
         idCyclePlacette: entity['id_cycle_placette'] ??
-            logAndReturnNull<int>('id_cycle_placette'),
+            logAndReturnNull<String>('id_cycle_placette'),
         idTransectOrig: entity['id_transect_orig'] ??
             logAndReturnNull<int>('id_transect_orig'),
         codeEssence:
@@ -108,7 +108,7 @@ class TransectMapper {
   }
 
   static TransectEntity transformToNewEntityMap(
-    int idCyclePlacette,
+    String idCyclePlacette,
     String codeEssence,
     String refTransect,
     double? distance,
@@ -182,8 +182,8 @@ class TransectMapper {
   }
 
   static TransectEntity transformToEntityMap(
-    int idTransect,
-    int idCyclePlacette,
+    String idTransect,
+    String idCyclePlacette,
     int idTransectOrig,
     String codeEssence,
     String refTransect,

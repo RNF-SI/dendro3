@@ -19,8 +19,8 @@ class ArbreMesureMapper {
     try {
       return ArbreMesure(
         idArbreMesure: entity['id_arbre_mesure'] ??
-            logAndReturnNull<int>('id_arbre_mesure'),
-        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+            logAndReturnNull<String>('id_arbre_mesure'),
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<String>('id_arbre'),
         idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
         diametre1: entity['diametre1'] as double?,
         diametre2: entity['diametre2'] as double?,
@@ -52,8 +52,8 @@ class ArbreMesureMapper {
     try {
       return ArbreMesure(
         idArbreMesure: entity['id_arbre_mesure'] ??
-            logAndReturnNull<int>('id_arbre_mesure'),
-        idArbre: entity['id_arbre'] ?? logAndReturnNull<int>('id_arbre'),
+            logAndReturnNull<String>('id_arbre_mesure'),
+        idArbre: entity['id_arbre'] ?? logAndReturnNull<String>('id_arbre'),
         idCycle: entity['id_cycle'] ?? logAndReturnNull<int>('id_cycle'),
         diametre1: entity['diametre1'] as double?,
         diametre2: entity['diametre2'] as double?,
@@ -106,7 +106,7 @@ class ArbreMesureMapper {
   }
 
   static ArbreMesureEntity transformToNewEntityMap(
-    final int? idArbre,
+    final String? idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,
@@ -148,8 +148,8 @@ class ArbreMesureMapper {
   }
 
   static ArbreMesureEntity transformToEntityMap(
-    final int? idArbreMesure,
-    final int? idArbre,
+    final String? idArbreMesure,
+    final String? idArbre,
     final int? idCycle,
     double? diametre1,
     double? diametre2,

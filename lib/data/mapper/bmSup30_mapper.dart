@@ -18,7 +18,7 @@ class BmSup30Mapper {
     try {
       return BmSup30(
         idBmSup30:
-            entity['id_bm_sup_30'] ?? logAndReturnNull<int>('id_bm_sup_30'),
+            entity['id_bm_sup_30'] ?? logAndReturnNull<String>('id_bm_sup_30'),
         idBmSup30Orig: entity['id_bm_sup_30_orig'] ??
             logAndReturnNull<int>('id_bm_sup_30_orig'),
         idPlacette:
@@ -49,7 +49,7 @@ class BmSup30Mapper {
     try {
       return BmSup30(
         idBmSup30:
-            entity['id_bm_sup_30'] ?? logAndReturnNull<int>('id_bm_sup_30'),
+            entity['id_bm_sup_30'] ?? logAndReturnNull<String>('id_bm_sup_30'),
         idBmSup30Orig: entity['id_bm_sup_30_orig'] ??
             logAndReturnNull<int>('id_bm_sup_30_orig'),
         idPlacette:
@@ -97,7 +97,7 @@ class BmSup30Mapper {
 
   static BmSup30Entity transformToNewEntityMap(
     final int idPlacette,
-    final int? idArbre,
+    final String? idArbre,
     final String codeEssence,
     final double azimut,
     final double distance,
@@ -136,7 +136,7 @@ class BmSup30Mapper {
   }
 
   static BmSup30Entity transformToEntityMap(
-    final int idBmSup30,
+    final String idBmSup30,
     final int idBmSup30Orig,
     final int idPlacette,
     final int? idArbre,
