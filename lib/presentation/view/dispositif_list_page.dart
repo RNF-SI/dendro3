@@ -10,7 +10,7 @@ class DispositifListPage extends StatelessWidget {
   final _filteredDispositifListProvider = filteredDispositifListProvider;
   final _dispositifListProvider = dispositifListViewModelStateNotifierProvider;
 
-  const DispositifListPage({super.key});
+  DispositifListPage({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -20,7 +20,7 @@ class DispositifListPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const ChipsBarWidget(),
+          ChipsBarWidget(),
           const Divider(height: 2, color: Colors.grey),
           // Expanded(child: _buildDispositifListWidget(context, dispositifList)),
           Consumer(
@@ -150,7 +150,7 @@ class DispositifListPage extends StatelessWidget {
 class ChipsBarWidget extends StatelessWidget {
   final _provider = filterKindViewModelStateNotifierProvider;
 
-  const ChipsBarWidget({super.key});
+  ChipsBarWidget({super.key});
 
   @override
   Widget build(final BuildContext context) {

@@ -10,11 +10,11 @@ class UserDispositifList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userDispositifListProvider = ref.watch(userDispositifListProvider);
+    final userDispositifListProv = ref.watch(userDispositifListProvider);
     final userDispositifList =
         ref.watch(userDispositifListViewModelStateNotifierProvider);
 
-    return userDispositifListProvider.maybeWhen(
+    return userDispositifListProv.maybeWhen(
       success: (data) => _buildDispositifListWidget(context, data),
       error: (_) => const Center(
         child: Text('Uh oh... Something went wrong...',

@@ -1,4 +1,3 @@
-
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
@@ -64,7 +63,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   NomenclatureList? stadeEcorceNomenclatures;
   Future<List<Nomenclature>>? stadeEcorceFuture;
 
-  final Essence? _initialEssence;
+  Essence? _initialEssence;
   Essence? initialEssence;
   Placette placette;
   Cycle cycle;
