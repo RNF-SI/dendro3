@@ -1,9 +1,7 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
-import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bmSup30_list.freezed.dart';

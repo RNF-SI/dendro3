@@ -27,7 +27,7 @@ class HomePage extends ConsumerWidget {
           ),
         ],
       ),
-      body: SafeArea(
+      body: const SafeArea(
         child: UserDispositifList(),
       ),
       // SafeArea(

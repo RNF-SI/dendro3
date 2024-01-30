@@ -2,20 +2,20 @@ import 'package:dendro3/domain/model/corCyclePlacette.dart';
 
 abstract class CorCyclesPlacettesRepository {
   Future<CorCyclePlacette> insertCorCyclePlacette(
-    final int id_cycle,
-    final int id_placette,
-    final DateTime? date_releve,
-    final String? date_intervention,
+    final int idCycle,
+    final int idPlacette,
+    final DateTime? dateReleve,
+    final String? dateIntervention,
     final int? annee,
-    final String? nature_intervention,
-    final String gestion_placette,
-    final int? id_nomenclature_castor,
-    final int? id_nomenclature_frottis,
-    final int? id_nomenclature_boutis,
-    final double? recouv_herbes_basses,
-    final double? recouv_herbes_hautes,
-    final double? recouv_buissons,
-    final double? recouv_arbres,
+    final String? natureIntervention,
+    final String gestionPlacette,
+    final int? idNomenclatureCastor,
+    final int? idNomenclatureFrottis,
+    final int? idNomenclatureBoutis,
+    final double? recouvHerbesBasses,
+    final double? recouvHerbesHautes,
+    final double? recouvBuissons,
+    final double? recouvArbres,
   );
 
   Future<List<String>> getCorCyclePlacetteIdsForPlacette(final int placetteId);

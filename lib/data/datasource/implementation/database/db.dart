@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DB {
-  static final DB _db = new DB._internal();
+  static final DB _db = DB._internal();
   DB._internal();
   static DB get instance => _db;
   static Database? _database;
@@ -22,7 +22,7 @@ class DB {
       onCreate: (db, _) async {
         String script = await rootBundle.loadString("assets/db/db_init.sql");
         List<String> scripts = script.split(";");
-        scripts.forEach((v) {
+        for (var v in scripts) {
           if (v.isNotEmpty) {
             try {
               db.execute(v.trim());
@@ -30,7 +30,7 @@ class DB {
               print(e);
             }
           }
-        });
+        }
       },
       // onConfigure: _onConfigure,
       version: _databaseVersion,

@@ -1,7 +1,6 @@
 import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/mapper/transect_mapper.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/transects_repository.dart';
 
 class TransectsRepositoryImpl implements TransectsRepository {

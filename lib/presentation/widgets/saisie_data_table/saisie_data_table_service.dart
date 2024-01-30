@@ -14,11 +14,8 @@ import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../domain/model/cycle_list.dart';
 
 const columnWidth = 80;
 

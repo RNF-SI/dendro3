@@ -1,10 +1,8 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TransectsDatabaseImpl implements TransectsDatabase {
@@ -36,29 +34,29 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   static Future<Map<String, List<TransectEntity>>>
       getCorCyclePlacetteTransectsForDataSync(Database db,
           final String corCyclePlacetteId, String lastSyncTime) async {
-    var created_transects = await db.query(
+    var createdTransects = await db.query(
       _tableName,
       where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
-    var updated_transects = await db.query(
+    var updatedTransects = await db.query(
       _tableName,
       where:
           'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
-    var deleted_transects = await db.query(
+    var deletedTransects = await db.query(
       _tableName,
       where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
     return {
-      "created": created_transects,
-      "updated": updated_transects,
-      "deleted": deleted_transects,
+      "created": createdTransects,
+      "updated": updatedTransects,
+      "deleted": deletedTransects,
     };
   }
 
@@ -150,5 +148,4 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   //     whereArgs: [id],
   //   );
   // }
-
 }

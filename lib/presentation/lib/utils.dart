@@ -33,7 +33,7 @@ Widget buildLongPropertyTextWidget(String property, dynamic value) {
   return Center(
     child: RichText(
       text: TextSpan(
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: titleFontSize,
           color: Colors.black,
         ),
@@ -41,7 +41,7 @@ Widget buildLongPropertyTextWidget(String property, dynamic value) {
           TextSpan(text: "$property: "),
           TextSpan(
             text: value.toString(),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: fontSize,
               color: Colors.black,
               fontWeight: FontWeight.bold,

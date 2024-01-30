@@ -1,4 +1,3 @@
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

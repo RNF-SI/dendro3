@@ -1,5 +1,4 @@
 import 'package:dendro3/domain/model/arbre.dart';
-import 'package:dendro3/domain/model/arbre_list.dart';
 
 abstract class ArbresRepository {
   Future<Arbre> insertArbre(

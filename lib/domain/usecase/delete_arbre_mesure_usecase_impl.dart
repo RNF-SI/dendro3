@@ -32,12 +32,10 @@ class DeleteArbreMesureUseCaseImpl implements DeleteArbreMesureUseCase {
       idCycle,
       numCycle,
     );
-    if (previousCycleMeasure != null) {
-      // Mise à jour du champ "coupe" de la mesure précédente
-      updatedPreviousCycleMeasure = await arbreMesureRepository
-          .updateLastArbreMesureCoupe(previousCycleMeasure.idArbreMesure, null);
-    }
-
+    // Mise à jour du champ "coupe" de la mesure précédente
+    updatedPreviousCycleMeasure = await arbreMesureRepository
+        .updateLastArbreMesureCoupe(previousCycleMeasure.idArbreMesure, null);
+  
     List<ArbreMesure> updatedMesures = List.from(arbre.arbresMesures!.values);
     // remove from list the element with arbreMesureId
     updatedMesures

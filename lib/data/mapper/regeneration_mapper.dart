@@ -38,7 +38,7 @@ class RegenerationMapper {
     } catch (e) {
       print("Error in Regeneration transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
-      throw e;
+      rethrow;
     }
   }
 
@@ -69,7 +69,7 @@ class RegenerationMapper {
       print("Error in Regeneration transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 

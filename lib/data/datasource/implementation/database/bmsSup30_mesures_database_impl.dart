@@ -1,12 +1,9 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
@@ -39,14 +36,14 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
       getbmSup30bmsSup30MesuresForDataSync(
           Database db, final String bmsSup30Id, String lastSyncTime) async {
     // Fetch newly created BmSup30Mesure records
-    List<BmSup30MesureEntity> created_bmSup30Mesure = await db.query(
+    List<BmSup30MesureEntity> createdBmsup30mesure = await db.query(
       _tableName,
       where: 'id_bm_sup_30 = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
     // Fetch updated BmSup30Mesure records
-    List<BmSup30MesureEntity> updated_bmSup30Mesure = await db.query(
+    List<BmSup30MesureEntity> updatedBmsup30mesure = await db.query(
       _tableName,
       where:
           'id_bm_sup_30 = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
@@ -54,16 +51,16 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     );
 
     // Fetch deleted BmSup30Mesure records
-    List<BmSup30MesureEntity> deleted_bmSup30Mesure = await db.query(
+    List<BmSup30MesureEntity> deletedBmsup30mesure = await db.query(
       _tableName,
       where: 'id_bm_sup_30 = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
     return {
-      "created": created_bmSup30Mesure,
-      "updated": updated_bmSup30Mesure,
-      "deleted": deleted_bmSup30Mesure,
+      "created": createdBmsup30mesure,
+      "updated": updatedBmsup30mesure,
+      "deleted": deletedBmsup30mesure,
     };
   }
 

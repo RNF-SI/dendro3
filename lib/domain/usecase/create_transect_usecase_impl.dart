@@ -1,5 +1,3 @@
-import 'package:dendro3/data/entity/transects_entity.dart';
-import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/repository/transects_repository.dart';
 // import 'package:dendro3/domain/model/transectMesure_list.dart';

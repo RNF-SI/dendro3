@@ -1,9 +1,7 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
-import 'package:dendro3/domain/model/arbreMesure_list.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
-import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_arbre_and_mesure_usecase.dart';
@@ -13,7 +11,6 @@ import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final arbreListProvider = Provider<ArbreList>((ref) {
@@ -64,7 +61,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     // final ArbreList arbreListe
     this._lastSelectedProvider,
     this._displayableListNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   // completeArbre(final Arbre todo) {
   //   final newArbre = todo.copyWith(isCompleted: true);

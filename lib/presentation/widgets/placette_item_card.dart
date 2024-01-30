@@ -1,5 +1,4 @@
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
-import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
@@ -80,13 +79,13 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                               data.idCycle, placette.idPlacette)) {
                     for (var corCyclePlacette
                         in placette.corCyclesPlacettes!.values) {
-                      if (corCyclePlacette.idCycle == data!.idCycle) {
+                      if (corCyclePlacette.idCycle == data.idCycle) {
                         currentCorCyclePlacette = corCyclePlacette;
                         break; // Break the loop once the matching element is found
                       }
                     }
                   } else {
-                    currentCorCyclePlacette = currentCorCyclePlacetteList!
+                    currentCorCyclePlacette = currentCorCyclePlacetteList
                         .getCorCyclePlacetteByIdCycle(data.idCycle);
                   }
 

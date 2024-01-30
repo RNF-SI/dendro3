@@ -1,4 +1,3 @@
-import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ class DisplayableButton extends ConsumerWidget {
   final String text;
   final Function onPressed;
 
-  DisplayableButton({required this.text, required this.onPressed});
+  const DisplayableButton({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,7 +14,7 @@ class DisplayableButton extends ConsumerWidget {
 
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(left: 8.0),
+        padding: const EdgeInsets.only(left: 8.0),
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -24,7 +23,7 @@ class DisplayableButton extends ConsumerWidget {
               },
             ),
             // Reducing padding inside the button
-            padding: MaterialStateProperty.all(EdgeInsets.all(4)),
+            padding: MaterialStateProperty.all(const EdgeInsets.all(4)),
           ),
           onPressed: () {
             onPressed();
@@ -35,7 +34,7 @@ class DisplayableButton extends ConsumerWidget {
                 .scaleDown, // Scales down text size to fit within the button
             child: Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14, // You can adjust the font size
               ),
               maxLines: 1, // Ensures text is in a single line

@@ -1,32 +1,18 @@
-import 'package:dendro3/data/mapper/arbreMesure_mapper.dart';
-import 'package:dendro3/data/mapper/arbre_mapper.dart';
-import 'package:dendro3/data/mapper/bmSup30Mesure_mapper.dart';
-import 'package:dendro3/data/mapper/bmSup30_mapper.dart';
-import 'package:dendro3/data/mapper/corCyclePlacette_mapper.dart';
-import 'package:dendro3/data/mapper/regeneration_mapper.dart';
-import 'package:dendro3/data/mapper/repere_mapper.dart';
-import 'package:dendro3/data/mapper/transect_mapper.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
-import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
-import 'package:dendro3/domain/model/regeneration_list.dart';
 import 'package:dendro3/domain/model/repere.dart';
-import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/presentation/lib/simple_element.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
@@ -34,26 +20,18 @@ import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart'
 import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/primary_grid.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
-import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/presentation/widgets/secondary_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'dart:math' as math;
 import 'package:data_table_2/data_table_2.dart';
 
-import 'package:flutter/scheduler.dart';
 
 class SaisieDataTable extends ConsumerStatefulWidget {
-  SaisieDataTable({
+  const SaisieDataTable({
     super.key,
     required this.placette,
     // required this.itemList,
@@ -92,7 +70,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref
           .watch(cycleSelectedProvider.notifier)
-          .setCycles(widget.dispCycleList!.values);
+          .setCycles(widget.dispCycleList.values);
       ref
           .watch(reducedToggleProvider.notifier)
           .setToggleList([true, false, false]);
@@ -131,7 +109,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     Map<String, int> mapNumCyclePlacetteNumCycle = {};
 
     // create a Map with key idCyclePlacette and value numCycle
-    if (cycleList != null && cycleList.isNotEmpty) {
+    if (cycleList.isNotEmpty) {
       mapNumCyclePlacetteNumCycle = {
         for (CorCyclePlacette corCyclePlacette
             in widget.corCyclePlacetteList.values)
@@ -162,11 +140,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final corCyclePlacetteLocalStorageStatusProvider = ref
         .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
 
-    final _columns = _createColumns(
+    final columns = _createColumns(
       columnNameList,
     );
 
-    final _rows = _createRows(
+    final rows = _createRows(
       sortedCycleRowList,
       items,
       mapIdCycleNumCycle,
@@ -179,8 +157,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         children: [
           Container(
             height: 300,
-            padding: EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.only(right: 12),
+            decoration: const BoxDecoration(
               color: Colors.white,
               // border: Border(),
               // borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -195,19 +173,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     dividerThickness: 1,
                     showCheckboxColumn: false, // Added dividers for clarity
                     minWidth: _extendedList[0] ? null : arrayWidth,
-                    columns: _columns,
-                    rows: _rows,
+                    columns: columns,
+                    rows: rows,
                     dataRowHeight:
                         50, // Uncommented and adjusted for better row visibility
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white, // Consider using theme-based colors
                     ),
-                    headingTextStyle: TextStyle(
+                    headingTextStyle: const TextStyle(
                       color: Colors.black54,
                       fontWeight:
                           FontWeight.bold, // Custom text style for headers
                     ),
-                    dataTextStyle: TextStyle(
+                    dataTextStyle: const TextStyle(
                       color: Colors.black, // Custom text style for data
                     ),
                     // Additional customizations like row color, sorting functionality, etc.
@@ -241,9 +219,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   minWidth: 80.0,
                 ),
                 isSelected: _extendedList,
-                children: <Widget>[Text('Synthese'), Text('Complet')],
+                children: const <Widget>[Text('Synthese'), Text('Complet')],
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Visibility(
                 visible: [0, 1].contains(
                     reducedMesureList.indexWhere((mesure) => mesure == true)),
@@ -311,8 +289,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             ),
           );
         },
-        child: Icon(Icons.add),
         tooltip: 'Ajouter un ${widget.displayTypeState}',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -326,7 +304,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
     // Check if selectedItemDetails is null
     if (selectedItemDetailsCo == null) {
-      return Text("No item selected.");
+      return const Text("No item selected.");
     }
 
     SimpleElement simpleElements = SimpleElement();
@@ -334,8 +312,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     // Extracting the data
     int currentIndex = 0;
-    var allValues = selectedItemDetailsCo!.getAllValuesMapped();
-    allValues.entries.forEach((entry) {
+    var allValues = selectedItemDetailsCo.getAllValuesMapped();
+    for (var entry in allValues.entries) {
       if (entry.key == "arbresMesures" && entry.value is List) {
         mesuresList = entry.value;
         selectedItemDetailsCo as Arbre;
@@ -355,11 +333,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         mesuresList = [];
         simpleElements.addEntry(entry.key, entry.value);
       }
-    });
+    }
 
     return Expanded(
       child: Container(
-        margin: EdgeInsets.all(10), // Marge externe
+        margin: const EdgeInsets.all(10), // Marge externe
         decoration: BoxDecoration(
           color: Colors.grey[200], // Couleur de fond
           borderRadius: BorderRadius.circular(15), // Bords arrondis
@@ -452,8 +430,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             if (mesuresList.isNotEmpty)
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(4),
-                  margin: EdgeInsets.all(5), // Marge externe
+                  padding: const EdgeInsets.all(4),
+                  margin: const EdgeInsets.all(5), // Marge externe
                   decoration: BoxDecoration(
                     color: Colors.grey[400], // Couleur de fond
                     borderRadius: BorderRadius.circular(15), // Bords arrondis
@@ -513,7 +491,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
                       if (!result) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                                 'Cannot delete the only mesure of an arbre.'),
                             duration: Duration(seconds: 3),
@@ -598,13 +576,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         .setSelectedItemDetails(value, widget.displayTypeState);
 
     if (selectedItem is Arbre) {
-      selectedItem as Arbre;
+      selectedItem;
       ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
               .arbresMesures!
               .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
           0;
     } else if (selectedItem is BmSup30) {
-      selectedItem as BmSup30;
+      selectedItem;
       ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
               .bmsSup30Mesures!
               .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
@@ -676,7 +654,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     for (var columnStr in columnTitles) {
       // Check if column should be included based on displayType
       columns.add(DataColumn2(
-        label: Text(columnStr, style: TextStyle(fontSize: 12)),
+        label: Text(columnStr, style: const TextStyle(fontSize: 12)),
         numeric: true,
         onSort: (columnIndex, _) {
           setState(() {
@@ -714,7 +692,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       int selectedIndex = 0;
 
       if (selectedItemDetails != null) {
-        if (selectedItemDetails!.isEqualToMap(value)) {
+        if (selectedItemDetails.isEqualToMap(value)) {
           isSelected = true;
         }
       }
@@ -726,7 +704,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             width: 24, // Adjust the width as needed
             height: 24,
             child: IconButton(
-              padding: EdgeInsets.only(left: 6, right: 30),
+              padding: const EdgeInsets.only(left: 6, right: 30),
               icon: Icon(
                 isSelected
                     ? Icons.radio_button_checked
@@ -751,13 +729,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
           cellList.add(DataCell(Text(
             mapIdCycleNumCycle[val].toString(),
-            style: TextStyle(fontSize: 15),
+            style: const TextStyle(fontSize: 15),
           )));
         } else if (key == "idCyclePlacette" &&
             mapNumCyclePlacetteNumCycle.containsKey(val)) {
           cellList.add(DataCell(Text(
             mapNumCyclePlacetteNumCycle[val].toString(),
-            style: TextStyle(fontSize: 15),
+            style: const TextStyle(fontSize: 15),
           )));
         } else {
           String displayValue;
@@ -772,7 +750,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             DataCell(
               Text(
                 displayValue,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
           );
@@ -832,6 +810,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 15) {
             return Colors.limeAccent;
           }
+          return null;
         }),
       );
     }).toList();
@@ -849,11 +828,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         return Regeneration.changeColumnName(columnList);
       case 'Transects':
         return Transect.changeColumnName(columnList);
-      case 'Reperes':
       case 'Repères':
         return Repere.changeColumnName(columnList);
       default:
-        throw ArgumentError('Unknown type: ${type}');
+        throw ArgumentError('Unknown type: $type');
     }
   }
 
@@ -941,12 +919,12 @@ Cycle? getCycleFromType(String formType, CycleList dispCycleList,
     [SaisisableObject? selectedItemMesureDetails]) {
   if (formType == 'edit') {
     if (selectedItemMesureDetails is ArbreMesure) {
-      return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+      return dispCycleList.findCycleById(selectedItemMesureDetails.idCycle);
     } else if (selectedItemMesureDetails is BmSup30Mesure) {
-      return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+      return dispCycleList.findCycleById(selectedItemMesureDetails.idCycle);
     } else if (selectedItemMesureDetails is CorCyclePlacette) {
       CorCyclePlacette aaa = selectedItemMesureDetails as CorCyclePlacette;
-      return dispCycleList.findCycleById(aaa!.idCycle);
+      return dispCycleList.findCycleById(aaa.idCycle);
     } else {
       return null;
     }

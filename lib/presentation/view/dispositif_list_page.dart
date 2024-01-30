@@ -5,11 +5,12 @@ import 'package:dendro3/presentation/viewmodel/dispositiflist/filter_kind_viewmo
 import 'package:dendro3/presentation/viewmodel/dispositiflist/dispositif_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class DispositifListPage extends StatelessWidget {
   final _filteredDispositifListProvider = filteredDispositifListProvider;
   final _dispositifListProvider = dispositifListViewModelStateNotifierProvider;
+
+  const DispositifListPage({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -19,7 +20,7 @@ class DispositifListPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ChipsBarWidget(),
+          const ChipsBarWidget(),
           const Divider(height: 2, color: Colors.grey),
           // Expanded(child: _buildDispositifListWidget(context, dispositifList)),
           Consumer(
@@ -76,7 +77,7 @@ class DispositifListPage extends StatelessWidget {
                   children: [
                     Text(
                       dispositif.name,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       overflow: TextOverflow.ellipsis,
                     ),
                     // Text(
@@ -86,14 +87,14 @@ class DispositifListPage extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       dispositif.idOrganisme.toString(),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       dispositif.alluvial
                           ? 'Ce dispositif est alluvial'
                           : "Ce dispositif n'est pas alluvial",
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -148,6 +149,8 @@ class DispositifListPage extends StatelessWidget {
 
 class ChipsBarWidget extends StatelessWidget {
   final _provider = filterKindViewModelStateNotifierProvider;
+
+  const ChipsBarWidget({super.key});
 
   @override
   Widget build(final BuildContext context) {

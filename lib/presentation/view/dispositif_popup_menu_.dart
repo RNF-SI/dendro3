@@ -12,11 +12,11 @@ class DispositifPopUpMenu extends ConsumerWidget {
       position: PopupMenuPosition.under,
       itemBuilder: (context) => [
         // popupmenu item 1
-        PopupMenuItem(
+        const PopupMenuItem(
           // value: 1,
           // row has two child icon and text.
           child: Row(
-            children: const [
+            children: [
               Icon(Icons.star),
               SizedBox(
                   // sized box with width 10
@@ -27,11 +27,11 @@ class DispositifPopUpMenu extends ConsumerWidget {
           ),
         ),
         // popupmenu item 2
-        PopupMenuItem(
+        const PopupMenuItem(
           // value: 2,
           // row has two child icon and text
           child: Row(
-            children: const [
+            children: [
               Icon(Icons.chrome_reader_mode),
               SizedBox(
                   // sized box with width 10

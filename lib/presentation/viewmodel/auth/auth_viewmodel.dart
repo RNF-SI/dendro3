@@ -7,13 +7,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 
 import 'package:dendro3/domain/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../domain/model/authentication.dart';
 
 // Pour le Checker
 final authStateProvider = StreamProvider<User?>((ref) {
@@ -28,8 +26,8 @@ final authenticationViewModelProvider =
 });
 
 class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
-  var _email = '';
-  var _password = '';
+  final _email = '';
+  final _password = '';
 
   User? user;
 
@@ -64,7 +62,7 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
       });
     } on DioError catch (e) {
       var errorObj = {};
-      var errorText;
+      String errorText;
       if (e.response != null) {
         errorObj['data'] = e.response!.data;
         errorObj['headers'] = e.response!.headers;
@@ -87,13 +85,13 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
               itemCount: errorObj.length,
               itemBuilder: (BuildContext context, int index) {
                 String key = errorObj.keys.elementAt(index);
-                return new Column(
+                return Column(
                   children: <Widget>[
-                    new ListTile(
-                      title: new Text("$key"),
-                      subtitle: new Text("${errorObj[key]}"),
+                    ListTile(
+                      title: Text(key),
+                      subtitle: Text("${errorObj[key]}"),
                     ),
-                    new Divider(
+                    const Divider(
                       height: 2.0,
                     ),
                   ],

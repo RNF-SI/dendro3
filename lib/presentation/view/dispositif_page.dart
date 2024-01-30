@@ -1,21 +1,13 @@
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
-import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
-import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
-import 'package:dendro3/presentation/view/placette_page/placette_page.dart';
-import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:dendro3/presentation/widgets/chiffres_widget.dart';
 import 'package:dendro3/presentation/widgets/placette_item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
-import 'package:dendro3/presentation/lib/utils.dart';
 
 class DispositifPage extends ConsumerWidget {
   DispositifPage({
@@ -44,6 +36,11 @@ class DispositifPage extends ConsumerWidget {
             PopupMenuButton<String>(
               onSelected: (value) async {
                 switch (value) {
+                  case 'export_disp':
+                    return await ref
+                        .read(
+                            dispositifViewModelProvider(dispositifId).notifier)
+                        .exportDispositifDataOnStagingDatabase(dispositifId);
                   case 'start_new_cycle':
                     return showNewCycleDialog(context, ref, dispositifId);
                   case 'open_remove_dialog':
@@ -54,10 +51,31 @@ class DispositifPage extends ConsumerWidget {
                 }
               },
               itemBuilder: (context) => [
-                PopupMenuItem(
+                const PopupMenuItem(
+                  value: 'export_disp',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.cloud_upload,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(
+                        // sized box with width 10
+                        width: 10,
+                      ),
+                      Text(
+                        "Exporter le dispositif",
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const PopupMenuItem(
                   value: 'start_new_cycle',
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.onetwothree, color: Colors.green),
                       SizedBox(
                         // sized box with width 10
@@ -72,10 +90,10 @@ class DispositifPage extends ConsumerWidget {
                     ],
                   ),
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: 'open_remove_dialog',
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.delete, color: Colors.red),
                       SizedBox(
                         // sized box with width 10
@@ -206,7 +224,7 @@ showNewCycleDialog(
       await ref
           .read(dispositifViewModelProvider(dispositifId).notifier)
           .actualiserCyclesDispositif(
-              context, () => {Navigator.of(context).pop()}, dispositifId);
+              context, () => Navigator.of(context).pop(), dispositifId);
       // context.go("/home");
     },
   );
@@ -251,11 +269,11 @@ List<Widget> __buildAsyncPages(
   WidgetRef ref,
   int dispositifId,
 ) {
-  final _viewModel = ref.watch(dispositifViewModelProvider(dispositifId));
+  final viewModel = ref.watch(dispositifViewModelProvider(dispositifId));
 
   return [
-    __buildAsyncPlacetteListWidget(context, ref, _viewModel),
-    __buildAsyncCycleInfoWidget(context, ref, _viewModel),
+    __buildAsyncPlacetteListWidget(context, ref, viewModel),
+    __buildAsyncCycleInfoWidget(context, ref, viewModel),
   ];
 }
 

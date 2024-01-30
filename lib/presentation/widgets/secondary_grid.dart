@@ -17,7 +17,7 @@ class SecondaryGrid extends StatefulWidget {
   final int currentIndex;
   final String displayTypeState;
 
-  SecondaryGrid({
+  const SecondaryGrid({
     Key? key,
     required this.mesuresList,
     required this.onItemSelected,
@@ -47,7 +47,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
     currentIndex = widget.currentIndex;
     if (widget.mesuresList.isEmpty) {
-      return SizedBox.shrink(); // Return an empty widget if the list is empty
+      return const SizedBox.shrink(); // Return an empty widget if the list is empty
     }
 
     var maxNumberCyclePlacette = widget.mapIdCycleNumCycle.isNotEmpty
@@ -99,7 +99,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       itemBuilder: (context, index) {
         if (index == widget.mesuresList.length) {
           if (widget.mapIdCycleNumCycle.isEmpty) {
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
 
           // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
@@ -112,8 +112,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               child: Container(
                 width: 200, // Same width as other items
                 height: 120,
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                child: Card(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: const Card(
                   color: Colors.greenAccent, // Different color to distinguish
                   child: Center(
                     child: Icon(Icons.add,
@@ -123,7 +123,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               ),
             );
           } else {
-            return SizedBox
+            return const SizedBox
                 .shrink(); // Return an empty widget for non-last cycles
           }
         }
@@ -176,7 +176,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         return Container(
           width: 300,
           height: 120, // Define the width for each item
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           child: Card(
             child: Column(
               children: [
@@ -184,39 +184,39 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () {
                         widget.onItemMesureUpdated(index);
                       },
                       iconSize: 18, // Reduced icon size
-                      padding: EdgeInsets.all(4), // Reduced padding
-                      constraints: BoxConstraints(),
+                      padding: const EdgeInsets.all(4), // Reduced padding
+                      constraints: const BoxConstraints(),
                     ),
                     // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
                     // ou bien si il y a plus de 1 mesure de cet arbre
                     if (maxNumberCyclePlacette == currentItem['numCycle'] &&
                         widget.mesuresList.length > 1)
                       IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           // Show confirmation dialog
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Confirmer la suppression'),
-                                content: Text(
+                                title: const Text('Confirmer la suppression'),
+                                content: const Text(
                                     'Etes vous sûr de vouloir supprimer cet élément?'),
                                 actions: <Widget>[
                                   TextButton(
-                                    child: Text('Annuler'),
+                                    child: const Text('Annuler'),
                                     onPressed: () {
                                       // Close the dialog
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   TextButton(
-                                    child: Text('Supprimer',
+                                    child: const Text('Supprimer',
                                         style: TextStyle(color: Colors.red)),
                                     onPressed: () {
                                       // Close the dialog
@@ -232,8 +232,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           );
                         },
                         iconSize: 18, // Reduced icon size
-                        padding: EdgeInsets.all(4), // Reduced padding
-                        constraints: BoxConstraints(),
+                        padding: const EdgeInsets.all(4), // Reduced padding
+                        constraints: const BoxConstraints(),
                       ),
                     // IconButton(
                     //   icon: Icon(Icons.add, color: Colors.green),
@@ -248,13 +248,13 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
 
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics:
-                        NeverScrollableScrollPhysics(), // to disable GridView's scrolling
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4, // Number of columns in the grid
                       childAspectRatio: 2, // Aspect ratio of each grid cell
                     ),
@@ -284,7 +284,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           Flexible(
                             child: Text(
                               "$titleName:",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 11),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -292,7 +292,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           Flexible(
                             child: Text(
                               displayValue,
-                              style: TextStyle(fontSize: 15),
+                              style: const TextStyle(fontSize: 15),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -353,7 +353,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       case 'BmsSup30':
         return BmSup30.changeTitleGridNames(columnList);
       default:
-        throw ArgumentError('Unknown type: ${type}');
+        throw ArgumentError('Unknown type: $type');
     }
   }
 }

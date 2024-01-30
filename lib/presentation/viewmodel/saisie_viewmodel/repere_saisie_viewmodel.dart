@@ -1,14 +1,6 @@
-import 'dart:ffi';
 
-import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
-import 'package:dendro3/domain/model/essence.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/repere.dart';
-import 'package:dendro3/domain/model/cycle.dart';
-import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
@@ -16,12 +8,6 @@ import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_vi
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
-import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
-import 'package:dendro3/presentation/lib/form_config/field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 //TODO: à clean et revoir lorsque ce sera fini
 
 final repereSaisieViewModelProvider = Provider.autoDispose
@@ -86,7 +72,7 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
       _isNewRepere = true;
     } else {
       _idRepere = repere!.idRepere;
-      _idPlacette = repere!.idPlacette;
+      _idPlacette = repere.idPlacette;
       _azimut = repere.azimut;
       _distance = repere.distance;
       _diametre = repere.diametre;

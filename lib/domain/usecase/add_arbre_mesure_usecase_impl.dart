@@ -1,15 +1,9 @@
-import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
-import 'package:dendro3/domain/model/essence.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
-import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
-import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 
 class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
   final ArbresRepository _arbreRepository;
@@ -45,13 +39,11 @@ class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
       // Récupération de la mesure précédente grace au numCycle
       ArbreMesure previousCycleMeasure = await _arbreMesureRepository
           .getPreviousCycleMeasure(arbre.idArbre, idCycle, numCycle);
-      if (previousCycleMeasure != null) {
-        // Mise à jour du champ "coupe" de la mesure précédente
-        updatedPreviousCycleMeasure =
-            await _arbreMesureRepository.updateLastArbreMesureCoupe(
-                previousCycleMeasure.idArbreMesure, coupe);
-      }
-    }
+      // Mise à jour du champ "coupe" de la mesure précédente
+      updatedPreviousCycleMeasure =
+          await _arbreMesureRepository.updateLastArbreMesureCoupe(
+              previousCycleMeasure.idArbreMesure, coupe);
+        }
 
     ArbreMesure arbreMesure = await _arbreMesureRepository.insertArbreMesure(
       arbre.idArbre,

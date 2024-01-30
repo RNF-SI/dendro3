@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
@@ -7,18 +6,13 @@ import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/nomenclature.dart';
 import 'package:dendro3/domain/model/nomenclature_list.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:dendro3/domain/model/cycle.dart';
-import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/transect_id.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
-import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,8 +20,6 @@ import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart'
 import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
-import 'package:dendro3/presentation/lib/form_config/field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 //TODO: à clean et revoir lorsque ce sera fini
 
 final transectSaisieViewModelProvider = Provider.autoDispose
@@ -311,9 +303,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
-        validator: (dynamic? text, formData) => validateCodeEssence(),
+        validator: (dynamic text, formData) => validateCodeEssence(),
         futureVariable: essenceFuture,
       ),
       // TextFieldConfig(
@@ -348,7 +340,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'Diametre',
         fieldRequired: true,
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
@@ -458,9 +450,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
-        validator: (dynamic? text, formData) {
+        validator: (dynamic text, formData) {
           if (text == null) {
             return 'Le champ Stade Durete est nécessaire.';
           }
@@ -485,9 +477,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
-        validator: (dynamic? text, formData) {
+        validator: (dynamic text, formData) {
           if (text == null) {
             return 'Le champ Stade Ecorce est nécessaire.';
           }
@@ -563,7 +555,8 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
   String? validateCodeEssence() {
     if (_codeEssence == '') {
       return 'Le champ code Essence est nécessaire.';
-    } else
+    } else {
       return null;
+    }
   }
 }

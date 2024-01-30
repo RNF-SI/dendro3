@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
@@ -9,8 +8,6 @@ import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //TODO: à clean et revoir lorsque ce sera fini
@@ -109,6 +106,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
     return '';
   }
 
+  @override
   Future<String> updateObject() async {
     return '';
   }

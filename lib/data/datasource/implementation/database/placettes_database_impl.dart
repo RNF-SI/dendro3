@@ -2,17 +2,13 @@ import 'package:dendro3/data/datasource/implementation/database/arbres_database_
 import 'package:dendro3/data/datasource/implementation/database/bmsSup30_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/corCyclesPlacettes_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
-import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
 import 'package:dendro3/data/entity/reperes_entity.dart';
-import 'package:dendro3/data/mapper/placette_mapper.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PlacettesDatabaseImpl implements PlacettesDatabase {

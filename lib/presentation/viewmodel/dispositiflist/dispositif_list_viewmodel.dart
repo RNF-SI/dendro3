@@ -1,5 +1,4 @@
 import 'package:dendro3/domain/domain_module.dart';
-import 'package:dendro3/domain/model/dispositif.dart';
 // import 'package:dendro3/domain/model/dispositif_id.dart';
 import 'package:dendro3/domain/model/dispositif_list.dart';
 // import 'package:dendro3/domain/usecase/create_dispositif_usecase.dart';

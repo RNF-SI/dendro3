@@ -1,9 +1,8 @@
-import 'dart:ui';
 
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
-import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
+import 'package:dendro3/domain/usecase/export_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
@@ -34,6 +33,7 @@ final dispositifViewModelProvider = StateNotifierProvider.autoDispose
     dispositifId,
     ref.watch(getDispositifUseCaseProvider),
     ref.watch(actualiserCyclesDispositifUseCaseProvider),
+    ref.watch(exportDispositifDataUseCaseProvider),
   );
 });
 
@@ -41,12 +41,14 @@ class DispositifViewModel
     extends StateNotifier<custom_async_state.State<Dispositif>> {
   final GetDispositifUseCase _getDispositifUseCase;
   final ActualiserCyclesDispositifUseCase _actualiserCyclesDispositifUseCase;
+  final ExportDispositifDataUseCase _exportDispositifDataUseCase;
 
   DispositifViewModel(
     this.ref,
     int dispositifId,
     this._getDispositifUseCase,
     this._actualiserCyclesDispositifUseCase,
+    this._exportDispositifDataUseCase,
   ) : super(const custom_async_state.State.init()) {
     _init(dispositifId);
   }
@@ -88,6 +90,18 @@ class DispositifViewModel
       await _actualiserCyclesDispositifUseCase.execute(dispositifId);
       await _init(dispositifId);
       onSuccess.call();
+    } on Exception catch (e) {
+      state = custom_async_state.State.error(e);
+    } catch (e) {
+      print(e);
+      state = custom_async_state.State.error(Exception(e));
+    }
+  }
+
+  exportDispositifDataOnStagingDatabase(int dispositifId) async {
+    try {
+      await _exportDispositifDataUseCase.execute(dispositifId);
+      // onSuccess.call();
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);
     } catch (e) {

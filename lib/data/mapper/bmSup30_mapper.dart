@@ -2,7 +2,6 @@ import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/data/mapper/bmSup30Mesure_list_mapper.dart';
 import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
-import 'package:dendro3/domain/model/bmSup30_list.dart';
 
 class BmSup30Mapper {
   // static BmSup30 transformToModel(final BmSup30Entity entity) {
@@ -41,7 +40,7 @@ class BmSup30Mapper {
       print("Error in BmSup30 transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -72,7 +71,7 @@ class BmSup30Mapper {
       print("Error in BmSup30 transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 

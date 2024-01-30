@@ -1,7 +1,6 @@
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
-import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

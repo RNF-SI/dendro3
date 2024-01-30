@@ -1,6 +1,5 @@
 import 'package:dendro3/data/repository/local_storage_repository_impl.dart';
 import 'package:dendro3/presentation/view/auth_checker.dart';
-import 'package:dendro3/presentation/view/dispositif_page.dart';
 import 'package:dendro3/presentation/view/home_page.dart';
 import 'package:dendro3/presentation/view/login_page.dart';
 import 'package:dendro3/presentation/view/user_dispositif_list.dart';
@@ -49,13 +48,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorageRepositoryImpl.init();
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MainApp(),
     ),
   );
 }
 
 class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

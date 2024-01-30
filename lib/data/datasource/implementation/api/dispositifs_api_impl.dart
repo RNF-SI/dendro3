@@ -1,16 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dendro3/core/error/failure.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 
-// const String apiBase = "http://10.0.2.2:8000";
-const String apiBase = "http://192.168.1.64:8000";
+const String apiBase = "http://10.0.2.2:8000";
+// const String apiBase = "http://192.168.1.64:8000";
 
 class DispositifsApiImpl implements DispositifsApi {
   @override
@@ -45,7 +41,7 @@ class DispositifsApiImpl implements DispositifsApi {
           message: err.response?.statusMessage ?? 'Something went wrong!');
     } on SocketException catch (err) {
       print(err);
-      throw Failure(message: 'Please check your connection.');
+      throw const Failure(message: 'Please check your connection.');
     }
   }
 
@@ -56,5 +52,23 @@ class DispositifsApiImpl implements DispositifsApi {
     DispositifEntity dispEnt = {};
     response.data.forEach((k, v) => {dispEnt[k] = v});
     return dispEnt;
+  }
+
+  @override
+  Future<void> exportDispositifData(DispositifEntity data) async {
+    try {
+      final url = Uri.parse("$apiBase/psdrf/export_dispositif_from_dendro3");
+      final response = await Dio()
+          .post("$apiBase/psdrf/export_dispositif_from_dendro3", data: data);
+      if (response.statusCode != 200) {
+        throw Failure(message: 'Failed to export data: $response');
+      }
+    } on SocketException catch (err) {
+      throw Failure(message: 'Please check your connection. Error: $err');
+    } on DioError catch (err) {
+      throw Failure(
+          message:
+              'Failed to export data. Error: ${err.response?.statusMessage}');
+    }
   }
 }

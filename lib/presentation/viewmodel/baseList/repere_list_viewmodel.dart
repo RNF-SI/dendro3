@@ -4,7 +4,6 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:dendro3/domain/usecase/create_repere_usecase.dart';
 import 'package:dendro3/domain/usecase/update_repere_usecase.dart';
-import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
@@ -53,7 +52,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
     // final BmSup30List bmsup30Liste
     this._lastSelectedProvider,
     this._displayableListNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   void setRepereList(RepereList repereList) {
     state = State.success(repereList);

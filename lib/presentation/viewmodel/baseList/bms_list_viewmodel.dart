@@ -11,7 +11,6 @@ import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final bmSup30ListProvider = Provider<BmSup30List>((ref) {
@@ -62,7 +61,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     // final BmSup30List bmsup30Liste
     this._lastSelectedProvider,
     this._displayableListNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   // completeBmSup30(final BmSup30 todo) {
   //   final newBmSup30 = todo.copyWith(isCompleted: true);

@@ -1,21 +1,12 @@
-import 'package:dendro3/domain/model/arbre.dart';
-import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
-import 'package:dendro3/domain/model/cycle_list.dart';
-import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
-import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
-import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/arbre_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/bmSup30_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/transect_saisie_viewmodel.dart';
@@ -23,14 +14,8 @@ import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/regeneration_sai
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/repere_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/cor_cycle_placette_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'dart:math' as math;
-import 'package:data_table_2/data_table_2.dart';
-import 'package:numberpicker/numberpicker.dart';
 // import 'package:numberpicker/numberpickerdialog.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:date_field/date_field.dart';
@@ -47,7 +32,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final String formType;
   final String? previousCycleCoupe;
 
-  FormSaisiePlacettePage({
+  const FormSaisiePlacettePage({
     Key? key,
     required this.formType,
     required this.type,
@@ -95,7 +80,7 @@ class FormSaisiePlacettePageState
   int stadeD = 2;
   // void updateDistanceWarning() {
   //   if(distanceController.value!=null &&){
-  late String _selectedValue = '1';
+  late final String _selectedValue = '1';
   List<String> listOfValue = ['1', '2', '3', '4', '5'];
 
   Map<String, dynamic> formData = {};
@@ -124,7 +109,7 @@ class FormSaisiePlacettePageState
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   _errorMessage!,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
             _buildFormWidget(),
@@ -133,7 +118,7 @@ class FormSaisiePlacettePageState
         // ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         child: ElevatedButton(
           onPressed: () async {
             final currentState = _formKey.currentState;
@@ -170,7 +155,7 @@ class FormSaisiePlacettePageState
           initialValue: field.initialValue,
           enabled: field.isEditable,
           validator: (value) {
-            return field.validator!(value, formData);
+            return field.validator(value, formData);
           },
           onChanged: (value) {
             setState(() {
@@ -178,7 +163,7 @@ class FormSaisiePlacettePageState
               if (field.fieldName == 'Diametre1') {
                 if (value != Null &&
                     value != '' &&
-                    double.parse(value!) <= 30) {
+                    double.parse(value) <= 30) {
                   formData['Diametre2'] = Null;
                 }
               }
@@ -204,15 +189,15 @@ class FormSaisiePlacettePageState
             future: field.futureVariable ?? Future.value([]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show loading indicator
+                return const CircularProgressIndicator(); // Show loading indicator
               } else if (snapshot.hasError) {
-                return Text("Error loading essences"); // Handle error state
+                return const Text("Error loading essences"); // Handle error state
               } else {
                 return DropdownSearch<dynamic>(
-                  popupProps: PopupProps.menu(
+                  popupProps: const PopupProps.menu(
                     showSearchBox: true,
                   ),
-                  clearButtonProps: ClearButtonProps(
+                  clearButtonProps: const ClearButtonProps(
                     color: Colors.red,
                     icon: Icon(Icons.close),
                   ),
@@ -237,7 +222,7 @@ class FormSaisiePlacettePageState
                     });
                   },
                   validator: (value) {
-                    return field.validator!(value, formData);
+                    return field.validator(value, formData);
                   },
                 );
               }
@@ -248,17 +233,17 @@ class FormSaisiePlacettePageState
             future: field.futureVariable ?? Future.value([]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show loading indicator
+                return const CircularProgressIndicator(); // Show loading indicator
               } else if (snapshot.hasError) {
-                return Text("Error loading essences"); // Handle error state
+                return const Text("Error loading essences"); // Handle error state
               } else {
                 _selectedDropdownItems = field.selectedItems!();
                 return DropdownSearch<dynamic>.multiSelection(
                     // key: ValueKey(_selectedDropdownItems!.length),
-                    popupProps: PopupPropsMultiSelection.menu(
+                    popupProps: const PopupPropsMultiSelection.menu(
                       showSearchBox: true,
                     ),
-                    clearButtonProps: ClearButtonProps(
+                    clearButtonProps: const ClearButtonProps(
                       color: Color.fromARGB(255, 104, 47, 43),
                       icon: Icon(Icons.close),
                     ),
@@ -286,7 +271,7 @@ class FormSaisiePlacettePageState
                       });
                     },
                     validator: (value) {
-                      return field.validator!(value, formData);
+                      return field.validator(value, formData);
                     });
               }
             });
@@ -372,7 +357,7 @@ class FormSaisiePlacettePageState
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
                   field.importantMessage!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11, // Taille de police plus petite
                     color: Colors.red, // Texte en rouge
                   ),
@@ -412,8 +397,8 @@ class FormSaisiePlacettePageState
                         ),
                       if (field.fieldInfo != '')
                         IconButton(
-                          padding: EdgeInsets.only(left: 0.0, right: 0.0),
-                          constraints: BoxConstraints(),
+                          padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+                          constraints: const BoxConstraints(),
                           icon: const Icon(
                             Icons.info_outline,
                             color: Colors.grey,
@@ -424,14 +409,14 @@ class FormSaisiePlacettePageState
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text('Information'),
+                                  title: const Text('Information'),
                                   content: Text(field.fieldInfo),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: Text('OK'),
+                                      child: const Text('OK'),
                                     ),
                                   ],
                                 );
@@ -513,7 +498,7 @@ class FormSaisiePlacettePageState
 }
 
 class CheckboxFormField extends FormField<bool> {
-  CheckboxFormField({
+  CheckboxFormField({super.key, 
     Widget? title,
     required FormFieldSetter<bool> onSaved,
     FormFieldValidator<bool>? validator,
@@ -540,7 +525,7 @@ class CheckboxFormField extends FormField<bool> {
                     ? Builder(
                         builder: (BuildContext context) => Text(
                           state.errorText ?? '',
-                          style: TextStyle(color: Theme.of(context).errorColor),
+                          style: TextStyle(color: Theme.of(context).colorScheme.error),
                         ),
                       )
                     : null,

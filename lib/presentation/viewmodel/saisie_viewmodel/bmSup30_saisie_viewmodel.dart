@@ -1,6 +1,4 @@
-import 'dart:ffi';
 
-import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
@@ -12,24 +10,18 @@ import 'package:dendro3/domain/model/nomenclature.dart';
 import 'package:dendro3/domain/model/nomenclature_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
-import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart';
 // import 'package:dendro3/presentation/viewmodel/baseList/bmSup30_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:dendro3/presentation/state/state.dart';
 
 //TODO: à clean et revoir lorsque ce sera fini
 
@@ -72,8 +64,8 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   NomenclatureList? stadeEcorceNomenclatures;
   Future<List<Nomenclature>>? stadeEcorceFuture;
 
-  Essence? _initialEssence = null;
-  Essence? initialEssence = null;
+  final Essence? _initialEssence;
+  Essence? initialEssence;
   Placette placette;
   Cycle cycle;
 
@@ -92,7 +84,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   double? _azimutSouche;
   double? _distanceSouche;
   var _observation = '';
-  var _isNewBmSup30 = false;
+  final _isNewBmSup30 = false;
 
   // late BmSup30MesureId idBmSup30Mesure='';
   // var _idBmSup30 = '';
@@ -195,8 +187,8 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     } else if (formType == 'edit') {
       // Init ArbreInfos
       _idBmSup30 = bmsup30!.idBmSup30;
-      _idBmSup30Orig = bmsup30!.idBmSup30Orig;
-      _idArbre = bmsup30!.idArbre;
+      _idBmSup30Orig = bmsup30.idBmSup30Orig;
+      _idArbre = bmsup30.idArbre;
       _codeEssence = bmsup30.codeEssence;
       _azimut = bmsup30.azimut;
       _distance = bmsup30.distance;
@@ -205,7 +197,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     } else if (formType == 'newMesure') {
       // Init ArbreInfos
       _idBmSup30 = bmsup30!.idBmSup30;
-      _idArbre = bmsup30!.idArbre;
+      _idArbre = bmsup30.idArbre;
       _codeEssence = bmsup30.codeEssence;
       _azimut = bmsup30.azimut;
       _distance = bmsup30.distance;
@@ -226,10 +218,10 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       _diametreIni = bmsup30Mesure.diametreIni;
       _diametreMed = bmsup30Mesure.diametreMed;
       _diametreFin = bmsup30Mesure.diametreFin;
-      _longueur = bmsup30Mesure.longueur!;
+      _longueur = bmsup30Mesure.longueur;
       _ratioHauteur = bmsup30Mesure.ratioHauteur!;
       _contact = bmsup30Mesure.contact;
-      _chablis = bmsup30Mesure.chablis!;
+      _chablis = bmsup30Mesure.chablis;
       _stadeDurete = bmsup30Mesure.stadeDurete;
       _stadeEcorce = bmsup30Mesure.stadeEcorce;
       // _observation = bmsup30Mesure.observation!;
@@ -238,6 +230,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
+  @override
   Future<String> createObject() async {
     if (formType == 'add') {
       _bmsup30ListViewModel.addItem({
@@ -285,6 +278,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     return '';
   }
 
+  @override
   Future<String> updateObject() async {
     _bmsup30ListViewModel.updateItem(
       {
@@ -427,8 +421,9 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
   String? validateCodeEssence() {
     if (_codeEssence == '') {
       return 'Le champ code Essence est nécessaire.';
-    } else
+    } else {
       return null;
+    }
   }
 
   String? validateAzimut() {
@@ -506,10 +501,10 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
         futureVariable: essenceFuture,
-        validator: (dynamic? text, formData) => validateCodeEssence(),
+        validator: (dynamic text, formData) => validateCodeEssence(),
       ),
       TextFieldConfig(
         fieldName: 'Azimut',
@@ -587,7 +582,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         fieldRequired: true,
         fieldUnit: 'm',
         initialValue: _longueur != null ? _longueur.toString() : '',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
@@ -608,7 +603,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
           fieldName: 'DiametreIni',
           fieldUnit: 'cm',
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
             DecimalTextInputFormatter(decimalRange: 1),
@@ -634,7 +629,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'DiametreMed',
         fieldUnit: 'cm',
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
@@ -657,7 +652,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
           fieldName: 'DiametreFin',
           fieldUnit: 'cm',
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
             DecimalTextInputFormatter(decimalRange: 1),
@@ -709,7 +704,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
         fieldUnit: '%',
         initialValue: initialContactValue(),
         fieldRequired: true,
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
@@ -747,7 +742,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
         validator: (value, formData) {
           if ((value == null || value == '')) {
@@ -777,7 +772,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           return true;
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
         validator: (value, formData) {
           if ((value == null || value == '')) {

@@ -6,8 +6,6 @@ import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @immutable
@@ -68,15 +66,15 @@ class DownloadButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _controller = useAnimationController(duration: transitionDuration);
-    _controller.addStatusListener((status) {
+    final controller = useAnimationController(duration: transitionDuration);
+    controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _controller.reverse();
+        controller.reverse();
       }
     });
 
     return AnimatedBuilder(
-        animation: _controller,
+        animation: controller,
         builder: (context, child) {
           return GestureDetector(
             onTap: () {
@@ -171,7 +169,7 @@ class ButtonShapeWidget extends StatelessWidget {
           child: Text(
             buttonText,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.button?.copyWith(
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: CupertinoColors.activeBlue,
                 ),

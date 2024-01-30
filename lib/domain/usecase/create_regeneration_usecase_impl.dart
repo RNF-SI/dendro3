@@ -1,5 +1,3 @@
-import 'package:dendro3/data/entity/regenerations_entity.dart';
-import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/repository/regenerations_repository.dart';
 // import 'package:dendro3/domain/model/regenerationMesure_list.dart';

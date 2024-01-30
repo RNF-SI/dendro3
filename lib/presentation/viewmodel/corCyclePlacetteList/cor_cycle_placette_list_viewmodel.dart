@@ -1,7 +1,6 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/create_cor_cycle_placette_usecase.dart';
@@ -40,7 +39,7 @@ class CorCyclePlacetteListViewModel
     this._setCyclePlacetteCreatedUseCaseProvider,
     this._completeCyclePlacetteCreatedUseCaseProvider,
     this._localStorageStatusNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   actualiser() {
     state = State.success(state.data!);

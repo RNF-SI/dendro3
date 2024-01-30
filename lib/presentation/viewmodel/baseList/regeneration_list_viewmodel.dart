@@ -56,7 +56,7 @@ class RegenerationListViewModel
     // final BmSup30List bmsup30Liste
     this._lastSelectedProvider,
     this._displayableListNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   void setRegenerationList(RegenerationList regenerationList) {
     state = State.success(regenerationList);

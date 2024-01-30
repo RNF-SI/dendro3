@@ -2,14 +2,9 @@ import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/bmsSup30_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
-import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
-import 'package:dendro3/domain/model/bmSup30.dart';
-import 'package:dendro3/domain/model/bmSup30_list.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BmsSup30DatabaseImpl implements BmsSup30Database {
@@ -60,7 +55,7 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     BmSup30ListEntity bmSup30List = await db.query(_tableName,
         where: 'id_placette = ? AND deleted = 0', whereArgs: [placetteId]);
 
-    var bmSup30MesureObj;
+    BmSup30MesureListEntity bmSup30MesureObj;
     return Future.wait(bmSup30List.map((BmSup30Entity bmSup30Entity) async {
       bmSup30MesureObj =
           await BmsSup30MesuresDatabaseImpl.getbmSup30bmsSup30Mesures(
@@ -73,18 +68,18 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       getPlacetteBmSup30ForDataSync(
           Database db, final int placetteId, String lastSyncTime) async {
     // Fetch newly created, updated, and deleted BmSup30 records
-    var created_bmSup30 = await db.query(
+    var createdBmsup30 = await db.query(
       _tableName,
       where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
-    var updated_bmSup30 = await db.query(
+    var updatedBmsup30 = await db.query(
       _tableName,
       where:
           'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
-    var deleted_bmSup30 = await db.query(
+    var deletedBmsup30 = await db.query(
       _tableName,
       where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [placetteId, lastSyncTime],
@@ -93,11 +88,11 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     // Process each list to include bmSup30Mesures
     return {
       "created":
-          await _processBmSup30WithMesures(db, created_bmSup30, lastSyncTime),
+          await _processBmSup30WithMesures(db, createdBmsup30, lastSyncTime),
       "updated":
-          await _processBmSup30WithMesures(db, updated_bmSup30, lastSyncTime),
+          await _processBmSup30WithMesures(db, updatedBmsup30, lastSyncTime),
       "deleted":
-          deleted_bmSup30, // Assuming no need to add bmSup30Mesures for deleted records
+          deletedBmsup30, // Assuming no need to add bmSup30Mesures for deleted records
     };
   }
 
@@ -195,9 +190,9 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
   Future<List<String>> getBmSup30IdsForPlacette(final int idPlacette) async {
     final db = await database;
     final results = await db.query(_tableName,
-        columns: ['$_columnId'],
+        columns: [_columnId],
         where: 'id_placette = ? AND deleted = 0',
         whereArgs: [idPlacette]);
-    return results.map((e) => e['$_columnId'] as String).toList();
+    return results.map((e) => e[_columnId] as String).toList();
   }
 }

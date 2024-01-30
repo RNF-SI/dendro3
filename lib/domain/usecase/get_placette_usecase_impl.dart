@@ -1,8 +1,5 @@
-import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/repository/dispositifs_repository.dart';
 import 'package:dendro3/domain/repository/placettes_repository.dart';
-import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 
 class GetPlacetteUseCaseImpl implements GetPlacetteUseCase {

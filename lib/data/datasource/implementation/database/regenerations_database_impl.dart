@@ -1,11 +1,8 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RegenerationsDatabaseImpl implements RegenerationsDatabase {
@@ -38,29 +35,29 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   static Future<Map<String, List<RegenerationEntity>>>
       getCorCyclePlacetteRegenerationsForDataSync(Database db,
           final String corCyclePlacetteId, String lastSyncTime) async {
-    var created_regenerations = await db.query(
+    var createdRegenerations = await db.query(
       _tableName,
       where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
-    var updated_regenerations = await db.query(
+    var updatedRegenerations = await db.query(
       _tableName,
       where:
           'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
-    var deleted_regenerations = await db.query(
+    var deletedRegenerations = await db.query(
       _tableName,
       where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
     return {
-      "created": created_regenerations,
-      "updated": updated_regenerations,
-      "deleted": deleted_regenerations,
+      "created": createdRegenerations,
+      "updated": updatedRegenerations,
+      "deleted": deletedRegenerations,
     };
   }
 

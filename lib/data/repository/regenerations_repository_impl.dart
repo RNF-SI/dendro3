@@ -1,9 +1,7 @@
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/mapper/regeneration_mapper.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
-import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/regenerations_repository.dart';
-import 'package:flutter/rendering.dart';
 
 class RegenerationsRepositoryImpl implements RegenerationsRepository {
   final RegenerationsDatabase database;

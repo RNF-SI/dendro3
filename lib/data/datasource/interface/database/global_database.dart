@@ -1,8 +1,6 @@
-import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:dendro3/data/entity/essences_entity.dart';
 import 'package:dendro3/data/entity/nomenclatures_entity.dart';
 import 'package:dendro3/data/entity/nomencluresTypes_entity.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
 
 abstract class GlobalDatabase {
   Future<void> initDatabase();

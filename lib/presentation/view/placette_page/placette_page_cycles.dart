@@ -5,7 +5,6 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
-import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +56,7 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
     // Iterate over corCyclePlacetteList to find the matching element
     for (var corCyclePlacette in widget.corCyclePlacetteList.values) {
       if (selectedCycle != null &&
-          corCyclePlacette.idCycle == selectedCycle!.idCycle) {
+          corCyclePlacette.idCycle == selectedCycle.idCycle) {
         selectedCorCyclePlacette = corCyclePlacette;
         break; // Break the loop once the matching element is found
       }
@@ -90,7 +89,7 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
         ),
         children: _generateCircleAvatars(
           widget.dispCycleList!,
-          widget.corCyclePlacetteList!,
+          widget.corCyclePlacetteList,
           corCyclePlacetteLocalStorageStatusProvider, // Pass the ViewModel instance here
         ),
       ),
@@ -103,20 +102,20 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
                 .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
             setState(() {}); // Refresh the UI
           },
-          child: const Text('Marquer comme complet'),
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.blue)),
+          child: const Text('Marquer comme complet'),
         ),
 
       // Afficher le grid seulement si le corcycle existe pour la placette
       // Sinon Afficher un text et un bouton
-      widget.corCyclePlacetteList!.values
+      widget.corCyclePlacetteList.values
               .map((CorCyclePlacette corCyclePla) => corCyclePla.idCycle)
               .contains(widget
                   .dispCycleList![
                       cycleSelected.indexWhere((selected) => selected == true)]
                   .idCycle)
-          ? __buildGridText(widget.corCyclePlacetteList![
+          ? __buildGridText(widget.corCyclePlacetteList[
               cycleSelected.indexWhere((selected) => selected == true)])
           : NoCycleWidget(
               placette: widget.placette,
@@ -222,9 +221,9 @@ class NoCycleWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        Text("Ce cycle n'a pas été réalisé pour cette placette"),
+        const Text("Ce cycle n'a pas été réalisé pour cette placette"),
         ElevatedButton(
-          child: Text("Button"),
+          child: const Text("Button"),
           onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
             builder: (BuildContext context) {
               return FormSaisiePlacettePage(

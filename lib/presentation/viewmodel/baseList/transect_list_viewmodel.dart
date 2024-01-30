@@ -49,7 +49,7 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
     // final BmSup30List bmsup30Liste,
     this._lastSelectedProvider,
     this._displayableListNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   void setTransectList(TransectList transectList) {
     state = State.success(transectList);

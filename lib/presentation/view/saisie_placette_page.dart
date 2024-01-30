@@ -1,7 +1,6 @@
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/displayable_button.dart';
@@ -9,9 +8,6 @@ import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'dart:math' as math;
-import 'package:data_table_2/data_table_2.dart';
 
 class SaisiePlacettePage extends ConsumerStatefulWidget {
   SaisiePlacettePage({
@@ -42,9 +38,9 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
       await showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-            title: Center(
+            title: const Center(
               child: Column(
-                children: const <Widget>[
+                children: <Widget>[
                   Icon(
                     Icons.forest,
                     color: Colors.green,
@@ -57,7 +53,7 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
                 ],
               ),
             ),
-            content: Container(
+            content: SizedBox(
               // Change as per your requirement
               width: 100,
               height: 200,
@@ -135,7 +131,7 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
               }
             },
             itemBuilder: (context) => [],
-            offset: Offset(0, 50),
+            offset: const Offset(0, 50),
             color: Colors.white,
             elevation: 2,
           ),
@@ -160,10 +156,10 @@ Widget __buildAsyncPlacetteListWidget(
   CycleList dispCycleList,
   CorCyclePlacetteList corCyclePlacetteList,
 ) {
-  final _viewModel =
+  final viewModel =
       ref.watch(saisiePlacetteViewModelProvider(placette.idPlacette));
 
-  return _viewModel.maybeWhen(
+  return viewModel.maybeWhen(
     success: (data) {
       final displayableListNotifier =
           ref.watch(displayableListProvider.notifier);

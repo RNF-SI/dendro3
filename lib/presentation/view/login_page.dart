@@ -1,6 +1,5 @@
 // import 'package:authentication_riverpod/providers/auth_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/presentation/viewmodel/auth/auth_viewmodel.dart';
@@ -71,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
           //  respective parameters.
           //  if you want you can write the exact code in the onPressed function
           //  it all depends on personal preference and code readability
-          Future<void> _onPressedFunction() async {
+          Future<void> onPressedFunction() async {
             if (_formKey.currentState!.validate()) {
               loading();
               await auth.signInWithEmailAndPassword(
@@ -173,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ? const Center(
                                     child: CircularProgressIndicator())
                                 : MaterialButton(
-                                    onPressed: _onPressedFunction,
+                                    onPressed: onPressedFunction,
                                     textColor: Colors.blue.shade700,
                                     textTheme: ButtonTextTheme.primary,
                                     minWidth: 100,

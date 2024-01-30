@@ -1,11 +1,8 @@
-import 'package:dendro3/domain/model/dispositif.dart';
-import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/model/dispositifInfo_list.dart';
 import 'package:dendro3/presentation/view/download_button.dart';
 import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserDispositifList extends ConsumerWidget {
@@ -13,11 +10,11 @@ class UserDispositifList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _userDispositifListProvider = ref.watch(userDispositifListProvider);
+    final userDispositifListProvider = ref.watch(userDispositifListProvider);
     final userDispositifList =
         ref.watch(userDispositifListViewModelStateNotifierProvider);
 
-    return _userDispositifListProvider.maybeWhen(
+    return userDispositifListProvider.maybeWhen(
       success: (data) => _buildDispositifListWidget(context, data),
       error: (_) => const Center(
         child: Text('Uh oh... Something went wrong...',
@@ -68,20 +65,20 @@ class DispositifItemCardWidget extends ConsumerWidget {
                   children: [
                     Text(
                       dispositifInfo.dispositif.name,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       dispositifInfo.dispositif.idOrganisme.toString(),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       dispositifInfo.dispositif.alluvial
                           ? 'Ce dispositif est alluvial'
                           : "Ce dispositif n'est pas alluvial",
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

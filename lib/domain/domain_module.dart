@@ -1,7 +1,4 @@
 import 'package:dendro3/data/data_module.dart';
-import 'package:dendro3/data/repository/essences_repository_impl.dart';
-import 'package:dendro3/domain/repository/essences_repository.dart';
-import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
@@ -37,6 +34,8 @@ import 'package:dendro3/domain/usecase/delete_transect_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_transect_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/export_dispositif_data_usecase.dart';
+import 'package:dendro3/domain/usecase/export_dispositif_data_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider.dart';
@@ -279,3 +278,8 @@ final getCorCyclePlacetteLocalStorageUseCaseprovider =
     Provider<GetInProgressCorCyclePlacetteLocalStorageUseCase>((ref) =>
         GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));
+
+final exportDispositifDataUseCaseProvider = Provider<ExportDispositifDataUseCase>(
+    (ref) => ExportDispositifDataUseCaseImpl(
+          ref.watch(dispositifsRepositoryProvider),
+        ));

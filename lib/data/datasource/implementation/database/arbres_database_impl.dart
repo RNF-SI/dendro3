@@ -2,13 +2,10 @@ import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/log_error.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:dendro3/domain/model/arbre.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ArbresDatabaseImpl implements ArbresDatabase {
@@ -71,14 +68,14 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   static Future<Map<String, List<ArbreEntity>>> getPlacetteArbresForDataSync(
       Database db, final int placetteId, String lastSyncTime) async {
     // Fetch newly created arbres (creation_date after lastSyncTime and not deleted)
-    List<ArbreEntity> created_arbres = await db.query(
+    List<ArbreEntity> createdArbres = await db.query(
       _tableName,
       where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Fetch updated arbres (last_update after lastSyncTime and not deleted)
-    List<ArbreEntity> updated_arbres = await db.query(
+    List<ArbreEntity> updatedArbres = await db.query(
       _tableName,
       where:
           'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
@@ -86,7 +83,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     );
 
     // Fetch deleted arbres (deleted flag set and last_update after lastSyncTime)
-    List<ArbreEntity> deleted_arbres = await db.query(
+    List<ArbreEntity> deletedArbres = await db.query(
       _tableName,
       where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [placetteId, lastSyncTime],
@@ -95,11 +92,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     // Process each list to include arbre_mesures, if needed
     Map<String, List<ArbreEntity>> arbreData = {
       "created":
-          await _processArbresWithMesures(db, created_arbres, lastSyncTime),
+          await _processArbresWithMesures(db, createdArbres, lastSyncTime),
       "updated":
-          await _processArbresWithMesures(db, updated_arbres, lastSyncTime),
+          await _processArbresWithMesures(db, updatedArbres, lastSyncTime),
       "deleted":
-          deleted_arbres // Assuming no need to add arbre_mesures for deleted arbres
+          deletedArbres // Assuming no need to add arbre_mesures for deleted arbres
     };
 
     return arbreData;

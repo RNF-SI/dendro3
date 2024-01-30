@@ -38,7 +38,7 @@ class CycleMapper {
     } catch (e) {
       print("Error in Cycle transformFromApiToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -66,7 +66,7 @@ class CycleMapper {
     } catch (e) {
       print("Error in Cycle transformFromDBToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 

@@ -1,10 +1,6 @@
-import 'package:dendro3/domain/model/essence.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/nomenclature_list.dart';
-import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/repository/nomenclatures_repository.dart';
 import 'package:dendro3/domain/repository/nomenclatures_types_repository.dart';
-import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 
 class GetStadeEcorceNomenclaturesUseCaseImpl

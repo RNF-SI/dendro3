@@ -1,14 +1,10 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
-import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
@@ -85,14 +81,14 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       getArbreArbresMesuresForDataSync(
           Database db, final String arbreId, String lastSyncTime) async {
     // Fetch newly created arbreMesures
-    List<ArbreMesureEntity> created_arbreMesures = await db.query(
+    List<ArbreMesureEntity> createdArbremesures = await db.query(
       _tableName,
       where: 'id_arbre = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [arbreId, lastSyncTime],
     );
 
     // Fetch updated arbreMesures
-    List<ArbreMesureEntity> updated_arbreMesures = await db.query(
+    List<ArbreMesureEntity> updatedArbremesures = await db.query(
       _tableName,
       where:
           'id_arbre = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
@@ -100,16 +96,16 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     );
 
     // Fetch deleted arbreMesures
-    List<ArbreMesureEntity> deleted_arbreMesures = await db.query(
+    List<ArbreMesureEntity> deletedArbremesures = await db.query(
       _tableName,
       where: 'id_arbre = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [arbreId, lastSyncTime],
     );
 
     return {
-      "created": created_arbreMesures,
-      "updated": updated_arbreMesures,
-      "deleted": deleted_arbreMesures,
+      "created": createdArbremesures,
+      "updated": updatedArbremesures,
+      "deleted": deletedArbremesures,
     };
   }
 

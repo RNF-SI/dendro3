@@ -1,10 +1,7 @@
-import 'dart:ffi';
 
-import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/arbre_id.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
@@ -13,7 +10,6 @@ import 'package:dendro3/domain/model/nomenclature_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
@@ -22,15 +18,10 @@ import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart'
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
-import 'package:dendro3/presentation/view/login_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:dendro3/presentation/state/state.dart';
 
 //TODO: à clean et revoir lorsque ce sera fini
 
@@ -325,6 +316,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
+  @override
   Future<String> createObject() async {
     if (formType == 'add') {
       _arbreListViewModel.addItem({
@@ -505,11 +497,11 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   // setters ArbreMesure
   setDiametre1(final String? value) {
-    _diametre1 = (value != null && value != '') ? double.parse(value!) : null;
+    _diametre1 = (value != null && value != '') ? double.parse(value) : null;
   }
 
   setDiametre2(final String? value) =>
-      _diametre2 = (value != null && value != '') ? double.parse(value!) : null;
+      _diametre2 = (value != null && value != '') ? double.parse(value) : null;
   setType(final String value) => _type = value;
   setHauteurTotale(final String? value) =>
       _hauteurTotale = value != null ? double.parse(value) : null;
@@ -534,8 +526,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   String? validateCodeEssence() {
     if (_codeEssence == '') {
       return 'Le champ code Essence est nécessaire.';
-    } else
+    } else {
       return null;
+    }
   }
 
   String? validateAzimut() {
@@ -626,9 +619,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
         itemAsString: (dynamic e) => e.codeEssence,
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
-        validator: (dynamic? text, formData) => validateCodeEssence(),
+        validator: (dynamic text, formData) => validateCodeEssence(),
         futureVariable: essenceFuture,
       ),
       TextFieldConfig(
@@ -751,7 +744,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         onChanged: (value) {
           setType(value);
-          if (value == null || value == '') {
+          if (value == '') {
             setStadeDurete(null);
             setStadeEcorce(null);
             setHauteurTotale(null);
@@ -776,7 +769,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'Hauteur',
         initialValue: initialHauteurTotaleValue(),
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
@@ -854,7 +847,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             return (_type != '');
           }
         },
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
         validator: (value, formData) {
           if ((value == null || value == '')) {
@@ -893,7 +886,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             return (_type != '');
           }
         },
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
         validator: (value, formData) {
           if ((value == null || value == '')) {
@@ -989,7 +982,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       DropdownFieldConfig<dynamic>(
         fieldName: 'Référentiel DMH',
-        value: _refCodeEcolo != null ? _refCodeEcolo : 'EFI',
+        value: _refCodeEcolo ?? 'EFI',
         items: [
           const MapEntry('EFI', 'EFI'),
           const MapEntry('engref', 'engref'),
@@ -1036,7 +1029,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         //     : [],
 
         selectedItems: () {
-          if (_codeEcolo != null && _codeEcolo.isNotEmpty) {
+          if (_codeEcolo.isNotEmpty) {
             return currentCodeEcoloNomenclature!
                 .where((nomenclature) => _codeEcolo
                     .split('-')
@@ -1047,7 +1040,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return [];
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        onChanged: (dynamic? data) => data == null
+        onChanged: (dynamic data) => data == null
             ? []
             : setCodeEcolo(data
                 .map((item) => item.cdNomenclature.toString())

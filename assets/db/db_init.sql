@@ -56,7 +56,7 @@ CREATE TABLE t_placettes (
 );
 
 CREATE TABLE t_reperes (
-  id_repere serial NOT NULL PRIMARY KEY,
+  id_repere TEXT NOT NULL PRIMARY KEY,
   id_placette integer NOT NULL,
   azimut real,
   distance real,
@@ -91,7 +91,7 @@ CREATE TABLE t_cycles (
 CREATE INDEX idx_t_cycles_num_cycle on t_cycles (num_cycle);
 
 CREATE TABLE t_arbres (
-  id_arbre serial NOT NULL PRIMARY KEY,
+  id_arbre TEXT NOT NULL PRIMARY KEY,
   id_arbre_orig integer,
   id_placette integer NOT NULL,
   code_essence character varying(4),
@@ -112,7 +112,7 @@ CREATE TABLE t_arbres (
 );
 
 CREATE TABLE t_arbres_mesures (
-  id_arbre_mesure serial NOT NULL PRIMARY KEY,
+  id_arbre_mesure TEXT NOT NULL PRIMARY KEY,
   id_arbre integer NOT NULL,
   id_cycle integer NOT NULL,
   diametre1 real,
@@ -148,7 +148,7 @@ CREATE TABLE t_arbres_mesures (
 CREATE INDEX idx_t_arbres_mesures_id_cycle on t_arbres_mesures (id_cycle);
 
 CREATE TABLE t_regenerations (
-  id_regeneration serial NOT NULL PRIMARY KEY,
+  id_regeneration TEXT NOT NULL PRIMARY KEY,
   id_cycle_placette integer,
   sous_placette integer,
   code_essence character varying(4),
@@ -184,7 +184,7 @@ CREATE TABLE t_categories (
 );
 
 CREATE TABLE t_bm_sup_30 (
-  id_bm_sup_30 serial NOT NULL PRIMARY KEY,
+  id_bm_sup_30 TEXT NOT NULL PRIMARY KEY,
   id_bm_sup_30_orig integer,
   id_placette integer NOT NULL,
   id_arbre integer,
@@ -208,7 +208,7 @@ CREATE TABLE t_bm_sup_30 (
 );
 
 CREATE TABLE t_bm_sup_30_mesures (
-  id_bm_sup_30_mesure serial NOT NULL PRIMARY KEY,
+  id_bm_sup_30_mesure TEXT NOT NULL PRIMARY KEY,
   id_bm_sup_30 integer NOT NULL,
   id_cycle integer NOT NULL,
   diametre_ini real,
@@ -236,7 +236,7 @@ CREATE TABLE t_bm_sup_30_mesures (
 );
 -- Table des transects : une ligne par bois mort
 CREATE TABLE t_transects (
-  id_transect serial NOT NULL PRIMARY KEY,
+  id_transect TEXT NOT NULL PRIMARY KEY,
   id_cycle_placette integer NOT NULL,
   id_transect_orig integer,
   code_essence character varying(4),
@@ -294,7 +294,7 @@ CREATE TABLE t_regroupements_essences (
 );
 
 CREATE TABLE cor_cycles_placettes (
-    id_cycle_placette serial NOT NULL PRIMARY KEY,
+    id_cycle_placette TEXT NOT NULL PRIMARY KEY,
     id_cycle integer NOT NULL,
     id_placette integer NOT NULL,
     date_releve date,

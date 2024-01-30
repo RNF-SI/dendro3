@@ -26,7 +26,7 @@ class PlacetteListViewModel extends BaseListViewModel<State<PlacetteList>> {
 
   PlacetteListViewModel(
     this._getPlacetteUseCase,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   void setPlacetteList(PlacetteList placetteList) {
     state = State.success(placetteList);

@@ -1,7 +1,5 @@
-import 'dart:ui';
 
 import 'package:dendro3/domain/domain_module.dart';
-import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
@@ -10,10 +8,8 @@ import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/model/dispositifInfo_list.dart';
 import 'package:dendro3/presentation/state/download_status.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
-import 'package:dendro3/domain/model/dispositif_list.dart';
 
 final userDispositifListProvider =
     Provider.autoDispose<custom_async_state.State<DispositifInfoList>>((ref) {
@@ -81,32 +77,20 @@ class UserDispositifsViewModel
       ]);
       // Si c'est une liste, alors on a bien une connexion internet
       // On affiche tous les dispositif
-      if (dispositifsList[0].values is List) {
-        var downloadStatus = DownloadStatus.notDownloaded;
-        dispositifsList[0].values.asMap().forEach((index, disp0) {
-          downloadStatus = DownloadStatus.notDownloaded;
-          dispositifsList[1].values.asMap().forEach((index, disp1) => {
-                if (disp0.id == disp1.id)
-                  {downloadStatus = DownloadStatus.downloaded}
-              });
-          dispositifInfoList = dispositifInfoList.addDispositifInfo(
-              DispositifInfo(
-                  dispositif: disp0, downloadStatus: downloadStatus));
-        });
+      var downloadStatus = DownloadStatus.notDownloaded;
+      dispositifsList[0].values.asMap().forEach((index, disp0) {
+        downloadStatus = DownloadStatus.notDownloaded;
+        dispositifsList[1].values.asMap().forEach((index, disp1) => {
+              if (disp0.id == disp1.id)
+                {downloadStatus = DownloadStatus.downloaded}
+            });
+        dispositifInfoList = dispositifInfoList.addDispositifInfo(
+            DispositifInfo(
+                dispositif: disp0, downloadStatus: downloadStatus));
+      });
 
-        state = custom_async_state.State.success(dispositifInfoList);
-      } else {
-        // Si c'est autre chose, il s'agit d'une erreur(pas internet)
-        // On affiche tous les dispositifs en local
-        dispositifsList[0].values.asMap().forEach((index, disp0) {
-          dispositifInfoList = dispositifInfoList.addDispositifInfo(
-              DispositifInfo(
-                  dispositif: disp0,
-                  downloadStatus: DownloadStatus.downloaded));
-        });
-        state = custom_async_state.State.success(dispositifInfoList);
-      }
-    } on Exception catch (e) {
+      state = custom_async_state.State.success(dispositifInfoList);
+        } on Exception catch (e) {
       state = custom_async_state.State.error(e);
     } catch (e) {
       print(e);

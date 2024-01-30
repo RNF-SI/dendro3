@@ -1,4 +1,3 @@
-import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 
 abstract class UpdateBmSup30AndMesureUseCase {

@@ -1,16 +1,12 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
-import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/regenerations_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/transects_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
@@ -91,14 +87,14 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       getPlacetteCorCyclesPlacettesForDataSync(
           Database db, final int placetteId, String lastSyncTime) async {
     // Fetch newly created CorCyclePlacette records
-    var created_corCyclePlacette = await db.query(
+    var createdCorcycleplacette = await db.query(
       _tableName,
       where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Fetch updated CorCyclePlacette records
-    var updated_corCyclePlacette = await db.query(
+    var updatedCorcycleplacette = await db.query(
       _tableName,
       where:
           'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
@@ -106,7 +102,7 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     );
 
     // Fetch deleted CorCyclePlacette records
-    var deleted_corCyclePlacette = await db.query(
+    var deletedCorcycleplacette = await db.query(
       _tableName,
       where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
       whereArgs: [placetteId, lastSyncTime],
@@ -116,16 +112,16 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     return {
       "created": await _processCorCyclePlacetteWithDetails(
         db,
-        created_corCyclePlacette,
+        createdCorcycleplacette,
         lastSyncTime,
       ),
       "updated": await _processCorCyclePlacetteWithDetails(
         db,
-        updated_corCyclePlacette,
+        updatedCorcycleplacette,
         lastSyncTime,
       ),
       "deleted":
-          deleted_corCyclePlacette, // Assuming no need to add details for deleted records
+          deletedCorcycleplacette, // Assuming no need to add details for deleted records
     };
   }
 

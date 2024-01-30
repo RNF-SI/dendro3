@@ -5,7 +5,7 @@ import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:flutter/material.dart';
 
-import '../lib/simple_element.dart';
+import 'package:dendro3/presentation/lib/simple_element.dart';
 
 class PrimaryGridWidget extends StatelessWidget {
   final SimpleElement simpleElements;
@@ -15,7 +15,7 @@ class PrimaryGridWidget extends StatelessWidget {
   final String displayTypeState;
   final Map<String, int> mapNumCyclePlacetteNumCycle;
 
-  PrimaryGridWidget({
+  const PrimaryGridWidget({
     Key? key,
     required this.simpleElements,
     required this.onItemAdded,
@@ -70,14 +70,14 @@ class PrimaryGridWidget extends StatelessWidget {
               Flexible(
                 child: Text(
                   "$titleName:", // Use the modified title name
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               Flexible(
                 child: Text(
                   displayValue,
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -94,34 +94,34 @@ class PrimaryGridWidget extends StatelessWidget {
           children: [
             if (displayTypeState != 'Arbres' && displayTypeState != 'BmsSup30')
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
                 onPressed: () =>
                     onItemUpdated(simpleElements), // Using onItemMesureUpdated
                 iconSize: 18, // Reduced icon size
-                padding: EdgeInsets.all(4), // Reduced padding
-                constraints: BoxConstraints(),
+                padding: const EdgeInsets.all(4), // Reduced padding
+                constraints: const BoxConstraints(),
               ),
             IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
+              icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 // Show confirmation dialog
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Confirmer la suppression'),
-                      content: Text(
+                      title: const Text('Confirmer la suppression'),
+                      content: const Text(
                           'Etes vous sûr de vouloir supprimer cet élément?'),
                       actions: <Widget>[
                         TextButton(
-                          child: Text('Annuler'),
+                          child: const Text('Annuler'),
                           onPressed: () {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
                         ),
                         TextButton(
-                          child: Text('Supprimer',
+                          child: const Text('Supprimer',
                               style: TextStyle(color: Colors.red)),
                           onPressed: () {
                             // Close the dialog
@@ -136,8 +136,8 @@ class PrimaryGridWidget extends StatelessWidget {
                 );
               },
               iconSize: 18, // Reduced icon size
-              padding: EdgeInsets.all(4), // Reduced padding
-              constraints: BoxConstraints(),
+              padding: const EdgeInsets.all(4), // Reduced padding
+              constraints: const BoxConstraints(),
             ),
             // IconButton(
             //   icon: Icon(Icons.add, color: Colors.green),
@@ -150,10 +150,10 @@ class PrimaryGridWidget extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(left: 20), // Ajout d'une marge en haut
+          padding: const EdgeInsets.only(left: 20), // Ajout d'une marge en haut
           child: GridView.count(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 4,
             childAspectRatio: 2.5,
             mainAxisSpacing: 1,
@@ -194,7 +194,7 @@ class PrimaryGridWidget extends StatelessWidget {
       case 'Transects':
         return Transect.changeTitleGridNames(columnList);
       default:
-        throw ArgumentError('Unknown type: ${type}');
+        throw ArgumentError('Unknown type: $type');
     }
   }
 }

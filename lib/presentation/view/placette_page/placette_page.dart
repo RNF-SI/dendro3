@@ -1,17 +1,12 @@
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
-import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
 import 'package:dendro3/presentation/view/placette_page/placette_page_cycles.dart';
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 
 class PlacettePage extends ConsumerWidget {
@@ -55,7 +50,7 @@ class PlacettePage extends ConsumerWidget {
                 }
               },
               itemBuilder: (context) => [],
-              offset: Offset(0, 50),
+              offset: const Offset(0, 50),
               color: Colors.white,
               elevation: 2,
             ),
@@ -105,7 +100,7 @@ class PlacettePage extends ConsumerWidget {
                 icon: const Icon(Icons.add),
               ),
             ActionButton(
-              onPressed: () => null,
+              onPressed: () {},
               icon: const Icon(Icons.play_arrow),
             ),
           ],
@@ -163,19 +158,19 @@ Widget __buildPlacetteResumeWidget(
   List<Map<String, dynamic>> longTextProperties = [];
 
   // Populate the lists based on the 'isLong' flag
-  properties.forEach((property) {
+  for (var property in properties) {
     if (property.containsKey('isLong') && property['isLong']) {
       longTextProperties.add(property);
     } else {
       regularProperties.add(property);
     }
-  });
+  }
 
   return CustomScrollView(
     slivers: [
       // Grid for regular properties
       SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 6, // Adjust as needed
         ),
