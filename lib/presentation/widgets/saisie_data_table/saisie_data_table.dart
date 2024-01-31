@@ -29,7 +29,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:data_table_2/data_table_2.dart';
 
-
 class SaisieDataTable extends ConsumerStatefulWidget {
   const SaisieDataTable({
     super.key,
@@ -143,6 +142,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final columns = _createColumns(
       columnNameList,
     );
+    Map<String, bool> columnVisibility =
+        getColumnVisibility(columnNameList, widget.displayTypeState);
 
     final rows = _createRows(
       sortedCycleRowList,
@@ -150,6 +151,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       mapIdCycleNumCycle,
       mapNumCyclePlacetteNumCycle,
       selectedItemDetails,
+      columnVisibility,
     );
 
     return Scaffold(
@@ -641,7 +643,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     //         shouldIncludeColumn(columnStr, widget.displayTypeState))
     //     .toList();
 
-    List<String> columnTitles =
+    List<Map<String, dynamic>> columnTitles =
         _getColumnTitlesForType(columnList, widget.displayTypeState);
 
     // Ajouter d'abord la colonne "update"
@@ -651,29 +653,32 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       ),
     );
 
-    for (var columnStr in columnTitles) {
-      // Check if column should be included based on displayType
-      columns.add(DataColumn2(
-        label: Text(columnStr, style: const TextStyle(fontSize: 12)),
-        numeric: true,
-        onSort: (columnIndex, _) {
-          setState(() {
-            if (_sortColumnIndex == columnIndex) {
-              // If the same column is clicked again, toggle the sort direction
-              _sortAscending = !_sortAscending;
-            } else {
-              // If a different column is clicked, start with ascending order
-              _sortColumnIndex = columnIndex;
-              _sortAscending = true;
-            }
-          });
+    for (var columnInfo in columnTitles) {
+      if (columnInfo['visible']) {
+        // Check if column should be included based on displayType
+        columns.add(DataColumn2(
+          label:
+              Text(columnInfo['title'], style: const TextStyle(fontSize: 12)),
+          numeric: true,
+          onSort: (columnIndex, _) {
+            setState(() {
+              if (_sortColumnIndex == columnIndex) {
+                // If the same column is clicked again, toggle the sort direction
+                _sortAscending = !_sortAscending;
+              } else {
+                // If a different column is clicked, start with ascending order
+                _sortColumnIndex = columnIndex;
+                _sortAscending = true;
+              }
+            });
 
-          ref
-              .read(sortedCycleRowsProvider.notifier)
-              .sortRows(columnIndex - 1, _sortAscending);
-          // _onSortColumn(columnIndex, ascending);
-        },
-      ));
+            ref
+                .read(sortedCycleRowsProvider.notifier)
+                .sortRows(columnIndex - 1, _sortAscending);
+            // _onSortColumn(columnIndex, ascending);
+          },
+        ));
+      }
     }
 
     return columns;
@@ -685,6 +690,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     Map<int, int> mapIdCycleNumCycle,
     Map<String, int> mapNumCyclePlacetteNumCycle,
     SaisisableObject? selectedItemDetails,
+    Map<String, bool> columnVisibility,
   ) {
     return valueList.map<DataRow>((value) {
       List<DataCell> cellList = [];
@@ -726,34 +732,36 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       // Create cells based on the new column order
       value.forEach((key, val) {
-        if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
-          cellList.add(DataCell(Text(
-            mapIdCycleNumCycle[val].toString(),
-            style: const TextStyle(fontSize: 15),
-          )));
-        } else if (key == "idCyclePlacette" &&
-            mapNumCyclePlacetteNumCycle.containsKey(val)) {
-          cellList.add(DataCell(Text(
-            mapNumCyclePlacetteNumCycle[val].toString(),
-            style: const TextStyle(fontSize: 15),
-          )));
-        } else {
-          String displayValue;
-          if (val is double) {
-            displayValue = val == val.toInt()
-                ? val.toInt().toString()
-                : val.toStringAsFixed(1);
+        if (columnVisibility[key] ?? true) {
+          if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
+            cellList.add(DataCell(Text(
+              mapIdCycleNumCycle[val].toString(),
+              style: const TextStyle(fontSize: 15),
+            )));
+          } else if (key == "idCyclePlacette" &&
+              mapNumCyclePlacetteNumCycle.containsKey(val)) {
+            cellList.add(DataCell(Text(
+              mapNumCyclePlacetteNumCycle[val].toString(),
+              style: const TextStyle(fontSize: 15),
+            )));
           } else {
-            displayValue = val.toString();
-          }
-          cellList.add(
-            DataCell(
-              Text(
-                displayValue,
-                style: const TextStyle(fontSize: 15),
+            String displayValue;
+            if (val is double) {
+              displayValue = val == val.toInt()
+                  ? val.toInt().toString()
+                  : val.toStringAsFixed(1);
+            } else {
+              displayValue = val.toString();
+            }
+            cellList.add(
+              DataCell(
+                Text(
+                  displayValue,
+                  style: const TextStyle(fontSize: 15),
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       });
 
@@ -816,7 +824,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     }).toList();
   }
 
-  List<String> _getColumnTitlesForType(List<String> columnList, String type) {
+  List<Map<String, dynamic>> _getColumnTitlesForType(
+      List<String> columnList, String type) {
     switch (type) {
       case 'Arbres':
         return Arbre.changeColumnName(columnList);
@@ -833,6 +842,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       default:
         throw ArgumentError('Unknown type: $type');
     }
+  }
+
+  // This function should be called to get the column visibility information
+  Map<String, bool> getColumnVisibility(List<String> columnList, String type) {
+    List<Map<String, dynamic>> columnTitles =
+        _getColumnTitlesForType(columnList, type);
+    Map<String, bool> columnVisibility = {};
+
+    for (var columnInfo in columnTitles) {
+      columnVisibility[columnInfo['title']] = columnInfo['visible'];
+    }
+
+    return columnVisibility;
   }
 
 //   List<Widget> _generateCircleAvatars(
