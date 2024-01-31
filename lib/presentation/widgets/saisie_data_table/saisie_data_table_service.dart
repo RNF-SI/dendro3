@@ -16,7 +16,6 @@ import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 const columnWidth = 80;
 
 // Provider appelé à la fois pour les toggles bouton et l'affichage dataTable
@@ -232,14 +231,14 @@ final cycleRowsProvider =
     return rowList;
   } else if (rowList.isEmpty) {
     return [];
-  } else if (rowList[0].containsKey('idArbreOrig') ||
-      rowList[0].containsKey('idBmSup30Orig')) {
+  } else if (rowList[0].containsKey('idArbre') ||
+      rowList[0].containsKey('idBmSup30')) {
     return rowList
         .where(
           (item) => rowsCycle.contains(item['idCycle']),
         )
         .toList();
-  } else if (rowList[0].containsKey('idTransectOrig') ||
+  } else if (rowList[0].containsKey('idTransect') ||
       rowList[0].containsKey('idRegeneration')) {
     var cyclePlacetteToCycleMap = {
       for (var link in links) link['idCyclePlacette']: link['idCycle']
@@ -429,23 +428,23 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
       state = null;
       return;
     } else if (_lastSelectedProvider.getObject().isEmpty) {
-      lastSelectedId = items.getFirstElementIdOrig();
+      lastSelectedId = items.getFirstElementId();
     } else if (items is ArbreList) {
       lastSelectedId = _lastSelectedProvider.getLastSelectedId('Arbres') ??
-          items.getFirstElementIdOrig();
+          items.getFirstElementId();
     } else if (items is BmSup30List) {
       lastSelectedId = _lastSelectedProvider.getLastSelectedId('BmsSup30') ??
-          items.getFirstElementIdOrig();
+          items.getFirstElementId();
     } else if (items is RegenerationList) {
       lastSelectedId =
           _lastSelectedProvider.getLastSelectedId('Regenerations') ??
-              items.getFirstElementIdOrig();
+              items.getFirstElementId();
     } else if (items is RepereList) {
       lastSelectedId = _lastSelectedProvider.getLastSelectedId('Repères') ??
-          items.getFirstElementIdOrig();
+          items.getFirstElementId();
     } else if (items is TransectList) {
       lastSelectedId = _lastSelectedProvider.getLastSelectedId('Transects') ??
-          items.getFirstElementIdOrig();
+          items.getFirstElementId();
     } else {
       throw ArgumentError('Unknown type: ${items.runtimeType}');
     }
@@ -457,13 +456,12 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
       Map<String, dynamic> value, String type) {
     switch (type) {
       case 'Arbres':
-        _lastSelectedProvider.setLastSelectedId('Arbres', value['idArbreOrig']);
-        state = items.getObjectFromId(value['idArbreOrig']);
+        _lastSelectedProvider.setLastSelectedId('Arbres', value['idArbre']);
+        state = items.getObjectFromId(value['idArbre']);
         return state;
       case 'BmsSup30':
-        _lastSelectedProvider.setLastSelectedId(
-            'BmsSup30', value['idBmSup30Orig']);
-        state = items.getObjectFromId(value['idBmSup30Orig']);
+        _lastSelectedProvider.setLastSelectedId('BmsSup30', value['idBmSup30']);
+        state = items.getObjectFromId(value['idBmSup30']);
         return state;
       case 'Regenerations':
         _lastSelectedProvider.setLastSelectedId(
