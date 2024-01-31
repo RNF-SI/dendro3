@@ -8,7 +8,7 @@ class DB {
   static DB get instance => _db;
   static Database? _database;
 
-  static const _databaseName = 'psdrf_database';
+  static const databaseName = 'psdrf_database';
   static const _databaseVersion = 1;
 
   Future<Database> get database async {
@@ -18,7 +18,7 @@ class DB {
 
   Future<Database> _initDatabase() async {
     return openDatabase(
-      join(await getDatabasesPath(), _databaseName),
+      join(await getDatabasesPath(), databaseName),
       onCreate: (db, _) async {
         String script = await rootBundle.loadString("assets/db/db_init.sql");
         List<String> scripts = script.split(";");

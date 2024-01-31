@@ -25,6 +25,8 @@ import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/delete_database_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase_impl.dart';
@@ -279,7 +281,11 @@ final getCorCyclePlacetteLocalStorageUseCaseprovider =
         GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));
 
-final exportDispositifDataUseCaseProvider = Provider<ExportDispositifDataUseCase>(
-    (ref) => ExportDispositifDataUseCaseImpl(
-          ref.watch(dispositifsRepositoryProvider),
-        ));
+final exportDispositifDataUseCaseProvider =
+    Provider<ExportDispositifDataUseCase>(
+        (ref) => ExportDispositifDataUseCaseImpl(
+              ref.watch(dispositifsRepositoryProvider),
+            ));
+
+final deleteDatabaseUseCaseProvider = Provider<DeleteDatabaseUseCase>((ref) =>
+    DeleteDatabaseUseCaseImpl(ref.watch(globalDatabaseRepositoryProvider)));

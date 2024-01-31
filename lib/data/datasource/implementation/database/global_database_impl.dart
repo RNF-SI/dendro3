@@ -3,6 +3,7 @@ import 'package:dendro3/data/datasource/interface/database/global_database.dart'
 import 'package:dendro3/data/entity/essences_entity.dart';
 import 'package:dendro3/data/entity/nomenclatures_entity.dart';
 import 'package:dendro3/data/entity/nomencluresTypes_entity.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class GlobalDatabaseImpl implements GlobalDatabase {
@@ -143,5 +144,15 @@ class GlobalDatabaseImpl implements GlobalDatabase {
       }).toList();
       await batch.commit();
     });
+  }
+
+  @override
+  Future<void> deleteCurrentDatabase() async {
+    var databasesPath = await getDatabasesPath();
+    String path =
+        join(databasesPath, DB.databaseName); // Use the constant from DB class
+
+    // Delete the database
+    await deleteDatabase(path);
   }
 }

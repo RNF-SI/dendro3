@@ -27,4 +27,9 @@ class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
       await database.insertNomenclatures(await api.getNomenclatures());
     }
   }
+
+  @override
+  Future<void> deleteDatabase() async {
+    await database.deleteCurrentDatabase();
+  }
 }
