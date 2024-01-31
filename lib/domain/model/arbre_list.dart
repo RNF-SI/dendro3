@@ -63,12 +63,12 @@ class ArbreList with _$ArbreList implements ViewModelObject, DisplayableList {
 
   @override
   Arbre getObjectFromId(final String id) {
-    return values.firstWhere((arbre) => arbre.idArbreOrig == id);
+    return values.firstWhere((arbre) => arbre.idArbre == id);
   }
 
   @override
-  int getFirstElementIdOrig() {
-    return values.first.idArbreOrig;
+  String getFirstElementId() {
+    return values.first.idArbre;
   }
 
   @override

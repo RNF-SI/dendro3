@@ -9,7 +9,7 @@ abstract class DisplayableList {
 
   getObjectFromId(final String id);
 
-  getFirstElementIdOrig();
+  getFirstElementId();
 
   bool isEmpty();
 }
@@ -31,7 +31,7 @@ class EmptyDisplayableList extends DisplayableList {
   }
 
   @override
-  getFirstElementIdOrig() {
+  getFirstElementId() {
     // Return null or an appropriate default value.
     return null;
   }

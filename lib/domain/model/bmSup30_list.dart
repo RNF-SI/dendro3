@@ -70,12 +70,12 @@ class BmSup30List
 
   @override
   getObjectFromId(final String id) {
-    return values.firstWhere((bmSup30) => bmSup30.idBmSup30Orig == id);
+    return values.firstWhere((bmSup30) => bmSup30.idBmSup30 == id);
   }
 
   @override
-  int getFirstElementIdOrig() {
-    return values.first.idBmSup30Orig;
+  String getFirstElementId() {
+    return values.first.idBmSup30;
   }
 
   @override
