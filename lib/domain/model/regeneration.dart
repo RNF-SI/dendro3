@@ -107,20 +107,29 @@ class Regeneration with _$Regeneration implements SaisisableObject {
     ].contains(columnName);
   }
 
-  static List<String> changeColumnName(List<String> columnNames) {
+  static List<Map<String, dynamic>> changeColumnName(List<String> columnNames) {
+    String displayName;
+    bool isVisible;
+
     return columnNames.map((columnName) {
+      isVisible = true;
       switch (columnName) {
         case 'idCyclePlacette':
-          return 'NumCycle';
+          displayName = 'NumCycle';
+          break;
         case 'sousPlacette':
-          return 'sousPlacette';
+          displayName = 'Sous placette';
+          break;
         case 'codeEssence':
-          return 'Ess';
+          displayName = 'Essence';
+          break;
         case 'taillis':
-          return 'Taillis';
+          displayName = 'Taillis';
+          break;
         default:
-          return columnName;
+          displayName = columnName;
       }
+      return {'title': displayName, 'visible': isVisible};
     }).toList();
   }
 

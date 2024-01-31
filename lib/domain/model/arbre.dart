@@ -65,6 +65,7 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
     DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
   }) {
     return {
+      'idArbre': idArbre,
       'idArbreOrig': idArbreOrig,
       'codeEssence': codeEssence,
       'azimut': azimut,
@@ -88,11 +89,12 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
 
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
-    return idArbreOrig == valueMap['idArbreOrig'];
+    return idArbre == valueMap['idArbre'];
   }
 
   static bool getDisplayableColumn(String columnName) {
     return [
+      'idArbre',
       'idArbreOrig',
       'codeEssence',
       'azimut',
@@ -143,28 +145,45 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
     return arbresMesures!.getMesureFromIdCycle(idCycle);
   }
 
-  static List<String> changeColumnName(List<String> columnNames) {
+  static List<Map<String, dynamic>> changeColumnName(List<String> columnNames) {
+    String displayName;
+    bool isVisible;
+
     return columnNames.map((columnName) {
+      isVisible = true;
       switch (columnName) {
+        case 'idArbre':
+          displayName = 'idArbre';
+          isVisible = false; // Assuming you want to hide this column
+          break;
         case 'idArbreOrig':
-          return 'Num';
+          displayName = 'Num';
+          break;
         case 'codeEssence':
-          return 'Ess';
+          displayName = 'Ess';
+          break;
         case 'azimut':
-          return 'Azimut';
+          displayName = 'Azim';
+          break;
         case 'distance':
-          return 'Dist';
+          displayName = 'Dist';
+          break;
         case 'idCycle':
-          return 'NumCycle';
+          displayName = 'NumCycle';
+          break;
         case 'diametre1':
-          return 'Diam1';
+          displayName = 'Diam1';
+          break;
         case 'type':
-          return 'Type';
+          displayName = 'Type';
+          break;
         case 'taillis':
-          return 'Taillis';
+          displayName = 'Taillis';
+          break;
         default:
-          return columnName;
+          displayName = columnName;
       }
+      return {'title': displayName, 'visible': isVisible};
     }).toList();
   }
 

@@ -63,6 +63,7 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
     DisplayedColumnType displayedMesureColumnType = DisplayedColumnType.all,
   }) {
     return {
+      'idBmSup30': idBmSup30,
       'idBmSup30Orig': idBmSup30Orig,
       'idArbre': idArbre,
       'codeEssence': codeEssence,
@@ -97,11 +98,12 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
 
   @override
   bool isEqualToMap(Map<String, dynamic> valueMap) {
-    return idBmSup30Orig == valueMap['idBmSup30Orig'];
+    return idBmSup30 == valueMap['idBmSup30'];
   }
 
   static bool getDisplayableColumn(String columnName) {
     return [
+      'idBmSup30',
       'idBmSup30Orig',
       'idPlacette',
       'idArbre',
@@ -160,28 +162,45 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
     return bmsSup30Mesures!.getMesureFromIdCycle(idCycle);
   }
 
-  static List<String> changeColumnName(List<String> columnNames) {
+  static List<Map<String, dynamic>> changeColumnName(List<String> columnNames) {
+    String displayName;
+    bool isVisible;
+
     return columnNames.map((columnName) {
+      isVisible = true;
       switch (columnName) {
+        case 'idBmSup30':
+          displayName = 'idBmSup30';
+          isVisible = false;
+          break;
         case 'idBmSup30Orig':
-          return 'id';
+          displayName = 'id';
+          break;
         case 'idArbre':
-          return 'NumArbre';
+          displayName = 'NumArbre';
+          break;
         case 'codeEssence':
-          return 'Ess';
+          displayName = 'Essence';
+          break;
         case 'azimut':
-          return 'Azimut';
+          displayName = 'Azimut';
+          break;
         case 'distance':
-          return 'Dist';
+          displayName = 'Distance';
+          break;
         case 'diametre':
-          return 'Diam';
+          displayName = 'Diam';
+          break;
         case 'longueur':
-          return 'Long';
+          displayName = 'Long';
+          break;
         case 'idCycle':
-          return 'NumCycle';
+          displayName = 'NumCycle';
+          break;
         default:
-          return columnName;
+          displayName = columnName;
       }
+      return {'title': displayName, 'visible': isVisible};
     }).toList();
   }
 
