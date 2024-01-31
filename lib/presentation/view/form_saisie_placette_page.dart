@@ -161,9 +161,7 @@ class FormSaisiePlacettePageState
             setState(() {
               formData[field.fieldName] = value;
               if (field.fieldName == 'Diametre1') {
-                if (value != Null &&
-                    value != '' &&
-                    double.parse(value) <= 30) {
+                if (value != Null && value != '' && double.parse(value) <= 30) {
                   formData['Diametre2'] = Null;
                 }
               }
@@ -191,7 +189,8 @@ class FormSaisiePlacettePageState
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator(); // Show loading indicator
               } else if (snapshot.hasError) {
-                return const Text("Error loading essences"); // Handle error state
+                return const Text(
+                    "Error loading essences"); // Handle error state
               } else {
                 return DropdownSearch<dynamic>(
                   popupProps: const PopupProps.menu(
@@ -235,7 +234,8 @@ class FormSaisiePlacettePageState
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator(); // Show loading indicator
               } else if (snapshot.hasError) {
-                return const Text("Error loading essences"); // Handle error state
+                return const Text(
+                    "Error loading essences"); // Handle error state
               } else {
                 _selectedDropdownItems = field.selectedItems!();
                 return DropdownSearch<dynamic>.multiSelection(
@@ -366,7 +366,7 @@ class FormSaisiePlacettePageState
             Row(
               children: [
                 Expanded(
-                  flex: 4,
+                  flex: 5,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -402,7 +402,7 @@ class FormSaisiePlacettePageState
                           icon: const Icon(
                             Icons.info_outline,
                             color: Colors.grey,
-                            size: 12,
+                            size: 11,
                           ),
                           onPressed: () {
                             showDialog(
@@ -498,7 +498,8 @@ class FormSaisiePlacettePageState
 }
 
 class CheckboxFormField extends FormField<bool> {
-  CheckboxFormField({super.key, 
+  CheckboxFormField({
+    super.key,
     Widget? title,
     required FormFieldSetter<bool> onSaved,
     FormFieldValidator<bool>? validator,
@@ -525,7 +526,8 @@ class CheckboxFormField extends FormField<bool> {
                     ? Builder(
                         builder: (BuildContext context) => Text(
                           state.errorText ?? '',
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
                         ),
                       )
                     : null,
