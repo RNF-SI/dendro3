@@ -232,4 +232,9 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
       }
     }).toList();
   }
+
+  @override
+  int getMesureValuesLength() {
+    return bmsSup30Mesures!.values.length;
+  }
 }

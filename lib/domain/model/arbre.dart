@@ -221,4 +221,8 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
       }
     }).toList();
   }
+
+  getMesureValuesLength() {
+    return arbresMesures!.values.length;
+  }
 }
