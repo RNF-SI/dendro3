@@ -3,6 +3,7 @@ import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration_list.dart';
 import 'package:dendro3/domain/usecase/create_regeneration_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
@@ -25,6 +26,7 @@ final regenerationListViewModelStateNotifierProvider =
     // ref.watch(getBmSup30ListUseCaseProvider),
     ref.watch(createRegenerationUseCaseProvider),
     ref.watch(updateRegenerationUseCaseProvider),
+    ref.watch(deleteRegenerationUseCaseProvider),
 
     // ref.watch(updateBmSup30UseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
@@ -42,6 +44,7 @@ class RegenerationListViewModel
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
   final CreateRegenerationUseCase _createRegenerationUseCase;
   final UpdateRegenerationUseCase _updateRegenerationUseCase;
+  final DeleteRegenerationUseCase _deleteRegenerationUseCase;
 
   // final UpdateBmSup30UseCase _updateBmSup30UseCase;
   // final DeleteBmSup30UseCase _deleteBmSup30UseCase;
@@ -50,6 +53,7 @@ class RegenerationListViewModel
     // this._getBmSup30ListUseCase,
     this._createRegenerationUseCase,
     this._updateRegenerationUseCase,
+    this._deleteRegenerationUseCase,
 
     // this._updateBmSup30UseCase,
     // this._deleteBmSup30UseCase,
@@ -125,8 +129,16 @@ class RegenerationListViewModel
   }
 
   @override
-  Future<bool> deleteItem(String id) {
-    // TODO: implement deleteItem
-    throw UnimplementedError();
+  Future<bool> deleteItem(String id) async {
+    try {
+      await _deleteRegenerationUseCase.execute(id);
+      _lastSelectedProvider.setLastSelectedId('Regenerations', null);
+      state = State.success(state.data!.removeItemFromList(id));
+      _displayableListNotifier.setDisplayableList(state.data!);
+      return true;
+    } on Exception catch (e) {
+      state = State.error(e);
+      return false;
+    }
   }
 }
