@@ -337,8 +337,7 @@ class FormSaisiePlacettePageState
           mode: DateTimeFieldPickerMode
               .date, // Change this to 'date' or 'dateAndTime'
           autovalidateMode: AutovalidateMode.always,
-          validator: (e) =>
-              (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+          validator: (e) => null,
           onDateSelected: field.onDateSelected,
         );
       } else {
