@@ -221,14 +221,52 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     }
   }
 
-  Future<void> deleteItemMesure(String id) async {
+  Future<bool> deleteItemMesure(
+    String idBmSup30,
+    String idBmSup30Mesure,
+  ) async {
     try {
-      await _deleteBmSup30MesureUseCase.execute(id);
+      BmSup30? targetedBmSup30;
+      for (var bm in state.data!.values) {
+        if (bm.idBmSup30 == idBmSup30) {
+          targetedBmSup30 = bm;
+          break;
+        }
+      }
+
+      if (targetedBmSup30 == null) {
+        throw Exception('BmSup30 not found');
+      }
+
+      // Check if the bmsup30 has more than one mesure
+      if (targetedBmSup30.bmsSup30Mesures!.length <= 1) {
+        throw Exception('BmSup30 has only one mesure');
+      }
+
+      BmSup30 bmSup30AfterDeletion = await _deleteBmSup30MesureUseCase.execute(
+        targetedBmSup30,
+        idBmSup30Mesure,
+      );
+
+      List<BmSup30> updatedBmsSup30 = [];
+      for (var tempBm in state.data!.values) {
+        if (tempBm.idBmSup30 == idBmSup30) {
+          updatedBmsSup30.add(bmSup30AfterDeletion);
+        } else {
+          updatedBmsSup30.add(tempBm);
+        }
+      }
+
+      // Set the new state with the updated Arbres list
+      BmSup30List updatedBmSup30List = BmSup30List(values: updatedBmsSup30);
+      state = State.success(updatedBmSup30List);
+      _displayableListNotifier.setDisplayableList(updatedBmSup30List);
+
       _lastSelectedProvider.setLastSelectedId('BmsSup30', null);
-      state = State.success(state.data!.removeItemFromList(id));
-      _displayableListNotifier.setDisplayableList(state.data!);
+      return true;
     } on Exception catch (e) {
       state = State.error(e);
+      return false;
     }
   }
 

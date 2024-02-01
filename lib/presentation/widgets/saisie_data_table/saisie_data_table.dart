@@ -507,10 +507,13 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             deletedItem['idCycle'],
                             mapIdCycleNumCycle[deletedItem['idCycle']]!);
                       } else if (deletedItem.containsKey('idBmSup30Mesure')) {
+                        selectedItemDetailsCo as BmSup30;
                         final bmSup30ListViewModel = ref.read(
                             bmSup30ListViewModelStateNotifierProvider.notifier);
-                        bmSup30ListViewModel
-                            .deleteItemMesure(deletedItem['idBmSup30Mesure']);
+                        result = await bmSup30ListViewModel.deleteItemMesure(
+                          selectedItemDetailsCo.idBmSup30,
+                          deletedItem['idBmSup30Mesure'],
+                        );
                       }
 
                       ScaffoldMessenger.of(context).showSnackBar(
