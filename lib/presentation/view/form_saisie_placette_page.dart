@@ -31,6 +31,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
   final CorCyclePlacette? corCyclePlacette;
   final String formType;
   final String? previousCycleCoupe;
+  final bool? hasPreviousMeasurements;
 
   const FormSaisiePlacettePage({
     Key? key,
@@ -42,6 +43,7 @@ class FormSaisiePlacettePage extends ConsumerStatefulWidget {
     required this.cycle,
     required this.corCyclePlacette,
     this.previousCycleCoupe,
+    this.hasPreviousMeasurements,
     // required this.placette,
     // required this.dispCycleList,
   }) : super(key: key);
@@ -549,6 +551,7 @@ ObjectSaisieViewModel getViewModel(
         'arbreMesure': widget.saisisableObject2,
         'formType': widget.formType,
         'previousCycleCoupe': widget.previousCycleCoupe,
+        'hasPreviousMeasurements': widget.hasPreviousMeasurements ?? false,
       }));
     // return ArbreViewModel();
     case 'BmsSup30':
