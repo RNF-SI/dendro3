@@ -672,9 +672,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               }
             });
 
+            // On utilise la function sort row avec columnIndex -1 car on a une colonne pour cliquer la ligne
+            // Mais on ajoute 1, car l'id n'est affiché pour aucune des tables
             ref
                 .read(sortedCycleRowsProvider.notifier)
-                .sortRows(columnIndex - 1, _sortAscending);
+                .sortRows(columnIndex, _sortAscending);
             // _onSortColumn(columnIndex, ascending);
           },
         ));

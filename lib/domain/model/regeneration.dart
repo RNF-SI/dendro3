@@ -114,6 +114,10 @@ class Regeneration with _$Regeneration implements SaisisableObject {
     return columnNames.map((columnName) {
       isVisible = true;
       switch (columnName) {
+        case 'idRegeneration':
+          displayName = 'idRegeneration';
+          isVisible = false;
+          break;
         case 'idCyclePlacette':
           displayName = 'NumCycle';
           break;

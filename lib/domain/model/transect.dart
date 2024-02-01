@@ -133,8 +133,10 @@ class Transect with _$Transect implements SaisisableObject {
     return columnNames.map((columnName) {
       isVisible = true;
       switch (columnName) {
-        // case 'idTransect':
-        //   return 'idTransectOrigine';
+        case 'idTransect':
+          displayName = 'idTransect';
+          isVisible = false;
+          break;
         case 'idCyclePlacette':
           displayName = 'NumCycle';
           break;
