@@ -1,4 +1,3 @@
-
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
@@ -702,7 +701,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             if (formData.isNotEmpty) {
               return (formData['Diametre1'] != null &&
                       formData['Diametre1'] != '' &&
-                      int.parse(formData['Diametre1']) > 30) ||
+                      double.parse(formData['Diametre1']) > 30) ||
                   (_diametre1 != null && _diametre1! > 30);
             } else {
               return (_diametre1 != null && _diametre1! > 30);
