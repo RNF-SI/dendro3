@@ -622,8 +622,9 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           initialValue: initialDiametreIniValue(),
           isVisibleFn: (formData) {
             return (formData['Longueur'] != null) &&
-                (formData['Longueur'] != '') &&
-                (double.tryParse(formData['Longueur'])! >= 5);
+                    (formData['Longueur'] != '') &&
+                    (double.tryParse(formData['Longueur'])! >= 5) ||
+                (_longueur != null && _longueur! >= 5);
           }),
       TextFieldConfig(
         fieldName: 'DiametreMed',
@@ -671,8 +672,9 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
           initialValue: initialDiametreFinValue(),
           isVisibleFn: (formData) {
             return (formData['Longueur'] != null) &&
-                (formData['Longueur'] != '') &&
-                (double.tryParse(formData['Longueur'])! >= 5);
+                    (formData['Longueur'] != '') &&
+                    (double.tryParse(formData['Longueur'])! >= 5) ||
+                (_longueur != null && _longueur! >= 5);
           }),
       // TextFieldConfig(
       //   fieldName: 'Diametre130',
