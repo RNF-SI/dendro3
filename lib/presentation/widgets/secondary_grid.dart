@@ -47,7 +47,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
     currentIndex = widget.currentIndex;
     if (widget.mesuresList.isEmpty) {
-      return const SizedBox.shrink(); // Return an empty widget if the list is empty
+      return const SizedBox
+          .shrink(); // Return an empty widget if the list is empty
     }
 
     var maxNumberCyclePlacette = widget.mapIdCycleNumCycle.isNotEmpty
@@ -57,43 +58,13 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         ? widget.mapIdCycleNumCycle.keys.firstWhere(
             (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette)
         : null;
+    var lastPassageIdCyclePlacette = (maxNumberCyclePlacette != null &&
+            maxNumberCyclePlacette > 1)
+        ? widget.mapIdCycleNumCycle.keys.firstWhere(
+            (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette - 1)
+        : null;
 
-    return
-        // Column(
-        //   children: [
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     IconButton(
-        //       icon: Icon(Icons.edit),
-        //       onPressed: () {
-        //         widget.onItemMesureUpdated(widget.mesuresList[currentIndex]);
-        //       },
-        //       iconSize: 18, // Reduced icon size
-        //       padding: EdgeInsets.all(4), // Reduced padding
-        //       constraints: BoxConstraints(),
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.delete, color: Colors.red),
-        //       onPressed: () {
-        //         widget.onItemMesureDeleted(widget.mesuresList[currentIndex]);
-        //       },
-        //       iconSize: 18, // Reduced icon size
-        //       padding: EdgeInsets.all(4), // Reduced padding
-        //       constraints: BoxConstraints(),
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.add, color: Colors.green),
-        //       onPressed: () {
-        //         widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
-        //       },
-        //       iconSize: 18, // Reduced icon size
-        //       padding: EdgeInsets.all(4), // Reduced padding
-        //       constraints: BoxConstraints(),
-        //     ),
-        //   ],
-        // ),
-        ListView.builder(
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.mesuresList.length + 1,
       itemBuilder: (context, index) {
@@ -103,7 +74,10 @@ class _SecondaryGridState extends State<SecondaryGrid> {
           }
 
           // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
-          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette) {
+          // Et qu'il n'y a pas eu de saut de cycle: que le cycle précédent soit le dernier cycle de la placette
+          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette &&
+              widget.mesuresList.last['idCycle'] ==
+                  lastPassageIdCyclePlacette) {
             // Return the "Add New Measure" element
             return GestureDetector(
               onTap: () {
@@ -254,7 +228,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                     shrinkWrap: true,
                     physics:
                         const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4, // Number of columns in the grid
                       childAspectRatio: 2, // Aspect ratio of each grid cell
                     ),
