@@ -453,6 +453,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     onItemMesureAdded: (dynamic adedItem) async {
                       Navigator.push(context, MaterialPageRoute<void>(
                         builder: (BuildContext context) {
+                          bool hasPreviousMeasurements = false;
+                          if (widget.displayTypeState == "Arbres") {
+                            selectedItemDetailsCo as SaisisableObjectMesure;
+                            hasPreviousMeasurements =
+                                selectedItemDetailsCo.getMesureValuesLength() >
+                                        0
+                                    ? true
+                                    : false;
+                          }
+
                           return FormSaisiePlacettePage(
                             formType: "newMesure",
                             type: widget.displayTypeState,
@@ -468,6 +478,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             ),
                             saisisableObject1: selectedItemDetailsCo,
                             saisisableObject2: null,
+                            hasPreviousMeasurements: hasPreviousMeasurements,
                           );
                         },
                       ));
@@ -507,6 +518,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                           // Get the coupe info of the previous cycle
                           // Get previous cycle
                           String? previousCycleCoupe;
+                          bool hasPreviousMeasurements = false;
                           if (widget.displayTypeState == "Arbres") {
                             selectedItemDetailsCo as SaisisableObjectMesure;
                             int? numCycle = mapIdCycleNumCycle[
@@ -529,8 +541,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                       previousCycleIdCycle);
 
                               if (previousArbreMesure != null) {
+                                hasPreviousMeasurements = true;
                                 previousCycleCoupe = previousArbreMesure.coupe;
                               } else {
+                                hasPreviousMeasurements = false;
                                 previousCycleCoupe = '';
                               }
                             }
@@ -560,6 +574,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                         .getMesureFromIndex(index)
                                     : null,
                             previousCycleCoupe: previousCycleCoupe,
+                            hasPreviousMeasurements: hasPreviousMeasurements,
                           );
                         },
                       ));

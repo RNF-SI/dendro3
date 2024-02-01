@@ -36,6 +36,7 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbreMesure'],
       arbreInfoObj['formType'],
       arbreInfoObj['previousCycleCoupe'],
+      arbreInfoObj['hasPreviousMeasurements'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -57,6 +58,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   final String formType;
 
   final String? previousCycleCoupe;
+  final bool hasPreviousMeasurements;
   // late TodoId _id;
   // var _title = '';
   // var _description = '';
@@ -124,6 +126,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     final ArbreMesure? arbreMesure,
     this.formType,
     this.previousCycleCoupe,
+    this.hasPreviousMeasurements,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -329,14 +332,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'numCycle': cycle.numCycle,
         'diametre1': _diametre1,
         'diametre2': _diametre2,
-        'type': _type,
+        'type': _type == '' ? null : _type,
         'hauteurTotale': _hauteurTotale,
         'hauteurBranche': _hauteurBranche,
         'stadeDurete': _stadeDurete,
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': '',
+        'coupe': null,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -358,14 +361,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           'numCycle': cycle.numCycle,
           'diametre1': _diametre1,
           'diametre2': _diametre2,
-          'type': _type,
+          'type': _type == '' ? null : _type,
           'hauteurTotale': _hauteurTotale,
           'hauteurBranche': _hauteurBranche,
           'stadeDurete': _stadeDurete,
           'stadeEcorce': _stadeEcorce,
           'liane': _liane,
           'diametreLiane': _diametreLiane,
-          'coupe': _coupe,
+          'coupe': _coupe == '' ? null : _coupe,
           'limite': _limite,
           'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
           'codeEcolo': _codeEcolo,
@@ -395,14 +398,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'numCycle': cycle.numCycle,
         'diametre1': _diametre1,
         'diametre2': _diametre2,
-        'type': _type,
+        'type': _type == '' ? null : _type,
         'hauteurTotale': _hauteurTotale,
         'hauteurBranche': _hauteurBranche,
         'stadeDurete': _stadeDurete,
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': _coupe,
+        'coupe': _coupe == '' ? null : _coupe,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -502,8 +505,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   setDiametre2(final String? value) =>
       _diametre2 = (value != null && value != '') ? double.parse(value) : null;
   setType(final String value) => _type = value;
-  setHauteurTotale(final String? value) =>
-      _hauteurTotale = value != null ? double.parse(value) : null;
+  setHauteurTotale(final String? value) => _hauteurTotale =
+      (value != null && value.isNotEmpty) ? double.tryParse(value) : null;
   setHauteurBranche(final String value) =>
       _hauteurBranche = double.parse(value);
   setStadeDurete(final int? value) => _stadeDurete = value;
@@ -933,18 +936,19 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
-            if (cycle.numCycle == 1) {
+            if (!hasPreviousMeasurements) {
               return false;
             } else if (((formData['Type'] != null) &&
                     (formData['Type'] != '')) ||
                 (_type != '')) {
               return true;
-            } else
+            } else {
               return false;
-          } else if (cycle.numCycle == 1) {
+            }
+          } else if (!hasPreviousMeasurements) {
             return false;
           } else {
-            return true;
+            return (_type != '');
           }
         },
         onChanged: (value) => setCoupe(value),
