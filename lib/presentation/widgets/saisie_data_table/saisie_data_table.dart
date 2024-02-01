@@ -524,9 +524,15 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                   .key;
 
                               // get coupe value of previous Cycle with previousCycleIdCycle
-                              previousCycleCoupe = selectedItemDetailsCo
-                                  .getMesureFromIdCycle(previousCycleIdCycle)
-                                  .coupe;
+                              ArbreMesure? previousArbreMesure =
+                                  selectedItemDetailsCo.getMesureFromIdCycle(
+                                      previousCycleIdCycle);
+
+                              if (previousArbreMesure != null) {
+                                previousCycleCoupe = previousArbreMesure.coupe;
+                              } else {
+                                previousCycleCoupe = '';
+                              }
                             }
                           }
                           return FormSaisiePlacettePage(
