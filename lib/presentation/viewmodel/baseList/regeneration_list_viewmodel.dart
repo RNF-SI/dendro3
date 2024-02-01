@@ -125,7 +125,7 @@ class RegenerationListViewModel
   }
 
   @override
-  Future<void> deleteItem(String id) {
+  Future<bool> deleteItem(String id) {
     // TODO: implement deleteItem
     throw UnimplementedError();
   }

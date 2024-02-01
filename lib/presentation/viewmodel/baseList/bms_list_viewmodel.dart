@@ -208,9 +208,17 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   }
 
   @override
-  Future<void> deleteItem(String id) {
-    // TODO: implement deleteItem
-    throw UnimplementedError();
+  Future<bool> deleteItem(String id) async {
+    try {
+      await _deleteBmSup30AndMesureUseCase.execute(id);
+      _lastSelectedProvider.setLastSelectedId('BmsSup30', null);
+      state = State.success(state.data!.removeItemFromList(id));
+      _displayableListNotifier.setDisplayableList(state.data!);
+      return true;
+    } on Exception catch (e) {
+      state = State.error(e);
+      return false;
+    }
   }
 
   Future<void> deleteItemMesure(String id) async {

@@ -215,14 +215,16 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   }
 
   @override
-  Future<void> deleteItem(String id) async {
+  Future<bool> deleteItem(String id) async {
     try {
       await _deleteArbreAndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('Arbres', null);
       state = State.success(state.data!.removeItemFromList(id));
       _displayableListNotifier.setDisplayableList(state.data!);
+      return true;
     } on Exception catch (e) {
       state = State.error(e);
+      return false;
     }
   }
 

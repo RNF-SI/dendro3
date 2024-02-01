@@ -372,35 +372,46 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   },
                 ));
               },
-              onItemDeleted: (dynamic item) {
+              onItemDeleted: (dynamic item) async {
+                bool deletionResult = false;
                 if (selectedItemDetailsCo is Arbre) {
                   final arbreListViewModel = ref
                       .read(arbreListViewModelStateNotifierProvider.notifier);
                   // Arbre? arbreDetails = selectedItemDetailsCo as Arbre?;
                   // if (arbreDetails != null) {
-                  arbreListViewModel.deleteItem(selectedItemDetailsCo.idArbre);
+                  deletionResult = await arbreListViewModel
+                      .deleteItem(selectedItemDetailsCo.idArbre);
                   // }
                 } else if (selectedItemDetailsCo is BmSup30) {
                   final bmSup30ListViewModel = ref
                       .read(bmSup30ListViewModelStateNotifierProvider.notifier);
-                  bmSup30ListViewModel
+                  deletionResult = await bmSup30ListViewModel
                       .deleteItem(selectedItemDetailsCo.idBmSup30);
                 } else if (selectedItemDetailsCo is Regeneration) {
                   final regenerationListViewModel = ref.read(
                       regenerationListViewModelStateNotifierProvider.notifier);
-                  regenerationListViewModel
+                  deletionResult = await regenerationListViewModel
                       .deleteItem(selectedItemDetailsCo.idRegeneration);
                 } else if (selectedItemDetailsCo is Repere) {
                   final repereListViewModel = ref
                       .read(repereListViewModelStateNotifierProvider.notifier);
-                  repereListViewModel
+                  deletionResult = await repereListViewModel
                       .deleteItem(selectedItemDetailsCo.idRepere);
                 } else if (selectedItemDetailsCo is Transect) {
                   final transectListViewModel = ref.read(
                       transectListViewModelStateNotifierProvider.notifier);
-                  transectListViewModel
+                  deletionResult = await transectListViewModel
                       .deleteItem(selectedItemDetailsCo.idTransect);
                 }
+                // Display the SnackBar based on the result of deletion
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(deletionResult
+                        ? 'Le ${widget.displayTypeState} a été supprimé sans problème. La sélection a été réinitialisée.'
+                        : 'Problème rencontré lors de la suppression du ${widget.displayTypeState}.'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
               },
               onItemUpdated: (dynamic item) {
                 // Logic for updating an item
@@ -502,15 +513,14 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             .deleteItemMesure(deletedItem['idBmSup30Mesure']);
                       }
 
-                      if (!result) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'Cannot delete the only mesure of an arbre.'),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(result
+                              ? 'La mesure du ${widget.displayTypeState} a été supprimée sans problème. La sélection a été réinitialisée.'
+                              : 'Un problème a eu lieu lors de la suppression.'),
+                          duration: Duration(seconds: 4),
+                        ),
+                      );
                     },
                     onItemMesureUpdated: (int index) {
                       Navigator.push(context, MaterialPageRoute<void>(
