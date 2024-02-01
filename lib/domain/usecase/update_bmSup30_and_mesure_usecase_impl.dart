@@ -42,7 +42,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
     int stadeEcorce,
     String? observationMesure,
   ) async {
-    BmSup30 bmsup30 = await _bmsup30Repository.updateBmSup30(
+    BmSup30 bmsup30Updated = await _bmsup30Repository.updateBmSup30(
       idBmSup30,
       idBmSup30Orig,
       idPlacette,
@@ -59,7 +59,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
     BmSup30Mesure bmsup30MesureUpdated =
         await _bmsup30MesureRepositoryMesure.updateBmSup30Mesure(
             idBmSup30Mesure,
-            idBmSup30,
+            bmsup30Updated.idBmSup30,
             idCycle,
             diametreIni,
             diametreMed,
@@ -83,7 +83,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
       updatedMesures[mesureIndex] = bmsup30MesureUpdated;
     }
 
-    return bmsup30.copyWith(
+    return bmsup30Updated.copyWith(
         bmsSup30Mesures: BmSup30MesureList(values: updatedMesures));
   }
 }
