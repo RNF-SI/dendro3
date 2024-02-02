@@ -67,8 +67,13 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
       String transectUuid = generateUuid();
-
       transect['id_transect'] = transectUuid;
+
+      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
+              'SELECT MAX(id_transect_orig) FROM $_tableName WHERE id_cycle_placette = ?',
+              [transect['id_cycle_placette']])) ??
+          0;
+      transect['id_transect_orig'] = maxIdOrig + 1;
 
       await txn.insert(
         _tableName,

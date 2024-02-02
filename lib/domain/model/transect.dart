@@ -107,7 +107,7 @@ class Transect with _$Transect implements SaisisableObject {
     return [
       'idTransect',
       'idCyclePlacette',
-      // 'idTransectOrig',
+      'idTransectOrig',
       'codeEssence',
       'refTransect',
       // 'distance',
@@ -157,7 +157,9 @@ class Transect with _$Transect implements SaisisableObject {
     return columnNames.map((columnName) {
       switch (columnName) {
         case 'idTransect':
-          return 'idTransectOrigine';
+          return 'idTransect';
+        case 'idTransectOrig':
+          return 'idTransectOrig';
         case 'idCyclePlacette':
           return 'NumCycle';
         case 'codeEssence':
