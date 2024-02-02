@@ -1,4 +1,3 @@
-
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/essence.dart';
@@ -185,6 +184,12 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   bool isUniqueCombination() {
+    // Check if corCyclePlacette or corCyclePlacette.regenerations is null before proceeding.
+    if (corCyclePlacette == null || corCyclePlacette!.regenerations == null) {
+      // If there's no regenerations data, we might consider the combination unique by default
+      // Or handle the logic differently depending on the application's requirements
+      return true; // or false, depending on your logic needs.
+    }
     return corCyclePlacette!.regenerations!
         .isUniqueCombination(_sousPlacette, _codeEssence, _taillis);
   }
