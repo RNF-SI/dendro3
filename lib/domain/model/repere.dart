@@ -99,7 +99,7 @@ class Repere with _$Repere implements SaisisableObject {
       switch (columnName) {
         case 'idRepere':
           displayName = 'id';
-          isVisible = false;
+          // isVisible = false;
           break;
         case 'azimut':
           displayName = 'Azimut';
@@ -127,7 +127,7 @@ class Repere with _$Repere implements SaisisableObject {
     return columnNames.map((columnName) {
       switch (columnName) {
         case 'idRepere':
-          return 'id';
+          return 'idRepere';
         case 'azimut':
           return 'Azimut';
         case 'distance':

@@ -1,4 +1,3 @@
-
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
@@ -96,6 +95,15 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
 
   @override
   Future<String> updateObject() async {
+    _repereListViewModel.updateItem({
+      'idRepere': _idRepere,
+      'idPlacette': corCyclePlacette!.idPlacette,
+      'azimut': _azimut,
+      'distance': _distance,
+      'diametre': _diametre,
+      'repere': _repere,
+      'observation': _observation,
+    });
     return '';
   }
 
@@ -146,5 +154,4 @@ class RepereSaisieViewModel extends ObjectSaisieViewModel {
   String initialObservation() => _observation ?? '';
 
   // Fonction setters
-
 }
