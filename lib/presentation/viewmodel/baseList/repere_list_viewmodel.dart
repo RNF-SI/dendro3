@@ -3,6 +3,7 @@ import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:dendro3/domain/usecase/create_repere_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_repere_usecase.dart';
 import 'package:dendro3/domain/usecase/update_repere_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
@@ -24,9 +25,9 @@ final repereListViewModelStateNotifierProvider =
     // ref.watch(getBmSup30ListUseCaseProvider),
     ref.watch(createRepereUseCaseProvider),
     ref.watch(updateRepereUseCaseProvider),
+    ref.watch(deleteRepereUseCaseProvider),
 
     // ref.watch(updateBmSup30UseCaseProvider),
-    // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
     lastSelectedProvider,
     displayableListNotifier,
@@ -40,14 +41,15 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
   final CreateRepereUseCase _createRepereUseCase;
   final UpdateRepereUseCase _updateRepereUseCase;
+  final DeleteRepereUseCase _deleteRepereUseCase;
 
   // final UpdateBmSup30UseCase _updateBmSup30UseCase;
-  // final DeleteBmSup30UseCase _deleteBmSup30UseCase;
 
   RepereListViewModel(
     // this._getBmSup30ListUseCase,
     this._createRepereUseCase,
     this._updateRepereUseCase,
+    this._deleteRepereUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
     this._lastSelectedProvider,
@@ -107,8 +109,16 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) {
-    // TODO: implement deleteItem
-    throw UnimplementedError();
+  Future<bool> deleteItem(String id) async {
+    try {
+      await _deleteRepereUseCase.execute(id);
+      _lastSelectedProvider.setLastSelectedId('Reperes', null);
+      state = State.success(state.data!.removeItemFromList(id));
+      _displayableListNotifier.setDisplayableList(state.data!);
+      return true;
+    } on Exception catch (e) {
+      state = State.error(e);
+      return false;
+    }
   }
 }
