@@ -624,48 +624,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
           0;
     }
-
-    // ref
-    //     .read(selectedItemMesureDetailsProvider.notifier)
-    //     .setSelectedItemMesureDetails(selectedIndex);
-
-    // if (selectedItemDetails is Arbre) {
-    //   Arbre arbreDetails = selectedItemDetails as Arbre;
-    //   selectedItemMesureDetails =
-    //       arbreDetails.arbresMesures!.values[selectedIndex];
-    // }
-    // onSelectedItemIndexChanged(selectedIndex);
-    // switch (widget.displayTypeState) {
-    //   case 'Arbres':
-    //     selectedItemMesureDetails = selectedItemDetails!
-    //         .arbresMesures.values[selectedIndex] as ArbreMesure;
-    //     // selectedItemMesureDetails =
-    //     //     getObjectFromType(selectedItemDetails!.arbresMesures.values[selectedIndex], items, 'Arbres');
-    //     // selectedItemMesureDetails =
-    //     // selectedItemDetails!.arbresMesures.values[selectedIndex];
-
-    //     break;
-    //   case 'BmsSup30':
-
-    // case 'BmsSup30':
-    //   return items.getObjectFromId(value['idBmSup30Orig']);
-    // case 'Regenerations':
-    //   return items.getObjectFromId(value['idRegeneration']);
-    // case 'Repères':
-    //   return items.getObjectFromId(value['idRepere']);
-    // case 'Transects':
-    //   return items.getObjectFromId(value['idTransectOrig']);
-    // default:
-    //   throw ArgumentError('Unknown type: ${items.runtimeType}');
-    // }
-
-    // if (selectedItemDetails != null &&
-    //     selectedIndex < selectedItemDetails?.arbresMesures.values.length) {
-    //   setState(() {
-    //     selectedArbreMesure =
-    //         selectedItemDetails?.arbresMesures.values[selectedIndex];
-    //   });
-    // }
   }
 
   List<DataColumn> _createColumns(List<String> columnList) {
@@ -951,25 +909,6 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         child: Text(data.numCycle.toString()),
       );
     }).toList();
-  }
-}
-
-SaisisableObject getObjectFromType(
-    Map<String, dynamic> value, DisplayableList items, String type) {
-  switch (type) {
-    case 'Arbres':
-      return items.getObjectFromId(value['idArbreOrig']);
-    case 'BmsSup30':
-      return items.getObjectFromId(value['idBmSup30Orig']);
-    case 'Regenerations':
-      return items.getObjectFromId(value['idRegeneration']);
-    case 'Reperes':
-    case 'Repères':
-      return items.getObjectFromId(value['idRepere']);
-    case 'Transects':
-      return items.getObjectFromId(value['idTransectOrig']);
-    default:
-      throw ArgumentError('Unknown type: ${items.runtimeType}');
   }
 }
 
