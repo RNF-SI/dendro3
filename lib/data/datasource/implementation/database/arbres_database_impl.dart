@@ -67,25 +67,25 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
   static Future<Map<String, List<ArbreEntity>>> getPlacetteArbresForDataSync(
       Database db, final int placetteId, String lastSyncTime) async {
-    // Fetch newly created arbres (creation_date after lastSyncTime and not deleted)
+    // Fetch newly created arbres (created_at after lastSyncTime and not deleted)
     List<ArbreEntity> createdArbres = await db.query(
       _tableName,
-      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
-    // Fetch updated arbres (last_update after lastSyncTime and not deleted)
+    // Fetch updated arbres (updated_at after lastSyncTime and not deleted)
     List<ArbreEntity> updatedArbres = await db.query(
       _tableName,
       where:
-          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
-    // Fetch deleted arbres (deleted flag set and last_update after lastSyncTime)
+    // Fetch deleted arbres (deleted flag set and updated_at after lastSyncTime)
     List<ArbreEntity> deletedArbres = await db.query(
       _tableName,
-      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],
     );
 
@@ -150,7 +150,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
       var updatedArbre = Map<String, dynamic>.from(arbre)
-        ..['last_update'] =
+        ..['updated_at'] =
             formatDateTime(DateTime.now()); // Add current timestamp
 
       await txn.update(

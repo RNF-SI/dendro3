@@ -43,14 +43,14 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     late final ArbreMesureEntity arbreMesureEntity;
 
     await db.transaction((txn) async {
-      // Create a copy of the arbreMesure map and add/modify the last_update field
+      // Create a copy of the arbreMesure map and add/modify the updated_at field
       var updatedArbreMesure = Map<String, dynamic>.from(arbreMesure)
-        ..['last_update'] =
+        ..['updated_at'] =
             formatDateTime(DateTime.now()); // Add current timestamp
 
       await txn.update(
         _tableName,
-        updatedArbreMesure, // Use the updated map with the new last_update value
+        updatedArbreMesure, // Use the updated map with the new updated_at value
         where: '$_columnId = ?',
         whereArgs: [arbreMesure['id_arbre_mesure']],
       );
@@ -83,7 +83,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     // Fetch newly created arbreMesures
     List<ArbreMesureEntity> createdArbremesures = await db.query(
       _tableName,
-      where: 'id_arbre = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_arbre = ? AND created_at > ? AND deleted = 0',
       whereArgs: [arbreId, lastSyncTime],
     );
 
@@ -91,14 +91,14 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     List<ArbreMesureEntity> updatedArbremesures = await db.query(
       _tableName,
       where:
-          'id_arbre = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_arbre = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [arbreId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted arbreMesures
     List<ArbreMesureEntity> deletedArbremesures = await db.query(
       _tableName,
-      where: 'id_arbre = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_arbre = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [arbreId, lastSyncTime],
     );
 
@@ -139,7 +139,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     await db.transaction((txn) async {
       var updateData = {
         'coupe': coupe,
-        'last_update': formatDateTime(DateTime.now())
+        'updated_at': formatDateTime(DateTime.now())
       };
 
       await txn.update(
@@ -200,5 +200,4 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   //     whereArgs: [id],
   //   );
   // }
-
 }

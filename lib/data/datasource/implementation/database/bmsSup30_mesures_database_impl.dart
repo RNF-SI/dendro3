@@ -38,7 +38,7 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     // Fetch newly created BmSup30Mesure records
     List<BmSup30MesureEntity> createdBmsup30mesure = await db.query(
       _tableName,
-      where: 'id_bm_sup_30 = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_bm_sup_30 = ? AND created_at > ? AND deleted = 0',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
@@ -46,14 +46,14 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     List<BmSup30MesureEntity> updatedBmsup30mesure = await db.query(
       _tableName,
       where:
-          'id_bm_sup_30 = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_bm_sup_30 = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [bmsSup30Id, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted BmSup30Mesure records
     List<BmSup30MesureEntity> deletedBmsup30mesure = await db.query(
       _tableName,
-      where: 'id_bm_sup_30 = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_bm_sup_30 = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
@@ -94,7 +94,7 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     late final BmSup30MesureEntity bmSup30MesureEntity;
     await db.transaction((txn) async {
       var updatedBmSup30Mesure = Map<String, dynamic>.from(bmSup30Mesure)
-        ..['last_update'] =
+        ..['updated_at'] =
             formatDateTime(DateTime.now()); // Add current timestamp
 
       await txn.update(

@@ -36,20 +36,20 @@ class TransectsDatabaseImpl implements TransectsDatabase {
           final String corCyclePlacetteId, String lastSyncTime) async {
     var createdTransects = await db.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_cycle_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
     var updatedTransects = await db.query(
       _tableName,
       where:
-          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_cycle_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
     var deletedTransects = await db.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_cycle_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
@@ -95,7 +95,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
       var updatedTransect = Map<String, dynamic>.from(transect)
-        ..['last_update'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now());
 
       await txn.update(
         _tableName,

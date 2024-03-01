@@ -35,7 +35,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     // Fetch newly created Repere records
     List<RepereEntity> createdReperes = await db.query(
       _tableName,
-      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
@@ -43,14 +43,14 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     List<RepereEntity> updatedReperes = await db.query(
       _tableName,
       where:
-          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted Repere records
     List<RepereEntity> deletedReperes = await db.query(
       _tableName,
-      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],
     );
 
@@ -90,7 +90,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     late final RepereEntity transectEntity;
     await db.transaction((txn) async {
       var updatedRepere = Map<String, dynamic>.from(repere)
-        ..['last_update'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now());
 
       await txn.update(
         _tableName,
