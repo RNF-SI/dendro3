@@ -63,8 +63,12 @@ CREATE TABLE t_reperes (
   diametre real,
   repere character varying,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_reperes_t_placettes
     FOREIGN KEY (id_placette) REFERENCES t_placettes (id_placette)
@@ -99,8 +103,12 @@ CREATE TABLE t_arbres (
   distance real,
   taillis boolean,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_arbres_t_placettes
     FOREIGN KEY (id_placette) REFERENCES t_placettes (id_placette)
@@ -131,8 +139,12 @@ CREATE TABLE t_arbres_mesures (
   ref_code_ecolo character varying,
   ratio_hauteur boolean,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_arbres_mesures_t_arbres
     FOREIGN KEY (id_arbre) REFERENCES t_arbres (id_arbre)
@@ -160,8 +172,12 @@ CREATE TABLE t_regenerations (
   abroutissement boolean,
   id_nomenclature_abroutissement integer,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_regenerations_cor_cycles_placettes
     FOREIGN KEY (id_cycle_placette) REFERENCES cor_cycles_placettes (id_cycle_placette)
@@ -195,8 +211,12 @@ CREATE TABLE t_bm_sup_30 (
   azimut_souche real,
   distance_souche real,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_bm_sup_30_t_placettes
     FOREIGN KEY (id_placette) REFERENCES t_placettes (id_placette)
@@ -222,8 +242,12 @@ CREATE TABLE t_bm_sup_30_mesures (
   stade_durete integer,
   stade_ecorce integer,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_bm_sup_30_mesures_t_bm_sup_30
     FOREIGN KEY (id_bm_sup_30) REFERENCES t_bm_sup_30 (id_bm_sup_30)
@@ -254,8 +278,12 @@ CREATE TABLE t_transects (
   stade_durete integer,
   stade_ecorce integer,
   observation text,
-  creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-  last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  created_on character varying,
+  created_by character varying,
+  updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+  updated_on character varying,
+  updated_by character varying,
   deleted BOOLEAN DEFAULT 0,
   CONSTRAINT fk_t_transects_cor_cycles_placettes
     FOREIGN KEY (id_cycle_placette) REFERENCES cor_cycles_placettes (id_cycle_placette)
@@ -309,8 +337,12 @@ CREATE TABLE cor_cycles_placettes (
     recouv_herbes_hautes real,
     recouv_buissons real,
     recouv_arbres real,
-    creation_date TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
-    last_update TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+    created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+    created_on character varying,
+    created_by character varying,
+    updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
+    updated_on character varying,
+    updated_by character varying,
     deleted BOOLEAN DEFAULT 0,
     CONSTRAINT fk_cor_cycles_placettes_t_cycles
       FOREIGN KEY (id_cycle) REFERENCES t_cycles (id_cycle)
