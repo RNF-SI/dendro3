@@ -59,11 +59,42 @@ class HomePage extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await authViewModel.signOut();
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ));
+            onPressed: () {
+              // Show a confirmation dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Deconnexion"),
+                    content: const Text(
+                        "Etes vous sûr de vouloir vous déconnecter? Il vous faudra une connexion internet pour vous reconnecter."),
+                    actions: <Widget>[
+                      // Cancel button
+                      TextButton(
+                        onPressed: () {
+                          // Dismiss the dialog but don't logout
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Annuler"),
+                      ),
+                      // Confirm button
+                      TextButton(
+                        onPressed: () async {
+                          // Pop the dialog first
+                          Navigator.of(context).pop();
+                          // Then sign out and navigate to the login page
+                          await authViewModel.signOut();
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ));
+                        },
+                        child: const Text("Se Déconnecter"),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
