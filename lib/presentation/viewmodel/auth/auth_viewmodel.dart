@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dendro3/domain/domain_module.dart';
 
 import 'package:dendro3/presentation/state/state.dart' as dendroState;
+import 'package:dendro3/presentation/view/auth_checker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,8 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 
 import 'package:dendro3/domain/model/user.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 // Pour le Checker
 final authStateProvider = StreamProvider<User?>((ref) {
@@ -46,18 +47,25 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
     final String identifiant,
     final String password,
     BuildContext context,
+    WidgetRef ref,
   ) async {
     try {
       state = const dendroState.State.loading();
-      await _loginUseCase.execute(identifiant, password).then((evt) async {
-        controller.add(evt);
+      await _loginUseCase.execute(identifiant, password).then((user) async {
+        controller.add(user);
         try {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
-          print('Login state saved'); // Added for debugging purposes
-        } catch (e) {
+          print("isLoggedIn set to: ${await prefs.getBool('isLoggedIn')}");
+          // Save the user's name. Replace `user.name` with the actual property that holds the user's name in your User model.
+          await prefs.setString('userName',
+              identifiant); // Assuming 'user.name' holds the name of the user
           print(
-              'Error saving login state: $e'); // Error handling for SharedPreferences
+              'Login state and user name saved'); // Added for debugging purposes
+          ref.refresh(isLoggedInProvider);
+          state = dendroState.State.success(user);
+        } catch (e) {
+          print('Error saving login state and user name: $e');
         }
       });
     } on DioError catch (e) {
@@ -130,7 +138,7 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
   }
 
   // Method to handle user logout
-  Future<void> signOut() async {
+  Future<void> signOut(ref, context) async {
     try {
       // Clear user data
       user = null;
@@ -139,7 +147,9 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
       // Update shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', false);
+      ref.refresh(isLoggedInProvider);
 
+      GoRouter.of(context).go('/');
       // Update state
       state = const dendroState.State.init();
     } catch (e) {

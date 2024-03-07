@@ -3,8 +3,10 @@ import 'package:dendro3/presentation/view/login_page.dart';
 import 'package:dendro3/presentation/view/user_dispositif_list.dart';
 import 'package:dendro3/presentation/viewmodel/auth/auth_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/database/database_service.dart';
+import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +20,15 @@ class HomePage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Mes Dispositifs"),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () async {
+              // Call your ViewModel's method to refresh the list
+              final userDispositifsViewModel = ref.read(
+                  userDispositifListViewModelStateNotifierProvider.notifier);
+              userDispositifsViewModel.refreshDispositifs();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
@@ -83,11 +94,7 @@ class HomePage extends ConsumerWidget {
                           // Pop the dialog first
                           Navigator.of(context).pop();
                           // Then sign out and navigate to the login page
-                          await authViewModel.signOut();
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => LoginPage(),
-                          ));
+                          await authViewModel.signOut(ref, context);
                         },
                         child: const Text("Se Déconnecter"),
                       ),

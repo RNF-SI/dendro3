@@ -30,37 +30,43 @@ class DownloadButton extends HookConsumerWidget {
 
   bool get _isRemoving => dispInfo.downloadStatus == DownloadStatus.removing;
 
-  void _onPressed(BuildContext context, WidgetRef ref) {
-    switch (dispInfo.downloadStatus) {
-      case DownloadStatus.notDownloaded:
-        ref
-            .read(userDispositifListViewModelStateNotifierProvider.notifier)
-            .downloadDispositif(dispInfo);
-        break;
-      case DownloadStatus.fetchingDownload:
-        // do nothing.
-        break;
-      case DownloadStatus.downloading:
-        ref
-            .read(userDispositifListViewModelStateNotifierProvider.notifier)
-            .stopDownloadDispositif(dispInfo);
-        break;
-      case DownloadStatus.downloaded:
-        ref
-            .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider
-                .notifier)
-            .reinitializeList();
-        Navigator.push(context, MaterialPageRoute<void>(
-          builder: (BuildContext context) {
-            return DispositifPage(
-              dispInfo: dispInfo,
-            );
-          },
-        ));
-        break;
-      case DownloadStatus.removing:
-        // Handle the removing state, perhaps do nothing or show a message
-        break;
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    try {
+      switch (dispInfo.downloadStatus) {
+        case DownloadStatus.notDownloaded:
+          ref
+              .read(userDispositifListViewModelStateNotifierProvider.notifier)
+              .downloadDispositif(dispInfo, context);
+          break;
+        case DownloadStatus.fetchingDownload:
+          // do nothing.
+          break;
+        case DownloadStatus.downloading:
+          ref
+              .read(userDispositifListViewModelStateNotifierProvider.notifier)
+              .stopDownloadDispositif(dispInfo);
+          break;
+        case DownloadStatus.downloaded:
+          ref
+              .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider
+                  .notifier)
+              .reinitializeList();
+          Navigator.push(context, MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return DispositifPage(
+                dispInfo: dispInfo,
+              );
+            },
+          ));
+          break;
+        case DownloadStatus.removing:
+          // Handle the removing state, perhaps do nothing or show a message
+          break;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Download failed: No internet connection."),
+      ));
     }
   }
 

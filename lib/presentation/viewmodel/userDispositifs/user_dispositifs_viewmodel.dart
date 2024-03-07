@@ -1,5 +1,5 @@
-
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
@@ -8,8 +8,10 @@ import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/model/dispositifInfo_list.dart';
 import 'package:dendro3/presentation/state/download_status.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 final userDispositifListProvider =
     Provider.autoDispose<custom_async_state.State<DispositifInfoList>>((ref) {
@@ -67,54 +69,87 @@ class UserDispositifsViewModel
     }
   }
 
-  Future<void> _init() async {
-    var dispositifInfoList = const DispositifInfoList(values: []);
-    state = const custom_async_state.State.loading();
-    try {
-      var dispositifsList = await Future.wait([
-        _getUserDispositifsListFromAPIUseCase.execute(3),
-        _getUserDispositifsListFromDBUseCase.execute(3)
-      ]);
-      // Si c'est une liste, alors on a bien une connexion internet
-      // On affiche tous les dispositif
-      var downloadStatus = DownloadStatus.notDownloaded;
-      dispositifsList[0].values.asMap().forEach((index, disp0) {
-        downloadStatus = DownloadStatus.notDownloaded;
-        dispositifsList[1].values.asMap().forEach((index, disp1) => {
-              if (disp0.id == disp1.id)
-                {downloadStatus = DownloadStatus.downloaded}
-            });
-        dispositifInfoList = dispositifInfoList.addDispositifInfo(
-            DispositifInfo(
-                dispositif: disp0, downloadStatus: downloadStatus));
-      });
-
-      state = custom_async_state.State.success(dispositifInfoList);
-        } on Exception catch (e) {
-      state = custom_async_state.State.error(e);
-    } catch (e) {
-      print(e);
-      state = custom_async_state.State.error(Exception(e));
-    }
+  Future<void> refreshDispositifs() async {
+    _init();
   }
 
-  downloadDispositif(final DispositifInfo dispositifInfo) async {
+  Future<void> _init() async {
+    state = const custom_async_state.State.loading();
+
+    bool isConnected = await hasInternetConnection(); // Implement this function
+    List<DispositifInfo> finalDispositifs = [];
+    Set<int> dbIDs = Set();
+
+    // Always fetch from DB first to determine downloaded status
+    var dbDispositifs = await _getUserDispositifsListFromDBUseCase.execute(3);
+    for (var dbDisp in dbDispositifs.values) {
+      // Add all DB dispositifs as downloaded
+      finalDispositifs.add(DispositifInfo(
+          dispositif: dbDisp, downloadStatus: DownloadStatus.downloaded));
+      dbIDs.add(dbDisp.id); // Keep track of downloaded IDs
+    }
+
+    if (isConnected) {
+      try {
+        // Fetch dispositifs from API
+        var apiDispositifs =
+            await _getUserDispositifsListFromAPIUseCase.execute(3);
+        for (var apiDisp in apiDispositifs.values) {
+          if (!dbIDs.contains(apiDisp.id)) {
+            // If not in DB, mark as not downloaded
+            finalDispositifs.add(DispositifInfo(
+                dispositif: apiDisp,
+                downloadStatus: DownloadStatus.notDownloaded));
+          }
+          // If it's in DB, it's already added as downloaded, no action needed
+        }
+      } catch (e) {
+        print("Error fetching from API: $e");
+        // Optionally handle the error, such as logging or setting a state to show an error message
+      }
+    }
+
+    state = custom_async_state.State.success(
+        DispositifInfoList(values: finalDispositifs));
+  }
+
+  Future<bool> hasInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      // We have a network connection, so we might have internet
+      // Note: This does not guarantee internet access, further checking is needed for actual internet access
+      return true;
+    }
+    return false;
+  }
+
+  downloadDispositif(final DispositifInfo dispositifInfo, context) async {
     final id = dispositifInfo.dispositif.id;
-    try {
-      var newDispositifInfo =
-          dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
-      state = custom_async_state.State.success(
-          state.data!.updateDispositifInfo(newDispositifInfo));
-      newDispositifInfo =
-          dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloaded);
-      await _downloadDispositifDataUseCase.execute(id);
-      state = custom_async_state.State.success(
-          state.data!.updateDispositifInfo(newDispositifInfo));
-    } on Exception catch (e) {
-      state = custom_async_state.State.error(e);
-    } catch (e) {
-      print(e);
-      state = custom_async_state.State.error(Exception(e));
+    bool isConnected = await hasInternetConnection();
+    if (!isConnected) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content:
+            Text("Téléchargement impossible: Connexion internet indisponible."),
+      ));
+    } else {
+      // Internet connection is available, proceed with the download
+      try {
+        var newDispositifInfo =
+            dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
+        state = custom_async_state.State.success(
+            state.data!.updateDispositifInfo(newDispositifInfo));
+        await _downloadDispositifDataUseCase.execute(id);
+        newDispositifInfo =
+            dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloaded);
+        state = custom_async_state.State.success(
+            state.data!.updateDispositifInfo(newDispositifInfo));
+      } on Exception catch (e) {
+        state = custom_async_state.State.error(e);
+      } catch (e) {
+        print(e);
+        state = custom_async_state.State.error(Exception(e));
+      }
     }
   }
 

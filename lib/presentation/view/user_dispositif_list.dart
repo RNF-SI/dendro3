@@ -15,7 +15,15 @@ class UserDispositifList extends ConsumerWidget {
         ref.watch(userDispositifListViewModelStateNotifierProvider);
 
     return userDispositifListProv.maybeWhen(
-      success: (data) => _buildDispositifListWidget(context, data),
+      success: (data) => RefreshIndicator(
+        onRefresh: () async {
+          // Trigger the refresh logic
+          ref
+              .read(userDispositifListViewModelStateNotifierProvider.notifier)
+              .refreshDispositifs();
+        },
+        child: _buildDispositifListWidget(context, data),
+      ),
       error: (_) => const Center(
         child: Text('Uh oh... Something went wrong...',
             style: TextStyle(color: Colors.white)),
@@ -25,15 +33,29 @@ class UserDispositifList extends ConsumerWidget {
   }
 
   Widget _buildDispositifListWidget(
-      final BuildContext context, final DispositifInfoList dispositifInfoList) {
+      BuildContext context, DispositifInfoList dispositifInfoList) {
     if (dispositifInfoList.length == 0) {
-      return const Center(child: Text('No dispositif'));
+      // Wrap the 'No dispositif' message in a ListView to keep pull-to-refresh functionality
+      return ListView(
+        physics:
+            const AlwaysScrollableScrollPhysics(), // This is important for enabling pull-to-refresh
+        children: const [
+          Center(
+            child: Padding(
+              padding:
+                  EdgeInsets.all(16.0), // Add some padding around the message
+              child: Text('Pas de dispositifs', textAlign: TextAlign.center),
+            ),
+          ),
+        ],
+      );
     } else {
       return ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: dispositifInfoList.length,
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemBuilder: (final BuildContext context, final int index) {
+        physics:
+            const AlwaysScrollableScrollPhysics(), // Keeps pull-to-refresh enabled
+        itemBuilder: (BuildContext context, int index) {
           return DispositifItemCardWidget(
               dispositifInfo: dispositifInfoList[index]);
         },
