@@ -1,10 +1,7 @@
-
 import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
 import 'package:dendro3/data/entity/cycles_entity.dart';
+import 'package:dendro3/data/common/constants.dart';
 import 'package:dio/dio.dart';
-
-const String apiBase = "http://10.0.2.2:8000";
-// const String apiBase = "http://192.168.1.64:8000";
 
 class CyclesApiImpl implements CyclesApi {
   @override

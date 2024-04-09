@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:dendro3/core/error/failure.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
+import 'package:dendro3/data/common/constants.dart';
 import 'package:dio/dio.dart';
-
-const String apiBase = "http://10.0.2.2:8000";
-// const String apiBase = "http://192.168.1.64:8000";
 
 class DispositifsApiImpl implements DispositifsApi {
   @override
