@@ -3,6 +3,7 @@ import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/interface/database/reperes_database.dart';
 import 'package:dendro3/data/entity/reperes_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ReperesDatabaseImpl implements ReperesDatabase {
@@ -66,10 +67,20 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   Future<RepereEntity> addRepere(final RepereEntity repere) async {
     final db = await database;
     late final RepereEntity repereEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String repereUuid = generateUuid();
 
       repere['id_repere'] = repereUuid;
+      // Par défaut created_at et update_at sont remplies.
+      repere['created_by'] = userName; // Set created_by
+      repere['updated_by'] = userName; // Set updated_by on creation as well
+      repere['created_on'] = terminalName;
+      repere['updated_on'] = terminalName;
+
       await txn.insert(
         _tableName,
         repere,
@@ -87,10 +98,16 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   // Function called when one arbre is updated (not updating arbre mesure)
   Future<RepereEntity> updateRepere(final RepereEntity repere) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final RepereEntity transectEntity;
     await db.transaction((txn) async {
       var updatedRepere = Map<String, dynamic>.from(repere)
-        ..['updated_at'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,

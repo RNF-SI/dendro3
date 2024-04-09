@@ -3,6 +3,7 @@ import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RegenerationsDatabaseImpl implements RegenerationsDatabase {
@@ -67,10 +68,20 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
       final RegenerationEntity regeneration) async {
     final db = await database;
     late final RegenerationEntity regenerationEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String regenerationUuid = generateUuid();
 
       regeneration['id_regeneration'] = regenerationUuid;
+      // Par défaut created_at et update_at sont remplies.
+      regeneration['created_by'] = userName; // Set created_by
+      regeneration['updated_by'] =
+          userName; // Set updated_by on creation as well
+      regeneration['created_on'] = terminalName;
+      regeneration['updated_on'] = terminalName;
       await txn.insert(
         _tableName,
         regeneration,
@@ -88,10 +99,16 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   Future<RegenerationEntity> updateRegeneration(
       final RegenerationEntity regeneration) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final RegenerationEntity regenerationEntity;
     await db.transaction((txn) async {
       var updatedRegeneration = Map<String, dynamic>.from(regeneration)
-        ..['updated_at'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,

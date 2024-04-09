@@ -5,6 +5,7 @@ import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BmsSup30DatabaseImpl implements BmsSup30Database {
@@ -35,7 +36,13 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
           k == 'orientation' ||
           k == 'azimut_souche' ||
           k == 'distance_souche' ||
-          k == 'observation'))
+          k == 'observation' ||
+          k == 'created_by' ||
+          k == 'updated_by' ||
+          k == 'created_on' ||
+          k == 'updated_on' ||
+          k == 'created_at' ||
+          k == 'updated_at'))
         property: bmSup30[property]
     };
 
@@ -117,6 +124,10 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
   Future<BmSup30Entity> addBmSup30(BmSup30Entity bmSup30) async {
     final db = await database;
     late final BmSup30Entity bmSup30Entity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String idBmsUuid = generateUuid();
 
@@ -127,6 +138,11 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
 
       bmSup30['id_bm_sup_30'] = idBmsUuid;
       bmSup30['id_bm_sup_30_orig'] = maxIdOrig + 1;
+      // Par défaut created_at et update_at sont remplies.
+      bmSup30['created_by'] = userName; // Set created_by
+      bmSup30['updated_by'] = userName; // Set updated_by on creation as well
+      bmSup30['created_on'] = terminalName;
+      bmSup30['updated_on'] = terminalName;
       await txn.insert(
         _tableName,
         bmSup30,
@@ -143,11 +159,17 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
   @override
   Future<BmSup30Entity> updateBmSup30(BmSup30Entity bmSup30) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final BmSup30Entity bmSup30Entity;
     await db.transaction((txn) async {
       var updatedBmSup30 = Map<String, dynamic>.from(bmSup30)
         ..['updated_at'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,

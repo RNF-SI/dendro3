@@ -5,6 +5,7 @@ import 'package:dendro3/data/datasource/interface/database/arbres_mesures_databa
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
@@ -20,9 +21,19 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       final ArbreMesureEntity arbreMesure) async {
     final db = await database;
     late final ArbreEntity arbreEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String idArbreMesureUuid = generateUuid();
       arbreMesure['id_arbre_mesure'] = idArbreMesureUuid;
+      // Par défaut created_at et update_at sont remplies
+      arbreMesure['created_by'] = userName;
+      arbreMesure['updated_by'] = userName;
+      arbreMesure['created_on'] = terminalName;
+      arbreMesure['updated_on'] = terminalName;
+
       await txn.insert(
         _tableName,
         arbreMesure,
@@ -41,12 +52,17 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       final ArbreMesureEntity arbreMesure) async {
     final db = await database;
     late final ArbreMesureEntity arbreMesureEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
 
     await db.transaction((txn) async {
       // Create a copy of the arbreMesure map and add/modify the updated_at field
       var updatedArbreMesure = Map<String, dynamic>.from(arbreMesure)
         ..['updated_at'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,

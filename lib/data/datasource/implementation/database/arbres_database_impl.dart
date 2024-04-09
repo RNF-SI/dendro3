@@ -7,6 +7,7 @@ import 'package:dendro3/data/datasource/interface/database/arbres_database.dart'
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ArbresDatabaseImpl implements ArbresDatabase {
   static const _tableName = 't_arbres';
@@ -22,6 +23,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   // }
 
   // Function called to add an arbre and his arbre mesures
+  // Only used for download Dispositif
   static Future<void> insertArbre(Batch batch, final ArbreEntity arbre) async {
     final arbreInsertProperties = {
       for (var property in arbre.keys.where((k) =>
@@ -32,7 +34,13 @@ class ArbresDatabaseImpl implements ArbresDatabase {
           k == 'azimut' ||
           k == 'distance' ||
           k == 'taillis' ||
-          k == 'observation'))
+          k == 'observation' ||
+          k == 'created_by' ||
+          k == 'updated_by' ||
+          k == 'created_on' ||
+          k == 'updated_on' ||
+          k == 'created_at' ||
+          k == 'updated_at'))
         property: arbre[property]
     };
 
@@ -120,6 +128,10 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   Future<ArbreEntity> addArbre(final ArbreEntity arbre) async {
     final db = await database;
     late final ArbreEntity arbreEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String idArbreUuid = generateUuid();
 
@@ -130,6 +142,12 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
       arbre['id_arbre'] = idArbreUuid;
       arbre['id_arbre_orig'] = maxIdOrig + 1;
+      // Par défaut created_at et update_at sont remplies.
+      arbre['created_by'] = userName; // Set created_by
+      arbre['updated_by'] = userName; // Set updated_by on creation as well
+      arbre['created_on'] = terminalName;
+      arbre['updated_on'] = terminalName;
+
       await txn.insert(
         _tableName,
         arbre,
@@ -147,11 +165,17 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   // Function called when one arbre is updated (not updating arbre mesure)
   Future<ArbreEntity> updateArbre(final ArbreEntity arbre) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
       var updatedArbre = Map<String, dynamic>.from(arbre)
         ..['updated_at'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,

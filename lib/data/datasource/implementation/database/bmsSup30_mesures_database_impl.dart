@@ -4,6 +4,7 @@ import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
@@ -69,9 +70,19 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
       BmSup30MesureEntity bmSup30Mesure) async {
     final db = await database;
     late final BmSup30Entity bmsup30Entity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String idBmSup30MesureUUID = generateUuid();
       bmSup30Mesure['id_bm_sup_30_mesure'] = idBmSup30MesureUUID;
+      // Par défaut created_at et update_at sont remplies.
+      bmSup30Mesure['created_by'] = userName; // Set created_by
+      bmSup30Mesure['updated_by'] =
+          userName; // Set updated_by on creation as well
+      bmSup30Mesure['created_on'] = terminalName;
+      bmSup30Mesure['updated_on'] = terminalName;
 
       await txn.insert(
         _tableName,
@@ -91,12 +102,17 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     final BmSup30MesureEntity bmSup30Mesure,
   ) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final BmSup30MesureEntity bmSup30MesureEntity;
     await db.transaction((txn) async {
       var updatedBmSup30Mesure = Map<String, dynamic>.from(bmSup30Mesure)
         ..['updated_at'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
-
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
       await txn.update(
         _tableName,
         updatedBmSup30Mesure,

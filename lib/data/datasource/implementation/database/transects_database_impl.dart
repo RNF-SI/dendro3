@@ -3,6 +3,7 @@ import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TransectsDatabaseImpl implements TransectsDatabase {
@@ -65,6 +66,10 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   Future<TransectEntity> addTransect(final TransectEntity transect) async {
     final db = await database;
     late final TransectEntity transectEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     await db.transaction((txn) async {
       String transectUuid = generateUuid();
       transect['id_transect'] = transectUuid;
@@ -74,6 +79,11 @@ class TransectsDatabaseImpl implements TransectsDatabase {
               [transect['id_cycle_placette']])) ??
           0;
       transect['id_transect_orig'] = maxIdOrig + 1;
+      // Par défaut created_at et update_at sont remplies.
+      transect['created_by'] = userName; // Set created_by
+      transect['updated_by'] = userName; // Set updated_by on creation as well
+      transect['created_on'] = terminalName;
+      transect['updated_on'] = terminalName;
 
       await txn.insert(
         _tableName,
@@ -92,10 +102,16 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   // Function called when one arbre is updated (not updating arbre mesure)
   Future<TransectEntity> updateTransect(final TransectEntity transect) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
       var updatedTransect = Map<String, dynamic>.from(transect)
-        ..['updated_at'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,
