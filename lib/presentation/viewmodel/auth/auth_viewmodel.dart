@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dendro3/domain/domain_module.dart';
 
 import 'package:dendro3/presentation/state/state.dart' as dendroState;
 import 'package:dendro3/presentation/view/auth_checker.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,7 +56,28 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
       await _loginUseCase.execute(identifiant, password).then((user) async {
         controller.add(user);
         try {
+          DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+          String deviceName = 'Unknown Device';
           SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          try {
+            if (Platform.isAndroid) {
+              AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+              deviceName =
+                  '${androidInfo.brand} ${androidInfo.model} Android ${androidInfo.version.release}';
+            } else if (Platform.isIOS) {
+              IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+              deviceName =
+                  '${iosInfo.utsname.machine} - iOS ${iosInfo.systemVersion}';
+            } else {
+              deviceName = 'Unknown Device';
+            }
+            await prefs.setString('terminalName', deviceName);
+            // You can add more platform-specific conditions if you need to
+          } catch (e) {
+            print('Failed to get device info: $e');
+          }
+
           await prefs.setBool('isLoggedIn', true);
           print("isLoggedIn set to: ${await prefs.getBool('isLoggedIn')}");
           // Save the user's name. Replace `user.name` with the actual property that holds the user's name in your User model.
