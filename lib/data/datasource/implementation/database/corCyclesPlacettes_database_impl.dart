@@ -7,6 +7,7 @@ import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
@@ -41,7 +42,13 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
           k == 'recouv_herbes_basses' ||
           k == 'recouv_herbes_hautes' ||
           k == 'recouv_buissons' ||
-          k == 'recouv_arbres'))
+          k == 'recouv_arbres' ||
+          k == 'created_by' ||
+          k == 'updated_by' ||
+          k == 'created_on' ||
+          k == 'updated_on' ||
+          k == 'created_at' ||
+          k == 'updated_at'))
         property: corCyclePlacette[property]
     };
 
@@ -151,6 +158,9 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       final CorCyclePlacetteEntity corCyclePlacette) async {
     final db = await database;
     late final CorCyclePlacetteEntity corCyclePlacetteEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     corCyclePlacette["date_releve"] =
@@ -159,6 +169,13 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     await db.transaction((txn) async {
       String corCyclePlacetteUuid = generateUuid();
       corCyclePlacette[_columnId] = corCyclePlacetteUuid;
+
+      // Par défaut created_at et update_at sont remplies.
+      corCyclePlacette['created_by'] = userName; // Set created_by
+      corCyclePlacette['updated_by'] =
+          userName; // Set updated_by on creation as well
+      corCyclePlacette['created_on'] = terminalName;
+      corCyclePlacette['updated_on'] = terminalName;
 
       await txn.insert(
         _tableName,
