@@ -64,7 +64,7 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
             if (Platform.isAndroid) {
               AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
               deviceName =
-                  '${androidInfo.brand} ${androidInfo.model} Android ${androidInfo.version.release}';
+                  '${androidInfo.brand} ${androidInfo.model} - Android ${androidInfo.version.release}';
             } else if (Platform.isIOS) {
               IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
               deviceName =
