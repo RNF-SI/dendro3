@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'arbreMesure.dart';
 
@@ -184,11 +184,11 @@ class _$ArbreMesureCopyWithImpl<$Res, $Val extends ArbreMesure>
 }
 
 /// @nodoc
-abstract class _$$_ArbreMesureCopyWith<$Res>
+abstract class _$$ArbreMesureImplCopyWith<$Res>
     implements $ArbreMesureCopyWith<$Res> {
-  factory _$$_ArbreMesureCopyWith(
-          _$_ArbreMesure value, $Res Function(_$_ArbreMesure) then) =
-      __$$_ArbreMesureCopyWithImpl<$Res>;
+  factory _$$ArbreMesureImplCopyWith(
+          _$ArbreMesureImpl value, $Res Function(_$ArbreMesureImpl) then) =
+      __$$ArbreMesureImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -214,11 +214,11 @@ abstract class _$$_ArbreMesureCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ArbreMesureCopyWithImpl<$Res>
-    extends _$ArbreMesureCopyWithImpl<$Res, _$_ArbreMesure>
-    implements _$$_ArbreMesureCopyWith<$Res> {
-  __$$_ArbreMesureCopyWithImpl(
-      _$_ArbreMesure _value, $Res Function(_$_ArbreMesure) _then)
+class __$$ArbreMesureImplCopyWithImpl<$Res>
+    extends _$ArbreMesureCopyWithImpl<$Res, _$ArbreMesureImpl>
+    implements _$$ArbreMesureImplCopyWith<$Res> {
+  __$$ArbreMesureImplCopyWithImpl(
+      _$ArbreMesureImpl _value, $Res Function(_$ArbreMesureImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -244,7 +244,7 @@ class __$$_ArbreMesureCopyWithImpl<$Res>
     Object? ratioHauteur = freezed,
     Object? observation = freezed,
   }) {
-    return _then(_$_ArbreMesure(
+    return _then(_$ArbreMesureImpl(
       idArbreMesure: null == idArbreMesure
           ? _value.idArbreMesure
           : idArbreMesure // ignore: cast_nullable_to_non_nullable
@@ -327,8 +327,8 @@ class __$$_ArbreMesureCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ArbreMesure extends _ArbreMesure {
-  const _$_ArbreMesure(
+class _$ArbreMesureImpl extends _ArbreMesure {
+  const _$ArbreMesureImpl(
       {required this.idArbreMesure,
       required this.idArbre,
       required this.idCycle,
@@ -395,10 +395,10 @@ class _$_ArbreMesure extends _ArbreMesure {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ArbreMesure &&
+            other is _$ArbreMesureImpl &&
             (identical(other.idArbreMesure, idArbreMesure) ||
                 other.idArbreMesure == idArbreMesure) &&
             (identical(other.idArbre, idArbre) || other.idArbre == idArbre) &&
@@ -462,8 +462,8 @@ class _$_ArbreMesure extends _ArbreMesure {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ArbreMesureCopyWith<_$_ArbreMesure> get copyWith =>
-      __$$_ArbreMesureCopyWithImpl<_$_ArbreMesure>(this, _$identity);
+  _$$ArbreMesureImplCopyWith<_$ArbreMesureImpl> get copyWith =>
+      __$$ArbreMesureImplCopyWithImpl<_$ArbreMesureImpl>(this, _$identity);
 }
 
 abstract class _ArbreMesure extends ArbreMesure {
@@ -486,7 +486,7 @@ abstract class _ArbreMesure extends ArbreMesure {
       final String? codeEcolo,
       final String? refCodeEcolo,
       final bool? ratioHauteur,
-      final String? observation}) = _$_ArbreMesure;
+      final String? observation}) = _$ArbreMesureImpl;
   const _ArbreMesure._() : super._();
 
   @override
@@ -529,6 +529,6 @@ abstract class _ArbreMesure extends ArbreMesure {
   String? get observation;
   @override
   @JsonKey(ignore: true)
-  _$$_ArbreMesureCopyWith<_$_ArbreMesure> get copyWith =>
+  _$$ArbreMesureImplCopyWith<_$ArbreMesureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

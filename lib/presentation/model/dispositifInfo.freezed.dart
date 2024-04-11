@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'dispositifInfo.dart';
 
@@ -73,11 +73,11 @@ class _$DispositifInfoCopyWithImpl<$Res, $Val extends DispositifInfo>
 }
 
 /// @nodoc
-abstract class _$$_DispositifInfoCopyWith<$Res>
+abstract class _$$DispositifInfoImplCopyWith<$Res>
     implements $DispositifInfoCopyWith<$Res> {
-  factory _$$_DispositifInfoCopyWith(
-          _$_DispositifInfo value, $Res Function(_$_DispositifInfo) then) =
-      __$$_DispositifInfoCopyWithImpl<$Res>;
+  factory _$$DispositifInfoImplCopyWith(_$DispositifInfoImpl value,
+          $Res Function(_$DispositifInfoImpl) then) =
+      __$$DispositifInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Dispositif dispositif, DownloadStatus downloadStatus});
@@ -87,11 +87,11 @@ abstract class _$$_DispositifInfoCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_DispositifInfoCopyWithImpl<$Res>
-    extends _$DispositifInfoCopyWithImpl<$Res, _$_DispositifInfo>
-    implements _$$_DispositifInfoCopyWith<$Res> {
-  __$$_DispositifInfoCopyWithImpl(
-      _$_DispositifInfo _value, $Res Function(_$_DispositifInfo) _then)
+class __$$DispositifInfoImplCopyWithImpl<$Res>
+    extends _$DispositifInfoCopyWithImpl<$Res, _$DispositifInfoImpl>
+    implements _$$DispositifInfoImplCopyWith<$Res> {
+  __$$DispositifInfoImplCopyWithImpl(
+      _$DispositifInfoImpl _value, $Res Function(_$DispositifInfoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -100,7 +100,7 @@ class __$$_DispositifInfoCopyWithImpl<$Res>
     Object? dispositif = null,
     Object? downloadStatus = null,
   }) {
-    return _then(_$_DispositifInfo(
+    return _then(_$DispositifInfoImpl(
       dispositif: null == dispositif
           ? _value.dispositif
           : dispositif // ignore: cast_nullable_to_non_nullable
@@ -115,8 +115,8 @@ class __$$_DispositifInfoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_DispositifInfo extends _DispositifInfo {
-  const _$_DispositifInfo(
+class _$DispositifInfoImpl extends _DispositifInfo {
+  const _$DispositifInfoImpl(
       {required this.dispositif, required this.downloadStatus})
       : super._();
 
@@ -131,10 +131,10 @@ class _$_DispositifInfo extends _DispositifInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DispositifInfo &&
+            other is _$DispositifInfoImpl &&
             (identical(other.dispositif, dispositif) ||
                 other.dispositif == dispositif) &&
             (identical(other.downloadStatus, downloadStatus) ||
@@ -147,14 +147,15 @@ class _$_DispositifInfo extends _DispositifInfo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DispositifInfoCopyWith<_$_DispositifInfo> get copyWith =>
-      __$$_DispositifInfoCopyWithImpl<_$_DispositifInfo>(this, _$identity);
+  _$$DispositifInfoImplCopyWith<_$DispositifInfoImpl> get copyWith =>
+      __$$DispositifInfoImplCopyWithImpl<_$DispositifInfoImpl>(
+          this, _$identity);
 }
 
 abstract class _DispositifInfo extends DispositifInfo {
   const factory _DispositifInfo(
       {required final Dispositif dispositif,
-      required final DownloadStatus downloadStatus}) = _$_DispositifInfo;
+      required final DownloadStatus downloadStatus}) = _$DispositifInfoImpl;
   const _DispositifInfo._() : super._();
 
   @override
@@ -163,6 +164,6 @@ abstract class _DispositifInfo extends DispositifInfo {
   DownloadStatus get downloadStatus;
   @override
   @JsonKey(ignore: true)
-  _$$_DispositifInfoCopyWith<_$_DispositifInfo> get copyWith =>
+  _$$DispositifInfoImplCopyWith<_$DispositifInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

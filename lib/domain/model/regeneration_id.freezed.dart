@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'regeneration_id.dart';
 
@@ -57,22 +57,22 @@ class _$RegenerationIdCopyWithImpl<$Res, $Val extends RegenerationId>
 }
 
 /// @nodoc
-abstract class _$$_RegenerationIdCopyWith<$Res>
+abstract class _$$RegenerationIdImplCopyWith<$Res>
     implements $RegenerationIdCopyWith<$Res> {
-  factory _$$_RegenerationIdCopyWith(
-          _$_RegenerationId value, $Res Function(_$_RegenerationId) then) =
-      __$$_RegenerationIdCopyWithImpl<$Res>;
+  factory _$$RegenerationIdImplCopyWith(_$RegenerationIdImpl value,
+          $Res Function(_$RegenerationIdImpl) then) =
+      __$$RegenerationIdImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int value});
 }
 
 /// @nodoc
-class __$$_RegenerationIdCopyWithImpl<$Res>
-    extends _$RegenerationIdCopyWithImpl<$Res, _$_RegenerationId>
-    implements _$$_RegenerationIdCopyWith<$Res> {
-  __$$_RegenerationIdCopyWithImpl(
-      _$_RegenerationId _value, $Res Function(_$_RegenerationId) _then)
+class __$$RegenerationIdImplCopyWithImpl<$Res>
+    extends _$RegenerationIdCopyWithImpl<$Res, _$RegenerationIdImpl>
+    implements _$$RegenerationIdImplCopyWith<$Res> {
+  __$$RegenerationIdImplCopyWithImpl(
+      _$RegenerationIdImpl _value, $Res Function(_$RegenerationIdImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_RegenerationIdCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
   }) {
-    return _then(_$_RegenerationId(
+    return _then(_$RegenerationIdImpl(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -91,8 +91,8 @@ class __$$_RegenerationIdCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RegenerationId implements _RegenerationId {
-  const _$_RegenerationId({required this.value});
+class _$RegenerationIdImpl implements _RegenerationId {
+  const _$RegenerationIdImpl({required this.value});
 
   @override
   final int value;
@@ -103,10 +103,10 @@ class _$_RegenerationId implements _RegenerationId {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RegenerationId &&
+            other is _$RegenerationIdImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -116,17 +116,19 @@ class _$_RegenerationId implements _RegenerationId {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RegenerationIdCopyWith<_$_RegenerationId> get copyWith =>
-      __$$_RegenerationIdCopyWithImpl<_$_RegenerationId>(this, _$identity);
+  _$$RegenerationIdImplCopyWith<_$RegenerationIdImpl> get copyWith =>
+      __$$RegenerationIdImplCopyWithImpl<_$RegenerationIdImpl>(
+          this, _$identity);
 }
 
 abstract class _RegenerationId implements RegenerationId {
-  const factory _RegenerationId({required final int value}) = _$_RegenerationId;
+  const factory _RegenerationId({required final int value}) =
+      _$RegenerationIdImpl;
 
   @override
   int get value;
   @override
   @JsonKey(ignore: true)
-  _$$_RegenerationIdCopyWith<_$_RegenerationId> get copyWith =>
+  _$$RegenerationIdImplCopyWith<_$RegenerationIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

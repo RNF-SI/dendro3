@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'arbre.dart';
 
@@ -126,9 +126,10 @@ class _$ArbreCopyWithImpl<$Res, $Val extends Arbre>
 }
 
 /// @nodoc
-abstract class _$$_ArbreCopyWith<$Res> implements $ArbreCopyWith<$Res> {
-  factory _$$_ArbreCopyWith(_$_Arbre value, $Res Function(_$_Arbre) then) =
-      __$$_ArbreCopyWithImpl<$Res>;
+abstract class _$$ArbreImplCopyWith<$Res> implements $ArbreCopyWith<$Res> {
+  factory _$$ArbreImplCopyWith(
+          _$ArbreImpl value, $Res Function(_$ArbreImpl) then) =
+      __$$ArbreImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -147,9 +148,11 @@ abstract class _$$_ArbreCopyWith<$Res> implements $ArbreCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ArbreCopyWithImpl<$Res> extends _$ArbreCopyWithImpl<$Res, _$_Arbre>
-    implements _$$_ArbreCopyWith<$Res> {
-  __$$_ArbreCopyWithImpl(_$_Arbre _value, $Res Function(_$_Arbre) _then)
+class __$$ArbreImplCopyWithImpl<$Res>
+    extends _$ArbreCopyWithImpl<$Res, _$ArbreImpl>
+    implements _$$ArbreImplCopyWith<$Res> {
+  __$$ArbreImplCopyWithImpl(
+      _$ArbreImpl _value, $Res Function(_$ArbreImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -165,7 +168,7 @@ class __$$_ArbreCopyWithImpl<$Res> extends _$ArbreCopyWithImpl<$Res, _$_Arbre>
     Object? observation = freezed,
     Object? arbresMesures = freezed,
   }) {
-    return _then(_$_Arbre(
+    return _then(_$ArbreImpl(
       idArbre: null == idArbre
           ? _value.idArbre
           : idArbre // ignore: cast_nullable_to_non_nullable
@@ -208,8 +211,8 @@ class __$$_ArbreCopyWithImpl<$Res> extends _$ArbreCopyWithImpl<$Res, _$_Arbre>
 
 /// @nodoc
 
-class _$_Arbre extends _Arbre {
-  const _$_Arbre(
+class _$ArbreImpl extends _Arbre {
+  const _$ArbreImpl(
       {required this.idArbre,
       required this.idArbreOrig,
       required this.idPlacette,
@@ -246,10 +249,10 @@ class _$_Arbre extends _Arbre {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Arbre &&
+            other is _$ArbreImpl &&
             (identical(other.idArbre, idArbre) || other.idArbre == idArbre) &&
             (identical(other.idArbreOrig, idArbreOrig) ||
                 other.idArbreOrig == idArbreOrig) &&
@@ -274,8 +277,8 @@ class _$_Arbre extends _Arbre {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ArbreCopyWith<_$_Arbre> get copyWith =>
-      __$$_ArbreCopyWithImpl<_$_Arbre>(this, _$identity);
+  _$$ArbreImplCopyWith<_$ArbreImpl> get copyWith =>
+      __$$ArbreImplCopyWithImpl<_$ArbreImpl>(this, _$identity);
 }
 
 abstract class _Arbre extends Arbre {
@@ -288,7 +291,7 @@ abstract class _Arbre extends Arbre {
       required final double distance,
       final bool? taillis,
       final String? observation,
-      final ArbreMesureList? arbresMesures}) = _$_Arbre;
+      final ArbreMesureList? arbresMesures}) = _$ArbreImpl;
   const _Arbre._() : super._();
 
   @override
@@ -311,6 +314,6 @@ abstract class _Arbre extends Arbre {
   ArbreMesureList? get arbresMesures;
   @override
   @JsonKey(ignore: true)
-  _$$_ArbreCopyWith<_$_Arbre> get copyWith =>
+  _$$ArbreImplCopyWith<_$ArbreImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

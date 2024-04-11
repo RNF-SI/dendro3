@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'nomenclatureType.dart';
 
@@ -163,11 +163,11 @@ class _$NomenclatureTypeCopyWithImpl<$Res, $Val extends NomenclatureType>
 }
 
 /// @nodoc
-abstract class _$$_NomenclatureTypeCopyWith<$Res>
+abstract class _$$NomenclatureTypeImplCopyWith<$Res>
     implements $NomenclatureTypeCopyWith<$Res> {
-  factory _$$_NomenclatureTypeCopyWith(
-          _$_NomenclatureType value, $Res Function(_$_NomenclatureType) then) =
-      __$$_NomenclatureTypeCopyWithImpl<$Res>;
+  factory _$$NomenclatureTypeImplCopyWith(_$NomenclatureTypeImpl value,
+          $Res Function(_$NomenclatureTypeImpl) then) =
+      __$$NomenclatureTypeImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -190,11 +190,11 @@ abstract class _$$_NomenclatureTypeCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_NomenclatureTypeCopyWithImpl<$Res>
-    extends _$NomenclatureTypeCopyWithImpl<$Res, _$_NomenclatureType>
-    implements _$$_NomenclatureTypeCopyWith<$Res> {
-  __$$_NomenclatureTypeCopyWithImpl(
-      _$_NomenclatureType _value, $Res Function(_$_NomenclatureType) _then)
+class __$$NomenclatureTypeImplCopyWithImpl<$Res>
+    extends _$NomenclatureTypeCopyWithImpl<$Res, _$NomenclatureTypeImpl>
+    implements _$$NomenclatureTypeImplCopyWith<$Res> {
+  __$$NomenclatureTypeImplCopyWithImpl(_$NomenclatureTypeImpl _value,
+      $Res Function(_$NomenclatureTypeImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -217,7 +217,7 @@ class __$$_NomenclatureTypeCopyWithImpl<$Res>
     Object? source = freezed,
     Object? statut = freezed,
   }) {
-    return _then(_$_NomenclatureType(
+    return _then(_$NomenclatureTypeImpl(
       idType: null == idType
           ? _value.idType
           : idType // ignore: cast_nullable_to_non_nullable
@@ -288,8 +288,8 @@ class __$$_NomenclatureTypeCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NomenclatureType extends _NomenclatureType {
-  const _$_NomenclatureType(
+class _$NomenclatureTypeImpl extends _NomenclatureType {
+  const _$NomenclatureTypeImpl(
       {required this.idType,
       this.mnemonique,
       required this.labelDefault,
@@ -347,10 +347,10 @@ class _$_NomenclatureType extends _NomenclatureType {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NomenclatureType &&
+            other is _$NomenclatureTypeImpl &&
             (identical(other.idType, idType) || other.idType == idType) &&
             (identical(other.mnemonique, mnemonique) ||
                 other.mnemonique == mnemonique) &&
@@ -400,8 +400,9 @@ class _$_NomenclatureType extends _NomenclatureType {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NomenclatureTypeCopyWith<_$_NomenclatureType> get copyWith =>
-      __$$_NomenclatureTypeCopyWithImpl<_$_NomenclatureType>(this, _$identity);
+  _$$NomenclatureTypeImplCopyWith<_$NomenclatureTypeImpl> get copyWith =>
+      __$$NomenclatureTypeImplCopyWithImpl<_$NomenclatureTypeImpl>(
+          this, _$identity);
 }
 
 abstract class _NomenclatureType extends NomenclatureType {
@@ -421,7 +422,7 @@ abstract class _NomenclatureType extends NomenclatureType {
       final String? labelIt,
       final String? definitionIt,
       final String? source,
-      final String? statut}) = _$_NomenclatureType;
+      final String? statut}) = _$NomenclatureTypeImpl;
   const _NomenclatureType._() : super._();
 
   @override
@@ -458,6 +459,6 @@ abstract class _NomenclatureType extends NomenclatureType {
   String? get statut;
   @override
   @JsonKey(ignore: true)
-  _$$_NomenclatureTypeCopyWith<_$_NomenclatureType> get copyWith =>
+  _$$NomenclatureTypeImplCopyWith<_$NomenclatureTypeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

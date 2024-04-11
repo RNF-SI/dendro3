@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'repere_id.dart';
 
@@ -56,21 +56,22 @@ class _$RepereIdCopyWithImpl<$Res, $Val extends RepereId>
 }
 
 /// @nodoc
-abstract class _$$_RepereIdCopyWith<$Res> implements $RepereIdCopyWith<$Res> {
-  factory _$$_RepereIdCopyWith(
-          _$_RepereId value, $Res Function(_$_RepereId) then) =
-      __$$_RepereIdCopyWithImpl<$Res>;
+abstract class _$$RepereIdImplCopyWith<$Res>
+    implements $RepereIdCopyWith<$Res> {
+  factory _$$RepereIdImplCopyWith(
+          _$RepereIdImpl value, $Res Function(_$RepereIdImpl) then) =
+      __$$RepereIdImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int value});
 }
 
 /// @nodoc
-class __$$_RepereIdCopyWithImpl<$Res>
-    extends _$RepereIdCopyWithImpl<$Res, _$_RepereId>
-    implements _$$_RepereIdCopyWith<$Res> {
-  __$$_RepereIdCopyWithImpl(
-      _$_RepereId _value, $Res Function(_$_RepereId) _then)
+class __$$RepereIdImplCopyWithImpl<$Res>
+    extends _$RepereIdCopyWithImpl<$Res, _$RepereIdImpl>
+    implements _$$RepereIdImplCopyWith<$Res> {
+  __$$RepereIdImplCopyWithImpl(
+      _$RepereIdImpl _value, $Res Function(_$RepereIdImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -78,7 +79,7 @@ class __$$_RepereIdCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
   }) {
-    return _then(_$_RepereId(
+    return _then(_$RepereIdImpl(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -89,8 +90,8 @@ class __$$_RepereIdCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RepereId implements _RepereId {
-  const _$_RepereId({required this.value});
+class _$RepereIdImpl implements _RepereId {
+  const _$RepereIdImpl({required this.value});
 
   @override
   final int value;
@@ -101,10 +102,10 @@ class _$_RepereId implements _RepereId {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RepereId &&
+            other is _$RepereIdImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -114,17 +115,17 @@ class _$_RepereId implements _RepereId {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RepereIdCopyWith<_$_RepereId> get copyWith =>
-      __$$_RepereIdCopyWithImpl<_$_RepereId>(this, _$identity);
+  _$$RepereIdImplCopyWith<_$RepereIdImpl> get copyWith =>
+      __$$RepereIdImplCopyWithImpl<_$RepereIdImpl>(this, _$identity);
 }
 
 abstract class _RepereId implements RepereId {
-  const factory _RepereId({required final int value}) = _$_RepereId;
+  const factory _RepereId({required final int value}) = _$RepereIdImpl;
 
   @override
   int get value;
   @override
   @JsonKey(ignore: true)
-  _$$_RepereIdCopyWith<_$_RepereId> get copyWith =>
+  _$$RepereIdImplCopyWith<_$RepereIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

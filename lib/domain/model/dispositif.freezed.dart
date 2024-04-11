@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'dispositif.dart';
 
@@ -120,11 +120,11 @@ class _$DispositifCopyWithImpl<$Res, $Val extends Dispositif>
 }
 
 /// @nodoc
-abstract class _$$_DispositifCopyWith<$Res>
+abstract class _$$DispositifImplCopyWith<$Res>
     implements $DispositifCopyWith<$Res> {
-  factory _$$_DispositifCopyWith(
-          _$_Dispositif value, $Res Function(_$_Dispositif) then) =
-      __$$_DispositifCopyWithImpl<$Res>;
+  factory _$$DispositifImplCopyWith(
+          _$DispositifImpl value, $Res Function(_$DispositifImpl) then) =
+      __$$DispositifImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -142,11 +142,11 @@ abstract class _$$_DispositifCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_DispositifCopyWithImpl<$Res>
-    extends _$DispositifCopyWithImpl<$Res, _$_Dispositif>
-    implements _$$_DispositifCopyWith<$Res> {
-  __$$_DispositifCopyWithImpl(
-      _$_Dispositif _value, $Res Function(_$_Dispositif) _then)
+class __$$DispositifImplCopyWithImpl<$Res>
+    extends _$DispositifCopyWithImpl<$Res, _$DispositifImpl>
+    implements _$$DispositifImplCopyWith<$Res> {
+  __$$DispositifImplCopyWithImpl(
+      _$DispositifImpl _value, $Res Function(_$DispositifImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -159,7 +159,7 @@ class __$$_DispositifCopyWithImpl<$Res>
     Object? placettes = freezed,
     Object? cycles = freezed,
   }) {
-    return _then(_$_Dispositif(
+    return _then(_$DispositifImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -190,8 +190,8 @@ class __$$_DispositifCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Dispositif extends _Dispositif {
-  const _$_Dispositif(
+class _$DispositifImpl extends _Dispositif {
+  const _$DispositifImpl(
       {required this.id,
       required this.name,
       required this.idOrganisme,
@@ -219,10 +219,10 @@ class _$_Dispositif extends _Dispositif {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Dispositif &&
+            other is _$DispositifImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.idOrganisme, idOrganisme) ||
@@ -241,8 +241,8 @@ class _$_Dispositif extends _Dispositif {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DispositifCopyWith<_$_Dispositif> get copyWith =>
-      __$$_DispositifCopyWithImpl<_$_Dispositif>(this, _$identity);
+  _$$DispositifImplCopyWith<_$DispositifImpl> get copyWith =>
+      __$$DispositifImplCopyWithImpl<_$DispositifImpl>(this, _$identity);
 }
 
 abstract class _Dispositif extends Dispositif {
@@ -252,7 +252,7 @@ abstract class _Dispositif extends Dispositif {
       required final int idOrganisme,
       required final bool alluvial,
       final PlacetteList? placettes,
-      final CycleList? cycles}) = _$_Dispositif;
+      final CycleList? cycles}) = _$DispositifImpl;
   const _Dispositif._() : super._();
 
   @override
@@ -269,6 +269,6 @@ abstract class _Dispositif extends Dispositif {
   CycleList? get cycles;
   @override
   @JsonKey(ignore: true)
-  _$$_DispositifCopyWith<_$_Dispositif> get copyWith =>
+  _$$DispositifImplCopyWith<_$DispositifImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

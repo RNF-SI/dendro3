@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'bmSup30.dart';
 
@@ -147,10 +147,10 @@ class _$BmSup30CopyWithImpl<$Res, $Val extends BmSup30>
 }
 
 /// @nodoc
-abstract class _$$_BmSup30CopyWith<$Res> implements $BmSup30CopyWith<$Res> {
-  factory _$$_BmSup30CopyWith(
-          _$_BmSup30 value, $Res Function(_$_BmSup30) then) =
-      __$$_BmSup30CopyWithImpl<$Res>;
+abstract class _$$BmSup30ImplCopyWith<$Res> implements $BmSup30CopyWith<$Res> {
+  factory _$$BmSup30ImplCopyWith(
+          _$BmSup30Impl value, $Res Function(_$BmSup30Impl) then) =
+      __$$BmSup30ImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -172,10 +172,11 @@ abstract class _$$_BmSup30CopyWith<$Res> implements $BmSup30CopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BmSup30CopyWithImpl<$Res>
-    extends _$BmSup30CopyWithImpl<$Res, _$_BmSup30>
-    implements _$$_BmSup30CopyWith<$Res> {
-  __$$_BmSup30CopyWithImpl(_$_BmSup30 _value, $Res Function(_$_BmSup30) _then)
+class __$$BmSup30ImplCopyWithImpl<$Res>
+    extends _$BmSup30CopyWithImpl<$Res, _$BmSup30Impl>
+    implements _$$BmSup30ImplCopyWith<$Res> {
+  __$$BmSup30ImplCopyWithImpl(
+      _$BmSup30Impl _value, $Res Function(_$BmSup30Impl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -194,7 +195,7 @@ class __$$_BmSup30CopyWithImpl<$Res>
     Object? observation = freezed,
     Object? bmsSup30Mesures = freezed,
   }) {
-    return _then(_$_BmSup30(
+    return _then(_$BmSup30Impl(
       idBmSup30: null == idBmSup30
           ? _value.idBmSup30
           : idBmSup30 // ignore: cast_nullable_to_non_nullable
@@ -249,8 +250,8 @@ class __$$_BmSup30CopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BmSup30 extends _BmSup30 {
-  const _$_BmSup30(
+class _$BmSup30Impl extends _BmSup30 {
+  const _$BmSup30Impl(
       {required this.idBmSup30,
       required this.idBmSup30Orig,
       required this.idPlacette,
@@ -296,10 +297,10 @@ class _$_BmSup30 extends _BmSup30 {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BmSup30 &&
+            other is _$BmSup30Impl &&
             (identical(other.idBmSup30, idBmSup30) ||
                 other.idBmSup30 == idBmSup30) &&
             (identical(other.idBmSup30Orig, idBmSup30Orig) ||
@@ -343,8 +344,8 @@ class _$_BmSup30 extends _BmSup30 {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BmSup30CopyWith<_$_BmSup30> get copyWith =>
-      __$$_BmSup30CopyWithImpl<_$_BmSup30>(this, _$identity);
+  _$$BmSup30ImplCopyWith<_$BmSup30Impl> get copyWith =>
+      __$$BmSup30ImplCopyWithImpl<_$BmSup30Impl>(this, _$identity);
 }
 
 abstract class _BmSup30 extends BmSup30 {
@@ -360,7 +361,7 @@ abstract class _BmSup30 extends BmSup30 {
       final double? azimutSouche,
       final double? distanceSouche,
       final String? observation,
-      final BmSup30MesureList? bmsSup30Mesures}) = _$_BmSup30;
+      final BmSup30MesureList? bmsSup30Mesures}) = _$BmSup30Impl;
   const _BmSup30._() : super._();
 
   @override
@@ -389,6 +390,6 @@ abstract class _BmSup30 extends BmSup30 {
   BmSup30MesureList? get bmsSup30Mesures;
   @override
   @JsonKey(ignore: true)
-  _$$_BmSup30CopyWith<_$_BmSup30> get copyWith =>
+  _$$BmSup30ImplCopyWith<_$BmSup30Impl> get copyWith =>
       throw _privateConstructorUsedError;
 }

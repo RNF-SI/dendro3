@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'corCyclePlacette.dart';
 
@@ -31,6 +31,8 @@ mixin _$CorCyclePlacette {
   double? get recouvHerbesHautes => throw _privateConstructorUsedError;
   double? get recouvBuissons => throw _privateConstructorUsedError;
   double? get recouvArbres => throw _privateConstructorUsedError;
+  int? get coeff => throw _privateConstructorUsedError;
+  double? get diamLim => throw _privateConstructorUsedError;
   TransectList? get transects => throw _privateConstructorUsedError;
   RegenerationList? get regenerations => throw _privateConstructorUsedError;
 
@@ -61,6 +63,8 @@ abstract class $CorCyclePlacetteCopyWith<$Res> {
       double? recouvHerbesHautes,
       double? recouvBuissons,
       double? recouvArbres,
+      int? coeff,
+      double? diamLim,
       TransectList? transects,
       RegenerationList? regenerations});
 
@@ -96,6 +100,8 @@ class _$CorCyclePlacetteCopyWithImpl<$Res, $Val extends CorCyclePlacette>
     Object? recouvHerbesHautes = freezed,
     Object? recouvBuissons = freezed,
     Object? recouvArbres = freezed,
+    Object? coeff = freezed,
+    Object? diamLim = freezed,
     Object? transects = freezed,
     Object? regenerations = freezed,
   }) {
@@ -160,6 +166,14 @@ class _$CorCyclePlacetteCopyWithImpl<$Res, $Val extends CorCyclePlacette>
           ? _value.recouvArbres
           : recouvArbres // ignore: cast_nullable_to_non_nullable
               as double?,
+      coeff: freezed == coeff
+          ? _value.coeff
+          : coeff // ignore: cast_nullable_to_non_nullable
+              as int?,
+      diamLim: freezed == diamLim
+          ? _value.diamLim
+          : diamLim // ignore: cast_nullable_to_non_nullable
+              as double?,
       transects: freezed == transects
           ? _value.transects
           : transects // ignore: cast_nullable_to_non_nullable
@@ -197,11 +211,11 @@ class _$CorCyclePlacetteCopyWithImpl<$Res, $Val extends CorCyclePlacette>
 }
 
 /// @nodoc
-abstract class _$$_CorCyclePlacetteCopyWith<$Res>
+abstract class _$$CorCyclePlacetteImplCopyWith<$Res>
     implements $CorCyclePlacetteCopyWith<$Res> {
-  factory _$$_CorCyclePlacetteCopyWith(
-          _$_CorCyclePlacette value, $Res Function(_$_CorCyclePlacette) then) =
-      __$$_CorCyclePlacetteCopyWithImpl<$Res>;
+  factory _$$CorCyclePlacetteImplCopyWith(_$CorCyclePlacetteImpl value,
+          $Res Function(_$CorCyclePlacetteImpl) then) =
+      __$$CorCyclePlacetteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -220,6 +234,8 @@ abstract class _$$_CorCyclePlacetteCopyWith<$Res>
       double? recouvHerbesHautes,
       double? recouvBuissons,
       double? recouvArbres,
+      int? coeff,
+      double? diamLim,
       TransectList? transects,
       RegenerationList? regenerations});
 
@@ -230,11 +246,11 @@ abstract class _$$_CorCyclePlacetteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_CorCyclePlacetteCopyWithImpl<$Res>
-    extends _$CorCyclePlacetteCopyWithImpl<$Res, _$_CorCyclePlacette>
-    implements _$$_CorCyclePlacetteCopyWith<$Res> {
-  __$$_CorCyclePlacetteCopyWithImpl(
-      _$_CorCyclePlacette _value, $Res Function(_$_CorCyclePlacette) _then)
+class __$$CorCyclePlacetteImplCopyWithImpl<$Res>
+    extends _$CorCyclePlacetteCopyWithImpl<$Res, _$CorCyclePlacetteImpl>
+    implements _$$CorCyclePlacetteImplCopyWith<$Res> {
+  __$$CorCyclePlacetteImplCopyWithImpl(_$CorCyclePlacetteImpl _value,
+      $Res Function(_$CorCyclePlacetteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -255,10 +271,12 @@ class __$$_CorCyclePlacetteCopyWithImpl<$Res>
     Object? recouvHerbesHautes = freezed,
     Object? recouvBuissons = freezed,
     Object? recouvArbres = freezed,
+    Object? coeff = freezed,
+    Object? diamLim = freezed,
     Object? transects = freezed,
     Object? regenerations = freezed,
   }) {
-    return _then(_$_CorCyclePlacette(
+    return _then(_$CorCyclePlacetteImpl(
       idCyclePlacette: null == idCyclePlacette
           ? _value.idCyclePlacette
           : idCyclePlacette // ignore: cast_nullable_to_non_nullable
@@ -319,6 +337,14 @@ class __$$_CorCyclePlacetteCopyWithImpl<$Res>
           ? _value.recouvArbres
           : recouvArbres // ignore: cast_nullable_to_non_nullable
               as double?,
+      coeff: freezed == coeff
+          ? _value.coeff
+          : coeff // ignore: cast_nullable_to_non_nullable
+              as int?,
+      diamLim: freezed == diamLim
+          ? _value.diamLim
+          : diamLim // ignore: cast_nullable_to_non_nullable
+              as double?,
       transects: freezed == transects
           ? _value.transects
           : transects // ignore: cast_nullable_to_non_nullable
@@ -333,8 +359,8 @@ class __$$_CorCyclePlacetteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CorCyclePlacette extends _CorCyclePlacette {
-  const _$_CorCyclePlacette(
+class _$CorCyclePlacetteImpl extends _CorCyclePlacette {
+  const _$CorCyclePlacetteImpl(
       {required this.idCyclePlacette,
       required this.idCycle,
       required this.idPlacette,
@@ -350,6 +376,8 @@ class _$_CorCyclePlacette extends _CorCyclePlacette {
       this.recouvHerbesHautes,
       this.recouvBuissons,
       this.recouvArbres,
+      this.coeff,
+      this.diamLim,
       this.transects,
       this.regenerations})
       : super._();
@@ -385,20 +413,24 @@ class _$_CorCyclePlacette extends _CorCyclePlacette {
   @override
   final double? recouvArbres;
   @override
+  final int? coeff;
+  @override
+  final double? diamLim;
+  @override
   final TransectList? transects;
   @override
   final RegenerationList? regenerations;
 
   @override
   String toString() {
-    return 'CorCyclePlacette(idCyclePlacette: $idCyclePlacette, idCycle: $idCycle, idPlacette: $idPlacette, dateReleve: $dateReleve, dateIntervention: $dateIntervention, annee: $annee, natureIntervention: $natureIntervention, gestionPlacette: $gestionPlacette, idNomenclatureCastor: $idNomenclatureCastor, idNomenclatureFrottis: $idNomenclatureFrottis, idNomenclatureBoutis: $idNomenclatureBoutis, recouvHerbesBasses: $recouvHerbesBasses, recouvHerbesHautes: $recouvHerbesHautes, recouvBuissons: $recouvBuissons, recouvArbres: $recouvArbres, transects: $transects, regenerations: $regenerations)';
+    return 'CorCyclePlacette(idCyclePlacette: $idCyclePlacette, idCycle: $idCycle, idPlacette: $idPlacette, dateReleve: $dateReleve, dateIntervention: $dateIntervention, annee: $annee, natureIntervention: $natureIntervention, gestionPlacette: $gestionPlacette, idNomenclatureCastor: $idNomenclatureCastor, idNomenclatureFrottis: $idNomenclatureFrottis, idNomenclatureBoutis: $idNomenclatureBoutis, recouvHerbesBasses: $recouvHerbesBasses, recouvHerbesHautes: $recouvHerbesHautes, recouvBuissons: $recouvBuissons, recouvArbres: $recouvArbres, coeff: $coeff, diamLim: $diamLim, transects: $transects, regenerations: $regenerations)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CorCyclePlacette &&
+            other is _$CorCyclePlacetteImpl &&
             (identical(other.idCyclePlacette, idCyclePlacette) ||
                 other.idCyclePlacette == idCyclePlacette) &&
             (identical(other.idCycle, idCycle) || other.idCycle == idCycle) &&
@@ -427,6 +459,8 @@ class _$_CorCyclePlacette extends _CorCyclePlacette {
                 other.recouvBuissons == recouvBuissons) &&
             (identical(other.recouvArbres, recouvArbres) ||
                 other.recouvArbres == recouvArbres) &&
+            (identical(other.coeff, coeff) || other.coeff == coeff) &&
+            (identical(other.diamLim, diamLim) || other.diamLim == diamLim) &&
             (identical(other.transects, transects) ||
                 other.transects == transects) &&
             (identical(other.regenerations, regenerations) ||
@@ -434,31 +468,35 @@ class _$_CorCyclePlacette extends _CorCyclePlacette {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      idCyclePlacette,
-      idCycle,
-      idPlacette,
-      dateReleve,
-      dateIntervention,
-      annee,
-      natureIntervention,
-      gestionPlacette,
-      idNomenclatureCastor,
-      idNomenclatureFrottis,
-      idNomenclatureBoutis,
-      recouvHerbesBasses,
-      recouvHerbesHautes,
-      recouvBuissons,
-      recouvArbres,
-      transects,
-      regenerations);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        idCyclePlacette,
+        idCycle,
+        idPlacette,
+        dateReleve,
+        dateIntervention,
+        annee,
+        natureIntervention,
+        gestionPlacette,
+        idNomenclatureCastor,
+        idNomenclatureFrottis,
+        idNomenclatureBoutis,
+        recouvHerbesBasses,
+        recouvHerbesHautes,
+        recouvBuissons,
+        recouvArbres,
+        coeff,
+        diamLim,
+        transects,
+        regenerations
+      ]);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CorCyclePlacetteCopyWith<_$_CorCyclePlacette> get copyWith =>
-      __$$_CorCyclePlacetteCopyWithImpl<_$_CorCyclePlacette>(this, _$identity);
+  _$$CorCyclePlacetteImplCopyWith<_$CorCyclePlacetteImpl> get copyWith =>
+      __$$CorCyclePlacetteImplCopyWithImpl<_$CorCyclePlacetteImpl>(
+          this, _$identity);
 }
 
 abstract class _CorCyclePlacette extends CorCyclePlacette {
@@ -478,8 +516,10 @@ abstract class _CorCyclePlacette extends CorCyclePlacette {
       final double? recouvHerbesHautes,
       final double? recouvBuissons,
       final double? recouvArbres,
+      final int? coeff,
+      final double? diamLim,
       final TransectList? transects,
-      final RegenerationList? regenerations}) = _$_CorCyclePlacette;
+      final RegenerationList? regenerations}) = _$CorCyclePlacetteImpl;
   const _CorCyclePlacette._() : super._();
 
   @override
@@ -513,11 +553,15 @@ abstract class _CorCyclePlacette extends CorCyclePlacette {
   @override
   double? get recouvArbres;
   @override
+  int? get coeff;
+  @override
+  double? get diamLim;
+  @override
   TransectList? get transects;
   @override
   RegenerationList? get regenerations;
   @override
   @JsonKey(ignore: true)
-  _$$_CorCyclePlacetteCopyWith<_$_CorCyclePlacette> get copyWith =>
+  _$$CorCyclePlacetteImplCopyWith<_$CorCyclePlacetteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

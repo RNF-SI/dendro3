@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'essence_list.dart';
 
@@ -57,22 +57,22 @@ class _$EssenceListCopyWithImpl<$Res, $Val extends EssenceList>
 }
 
 /// @nodoc
-abstract class _$$_EssenceListCopyWith<$Res>
+abstract class _$$EssenceListImplCopyWith<$Res>
     implements $EssenceListCopyWith<$Res> {
-  factory _$$_EssenceListCopyWith(
-          _$_EssenceList value, $Res Function(_$_EssenceList) then) =
-      __$$_EssenceListCopyWithImpl<$Res>;
+  factory _$$EssenceListImplCopyWith(
+          _$EssenceListImpl value, $Res Function(_$EssenceListImpl) then) =
+      __$$EssenceListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Essence> values});
 }
 
 /// @nodoc
-class __$$_EssenceListCopyWithImpl<$Res>
-    extends _$EssenceListCopyWithImpl<$Res, _$_EssenceList>
-    implements _$$_EssenceListCopyWith<$Res> {
-  __$$_EssenceListCopyWithImpl(
-      _$_EssenceList _value, $Res Function(_$_EssenceList) _then)
+class __$$EssenceListImplCopyWithImpl<$Res>
+    extends _$EssenceListCopyWithImpl<$Res, _$EssenceListImpl>
+    implements _$$EssenceListImplCopyWith<$Res> {
+  __$$EssenceListImplCopyWithImpl(
+      _$EssenceListImpl _value, $Res Function(_$EssenceListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_EssenceListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_EssenceList(
+    return _then(_$EssenceListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -91,14 +91,15 @@ class __$$_EssenceListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EssenceList extends _EssenceList {
-  const _$_EssenceList({required final List<Essence> values})
+class _$EssenceListImpl extends _EssenceList {
+  const _$EssenceListImpl({required final List<Essence> values})
       : _values = values,
         super._();
 
   final List<Essence> _values;
   @override
   List<Essence> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -109,10 +110,10 @@ class _$_EssenceList extends _EssenceList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EssenceList &&
+            other is _$EssenceListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -123,19 +124,19 @@ class _$_EssenceList extends _EssenceList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EssenceListCopyWith<_$_EssenceList> get copyWith =>
-      __$$_EssenceListCopyWithImpl<_$_EssenceList>(this, _$identity);
+  _$$EssenceListImplCopyWith<_$EssenceListImpl> get copyWith =>
+      __$$EssenceListImplCopyWithImpl<_$EssenceListImpl>(this, _$identity);
 }
 
 abstract class _EssenceList extends EssenceList {
   const factory _EssenceList({required final List<Essence> values}) =
-      _$_EssenceList;
+      _$EssenceListImpl;
   const _EssenceList._() : super._();
 
   @override
   List<Essence> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_EssenceListCopyWith<_$_EssenceList> get copyWith =>
+  _$$EssenceListImplCopyWith<_$EssenceListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

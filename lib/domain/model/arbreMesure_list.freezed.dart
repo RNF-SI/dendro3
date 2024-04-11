@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'arbreMesure_list.dart';
 
@@ -57,22 +57,22 @@ class _$ArbreMesureListCopyWithImpl<$Res, $Val extends ArbreMesureList>
 }
 
 /// @nodoc
-abstract class _$$_ArbreMesureListCopyWith<$Res>
+abstract class _$$ArbreMesureListImplCopyWith<$Res>
     implements $ArbreMesureListCopyWith<$Res> {
-  factory _$$_ArbreMesureListCopyWith(
-          _$_ArbreMesureList value, $Res Function(_$_ArbreMesureList) then) =
-      __$$_ArbreMesureListCopyWithImpl<$Res>;
+  factory _$$ArbreMesureListImplCopyWith(_$ArbreMesureListImpl value,
+          $Res Function(_$ArbreMesureListImpl) then) =
+      __$$ArbreMesureListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<ArbreMesure> values});
 }
 
 /// @nodoc
-class __$$_ArbreMesureListCopyWithImpl<$Res>
-    extends _$ArbreMesureListCopyWithImpl<$Res, _$_ArbreMesureList>
-    implements _$$_ArbreMesureListCopyWith<$Res> {
-  __$$_ArbreMesureListCopyWithImpl(
-      _$_ArbreMesureList _value, $Res Function(_$_ArbreMesureList) _then)
+class __$$ArbreMesureListImplCopyWithImpl<$Res>
+    extends _$ArbreMesureListCopyWithImpl<$Res, _$ArbreMesureListImpl>
+    implements _$$ArbreMesureListImplCopyWith<$Res> {
+  __$$ArbreMesureListImplCopyWithImpl(
+      _$ArbreMesureListImpl _value, $Res Function(_$ArbreMesureListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_ArbreMesureListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_ArbreMesureList(
+    return _then(_$ArbreMesureListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -91,14 +91,15 @@ class __$$_ArbreMesureListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ArbreMesureList extends _ArbreMesureList {
-  const _$_ArbreMesureList({required final List<ArbreMesure> values})
+class _$ArbreMesureListImpl extends _ArbreMesureList {
+  const _$ArbreMesureListImpl({required final List<ArbreMesure> values})
       : _values = values,
         super._();
 
   final List<ArbreMesure> _values;
   @override
   List<ArbreMesure> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -109,10 +110,10 @@ class _$_ArbreMesureList extends _ArbreMesureList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ArbreMesureList &&
+            other is _$ArbreMesureListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -123,19 +124,20 @@ class _$_ArbreMesureList extends _ArbreMesureList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ArbreMesureListCopyWith<_$_ArbreMesureList> get copyWith =>
-      __$$_ArbreMesureListCopyWithImpl<_$_ArbreMesureList>(this, _$identity);
+  _$$ArbreMesureListImplCopyWith<_$ArbreMesureListImpl> get copyWith =>
+      __$$ArbreMesureListImplCopyWithImpl<_$ArbreMesureListImpl>(
+          this, _$identity);
 }
 
 abstract class _ArbreMesureList extends ArbreMesureList {
   const factory _ArbreMesureList({required final List<ArbreMesure> values}) =
-      _$_ArbreMesureList;
+      _$ArbreMesureListImpl;
   const _ArbreMesureList._() : super._();
 
   @override
   List<ArbreMesure> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_ArbreMesureListCopyWith<_$_ArbreMesureList> get copyWith =>
+  _$$ArbreMesureListImplCopyWith<_$ArbreMesureListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

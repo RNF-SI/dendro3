@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'transect.dart';
 
@@ -176,10 +176,11 @@ class _$TransectCopyWithImpl<$Res, $Val extends Transect>
 }
 
 /// @nodoc
-abstract class _$$_TransectCopyWith<$Res> implements $TransectCopyWith<$Res> {
-  factory _$$_TransectCopyWith(
-          _$_Transect value, $Res Function(_$_Transect) then) =
-      __$$_TransectCopyWithImpl<$Res>;
+abstract class _$$TransectImplCopyWith<$Res>
+    implements $TransectCopyWith<$Res> {
+  factory _$$TransectImplCopyWith(
+          _$TransectImpl value, $Res Function(_$TransectImpl) then) =
+      __$$TransectImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -204,11 +205,11 @@ abstract class _$$_TransectCopyWith<$Res> implements $TransectCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_TransectCopyWithImpl<$Res>
-    extends _$TransectCopyWithImpl<$Res, _$_Transect>
-    implements _$$_TransectCopyWith<$Res> {
-  __$$_TransectCopyWithImpl(
-      _$_Transect _value, $Res Function(_$_Transect) _then)
+class __$$TransectImplCopyWithImpl<$Res>
+    extends _$TransectCopyWithImpl<$Res, _$TransectImpl>
+    implements _$$TransectImplCopyWith<$Res> {
+  __$$TransectImplCopyWithImpl(
+      _$TransectImpl _value, $Res Function(_$TransectImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -233,7 +234,7 @@ class __$$_TransectCopyWithImpl<$Res>
     Object? stadeEcorce = null,
     Object? observation = freezed,
   }) {
-    return _then(_$_Transect(
+    return _then(_$TransectImpl(
       idTransect: null == idTransect
           ? _value.idTransect
           : idTransect // ignore: cast_nullable_to_non_nullable
@@ -312,8 +313,8 @@ class __$$_TransectCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Transect extends _Transect {
-  const _$_Transect(
+class _$TransectImpl extends _Transect {
+  const _$TransectImpl(
       {required this.idTransect,
       required this.idCyclePlacette,
       required this.idTransectOrig,
@@ -377,10 +378,10 @@ class _$_Transect extends _Transect {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Transect &&
+            other is _$TransectImpl &&
             (identical(other.idTransect, idTransect) ||
                 other.idTransect == idTransect) &&
             (identical(other.idCyclePlacette, idCyclePlacette) ||
@@ -441,8 +442,8 @@ class _$_Transect extends _Transect {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TransectCopyWith<_$_Transect> get copyWith =>
-      __$$_TransectCopyWithImpl<_$_Transect>(this, _$identity);
+  _$$TransectImplCopyWith<_$TransectImpl> get copyWith =>
+      __$$TransectImplCopyWithImpl<_$TransectImpl>(this, _$identity);
 }
 
 abstract class _Transect extends Transect {
@@ -464,7 +465,7 @@ abstract class _Transect extends Transect {
       required final bool chablis,
       required final int stadeDurete,
       required final int stadeEcorce,
-      final String? observation}) = _$_Transect;
+      final String? observation}) = _$TransectImpl;
   const _Transect._() : super._();
 
   @override
@@ -505,6 +506,6 @@ abstract class _Transect extends Transect {
   String? get observation;
   @override
   @JsonKey(ignore: true)
-  _$$_TransectCopyWith<_$_Transect> get copyWith =>
+  _$$TransectImplCopyWith<_$TransectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

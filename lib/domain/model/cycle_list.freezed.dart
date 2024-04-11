@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'cycle_list.dart';
 
@@ -56,21 +56,22 @@ class _$CycleListCopyWithImpl<$Res, $Val extends CycleList>
 }
 
 /// @nodoc
-abstract class _$$_CycleListCopyWith<$Res> implements $CycleListCopyWith<$Res> {
-  factory _$$_CycleListCopyWith(
-          _$_CycleList value, $Res Function(_$_CycleList) then) =
-      __$$_CycleListCopyWithImpl<$Res>;
+abstract class _$$CycleListImplCopyWith<$Res>
+    implements $CycleListCopyWith<$Res> {
+  factory _$$CycleListImplCopyWith(
+          _$CycleListImpl value, $Res Function(_$CycleListImpl) then) =
+      __$$CycleListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Cycle> values});
 }
 
 /// @nodoc
-class __$$_CycleListCopyWithImpl<$Res>
-    extends _$CycleListCopyWithImpl<$Res, _$_CycleList>
-    implements _$$_CycleListCopyWith<$Res> {
-  __$$_CycleListCopyWithImpl(
-      _$_CycleList _value, $Res Function(_$_CycleList) _then)
+class __$$CycleListImplCopyWithImpl<$Res>
+    extends _$CycleListCopyWithImpl<$Res, _$CycleListImpl>
+    implements _$$CycleListImplCopyWith<$Res> {
+  __$$CycleListImplCopyWithImpl(
+      _$CycleListImpl _value, $Res Function(_$CycleListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -78,7 +79,7 @@ class __$$_CycleListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_CycleList(
+    return _then(_$CycleListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -89,14 +90,15 @@ class __$$_CycleListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CycleList extends _CycleList {
-  const _$_CycleList({required final List<Cycle> values})
+class _$CycleListImpl extends _CycleList {
+  const _$CycleListImpl({required final List<Cycle> values})
       : _values = values,
         super._();
 
   final List<Cycle> _values;
   @override
   List<Cycle> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -107,10 +109,10 @@ class _$_CycleList extends _CycleList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CycleList &&
+            other is _$CycleListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -121,18 +123,19 @@ class _$_CycleList extends _CycleList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CycleListCopyWith<_$_CycleList> get copyWith =>
-      __$$_CycleListCopyWithImpl<_$_CycleList>(this, _$identity);
+  _$$CycleListImplCopyWith<_$CycleListImpl> get copyWith =>
+      __$$CycleListImplCopyWithImpl<_$CycleListImpl>(this, _$identity);
 }
 
 abstract class _CycleList extends CycleList {
-  const factory _CycleList({required final List<Cycle> values}) = _$_CycleList;
+  const factory _CycleList({required final List<Cycle> values}) =
+      _$CycleListImpl;
   const _CycleList._() : super._();
 
   @override
   List<Cycle> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_CycleListCopyWith<_$_CycleList> get copyWith =>
+  _$$CycleListImplCopyWith<_$CycleListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

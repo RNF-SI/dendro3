@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'repere_list.dart';
 
@@ -57,22 +57,22 @@ class _$RepereListCopyWithImpl<$Res, $Val extends RepereList>
 }
 
 /// @nodoc
-abstract class _$$_RepereListCopyWith<$Res>
+abstract class _$$RepereListImplCopyWith<$Res>
     implements $RepereListCopyWith<$Res> {
-  factory _$$_RepereListCopyWith(
-          _$_RepereList value, $Res Function(_$_RepereList) then) =
-      __$$_RepereListCopyWithImpl<$Res>;
+  factory _$$RepereListImplCopyWith(
+          _$RepereListImpl value, $Res Function(_$RepereListImpl) then) =
+      __$$RepereListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Repere> values});
 }
 
 /// @nodoc
-class __$$_RepereListCopyWithImpl<$Res>
-    extends _$RepereListCopyWithImpl<$Res, _$_RepereList>
-    implements _$$_RepereListCopyWith<$Res> {
-  __$$_RepereListCopyWithImpl(
-      _$_RepereList _value, $Res Function(_$_RepereList) _then)
+class __$$RepereListImplCopyWithImpl<$Res>
+    extends _$RepereListCopyWithImpl<$Res, _$RepereListImpl>
+    implements _$$RepereListImplCopyWith<$Res> {
+  __$$RepereListImplCopyWithImpl(
+      _$RepereListImpl _value, $Res Function(_$RepereListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_RepereListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_RepereList(
+    return _then(_$RepereListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -91,14 +91,15 @@ class __$$_RepereListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RepereList extends _RepereList {
-  const _$_RepereList({required final List<Repere> values})
+class _$RepereListImpl extends _RepereList {
+  const _$RepereListImpl({required final List<Repere> values})
       : _values = values,
         super._();
 
   final List<Repere> _values;
   @override
   List<Repere> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -109,10 +110,10 @@ class _$_RepereList extends _RepereList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RepereList &&
+            other is _$RepereListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -123,19 +124,19 @@ class _$_RepereList extends _RepereList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RepereListCopyWith<_$_RepereList> get copyWith =>
-      __$$_RepereListCopyWithImpl<_$_RepereList>(this, _$identity);
+  _$$RepereListImplCopyWith<_$RepereListImpl> get copyWith =>
+      __$$RepereListImplCopyWithImpl<_$RepereListImpl>(this, _$identity);
 }
 
 abstract class _RepereList extends RepereList {
   const factory _RepereList({required final List<Repere> values}) =
-      _$_RepereList;
+      _$RepereListImpl;
   const _RepereList._() : super._();
 
   @override
   List<Repere> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_RepereListCopyWith<_$_RepereList> get copyWith =>
+  _$$RepereListImplCopyWith<_$RepereListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

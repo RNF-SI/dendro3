@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'arbre_list.dart';
 
@@ -56,21 +56,22 @@ class _$ArbreListCopyWithImpl<$Res, $Val extends ArbreList>
 }
 
 /// @nodoc
-abstract class _$$_ArbreListCopyWith<$Res> implements $ArbreListCopyWith<$Res> {
-  factory _$$_ArbreListCopyWith(
-          _$_ArbreList value, $Res Function(_$_ArbreList) then) =
-      __$$_ArbreListCopyWithImpl<$Res>;
+abstract class _$$ArbreListImplCopyWith<$Res>
+    implements $ArbreListCopyWith<$Res> {
+  factory _$$ArbreListImplCopyWith(
+          _$ArbreListImpl value, $Res Function(_$ArbreListImpl) then) =
+      __$$ArbreListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Arbre> values});
 }
 
 /// @nodoc
-class __$$_ArbreListCopyWithImpl<$Res>
-    extends _$ArbreListCopyWithImpl<$Res, _$_ArbreList>
-    implements _$$_ArbreListCopyWith<$Res> {
-  __$$_ArbreListCopyWithImpl(
-      _$_ArbreList _value, $Res Function(_$_ArbreList) _then)
+class __$$ArbreListImplCopyWithImpl<$Res>
+    extends _$ArbreListCopyWithImpl<$Res, _$ArbreListImpl>
+    implements _$$ArbreListImplCopyWith<$Res> {
+  __$$ArbreListImplCopyWithImpl(
+      _$ArbreListImpl _value, $Res Function(_$ArbreListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -78,7 +79,7 @@ class __$$_ArbreListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_ArbreList(
+    return _then(_$ArbreListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -89,14 +90,15 @@ class __$$_ArbreListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ArbreList extends _ArbreList {
-  const _$_ArbreList({required final List<Arbre> values})
+class _$ArbreListImpl extends _ArbreList {
+  const _$ArbreListImpl({required final List<Arbre> values})
       : _values = values,
         super._();
 
   final List<Arbre> _values;
   @override
   List<Arbre> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -107,10 +109,10 @@ class _$_ArbreList extends _ArbreList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ArbreList &&
+            other is _$ArbreListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -121,18 +123,19 @@ class _$_ArbreList extends _ArbreList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ArbreListCopyWith<_$_ArbreList> get copyWith =>
-      __$$_ArbreListCopyWithImpl<_$_ArbreList>(this, _$identity);
+  _$$ArbreListImplCopyWith<_$ArbreListImpl> get copyWith =>
+      __$$ArbreListImplCopyWithImpl<_$ArbreListImpl>(this, _$identity);
 }
 
 abstract class _ArbreList extends ArbreList {
-  const factory _ArbreList({required final List<Arbre> values}) = _$_ArbreList;
+  const factory _ArbreList({required final List<Arbre> values}) =
+      _$ArbreListImpl;
   const _ArbreList._() : super._();
 
   @override
   List<Arbre> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_ArbreListCopyWith<_$_ArbreList> get copyWith =>
+  _$$ArbreListImplCopyWith<_$ArbreListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
