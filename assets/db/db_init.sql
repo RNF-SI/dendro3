@@ -81,10 +81,8 @@ CREATE TABLE t_cycles (
   id_cycle serial NOT NULL PRIMARY KEY,
   id_dispositif integer NOT NULL,
   num_cycle integer NOT NULL,
-  coeff integer,
   date_debut date,
   date_fin date,
-  diam_lim real,
   monitor character varying (50),
   CONSTRAINT fk_t_cycles_t_placettes
     FOREIGN KEY (id_dispositif) REFERENCES t_dispositifs (id_dispositif)
@@ -337,6 +335,8 @@ CREATE TABLE cor_cycles_placettes (
     recouv_herbes_hautes real,
     recouv_buissons real,
     recouv_arbres real,
+    coeff integer,
+    diam_lim real,
     created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
     created_on character varying,
     created_by character varying,

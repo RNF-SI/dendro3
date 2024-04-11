@@ -23,10 +23,8 @@ class CyclesDatabaseImpl implements CyclesDatabase {
           k == 'id_cycle' ||
           k == 'id_dispositif' ||
           k == 'num_cycle' ||
-          k == 'coeff' ||
           k == 'date_debut' ||
           k == 'date_fin' ||
-          k == 'diam_lim' ||
           k == 'monitor'))
         property: cycle[property]
     };

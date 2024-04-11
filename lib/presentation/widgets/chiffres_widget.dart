@@ -88,7 +88,6 @@ List<Widget> __buildGridText(Cycle cycle) {
             buildPropertyTextWidget('idCycle', cycle.idCycle),
             buildPropertyTextWidget('idDispositif', cycle.idDispositif),
             buildPropertyTextWidget('numCycle', cycle.numCycle),
-            buildPropertyTextWidget('coeff', cycle.coeff),
             buildPropertyTextWidget(
                 'dateDebut',
                 cycle.dateDebut != null
@@ -99,7 +98,6 @@ List<Widget> __buildGridText(Cycle cycle) {
                 cycle.dateFin != null
                     ? '${cycle.dateFin!.day}/${cycle.dateFin!.month}/${cycle.dateFin!.year}'
                     : null),
-            buildPropertyTextWidget('diamLim', cycle.diamLim),
             buildPropertyTextWidget('monitor', cycle.monitor),
           ]),
     ),

@@ -43,6 +43,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
           k == 'recouv_herbes_hautes' ||
           k == 'recouv_buissons' ||
           k == 'recouv_arbres' ||
+          k == 'coeff' ||
+          k == 'diam_lim' ||
           k == 'created_by' ||
           k == 'updated_by' ||
           k == 'created_on' ||

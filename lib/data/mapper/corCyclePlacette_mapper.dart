@@ -38,6 +38,8 @@ class CorCyclePlacetteMapper {
       recouvHerbesHautes: entity['recouv_herbes_hautes'],
       recouvBuissons: entity['recouv_buissons'],
       recouvArbres: entity['recouv_arbres'],
+      coeff: entity['coeff'] as int?,
+      diamLim: entity['diam_lim'] as double?,
     );
   }
 
@@ -102,6 +104,8 @@ class CorCyclePlacetteMapper {
         recouvHerbesHautes: entity['recouv_herbes_hautes'] as double?,
         recouvBuissons: entity['recouv_buissons'] as double?,
         recouvArbres: entity['recouv_arbres'] as double?,
+        coeff: entity['coeff'] as int?,
+        diamLim: entity['diam_lim'] as double?,
         transects: entity.containsKey('transects')
             ? TransectListMapper.transformFromDBToModel(entity['transects'])
             : null,
@@ -136,6 +140,8 @@ class CorCyclePlacetteMapper {
       'recouv_herbes_hautes': model.recouvHerbesHautes,
       'recouv_buissons': model.recouvBuissons,
       'recouv_arbres': model.recouvArbres,
+      'coeff': model.coeff,
+      'diam_lim': model.diamLim,
       'transects': model.transects != null
           ? TransectListMapper.transformToMap(model.transects!)
           : null,

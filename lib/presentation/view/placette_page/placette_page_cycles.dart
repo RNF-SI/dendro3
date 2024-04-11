@@ -205,6 +205,8 @@ Widget __buildGridText(CorCyclePlacette corCyclePlacette) {
                 'recouvBuissons', corCyclePlacette.recouvBuissons),
             buildPropertyTextWidget(
                 'recouvArbres', corCyclePlacette.recouvArbres),
+            buildPropertyTextWidget('coeff', corCyclePlacette.coeff),
+            buildPropertyTextWidget('diamLim', corCyclePlacette.diamLim),
           ]),
     ),
   );
