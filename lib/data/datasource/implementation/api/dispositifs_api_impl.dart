@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dendro3/core/error/failure.dart';
+import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:dendro3/data/common/constants.dart';
@@ -53,14 +54,21 @@ class DispositifsApiImpl implements DispositifsApi {
   }
 
   @override
-  Future<void> exportDispositifData(DispositifEntity data) async {
+  Future<SyncResults> exportDispositifData(DispositifEntity data) async {
     try {
       final url = Uri.parse("$apiBase/psdrf/export_dispositif_from_dendro3");
       final response = await Dio()
           .post("$apiBase/psdrf/export_dispositif_from_dendro3", data: data);
+      SyncResults syncResults = SyncResults(
+        localArbres: SyncDetails(created: 10, updated: 5, deleted: 2),
+        distantArbres: SyncDetails(created: 8, updated: 3, deleted: 1),
+        localBms: SyncDetails(created: 4, updated: 4, deleted: 0),
+        distantBms: SyncDetails(created: 5, updated: 2, deleted: 1),
+      );
       if (response.statusCode != 200) {
         throw Failure(message: 'Failed to export data: $response');
       }
+      return syncResults;
     } on SocketException catch (err) {
       throw Failure(message: 'Please check your connection. Error: $err');
     } on DioError catch (err) {

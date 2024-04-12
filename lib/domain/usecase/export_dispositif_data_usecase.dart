@@ -1,5 +1,7 @@
+import 'package:dendro3/core/helpers/sync_objects.dart';
+
 abstract class ExportDispositifDataUseCase {
-  Future<void> execute(
+  Future<SyncResults> execute(
     final int id,
   );
 }

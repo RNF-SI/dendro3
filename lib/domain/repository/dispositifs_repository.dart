@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/dispositif_list.dart';
 
@@ -30,5 +31,5 @@ abstract class DispositifsRepository {
     final int id,
   );
 
-  Future<void> exportDispositifData(int idDispositif);
+  Future<SyncResults> exportDispositifData(int idDispositif);
 }

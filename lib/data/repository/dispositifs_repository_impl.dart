@@ -1,4 +1,4 @@
-
+import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
@@ -109,7 +109,7 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
       await database.deleteDispositif(id);
 
   @override
-  Future<void> exportDispositifData(int idDispositif) async {
+  Future<SyncResults> exportDispositifData(int idDispositif) async {
     String? lastSyncTime = await _localStorageRepository
         .getLastSyncTimeForDispositif(idDispositif);
 
@@ -117,6 +117,6 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
     DispositifEntity data =
         await database.getDispositifAllData(idDispositif, lastSyncTime!);
 
-    await api.exportDispositifData(data);
+    return await api.exportDispositifData(data);
   }
 }

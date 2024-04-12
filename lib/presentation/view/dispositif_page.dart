@@ -1,7 +1,9 @@
+import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
+import 'package:dendro3/presentation/view/sync_result.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/chiffres_widget.dart';
 import 'package:dendro3/presentation/widgets/placette_item_card.dart';
@@ -37,10 +39,8 @@ class DispositifPage extends ConsumerWidget {
               onSelected: (value) async {
                 switch (value) {
                   case 'export_disp':
-                    return await ref
-                        .read(
-                            dispositifViewModelProvider(dispositifId).notifier)
-                        .exportDispositifDataOnStagingDatabase(dispositifId);
+                    showSyncResultsDialog(context, dispositifId);
+                    break;
                   case 'start_new_cycle':
                     return showNewCycleDialog(context, ref, dispositifId);
                   case 'open_remove_dialog':
@@ -202,6 +202,21 @@ showAlertDialog(
     context: context,
     builder: (BuildContext context) {
       return alert;
+    },
+  );
+}
+
+void showSyncResultsDialog(BuildContext context, int dispositifId) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: Container(
+          width: 300,
+          height: 400, // Adjust the size as needed
+          child: SyncResultsWidget(dispositifId: dispositifId),
+        ),
+      );
     },
   );
 }
