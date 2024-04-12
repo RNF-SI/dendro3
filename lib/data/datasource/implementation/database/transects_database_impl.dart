@@ -33,22 +33,22 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   }
 
   static Future<Map<String, List<TransectEntity>>>
-      getCorCyclePlacetteTransectsForDataSync(Database db,
+      getCorCyclePlacetteTransectsForDataSync(Transaction txn,
           final String corCyclePlacetteId, String lastSyncTime) async {
-    var createdTransects = await db.query(
+    var createdTransects = await txn.query(
       _tableName,
       where: 'id_cycle_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
-    var updatedTransects = await db.query(
+    var updatedTransects = await txn.query(
       _tableName,
       where:
           'id_cycle_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
-    var deletedTransects = await db.query(
+    var deletedTransects = await txn.query(
       _tableName,
       where: 'id_cycle_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [corCyclePlacetteId, lastSyncTime],

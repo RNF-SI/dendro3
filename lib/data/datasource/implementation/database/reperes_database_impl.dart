@@ -32,16 +32,16 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   }
 
   static Future<Map<String, List<RepereEntity>>> getPlacetteReperesForDataSync(
-      Database db, int placetteId, String lastSyncTime) async {
+      Transaction txn, int placetteId, String lastSyncTime) async {
     // Fetch newly created Repere records
-    List<RepereEntity> createdReperes = await db.query(
+    List<RepereEntity> createdReperes = await txn.query(
       _tableName,
       where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Fetch updated Repere records
-    List<RepereEntity> updatedReperes = await db.query(
+    List<RepereEntity> updatedReperes = await txn.query(
       _tableName,
       where:
           'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
@@ -49,7 +49,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     );
 
     // Fetch deleted Repere records
-    List<RepereEntity> deletedReperes = await db.query(
+    List<RepereEntity> deletedReperes = await txn.query(
       _tableName,
       where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],

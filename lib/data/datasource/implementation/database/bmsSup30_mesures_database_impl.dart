@@ -35,16 +35,16 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
 
   static Future<Map<String, BmSup30MesureListEntity>>
       getbmSup30bmsSup30MesuresForDataSync(
-          Database db, final String bmsSup30Id, String lastSyncTime) async {
+          Transaction txn, final String bmsSup30Id, String lastSyncTime) async {
     // Fetch newly created BmSup30Mesure records
-    List<BmSup30MesureEntity> createdBmsup30mesure = await db.query(
+    List<BmSup30MesureEntity> createdBmsup30mesure = await txn.query(
       _tableName,
       where: 'id_bm_sup_30 = ? AND created_at > ? AND deleted = 0',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
     // Fetch updated BmSup30Mesure records
-    List<BmSup30MesureEntity> updatedBmsup30mesure = await db.query(
+    List<BmSup30MesureEntity> updatedBmsup30mesure = await txn.query(
       _tableName,
       where:
           'id_bm_sup_30 = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
@@ -52,7 +52,7 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     );
 
     // Fetch deleted BmSup30Mesure records
-    List<BmSup30MesureEntity> deletedBmsup30mesure = await db.query(
+    List<BmSup30MesureEntity> deletedBmsup30mesure = await txn.query(
       _tableName,
       where: 'id_bm_sup_30 = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [bmsSup30Id, lastSyncTime],

@@ -74,16 +74,16 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   }
 
   static Future<Map<String, List<ArbreEntity>>> getPlacetteArbresForDataSync(
-      Database db, final int placetteId, String lastSyncTime) async {
+      Transaction txn, final int placetteId, String lastSyncTime) async {
     // Fetch newly created arbres (created_at after lastSyncTime and not deleted)
-    List<ArbreEntity> createdArbres = await db.query(
+    List<ArbreEntity> createdArbres = await txn.query(
       _tableName,
       where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Fetch updated arbres (updated_at after lastSyncTime and not deleted)
-    List<ArbreEntity> updatedArbres = await db.query(
+    List<ArbreEntity> updatedArbres = await txn.query(
       _tableName,
       where:
           'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
@@ -91,7 +91,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     );
 
     // Fetch deleted arbres (deleted flag set and updated_at after lastSyncTime)
-    List<ArbreEntity> deletedArbres = await db.query(
+    List<ArbreEntity> deletedArbres = await txn.query(
       _tableName,
       where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],
@@ -100,11 +100,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     // Process each list to include arbre_mesures, if needed
     Map<String, List<ArbreEntity>> arbreData = {
       "created":
-          await _processArbresWithMesures(db, createdArbres, lastSyncTime),
+          await _processArbresWithMesures(txn, createdArbres, lastSyncTime),
       "updated":
-          await _processArbresWithMesures(db, updatedArbres, lastSyncTime),
+          await _processArbresWithMesures(txn, updatedArbres, lastSyncTime),
       "deleted":
-          deletedArbres // Assuming no need to add arbre_mesures for deleted arbres
+          deletedArbres, // Assuming no need to add arbre_mesures for deleted arbres
     };
 
     return arbreData;
@@ -112,11 +112,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
   // Helper function to process arbres and include their measures
   static Future<List<ArbreEntity>> _processArbresWithMesures(
-      Database db, List<ArbreEntity> arbres, String lastSyncTime) async {
+      Transaction txn, List<ArbreEntity> arbres, String lastSyncTime) async {
     return Future.wait(arbres.map((ArbreEntity arbreEntity) async {
       Map<String, List<ArbreMesureEntity>> arbreMesureObj =
           await ArbresMesuresDatabaseImpl.getArbreArbresMesuresForDataSync(
-              db,
+              txn,
               arbreEntity["id_arbre"],
               lastSyncTime); // Assuming you also update getArbreArbresMesures similarly
       return {...arbreEntity, 'arbres_mesures': arbreMesureObj};

@@ -95,16 +95,16 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   static Future<Map<String, List<ArbreMesureEntity>>>
       getArbreArbresMesuresForDataSync(
-          Database db, final String arbreId, String lastSyncTime) async {
+          Transaction txn, final String arbreId, String lastSyncTime) async {
     // Fetch newly created arbreMesures
-    List<ArbreMesureEntity> createdArbremesures = await db.query(
+    List<ArbreMesureEntity> createdArbremesures = await txn.query(
       _tableName,
       where: 'id_arbre = ? AND created_at > ? AND deleted = 0',
       whereArgs: [arbreId, lastSyncTime],
     );
 
     // Fetch updated arbreMesures
-    List<ArbreMesureEntity> updatedArbremesures = await db.query(
+    List<ArbreMesureEntity> updatedArbremesures = await txn.query(
       _tableName,
       where:
           'id_arbre = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
@@ -112,7 +112,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     );
 
     // Fetch deleted arbreMesures
-    List<ArbreMesureEntity> deletedArbremesures = await db.query(
+    List<ArbreMesureEntity> deletedArbremesures = await txn.query(
       _tableName,
       where: 'id_arbre = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [arbreId, lastSyncTime],
