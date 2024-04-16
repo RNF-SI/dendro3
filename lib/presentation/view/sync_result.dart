@@ -69,6 +69,11 @@ class SyncResultsWidget extends ConsumerWidget {
             Text("  Created: ${results.distantBmsMesures.created}"),
             Text("  Updated: ${results.distantBmsMesures.updated}"),
             Text("  Deleted: ${results.distantBmsMesures.deleted}"),
+            Divider(),
+            Text("Distant Reperes:"),
+            Text("  Created: ${results.distantReperes.created}"),
+            Text("  Updated: ${results.distantReperes.updated}"),
+            Text("  Deleted: ${results.distantReperes.deleted}"),
           ],
         ),
       );

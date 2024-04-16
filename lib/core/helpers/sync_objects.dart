@@ -16,6 +16,8 @@ class SyncResults {
   final SyncDetails distantBms;
   final SyncDetails localBmsMesures;
   final SyncDetails distantBmsMesures;
+  final SyncDetails localReperes;
+  final SyncDetails distantReperes;
   // Add other entities as necessary
 
   SyncResults({
@@ -27,5 +29,7 @@ class SyncResults {
     required this.distantBms,
     required this.localBmsMesures,
     required this.distantBmsMesures,
+    required this.localReperes,
+    required this.distantReperes,
   });
 }

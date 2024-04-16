@@ -150,6 +150,12 @@ class DispositifsApiImpl implements DispositifsApi {
           deleted: result['counts_bm_mesure']['deleted'] ?? 0,
         ),
         localBmsMesures: SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantReperes: SyncDetails(
+          created: result['counts_repere']['created'] ?? 0,
+          updated: result['counts_repere']['updated'] ?? 0,
+          deleted: result['counts_repere']['deleted'] ?? 0,
+        ),
+        localReperes: SyncDetails(created: 0, updated: 0, deleted: 0),
       );
       return syncResults;
     } else {
