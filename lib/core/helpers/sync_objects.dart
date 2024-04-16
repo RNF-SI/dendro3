@@ -10,15 +10,22 @@ class SyncDetails {
 class SyncResults {
   final SyncDetails localArbres;
   final SyncDetails distantArbres;
+  final SyncDetails localArbresMesures;
+  final SyncDetails distantArbresMesures;
   final SyncDetails localBms;
   final SyncDetails distantBms;
+  final SyncDetails localBmsMesures;
+  final SyncDetails distantBmsMesures;
   // Add other entities as necessary
 
   SyncResults({
     required this.localArbres,
     required this.distantArbres,
+    required this.localArbresMesures,
+    required this.distantArbresMesures,
     required this.localBms,
     required this.distantBms,
-    // Initialize other entities here
+    required this.localBmsMesures,
+    required this.distantBmsMesures,
   });
 }

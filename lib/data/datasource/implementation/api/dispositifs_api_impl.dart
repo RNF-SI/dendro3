@@ -55,26 +55,105 @@ class DispositifsApiImpl implements DispositifsApi {
 
   @override
   Future<SyncResults> exportDispositifData(DispositifEntity data) async {
+    final dio =
+        Dio(); // Consider creating Dio instance outside of method if called frequently
+
+    dio.options
+      ..sendTimeout = const Duration(
+          minutes: 2) // Shorter send timeout, since you're just sending data
+      ..receiveTimeout =
+          const Duration(minutes: 2) // Polling should not take long
+      ..connectTimeout = const Duration(minutes: 1);
+
+    dio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+    ));
+
+    final url = "$apiBase/psdrf/export_dispositif_from_dendro3";
     try {
-      final url = Uri.parse("$apiBase/psdrf/export_dispositif_from_dendro3");
-      final response = await Dio()
-          .post("$apiBase/psdrf/export_dispositif_from_dendro3", data: data);
-      SyncResults syncResults = SyncResults(
-        localArbres: SyncDetails(created: 10, updated: 5, deleted: 2),
-        distantArbres: SyncDetails(created: 8, updated: 3, deleted: 1),
-        localBms: SyncDetails(created: 4, updated: 4, deleted: 0),
-        distantBms: SyncDetails(created: 5, updated: 2, deleted: 1),
-      );
-      if (response.statusCode != 200) {
-        throw Failure(message: 'Failed to export data: $response');
+      final response = await dio.post(url, data: data);
+      print(response);
+      if (response.statusCode == 202) {
+        final taskId = response.data['task_id'];
+        return pollTaskStatus(taskId);
+      } else {
+        throw Exception(
+            'Failed to initiate export task: ${response.statusCode}');
       }
+    } on DioException catch (err) {
+      throw Exception(
+          'Failed to export data. Error: ${err.response?.statusMessage}');
+    }
+  }
+
+  Future<SyncResults> pollTaskStatus(String taskId) async {
+    final dio = Dio(); // Reuse Dio instance if possible
+    final statusUrl =
+        "$apiBase/psdrf/export_dispositif_from_dendro3/status/$taskId";
+
+    while (true) {
+      final statusResponse = await dio.get(statusUrl);
+      if (statusResponse.statusCode == 200 &&
+          statusResponse.data['state'] == 'SUCCESS') {
+        return fetchTaskResult(taskId);
+      } else if (statusResponse.data['state'] == 'FAILURE') {
+        throw Exception(
+            'Task failed with error: ${statusResponse.data['status']}');
+      } else if (statusResponse.statusCode == 202) {
+        // Task is still processing, continue polling
+        print('Task is still processing, waiting to retry...');
+      } else {
+        // Handle unexpected response status
+        throw Exception(
+            'Unexpected response status: ${statusResponse.statusCode}');
+      }
+
+      await Future.delayed(Duration(seconds: 20)); // Wait before polling again
+    }
+  }
+
+  Future<SyncResults> fetchTaskResult(String taskId) async {
+    final dio = Dio(); // Reuse Dio instance if possible
+    final resultUrl =
+        "$apiBase/psdrf/export_dispositif_from_dendro3/result/$taskId";
+    final resultResponse = await dio.get(resultUrl);
+
+    if (resultResponse.statusCode == 200) {
+      final result = resultResponse.data['data'];
+      // Parse your result here and create SyncResults
+      // Assuming result is a Map and directly contains the counts
+      SyncResults syncResults = SyncResults(
+        distantArbres: SyncDetails(
+          created: result['counts_arbre']['created'] ?? 0,
+          updated: result['counts_arbre']['updated'] ?? 0,
+          deleted: result['counts_arbre']['deleted'] ?? 0,
+        ),
+        localArbres: SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantArbresMesures: SyncDetails(
+          created: result['counts_arbre_mesure']['created'] ?? 0,
+          updated: result['counts_arbre_mesure']['updated'] ?? 0,
+          deleted: result['counts_arbre_mesure']['deleted'] ?? 0,
+        ),
+        localArbresMesures: SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantBms: SyncDetails(
+          created: result['counts_bm']['created'] ?? 0,
+          updated: result['counts_bm']['updated'] ?? 0,
+          deleted: result['counts_bm']['deleted'] ?? 0,
+        ),
+        localBms: SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantBmsMesures: SyncDetails(
+          created: result['counts_bm_mesure']['created'] ?? 0,
+          updated: result['counts_bm_mesure']['updated'] ?? 0,
+          deleted: result['counts_bm_mesure']['deleted'] ?? 0,
+        ),
+        localBmsMesures: SyncDetails(created: 0, updated: 0, deleted: 0),
+      );
       return syncResults;
-    } on SocketException catch (err) {
-      throw Failure(message: 'Please check your connection. Error: $err');
-    } on DioError catch (err) {
-      throw Failure(
-          message:
-              'Failed to export data. Error: ${err.response?.statusMessage}');
+    } else {
+      throw Exception('Failed to fetch results: ${resultResponse.statusCode}');
     }
   }
 }
