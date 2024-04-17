@@ -156,6 +156,25 @@ class DispositifsApiImpl implements DispositifsApi {
           deleted: result['counts_repere']['deleted'] ?? 0,
         ),
         localReperes: SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantCorCyclesPlacettes: SyncDetails(
+          created: result['counts_cor_cycle_placette']['created'] ?? 0,
+          updated: result['counts_cor_cycle_placette']['updated'] ?? 0,
+          deleted: result['counts_cor_cycle_placette']['deleted'] ?? 0,
+        ),
+        localCorCyclesPlacettes:
+            SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantRegenerations: SyncDetails(
+          created: result['counts_regeneration']['created'] ?? 0,
+          updated: result['counts_regeneration']['updated'] ?? 0,
+          deleted: result['counts_regeneration']['deleted'] ?? 0,
+        ),
+        localRegenerations: SyncDetails(created: 0, updated: 0, deleted: 0),
+        distantTransects: SyncDetails(
+          created: result['counts_transect']['created'] ?? 0,
+          updated: result['counts_transect']['updated'] ?? 0,
+          deleted: result['counts_transect']['deleted'] ?? 0,
+        ),
+        localTransects: SyncDetails(created: 0, updated: 0, deleted: 0),
       );
       return syncResults;
     } else {

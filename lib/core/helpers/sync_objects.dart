@@ -18,6 +18,13 @@ class SyncResults {
   final SyncDetails distantBmsMesures;
   final SyncDetails localReperes;
   final SyncDetails distantReperes;
+  final SyncDetails localCorCyclesPlacettes;
+  final SyncDetails distantCorCyclesPlacettes;
+  final SyncDetails localRegenerations;
+  final SyncDetails distantRegenerations;
+  final SyncDetails localTransects;
+  final SyncDetails distantTransects;
+
   // Add other entities as necessary
 
   SyncResults({
@@ -31,5 +38,11 @@ class SyncResults {
     required this.distantBmsMesures,
     required this.localReperes,
     required this.distantReperes,
+    required this.localCorCyclesPlacettes,
+    required this.distantCorCyclesPlacettes,
+    required this.localRegenerations,
+    required this.distantRegenerations,
+    required this.localTransects,
+    required this.distantTransects,
   });
 }
