@@ -213,7 +213,7 @@ void showSyncResultsDialog(BuildContext context, int dispositifId) {
       return Dialog(
         child: Container(
           width: 300,
-          height: 400, // Adjust the size as needed
+          height: 500, // Adjust the size as needed
           child: SyncResultsWidget(dispositifId: dispositifId),
         ),
       );
