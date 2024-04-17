@@ -25,4 +25,7 @@ abstract class ArbresRepository {
 
   Future<List<String>> getArbreIdsForPlacette(final int idPlacette);
   Future<void> deleteArbreAndArbreMesureFromIdArbre(final String idArbre);
+
+  Future<void> actualizeArbreIdArbreOrigAfterSync(
+      final List<Map<String, dynamic>> arbresList);
 }

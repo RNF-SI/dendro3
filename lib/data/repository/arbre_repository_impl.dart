@@ -1,4 +1,3 @@
-
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/mapper/arbre_mapper.dart';
 import 'package:dendro3/domain/model/arbre.dart';
@@ -74,5 +73,11 @@ class ArbresRepositoryImpl implements ArbresRepository {
   Future<void> deleteArbreAndArbreMesureFromIdArbre(String idArbre) async {
     await arbresMesuresRepository.deleteArbreMesureFromIdArbre(idArbre);
     await database.deleteArbre(idArbre);
+  }
+
+  @override
+  Future<void> actualizeArbreIdArbreOrigAfterSync(
+      List<Map<String, dynamic>> arbresList) async {
+    await database.actualizeArbreIdArbreOrigAfterSync(arbresList);
   }
 }

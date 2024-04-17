@@ -231,4 +231,29 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       return []; // or rethrow, depending on how you want to handle the error
     }
   }
+
+  @override
+  Future<void> actualizeArbreIdArbreOrigAfterSync(
+      List<Map<String, dynamic>> arbresList) async {
+    final db =
+        await database; // Assuming database is a Future or already opened instance
+
+    // Iterate over the list of arbres data
+    for (var arbreData in arbresList) {
+      if (arbreData['status'] == 'created') {
+        // Fetch the Arbre object based on idArbre
+        var arbre = await db.query('Arbres',
+            where: '$_columnId = ?', whereArgs: [arbreData['id']]);
+        if (arbre.isNotEmpty) {
+          // Update the Arbre object's idArbreOrig
+          await db.update(
+            _tableName,
+            {'idArbreOrig': arbreData['new_id_arbre_orig']},
+            where: '$_columnId = ?',
+            whereArgs: [arbreData['id']],
+          );
+        }
+      }
+    }
+  }
 }
