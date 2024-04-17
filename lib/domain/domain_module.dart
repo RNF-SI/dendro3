@@ -283,9 +283,11 @@ final getCorCyclePlacetteLocalStorageUseCaseprovider =
 
 final exportDispositifDataUseCaseProvider =
     Provider<ExportDispositifDataUseCase>(
-        (ref) => ExportDispositifDataUseCaseImpl(
-              ref.watch(dispositifsRepositoryProvider),
-            ));
+  (ref) => ExportDispositifDataUseCaseImpl(
+    ref.watch(dispositifsRepositoryProvider),
+    ref.watch(arbresRepositoryProvider),
+  ),
+);
 
 final deleteDatabaseUseCaseProvider = Provider<DeleteDatabaseUseCase>((ref) =>
     DeleteDatabaseUseCaseImpl(ref.watch(globalDatabaseRepositoryProvider)));

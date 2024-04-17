@@ -109,7 +109,7 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
       await database.deleteDispositif(id);
 
   @override
-  Future<SyncResults> exportDispositifData(int idDispositif) async {
+  Future<TaskResult> exportDispositifData(int idDispositif) async {
     String? lastSyncTime = await _localStorageRepository
         .getLastSyncTimeForDispositif(idDispositif);
 

@@ -46,3 +46,13 @@ class SyncResults {
     required this.distantTransects,
   });
 }
+
+class TaskResult {
+  final SyncResults syncResults;
+  final List<Map<String, dynamic>> createdArbres;
+
+  TaskResult({
+    required this.syncResults,
+    required this.createdArbres,
+  });
+}

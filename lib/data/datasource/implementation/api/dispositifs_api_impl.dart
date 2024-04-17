@@ -54,7 +54,7 @@ class DispositifsApiImpl implements DispositifsApi {
   }
 
   @override
-  Future<SyncResults> exportDispositifData(DispositifEntity data) async {
+  Future<TaskResult> exportDispositifData(DispositifEntity data) async {
     final dio =
         Dio(); // Consider creating Dio instance outside of method if called frequently
 
@@ -89,7 +89,7 @@ class DispositifsApiImpl implements DispositifsApi {
     }
   }
 
-  Future<SyncResults> pollTaskStatus(String taskId) async {
+  Future<TaskResult> pollTaskStatus(String taskId) async {
     final dio = Dio(); // Reuse Dio instance if possible
     final statusUrl =
         "$apiBase/psdrf/export_dispositif_from_dendro3/status/$taskId";
@@ -115,7 +115,7 @@ class DispositifsApiImpl implements DispositifsApi {
     }
   }
 
-  Future<SyncResults> fetchTaskResult(String taskId) async {
+  Future<TaskResult> fetchTaskResult(String taskId) async {
     final dio = Dio(); // Reuse Dio instance if possible
     final resultUrl =
         "$apiBase/psdrf/export_dispositif_from_dendro3/result/$taskId";
@@ -176,7 +176,14 @@ class DispositifsApiImpl implements DispositifsApi {
         ),
         localTransects: SyncDetails(created: 0, updated: 0, deleted: 0),
       );
-      return syncResults;
+
+      // Create a new type containing SyncResults and created_arbres
+      return TaskResult(
+        syncResults: syncResults,
+        createdArbres: (result['created_arbres'] as List)
+            .map((item) => item as Map<String, dynamic>)
+            .toList(),
+      );
     } else {
       throw Exception('Failed to fetch results: ${resultResponse.statusCode}');
     }
