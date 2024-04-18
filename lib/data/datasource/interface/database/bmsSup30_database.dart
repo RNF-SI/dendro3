@@ -6,4 +6,6 @@ abstract class BmsSup30Database {
   Future<BmSup30Entity> updateBmSup30(final BmSup30Entity bmSup30Entity);
   Future<void> deleteBmSup30(final String id);
   Future<List<String>> getBmSup30IdsForPlacette(final int idPlacette);
+  Future<void> actualizeBmIdBmSup30OrigAfterSync(
+      List<Map<String, dynamic>> bmsList);
 }

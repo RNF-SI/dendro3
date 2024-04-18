@@ -183,6 +183,9 @@ class DispositifsApiImpl implements DispositifsApi {
         createdArbres: (result['created_arbres'] as List)
             .map((item) => item as Map<String, dynamic>)
             .toList(),
+        createdBms: (result['created_bms'] as List)
+            .map((item) => item as Map<String, dynamic>)
+            .toList(),
       );
     } else {
       throw Exception('Failed to fetch results: ${resultResponse.statusCode}');

@@ -50,9 +50,11 @@ class SyncResults {
 class TaskResult {
   final SyncResults syncResults;
   final List<Map<String, dynamic>> createdArbres;
+  final List<Map<String, dynamic>> createdBms;
 
   TaskResult({
     required this.syncResults,
     required this.createdArbres,
+    required this.createdBms,
   });
 }

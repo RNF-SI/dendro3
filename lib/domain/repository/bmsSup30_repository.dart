@@ -33,4 +33,7 @@ abstract class BmsSup30Repository {
 
   Future<void> deleteBmSup30AndBmSup30MesureFromIdBmSup30(
       final String idBmSup30);
+
+  Future<void> actualizeBmIdBmSup30OrigAfterSync(
+      final List<Map<String, dynamic>> bms);
 }

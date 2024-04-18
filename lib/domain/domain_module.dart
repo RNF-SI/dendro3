@@ -286,6 +286,7 @@ final exportDispositifDataUseCaseProvider =
   (ref) => ExportDispositifDataUseCaseImpl(
     ref.watch(dispositifsRepositoryProvider),
     ref.watch(arbresRepositoryProvider),
+    ref.watch(bmsSup30RepositoryProvider),
   ),
 );
 
