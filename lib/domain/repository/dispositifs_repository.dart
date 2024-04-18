@@ -31,5 +31,6 @@ abstract class DispositifsRepository {
     final int id,
   );
 
-  Future<TaskResult> exportDispositifData(int idDispositif);
+  Future<TaskResult> exportDispositifData(
+      int idDispositif, String? lastSyncTime);
 }

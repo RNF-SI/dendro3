@@ -34,17 +34,6 @@ class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
     bool? ratioHauteur,
     String? observationMesure,
   ) async {
-    ArbreMesure? updatedPreviousCycleMeasure;
-    if (coupe != null && coupe.isNotEmpty) {
-      // Récupération de la mesure précédente grace au numCycle
-      ArbreMesure previousCycleMeasure = await _arbreMesureRepository
-          .getPreviousCycleMeasure(arbre.idArbre, idCycle, numCycle);
-      // Mise à jour du champ "coupe" de la mesure précédente
-      updatedPreviousCycleMeasure =
-          await _arbreMesureRepository.updateLastArbreMesureCoupe(
-              previousCycleMeasure.idArbreMesure, coupe);
-        }
-
     ArbreMesure arbreMesure = await _arbreMesureRepository.insertArbreMesure(
       arbre.idArbre,
       idCycle,
@@ -57,7 +46,7 @@ class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
       stadeEcorce,
       liane,
       diametreLiane,
-      '',
+      coupe,
       limite,
       idNomenclatureCodeSanitaire,
       codeEcolo,
@@ -66,26 +55,10 @@ class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
       observationMesure,
     );
 
-    // Mise à jour de la liste des mesures
-    List<ArbreMesure> updatedMesures =
-        arbre.arbresMesures!.values.map((mesure) {
-      // Remplace la mesure existante si elle correspond à la mesure précédente mise à jour
-      if (updatedPreviousCycleMeasure != null &&
-          mesure.idArbreMesure == updatedPreviousCycleMeasure.idArbreMesure) {
-        return updatedPreviousCycleMeasure;
-      }
-      return mesure;
-    }).toList();
-
-    // Ajoute la nouvelle mesure à la liste
-    updatedMesures.add(arbreMesure);
+    var updatedMesureList = arbre.arbresMesures!.addArbreMesure(arbreMesure);
 
     return arbre.copyWith(
-      arbresMesures: ArbreMesureList(values: updatedMesures),
+      arbresMesures: updatedMesureList,
     );
-
-    // return arbre.copyWith(
-    //     arbresMesures: ArbreMesureList(values: [arbreMesure, ...arbre.arbresMesures]));
-    // return aa;
   }
 }

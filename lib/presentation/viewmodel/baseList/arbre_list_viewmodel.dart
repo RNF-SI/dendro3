@@ -251,7 +251,9 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
 
       // Execute the use case to delete the ArbreMesure
       Arbre arbreAfterDeletion = await _deleteArbreMesureUseCase.execute(
-          targetedArbre, idArbreMesure, idArbre, idCycle, numCycle);
+        targetedArbre,
+        idArbreMesure,
+      );
 
       // Update the ArbreList by removing the specific ArbreMesure
       List<Arbre> updatedArbres = [];

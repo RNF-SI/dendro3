@@ -54,17 +54,6 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       observation,
     );
 
-    ArbreMesure? updatedPreviousCycleMeasure;
-    if (coupe != null && coupe.isNotEmpty) {
-      // Récupération de la mesure précédente grace au numCycle
-      ArbreMesure previousCycleMeasure = await _arbreMesureRepository
-          .getPreviousCycleMeasure(arbre.idArbre, idCycle, numCycle);
-      // Mise à jour du champ "coupe" de la mesure précédente
-      updatedPreviousCycleMeasure =
-          await _arbreMesureRepository.updateLastArbreMesureCoupe(
-              previousCycleMeasure.idArbreMesure, coupe);
-        }
-
     ArbreMesure arbreMesureUpdated =
         await _arbreMesureRepository.updateArbreMesure(
       idArbreMesure,
@@ -79,7 +68,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       stadeEcorce,
       liane,
       diametreLiane,
-      '',
+      coupe,
       limite,
       idNomenclatureCodeSanitaire,
       codeEcolo,
@@ -97,17 +86,7 @@ class UpdateArbreAndMesureUseCaseImpl implements UpdateArbreAndMesureUseCase {
       updatedMesures[mesureIndex] = arbreMesureUpdated;
     }
 
-    // Mise à jour de la liste des mesures
-    List<ArbreMesure> updatedMesuresWithPrevious = updatedMesures.map((mesure) {
-      // Remplace la mesure existante si elle correspond à la mesure précédente mise à jour
-      if (updatedPreviousCycleMeasure != null &&
-          mesure.idArbreMesure == updatedPreviousCycleMeasure.idArbreMesure) {
-        return updatedPreviousCycleMeasure;
-      }
-      return mesure;
-    }).toList();
-
     return arbreUpdated.copyWith(
-        arbresMesures: ArbreMesureList(values: updatedMesuresWithPrevious));
+        arbresMesures: ArbreMesureList(values: updatedMesures));
   }
 }

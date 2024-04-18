@@ -1,4 +1,3 @@
-
 import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
 import 'package:dendro3/data/mapper/arbreMesure_mapper.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
@@ -112,16 +111,6 @@ class ArbresMesuresRepositoryImpl implements ArbresMesuresRepository {
   ) async {
     final arbreEntity =
         await database.getPreviousCycleMeasure(idArbre, idCycle, numCycle);
-    return ArbreMesureMapper.transformToModel(arbreEntity);
-  }
-
-  @override
-  Future<ArbreMesure> updateLastArbreMesureCoupe(
-    final String idArbreMesure,
-    final String? coupe,
-  ) async {
-    final arbreEntity =
-        await database.updateLastArbreMesureCoupe(idArbreMesure, coupe);
     return ArbreMesureMapper.transformToModel(arbreEntity);
   }
 

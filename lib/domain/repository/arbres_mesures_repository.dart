@@ -51,11 +51,6 @@ abstract class ArbresMesuresRepository {
     int? numCycle,
   );
 
-  Future<ArbreMesure> updateLastArbreMesureCoupe(
-    final String idArbreMesure,
-    final String? coupe,
-  );
-
   Future<void> deleteArbreMesureFromIdArbre(final String idArbre);
 
   Future<void> deleteArbreMesure(final String idArbreMesure);

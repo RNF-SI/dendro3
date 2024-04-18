@@ -17,41 +17,15 @@ class DeleteArbreMesureUseCaseImpl implements DeleteArbreMesureUseCase {
   Future<Arbre> execute(
     Arbre arbre,
     String arbreMesureId,
-    String arbreId,
-    final int? idCycle,
-    int? numCycle,
   ) async {
     await repository.deleteArbreMesure(arbreMesureId);
 
-    ArbreMesure? updatedPreviousCycleMeasure;
-
-    // Récupération de la mesure précédente grace au numCycle
-    ArbreMesure previousCycleMeasure =
-        await arbreMesureRepository.getPreviousCycleMeasure(
-      arbreId,
-      idCycle,
-      numCycle,
-    );
-    // Mise à jour du champ "coupe" de la mesure précédente
-    updatedPreviousCycleMeasure = await arbreMesureRepository
-        .updateLastArbreMesureCoupe(previousCycleMeasure.idArbreMesure, null);
-  
     List<ArbreMesure> updatedMesures = List.from(arbre.arbresMesures!.values);
     // remove from list the element with arbreMesureId
     updatedMesures
         .removeWhere((mesure) => mesure.idArbreMesure == arbreMesureId);
 
-    // Mise à jour de la liste des mesures
-    List<ArbreMesure> updatedMesuresWithPrevious = updatedMesures.map((mesure) {
-      // Remplace la mesure existante si elle correspond à la mesure précédente mise à jour
-      if (updatedPreviousCycleMeasure != null &&
-          mesure.idArbreMesure == updatedPreviousCycleMeasure.idArbreMesure) {
-        return updatedPreviousCycleMeasure;
-      }
-      return mesure;
-    }).toList();
-
     return arbre.copyWith(
-        arbresMesures: ArbreMesureList(values: updatedMesuresWithPrevious));
+        arbresMesures: ArbreMesureList(values: updatedMesures));
   }
 }

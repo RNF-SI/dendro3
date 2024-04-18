@@ -147,33 +147,6 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   @override
-  Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
-      final String idArbreMesure, final String? coupe) async {
-    final db = await database;
-    late final ArbreMesureEntity arbreMesureEntity;
-
-    await db.transaction((txn) async {
-      var updateData = {
-        'coupe': coupe,
-        'updated_at': formatDateTime(DateTime.now())
-      };
-
-      await txn.update(
-        _tableName,
-        updateData,
-        where: '$_columnId = ?',
-        whereArgs: [idArbreMesure],
-      );
-
-      final results = await txn.query(_tableName,
-          where: '$_columnId = ?', whereArgs: [idArbreMesure]);
-      arbreMesureEntity = results.first;
-    });
-
-    return arbreMesureEntity;
-  }
-
-  @override
   Future<void> deleteArbreMesureFromIdArbre(final String idArbre) async {
     final db = await database;
     await db.update(
