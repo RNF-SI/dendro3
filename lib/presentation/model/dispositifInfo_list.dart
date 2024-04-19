@@ -28,6 +28,8 @@ class DispositifInfoList with _$DispositifInfoList {
                     : dispositifInfo)
             .toList());
   }
+
+  bool isEmpty() => values.isEmpty;
 // TODO: Change searching disp in phone db
   // DispositifInfoList filterByDownloaded() => copyWith(
   //     values: values.where((dispositif) => dispositif.isCompleted).toList());
