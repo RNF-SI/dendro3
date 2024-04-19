@@ -287,6 +287,7 @@ final exportDispositifDataUseCaseProvider =
     ref.watch(dispositifsRepositoryProvider),
     ref.watch(arbresRepositoryProvider),
     ref.watch(bmsSup30RepositoryProvider),
+    ref.watch(localStorageProvider),
   ),
 );
 

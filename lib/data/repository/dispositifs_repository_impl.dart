@@ -109,10 +109,8 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
       await database.deleteDispositif(id);
 
   @override
-  Future<TaskResult> exportDispositifData(int idDispositif) async {
-    String? lastSyncTime = await _localStorageRepository
-        .getLastSyncTimeForDispositif(idDispositif);
-
+  Future<TaskResult> exportDispositifData(
+      int idDispositif, String? lastSyncTime) async {
     // get dispositif and all data linked to the dispositif
     DispositifEntity data =
         await database.getDispositifAllData(idDispositif, lastSyncTime!);
