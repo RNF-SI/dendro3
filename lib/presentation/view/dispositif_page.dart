@@ -31,10 +31,9 @@ class DispositifPage extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Dispositif $dispositifId: $dispositifName'),
+          title: Text('Dispositif $dispositifId: $dispositifName',
+              style: TextStyle(color: Colors.white)),
           actions: <Widget>[
-            // popup menu button
-
             PopupMenuButton<String>(
               onSelected: (value) async {
                 switch (value) {
@@ -51,78 +50,33 @@ class DispositifPage extends ConsumerWidget {
                 }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'export_disp',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.cloud_upload,
-                        color: Colors.blue,
-                      ),
-                      SizedBox(
-                        // sized box with width 10
-                        width: 10,
-                      ),
-                      Text(
-                        "Exporter le dispositif",
-                        style: TextStyle(
-                          color: Colors.blue,
-                        ),
-                      )
-                    ],
-                  ),
+                  child: menuItemRow(Icons.cloud_upload,
+                      "Exporter le dispositif", Color(0xFF7DAB9C)),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'start_new_cycle',
-                  child: Row(
-                    children: [
-                      Icon(Icons.onetwothree, color: Colors.green),
-                      SizedBox(
-                        // sized box with width 10
-                        width: 10,
-                      ),
-                      Text(
-                        "Commencer un nouveau cycle",
-                        style: TextStyle(
-                          color: Colors.green,
-                        ),
-                      )
-                    ],
-                  ),
+                  child: menuItemRow(Icons.onetwothree,
+                      "Commencer un nouveau cycle", Color(0xFF8AAC3E)),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'open_remove_dialog',
-                  child: Row(
-                    children: [
-                      Icon(Icons.delete, color: Colors.red),
-                      SizedBox(
-                        // sized box with width 10
-                        width: 10,
-                      ),
-                      Text(
-                        "Supprimer localement",
-                        style: TextStyle(
-                          color: Colors.red,
-                        ),
-                      )
-                    ],
-                  ),
+                  child: menuItemRow(
+                      Icons.delete, "Supprimer localement", Colors.red),
                 ),
-                // popupmenu item 2
               ],
-              offset: const Offset(0, 50),
+              offset: Offset(0, 50),
               color: Colors.white,
               elevation: 2,
             ),
           ],
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.radio_button_checked),
-                text: 'Placettes',
-              ),
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.radio_button_checked), text: 'Placettes'),
               Tab(icon: Icon(Icons.insights), text: 'Chiffres'),
             ],
+            indicatorColor: Color(0xFF8AAC3E),
           ),
         ),
         body: TabBarView(
@@ -135,6 +89,16 @@ class DispositifPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+Widget menuItemRow(IconData icon, String text, Color textColor) {
+  return Row(
+    children: [
+      Icon(icon, color: textColor),
+      SizedBox(width: 10),
+      Text(text, style: TextStyle(color: textColor)),
+    ],
+  );
 }
 
 showAlertDialog(
@@ -169,14 +133,17 @@ showAlertDialog(
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: const Text("Attention"),
+    title: const Text(
+      "Attention",
+      style: TextStyle(color: Color(0xFF1a1a18)),
+    ),
     content: RichText(
       text: TextSpan(
         // Note: Styles for TextSpans must be explicitly defined.
         // Child text spans will inherit styles from parent
         style: const TextStyle(
           fontSize: 14.0,
-          color: Colors.black,
+          color: Color(0xFF1a1a18),
         ),
         children: <TextSpan>[
           const TextSpan(
@@ -246,14 +213,15 @@ showNewCycleDialog(
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: const Text("Information"),
+    title:
+        const Text("Information", style: TextStyle(color: Color(0xFF1a1a18))),
     content: RichText(
       text: const TextSpan(
         // Note: Styles for TextSpans must be explicitly defined.
         // Child text spans will inherit styles from parent
         style: TextStyle(
           fontSize: 14.0,
-          color: Colors.black,
+          color: Color(0xFF1a1a18),
         ),
         children: <TextSpan>[
           TextSpan(
