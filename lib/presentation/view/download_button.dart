@@ -8,6 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+// Custom Colors
+const Color colorBlue1 = Color(0xFF598979); // Bleu
+const Color colorGreen = Color(0xFF8AAC3E); // Vert
+const Color colorBlue2 = Color(0xFF7DAB9C); // Bleu
+const Color colorBlack = Color(0xFF1a1a18); // Noir
+const Color colorBeige = Color(0xFFF4F1E4); // Beige
+const Color colorBrown = Color(0xFF8B5500); // Marron
+
 @immutable
 class DownloadButton extends HookConsumerWidget {
   const DownloadButton({
@@ -15,7 +23,6 @@ class DownloadButton extends HookConsumerWidget {
     required this.dispInfo,
   });
 
-  // final DownloadStatus status;
   final DispositifInfo dispInfo;
   final Duration transitionDuration = const Duration(milliseconds: 500);
 
@@ -104,7 +111,6 @@ class DownloadButton extends HookConsumerWidget {
                       alignment: Alignment.center,
                       children: [
                         ProgressIndicatorWidget(
-                          // downloadProgress: downloadProgress,
                           isDownloading: _isDownloading,
                           isFetching: _isFetching,
                         ),
@@ -112,7 +118,7 @@ class DownloadButton extends HookConsumerWidget {
                           const Icon(
                             Icons.stop,
                             size: 14,
-                            color: CupertinoColors.activeBlue,
+                            color: colorGreen,
                           ),
                       ],
                     ),
@@ -144,15 +150,15 @@ class ButtonShapeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var shape = const ShapeDecoration(
+    var shape = ShapeDecoration(
       shape: StadiumBorder(),
-      color: CupertinoColors.lightBackgroundGray,
+      color: isDownloaded ? colorBlue1 : colorBeige,
     );
 
     if (isDownloading || isFetching) {
       shape = ShapeDecoration(
-        shape: const CircleBorder(),
-        color: Colors.white.withOpacity(0),
+        shape: CircleBorder(),
+        color: Colors.white.withOpacity(0.7),
       );
     }
 
@@ -177,7 +183,7 @@ class ButtonShapeWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: CupertinoColors.activeBlue,
+                  color: isDownloading ? colorGreen : colorBlack,
                 ),
           ),
         ),
@@ -190,12 +196,10 @@ class ButtonShapeWidget extends StatelessWidget {
 class ProgressIndicatorWidget extends StatelessWidget {
   const ProgressIndicatorWidget({
     super.key,
-    // required this.downloadProgress,
     required this.isDownloading,
     required this.isFetching,
   });
 
-  // final double downloadProgress;
   final bool isDownloading;
   final bool isFetching;
 
@@ -203,24 +207,12 @@ class ProgressIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
         aspectRatio: 1,
-        child:
-            // TweenAnimationBuilder<double>(
-            // tween: Tween(begin: 0, end: downloadProgress),
-            // duration: const Duration(milliseconds: 200),
-            // builder: (context, progress, child) {
-            // return
-            CircularProgressIndicator(
-          backgroundColor: isDownloading
-              ? CupertinoColors.lightBackgroundGray
-              : Colors.white.withOpacity(0),
-          valueColor: AlwaysStoppedAnimation(isFetching
-              ? CupertinoColors.lightBackgroundGray
-              : CupertinoColors.activeBlue),
+        child: CircularProgressIndicator(
+          backgroundColor: colorBeige,
+          valueColor: AlwaysStoppedAnimation(
+            isFetching ? colorBlue1 : colorGreen,
+          ),
           strokeWidth: 2,
-          // value: isFetching ? null : progress,
-        )
-        //   },
-        // ),
-        );
+        ));
   }
 }
