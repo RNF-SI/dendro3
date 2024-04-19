@@ -28,6 +28,7 @@ import 'package:dendro3/presentation/widgets/secondary_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:collection/collection.dart';
 
 class SaisieDataTable extends ConsumerStatefulWidget {
   const SaisieDataTable({
@@ -464,10 +465,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     onItemMesureAdded: (dynamic adedItem) async {
                       Navigator.push(context, MaterialPageRoute<void>(
                         builder: (BuildContext context) {
-                          bool hasPreviousMeasurements = false;
+                          bool hasNextMeasurements = false;
                           if (widget.displayTypeState == "Arbres") {
                             selectedItemDetailsCo as SaisisableObjectMesure;
-                            hasPreviousMeasurements =
+                            hasNextMeasurements =
                                 selectedItemDetailsCo.getMesureValuesLength() >
                                         0
                                     ? true
@@ -489,7 +490,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             ),
                             saisisableObject1: selectedItemDetailsCo,
                             saisisableObject2: null,
-                            hasPreviousMeasurements: hasPreviousMeasurements,
+                            hasNextMeasurements: hasNextMeasurements,
                           );
                         },
                       ));
@@ -530,36 +531,37 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         builder: (BuildContext context) {
                           // Get the coupe info of the previous cycle
                           // Get previous cycle
-                          String? previousCycleCoupe;
-                          bool hasPreviousMeasurements = false;
+                          String? nextCycleType;
+                          bool hasNextMeasurements = false;
                           if (widget.displayTypeState == "Arbres") {
                             selectedItemDetailsCo as SaisisableObjectMesure;
                             int? numCycle = mapIdCycleNumCycle[
                                 selectedItemDetailsCo
                                     .getMesureFromIndex(index)
                                     .idCycle];
-                            // get previous cycle with numCycle - 1
-                            int? previousCycle = numCycle! - 1;
-                            if (previousCycle != 0) {
-                              // get previous cycle idCycle
-                              int? previousCycleIdCycle = mapIdCycleNumCycle
-                                  .entries
-                                  .firstWhere((element) =>
-                                      element.value == previousCycle)
-                                  .key;
+                            // get next cycle with numCycle + 1
+                            int? nextCycle = numCycle! + 1;
+                            // get next cycle idCycle
+                            int? nextCycleIdCycle = mapIdCycleNumCycle.entries
+                                .firstWhereOrNull(
+                                    (element) => element.value == nextCycle)
+                                ?.key;
 
-                              // get coupe value of previous Cycle with previousCycleIdCycle
-                              ArbreMesure? previousArbreMesure =
-                                  selectedItemDetailsCo.getMesureFromIdCycle(
-                                      previousCycleIdCycle);
-
-                              if (previousArbreMesure != null) {
-                                hasPreviousMeasurements = true;
-                                previousCycleCoupe = previousArbreMesure.coupe;
+                            // get coupe value of previous Cycle with previousCycleIdCycle
+                            if (nextCycleIdCycle != null) {
+                              ArbreMesure? nextArbreMesure =
+                                  selectedItemDetailsCo
+                                      .getMesureFromIdCycle(nextCycleIdCycle);
+                              if (nextArbreMesure != null) {
+                                hasNextMeasurements = true;
+                                nextCycleType = nextArbreMesure.type;
                               } else {
-                                hasPreviousMeasurements = false;
-                                previousCycleCoupe = '';
+                                hasNextMeasurements = false;
+                                nextCycleType = '';
                               }
+                            } else {
+                              hasNextMeasurements = false;
+                              nextCycleType = '';
                             }
                           }
                           return FormSaisiePlacettePage(
@@ -586,8 +588,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                     ? selectedItemDetailsCo
                                         .getMesureFromIndex(index)
                                     : null,
-                            previousCycleCoupe: previousCycleCoupe,
-                            hasPreviousMeasurements: hasPreviousMeasurements,
+                            nextCycleType: nextCycleType,
+                            hasNextMeasurements: hasNextMeasurements,
                           );
                         },
                       ));

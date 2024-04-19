@@ -35,8 +35,8 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
       arbreInfoObj['formType'],
-      arbreInfoObj['previousCycleCoupe'],
-      arbreInfoObj['hasPreviousMeasurements'],
+      arbreInfoObj['nextCycleType'],
+      arbreInfoObj['hasNextMeasurements'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -57,8 +57,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   final String formType;
 
-  final String? previousCycleCoupe;
-  final bool hasPreviousMeasurements;
+  final String? nextCycleType;
+  final bool hasNextMeasurements;
   // late TodoId _id;
   // var _title = '';
   // var _description = '';
@@ -125,8 +125,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this.arbre,
     final ArbreMesure? arbreMesure,
     this.formType,
-    this.previousCycleCoupe,
-    this.hasPreviousMeasurements,
+    this.nextCycleType,
+    this.hasNextMeasurements,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -288,7 +288,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _liane = arbreMesure.liane ?? '';
       _diametreLiane = arbreMesure.diametreLiane;
       _coupe =
-          previousCycleCoupe != null ? previousCycleCoupe!.toUpperCase() : '';
+          arbreMesure.coupe != null ? arbreMesure.coupe!.toUpperCase() : '';
       _limite = arbreMesure.limite ?? false;
       _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
       _codeEcolo = arbreMesure.codeEcolo ?? '';
@@ -339,7 +339,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': null,
+        'coupe': _coupe == '' ? null : _coupe,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -924,7 +924,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Coupe',
         value: _coupe,
         fieldInfo:
-            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, modifier le champs 'coupe' du cycle précédent",
+            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, vous devez modifier le champs 'coupe' du cycle précédent",
         items: [
           const MapEntry('', 'Sélectionnez une option'),
           const MapEntry('C', 'chablis'),
@@ -936,24 +936,21 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
-            if (!hasPreviousMeasurements) {
+            if (!hasNextMeasurements) {
               return false;
-            } else if (((formData['Type'] != null) &&
-                    (formData['Type'] != '')) ||
-                (_type != '')) {
+            } else if (((nextCycleType != null) && (nextCycleType != '')) ||
+                (nextCycleType != '')) {
               return true;
             } else {
               return false;
             }
-          } else if (!hasPreviousMeasurements) {
-            return false;
           } else {
-            return (_type != '');
+            return ((nextCycleType != null) && (nextCycleType != ''));
           }
         },
         onChanged: (value) => setCoupe(value),
         importantMessage:
-            "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})",
+            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, vous devez modifier le champs 'coupe' du cycle précédent",
       ),
 
       // TextFieldConfig(
