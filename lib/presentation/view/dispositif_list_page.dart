@@ -66,8 +66,11 @@ class DispositifListPage extends StatelessWidget {
       final BuildContext context, final Dispositif dispositif) {
     return InkWell(
       child: Card(
+        color: Color(0xFFF4F1E4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -77,40 +80,38 @@ class DispositifListPage extends StatelessWidget {
                   children: [
                     Text(
                       dispositif.name,
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: Color(0xFF1a1a18)),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Text(
-                    //   DateFormat('yyyy/MM/dd').format(dispositif.dueDate),
-                    //   style: Theme.of(context).textTheme.caption,
-                    // ),
                     const SizedBox(height: 4),
                     Text(
                       dispositif.idOrganisme.toString(),
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: Color(0xFF1a1a18)),
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       dispositif.alluvial
-                          ? 'Ce dispositif est alluvial'
-                          : "Ce dispositif n'est pas alluvial",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                          ? 'This setup is alluvial'
+                          : "This setup isn't alluvial",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Color(0xFF7DAB9C)),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
-              // const SizedBox(width: 8),
-              // dispositif.isCompleted ? _buildCheckedIcon(context, dispositif) : _buildUncheckedIcon(context, dispositif),
             ],
           ),
         ),
       ),
-      // onTap: () => Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (_) => DispositifFormPage(dispositif),
-      //     )),
     );
   }
 
@@ -143,7 +144,10 @@ class DispositifListPage extends StatelessWidget {
   // }
 
   Widget _buildErrorWidget() {
-    return const Center(child: Text('An error has occurred!'));
+    return Center(
+      child: Text('Une erreur a eu lieu.',
+          style: TextStyle(color: Color(0xFF8B5500))),
+    );
   }
 }
 
@@ -164,11 +168,12 @@ class ChipsBarWidget extends StatelessWidget {
             child: Row(
               children: [
                 InputChip(
-                  label: const Text('All'),
-                  selected: viewModel.isFilteredByAll(),
+                  backgroundColor: viewModel.isFilteredByAll()
+                      ? Color(0xFF8B5500)
+                      : Color(0xFF7DAB9C),
+                  label:
+                      Text('All', style: TextStyle(color: Color(0xFFF4F1E4))),
                   onSelected: (_) => viewModel.filterByAll(),
-                  selectedColor:
-                      viewModel.isFilteredByAll() ? Colors.lightGreen : null,
                 ),
                 const SizedBox(width: 8),
                 InputChip(
@@ -176,8 +181,8 @@ class ChipsBarWidget extends StatelessWidget {
                   selected: viewModel.isFilteredByDownloaded(),
                   onSelected: (_) => viewModel.filterByUndownloaded(),
                   selectedColor: viewModel.isFilteredByDownloaded()
-                      ? Colors.lightGreen
-                      : null,
+                      ? Color(0xFF8B5500)
+                      : Color(0xFF7DAB9C),
                 ),
                 const SizedBox(width: 8),
                 InputChip(
@@ -185,8 +190,8 @@ class ChipsBarWidget extends StatelessWidget {
                   selected: viewModel.isFilteredByUndownloaded(),
                   onSelected: (_) => viewModel.filterByUndownloaded(),
                   selectedColor: viewModel.isFilteredByUndownloaded()
-                      ? Colors.lightGreen
-                      : null,
+                      ? Color(0xFF8B5500)
+                      : Color(0xFF7DAB9C),
                 ),
               ],
             ),
