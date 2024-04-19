@@ -16,98 +16,89 @@ class ChiffresWidget extends StatefulWidget {
 }
 
 class _ChiffresWidgetState extends State<ChiffresWidget> {
-  _ChiffresWidgetState();
-
   late List<bool> cycleSelected;
 
   @override
   void initState() {
     cycleSelected = widget.cycleList!.values
-        .map<bool>((Cycle data) => data.numCycle == 1 ? true : false)
+        .map<bool>((Cycle data) => data.numCycle == 1)
         .toList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      ToggleButtons(
-        isSelected: cycleSelected,
-        onPressed: (int index) {
-          setState(() {
-            for (int i = 0; i < cycleSelected.length; i++) {
-              cycleSelected[i] = i == index;
-            }
-          });
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        selectedBorderColor: Colors.blue[700],
-        selectedColor: Colors.white,
-        fillColor: Colors.blue[200],
-        color: Colors.blue[400],
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 80.0,
+    return Column(
+      children: [
+        ToggleButtons(
+          isSelected: cycleSelected,
+          onPressed: (int index) {
+            setState(() {
+              for (int i = 0; i < cycleSelected.length; i++) {
+                cycleSelected[i] = i == index;
+              }
+            });
+          },
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          selectedBorderColor: Color(0xFF598979),
+          selectedColor: Colors.white,
+          fillColor: Color(0xFF7DAB9C),
+          color: Color(0xFF8AAC3E),
+          constraints: const BoxConstraints(minHeight: 40.0, minWidth: 90.0),
+          children: _generateCircleAvatars(widget.cycleList!),
         ),
-        children: <Widget>[
-          ..._generateCircleAvatars(widget.cycleList!),
-        ],
-      ),
-      ...__buildGridText(
-        widget.cycleList![
-            cycleSelected.indexWhere((selected) => selected == true)],
-      ),
-    ]);
+        ..._buildGridText(
+          widget.cycleList![
+              cycleSelected.indexWhere((bool selected) => selected)],
+        ),
+      ],
+    );
   }
-}
 
-List<Widget> _generateCircleAvatars(CycleList cycleList) {
-  var list = cycleList.values
-      .map<Widget>((data) => CircleAvatar(
-            backgroundColor: data.dateFin == null ? Colors.red : Colors.green,
-            foregroundColor: Colors.white,
-            radius: 10,
-            child: Text(
-              data.numCycle.toString(),
-            ),
-          ))
-      .toList();
-  return list;
-}
+  List<Widget> _generateCircleAvatars(CycleList cycleList) {
+    return cycleList.values.map<Widget>((Cycle data) {
+      return CircleAvatar(
+        backgroundColor:
+            data.dateFin == null ? Color(0xFF8AAC3E) : Color(0xFF598979),
+        foregroundColor: Colors.white,
+        radius: 15,
+        child: Text(data.numCycle.toString()),
+      );
+    }).toList();
+  }
 
-List<Widget> __buildGridText(Cycle cycle) {
-  return [
-    SizedBox(
-      height: 200.0,
-      child: GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 2,
-          childAspectRatio: (1 / .2),
-          children: [
-            buildPropertyTextWidget('idCycle', cycle.idCycle),
-            buildPropertyTextWidget('idDispositif', cycle.idDispositif),
-            buildPropertyTextWidget('numCycle', cycle.numCycle),
-            buildPropertyTextWidget(
-                'dateDebut',
-                cycle.dateDebut != null
-                    ? '${cycle.dateDebut!.day}/${cycle.dateDebut!.month}/${cycle.dateDebut!.year}'
-                    : null),
-            buildPropertyTextWidget(
-                'dateFin',
-                cycle.dateFin != null
-                    ? '${cycle.dateFin!.day}/${cycle.dateFin!.month}/${cycle.dateFin!.year}'
-                    : null),
-            buildPropertyTextWidget('monitor', cycle.monitor),
-          ]),
-    ),
-    Tooltip(
-      message: "Calculé en fonction de DateFin.\n"
-          "Avertissez le responsable PSDRF \npour actualiser.",
-      triggerMode: TooltipTriggerMode.tap,
-      child: cycle.dateFin == null
-          ? const Text("Ce cycle est en cours")
-          : const Text("Ce cycle est terminé"),
-    )
-  ];
+  List<Widget> _buildGridText(Cycle cycle) {
+    return [
+      SizedBox(
+        height: 200.0,
+        child: GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: (1 / .2),
+            children: [
+              buildPropertyTextWidget('idCycle', cycle.idCycle),
+              buildPropertyTextWidget('idDispositif', cycle.idDispositif),
+              buildPropertyTextWidget('numCycle', cycle.numCycle),
+              buildPropertyTextWidget(
+                  'dateDebut',
+                  cycle.dateDebut != null
+                      ? '${cycle.dateDebut!.day}/${cycle.dateDebut!.month}/${cycle.dateDebut!.year}'
+                      : null),
+              buildPropertyTextWidget(
+                  'dateFin',
+                  cycle.dateFin != null
+                      ? '${cycle.dateFin!.day}/${cycle.dateFin!.month}/${cycle.dateFin!.year}'
+                      : null),
+              buildPropertyTextWidget('monitor', cycle.monitor),
+            ]),
+      ),
+      Tooltip(
+        message: "Calculé en fonction de DateFin.\n"
+            "Avertissez le responsable PSDRF \npour actualiser.",
+        triggerMode: TooltipTriggerMode.tap,
+        child: cycle.dateFin == null
+            ? const Text("Ce cycle est en cours")
+            : const Text("Ce cycle est terminé"),
+      )
+    ];
+  }
 }
