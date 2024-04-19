@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/regenerations_database_impl.dart';
@@ -163,6 +164,7 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     corCyclePlacette["date_releve"] =
@@ -178,6 +180,8 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
           userName; // Set updated_by on creation as well
       corCyclePlacette['created_on'] = terminalName;
       corCyclePlacette['updated_on'] = terminalName;
+      corCyclePlacette['created_at'] = formattedDate;
+      corCyclePlacette['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,
