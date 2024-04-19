@@ -39,8 +39,8 @@ class DisplayableButton extends ConsumerWidget {
               text,
               style: const TextStyle(
                 fontSize: 14, // You can adjust the font size
-                color: Color(0xFFF4F1E4),
-              ),
+                color: Color(0xFFFFFFFF),
+              ), // White text color
               maxLines: 1, // Ensures text is in a single line
               overflow:
                   TextOverflow.ellipsis, // Adds ellipsis for overflow text
