@@ -16,6 +16,8 @@ abstract class CorCyclesPlacettesRepository {
     final double? recouvHerbesHautes,
     final double? recouvBuissons,
     final double? recouvArbres,
+    final int? coeff,
+    final double? diamLim,
   );
 
   Future<List<String>> getCorCyclePlacetteIdsForPlacette(final int placetteId);

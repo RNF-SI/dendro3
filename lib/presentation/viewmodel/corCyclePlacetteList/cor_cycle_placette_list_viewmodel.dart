@@ -65,6 +65,8 @@ class CorCyclePlacetteListViewModel
         item['recouvHerbesHautes'],
         item['recouvBuissons'],
         item['recouvArbres'],
+        item['coeff'],
+        item['diamLim'],
       );
       await _localStorageStatusNotifier.startCyclePlacette(newCorCyclePlacette
           .idCyclePlacette); // Mark the cycle as created using SetCycleCreatedUseCase

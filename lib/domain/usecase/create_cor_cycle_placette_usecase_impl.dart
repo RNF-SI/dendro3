@@ -27,6 +27,8 @@ class CreateCorCyclePlacetteUseCaseImpl
     recouvHerbesHautes,
     recouvBuissons,
     recouvArbres,
+    coeff,
+    diamLim,
   ) async {
     CorCyclePlacette corCyclePlacette =
         await _corCyclePlacetteRepository.insertCorCyclePlacette(
@@ -44,6 +46,8 @@ class CreateCorCyclePlacetteUseCaseImpl
       recouvHerbesHautes,
       recouvBuissons,
       recouvArbres,
+      coeff,
+      diamLim,
     );
 
     // final cycle = await _cycleRepository.get(cycleId);

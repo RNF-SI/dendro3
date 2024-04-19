@@ -38,8 +38,8 @@ class CorCyclePlacetteMapper {
       recouvHerbesHautes: entity['recouv_herbes_hautes'],
       recouvBuissons: entity['recouv_buissons'],
       recouvArbres: entity['recouv_arbres'],
-      coeff: entity['coeff'] as int?,
-      diamLim: entity['diam_lim'] as double?,
+      coeff: entity['coeff'],
+      diamLim: entity['diam_lim'],
     );
   }
 
@@ -66,6 +66,8 @@ class CorCyclePlacetteMapper {
         recouvHerbesHautes: entity['recouv_herbes_hautes'] as double?,
         recouvBuissons: entity['recouv_buissons'] as double?,
         recouvArbres: entity['recouv_arbres'] as double?,
+        coeff: entity['coeff'] as int?,
+        diamLim: entity['diam_lim'] as double?,
         transects: entity.containsKey('transects')
             ? TransectListMapper.transformFromApiToModel(entity['transects'])
             : null,
@@ -167,6 +169,8 @@ class CorCyclePlacetteMapper {
     final double? recouvHerbesHautes,
     final double? recouvBuissons,
     final double? recouvArbres,
+    final int? coeff,
+    final double? diamLim,
   ) {
     return {
       'id_cycle_placette': null,
@@ -184,6 +188,8 @@ class CorCyclePlacetteMapper {
       'recouv_herbes_hautes': recouvHerbesHautes,
       'recouv_buissons': recouvBuissons,
       'recouv_arbres': recouvArbres,
+      'coeff': coeff,
+      'diam_lim': diamLim,
     };
   }
 }

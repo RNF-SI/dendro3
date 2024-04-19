@@ -35,6 +35,8 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
     final double? recouvHerbesHautes,
     final double? recouvBuissons,
     final double? recouvArbres,
+    final int? coeff,
+    final double? diamLim,
   ) async {
     final corCyclePlacettesEntity = await database
         .addCorCyclePlacette(CorCyclePlacetteMapper.transformToNewEntityMap(
@@ -52,6 +54,8 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
       recouvHerbesHautes,
       recouvBuissons,
       recouvArbres,
+      coeff,
+      diamLim,
     ));
 
     return CorCyclePlacetteMapper.transformToModel(corCyclePlacettesEntity);
