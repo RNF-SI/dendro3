@@ -75,19 +75,22 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       getPlacetteBmSup30ForDataSync(
           Transaction txn, final int placetteId, String lastSyncTime) async {
     // Fetch newly created, updated, and deleted BmSup30 records
-    var createdBmsup30 = await txn.query(_tableName,
-        where: 'id_placette = ? AND created_at > ? AND deleted = 0',
-        whereArgs: [placetteId, lastSyncTime],
-        limit: 5);
-    var updatedBmsup30 = await txn.query(_tableName,
-        where:
-            'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
-        whereArgs: [placetteId, lastSyncTime, lastSyncTime],
-        limit: 5);
-    var deletedBmsup30 = await txn.query(_tableName,
-        where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
-        whereArgs: [placetteId, lastSyncTime],
-        limit: 5);
+    var createdBmsup30 = await txn.query(
+      _tableName,
+      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime],
+    );
+    var updatedBmsup30 = await txn.query(
+      _tableName,
+      where:
+          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
+      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
+    );
+    var deletedBmsup30 = await txn.query(
+      _tableName,
+      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
+      whereArgs: [placetteId, lastSyncTime],
+    );
 
     // Process each list to include bmSup30Mesures
     return {
