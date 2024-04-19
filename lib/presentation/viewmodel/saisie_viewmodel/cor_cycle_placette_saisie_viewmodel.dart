@@ -127,6 +127,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       // hintText: 'Veuillez entrer le code'),
       DateFieldConfig(
         fieldName: "Date de Releve",
+        fieldRequired: true,
         onDateSelected: (DateTime date) {
           _dateReleve = date;
         },
