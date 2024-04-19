@@ -147,12 +147,17 @@ class GlobalDatabaseImpl implements GlobalDatabase {
   }
 
   @override
-  Future<void> deleteCurrentDatabase() async {
+  Future<void> deleteAndReinitializeCurrentDatabase() async {
     var databasesPath = await getDatabasesPath();
     String path =
         join(databasesPath, DB.databaseName); // Use the constant from DB class
 
     // Delete the database
     await deleteDatabase(path);
+
+    DB.setDatabaseNull();
+
+    // Reinitialize the database
+    await DB.instance.database;
   }
 }

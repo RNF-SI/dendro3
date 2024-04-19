@@ -16,6 +16,11 @@ class DB {
     return _database!;
   }
 
+  // add a function to set the database to null
+  static void setDatabaseNull() {
+    _database = null;
+  }
+
   Future<Database> _initDatabase() async {
     return openDatabase(
       join(await getDatabasesPath(), databaseName),

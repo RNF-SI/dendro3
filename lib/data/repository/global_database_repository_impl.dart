@@ -30,6 +30,6 @@ class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
 
   @override
   Future<void> deleteDatabase() async {
-    await database.deleteCurrentDatabase();
+    await database.deleteAndReinitializeCurrentDatabase();
   }
 }
