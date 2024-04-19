@@ -6,7 +6,8 @@ class DisplayableButton extends ConsumerWidget {
   final String text;
   final Function onPressed;
 
-  const DisplayableButton({super.key, required this.text, required this.onPressed});
+  const DisplayableButton(
+      {super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,15 +20,17 @@ class DisplayableButton extends ConsumerWidget {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
-                return isActive ? Colors.green : Colors.blue;
+                // Use tertiary color for inactive, accent color for active
+                return isActive ? Color(0xFF598979) : Color(0xFF7DAB9C);
               },
             ),
-            // Reducing padding inside the button
             padding: MaterialStateProperty.all(const EdgeInsets.all(4)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)) // Rounded corners
+                ),
           ),
           onPressed: () {
             onPressed();
-            // ref.watch(displayTypeStateProvider.notifier).state = text;
           },
           child: FittedBox(
             fit: BoxFit
@@ -36,6 +39,7 @@ class DisplayableButton extends ConsumerWidget {
               text,
               style: const TextStyle(
                 fontSize: 14, // You can adjust the font size
+                color: Color(0xFFF4F1E4),
               ),
               maxLines: 1, // Ensures text is in a single line
               overflow:
