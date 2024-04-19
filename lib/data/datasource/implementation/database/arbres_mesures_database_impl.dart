@@ -5,6 +5,7 @@ import 'package:dendro3/data/datasource/interface/database/arbres_mesures_databa
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -152,9 +153,19 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   @override
   Future<void> deleteArbreMesureFromIdArbre(final String idArbre) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the record as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: 'id_arbre = ?',
       whereArgs: [idArbre],
     );
@@ -163,9 +174,19 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   @override
   Future<void> deleteArbreMesure(final String idArbreMesure) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the record as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [idArbreMesure],
     );

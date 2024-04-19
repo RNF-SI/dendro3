@@ -145,9 +145,18 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   @override
   Future<void> deleteBmSup30MesureFromIdBmSup30(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: 'id_bm_sup_30 = ?',
       whereArgs: [id],
     );
@@ -156,9 +165,18 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   @override
   Future<void> deleteBmSup30Mesure(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: '$_columnId = ?',
       whereArgs: [id],
     );
