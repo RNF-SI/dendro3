@@ -24,6 +24,7 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String idArbreMesureUuid = generateUuid();
@@ -33,6 +34,8 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       arbreMesure['updated_by'] = userName;
       arbreMesure['created_on'] = terminalName;
       arbreMesure['updated_on'] = terminalName;
+      arbreMesure['created_at'] = formattedDate;
+      arbreMesure['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,

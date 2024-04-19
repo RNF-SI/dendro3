@@ -69,6 +69,7 @@ class TransectsDatabaseImpl implements TransectsDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String transectUuid = generateUuid();
@@ -84,6 +85,8 @@ class TransectsDatabaseImpl implements TransectsDatabase {
       transect['updated_by'] = userName; // Set updated_by on creation as well
       transect['created_on'] = terminalName;
       transect['updated_on'] = terminalName;
+      transect['created_at'] = formattedDate;
+      transect['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,

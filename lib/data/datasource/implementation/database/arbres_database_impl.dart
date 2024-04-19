@@ -6,6 +6,7 @@ import 'package:dendro3/data/datasource/implementation/database/log_error.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -131,6 +132,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String idArbreUuid = generateUuid();
@@ -147,7 +149,8 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       arbre['updated_by'] = userName; // Set updated_by on creation as well
       arbre['created_on'] = terminalName;
       arbre['updated_on'] = terminalName;
-
+      arbre['created_at'] = formattedDate;
+      arbre['updated_at'] = formattedDate;
       await txn.insert(
         _tableName,
         arbre,
@@ -242,13 +245,13 @@ class ArbresDatabaseImpl implements ArbresDatabase {
     for (var arbreData in arbresList) {
       if (arbreData['status'] == 'created') {
         // Fetch the Arbre object based on idArbre
-        var arbre = await db.query('Arbres',
+        var arbre = await db.query(_tableName,
             where: '$_columnId = ?', whereArgs: [arbreData['id']]);
         if (arbre.isNotEmpty) {
           // Update the Arbre object's idArbreOrig
           await db.update(
             _tableName,
-            {'idArbreOrig': arbreData['new_id_arbre_orig']},
+            {'id_arbre_orig': arbreData['new_id_arbre_orig']},
             where: '$_columnId = ?',
             whereArgs: [arbreData['id']],
           );

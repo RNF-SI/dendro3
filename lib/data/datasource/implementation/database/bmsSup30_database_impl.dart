@@ -75,22 +75,19 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       getPlacetteBmSup30ForDataSync(
           Transaction txn, final int placetteId, String lastSyncTime) async {
     // Fetch newly created, updated, and deleted BmSup30 records
-    var createdBmsup30 = await txn.query(
-      _tableName,
-      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
-      whereArgs: [placetteId, lastSyncTime],
-    );
-    var updatedBmsup30 = await txn.query(
-      _tableName,
-      where:
-          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
-      whereArgs: [placetteId, lastSyncTime, lastSyncTime],
-    );
-    var deletedBmsup30 = await txn.query(
-      _tableName,
-      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
-      whereArgs: [placetteId, lastSyncTime],
-    );
+    var createdBmsup30 = await txn.query(_tableName,
+        where: 'id_placette = ? AND created_at > ? AND deleted = 0',
+        whereArgs: [placetteId, lastSyncTime],
+        limit: 5);
+    var updatedBmsup30 = await txn.query(_tableName,
+        where:
+            'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
+        whereArgs: [placetteId, lastSyncTime, lastSyncTime],
+        limit: 5);
+    var deletedBmsup30 = await txn.query(_tableName,
+        where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
+        whereArgs: [placetteId, lastSyncTime],
+        limit: 5);
 
     // Process each list to include bmSup30Mesures
     return {
@@ -129,6 +126,7 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String idBmsUuid = generateUuid();
@@ -145,6 +143,9 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       bmSup30['updated_by'] = userName; // Set updated_by on creation as well
       bmSup30['created_on'] = terminalName;
       bmSup30['updated_on'] = terminalName;
+      bmSup30['created_at'] = formattedDate;
+      bmSup30['updated_at'] = formattedDate;
+
       await txn.insert(
         _tableName,
         bmSup30,
@@ -218,5 +219,29 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
         where: 'id_placette = ? AND deleted = 0',
         whereArgs: [idPlacette]);
     return results.map((e) => e[_columnId] as String).toList();
+  }
+
+  @override
+  Future<void> actualizeBmIdBmSup30OrigAfterSync(
+      List<Map<String, dynamic>> bmsList) async {
+    final db = await database;
+
+    // Iterate over the list of arbres data
+    for (var bmData in bmsList) {
+      if (bmData['status'] == 'created') {
+        // Fetch the Bm object based on idArbre
+        var bm = await db.query(_tableName,
+            where: '$_columnId = ?', whereArgs: [bmData['id']]);
+        if (bm.isNotEmpty) {
+          // Update the Bm object's id_bm_sup_30_orig
+          await db.update(
+            _tableName,
+            {'id_bm_sup_30_orig': bmData['new_id_bm_orig']},
+            where: '$_columnId = ?',
+            whereArgs: [bmData['id']],
+          );
+        }
+      }
+    }
   }
 }

@@ -71,6 +71,7 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String regenerationUuid = generateUuid();
@@ -82,6 +83,8 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
           userName; // Set updated_by on creation as well
       regeneration['created_on'] = terminalName;
       regeneration['updated_on'] = terminalName;
+      regeneration['created_at'] = formattedDate;
+      regeneration['updated_at'] = formattedDate;
       await txn.insert(
         _tableName,
         regeneration,

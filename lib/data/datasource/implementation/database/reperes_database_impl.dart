@@ -70,6 +70,7 @@ class ReperesDatabaseImpl implements ReperesDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String repereUuid = generateUuid();
@@ -80,6 +81,8 @@ class ReperesDatabaseImpl implements ReperesDatabase {
       repere['updated_by'] = userName; // Set updated_by on creation as well
       repere['created_on'] = terminalName;
       repere['updated_on'] = terminalName;
+      repere['created_at'] = formattedDate;
+      repere['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,

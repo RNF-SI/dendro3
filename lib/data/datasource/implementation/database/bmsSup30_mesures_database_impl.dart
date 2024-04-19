@@ -73,6 +73,7 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userName = prefs.getString('userName') ?? 'Unknown';
     String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     await db.transaction((txn) async {
       String idBmSup30MesureUUID = generateUuid();
@@ -83,6 +84,8 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
           userName; // Set updated_by on creation as well
       bmSup30Mesure['created_on'] = terminalName;
       bmSup30Mesure['updated_on'] = terminalName;
+      bmSup30Mesure['created_at'] = formattedDate;
+      bmSup30Mesure['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,
