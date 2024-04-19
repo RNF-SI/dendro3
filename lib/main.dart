@@ -61,6 +61,45 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
+      theme: ThemeData(
+        primaryColor: Color(0xFF598979), // Used for elements needing emphasis
+        scaffoldBackgroundColor:
+            Color(0xFFF4F1E4), // Background color for Scaffold widgets
+        appBarTheme: AppBarTheme(
+          color: Color(0xFF598979), // Custom color for AppBar
+          toolbarTextStyle: TextStyle(
+              color: Colors.white, fontSize: 18), // Simplified text style
+          titleTextStyle: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Color(0xFF8B5500),
+            backgroundColor: Color(0xFF8AAC3E), // Button background color
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)), // Rounded buttons
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Color(0xFF7DAB9C), // Icon color
+        ),
+        textTheme: TextTheme(
+          bodyText1:
+              TextStyle(color: Color(0xFF1a1a18)), // General text styling
+          bodyText2: TextStyle(color: Color(0xFF1a1a18)),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor:
+                Color(0xFF8AAC3E), // Text color for elevated buttons
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
+            .copyWith(secondary: Color(0xFF8AAC3E)),
+      ),
     );
   }
 }
