@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:flutter/material.dart';
-
 import 'package:dendro3/presentation/lib/simple_element.dart';
 
 class PrimaryGridWidget extends StatelessWidget {
@@ -27,6 +26,8 @@ class PrimaryGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+// Bright green from your palette
+    final Color deleteColor = Color(0xFF8B5500);
     // Replace idCyclePlacette value by with NumCycle value
     if (simpleElements.containsKey('idCyclePlacette')) {
       int? numCyclePlacette = mapNumCyclePlacetteNumCycle[
@@ -62,7 +63,7 @@ class PrimaryGridWidget extends StatelessWidget {
 
       simpleWidgets.add(
         Container(
-          padding: const EdgeInsets.all(2.0),
+          padding: const EdgeInsets.all(1.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +71,10 @@ class PrimaryGridWidget extends StatelessWidget {
               Flexible(
                 child: Text(
                   "$titleName:", // Use the modified title name
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -102,7 +106,7 @@ class PrimaryGridWidget extends StatelessWidget {
                 constraints: const BoxConstraints(),
               ),
             IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
+              icon: Icon(Icons.delete, color: deleteColor),
               onPressed: () {
                 // Show confirmation dialog
                 showDialog(
