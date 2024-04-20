@@ -59,7 +59,7 @@ class _ChiffresWidgetState extends State<ChiffresWidget> {
     return cycleList.values.map<Widget>((Cycle data) {
       return CircleAvatar(
         backgroundColor:
-            data.dateFin == null ? Color(0xFF8AAC3E) : Color(0xFF598979),
+            data.dateFin == null ? Color(0xFF8B5500) : Color(0xFF598979),
         foregroundColor: Colors.white,
         radius: 15,
         child: Text(data.numCycle.toString()),
