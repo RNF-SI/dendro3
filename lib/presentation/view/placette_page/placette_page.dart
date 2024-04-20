@@ -25,87 +25,76 @@ class PlacettePage extends ConsumerWidget {
       initialIndex: 1,
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Text('Placette ${placette.idPlacetteOrig}'),
-              const SizedBox(width: 8),
-              Text(
-                '(DISP ${placette.idDispositif})',
-                style: const TextStyle(
-                  fontSize: 12,
+          appBar: AppBar(
+            title: Row(
+              children: [
+                Text('Placette ${placette.idPlacetteOrig}'),
+                const SizedBox(width: 8),
+                Text(
+                  '(DISP ${placette.idDispositif})',
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
                 ),
+              ],
+            ),
+            bottom: const TabBar(
+              tabs: <Widget>[
+                Tab(
+                  icon: Icon(Icons.summarize),
+                  text: 'Résumé',
+                ),
+                Tab(
+                  icon: Icon(Icons.onetwothree),
+                  text: 'Cycles',
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              __buildPlacetteResumeWidget(
+                context,
+                ref,
+                placette,
+              ),
+              PlacetteCycleWidget(
+                placette: placette,
+                corCyclePlacetteList: corCyclePlacetteList,
+                dispCycleList: dispCycleList,
               ),
             ],
           ),
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              onSelected: (value) async {
-                switch (value) {
-                  case 'open_remove_dialog':
-                  // return showAlertDialog(
-                  //     context, ref, dispositifId, dispositifName);
-                  default:
-                    throw UnimplementedError();
-                }
-              },
-              itemBuilder: (context) => [],
-              offset: const Offset(0, 50),
-              color: Colors.white,
-              elevation: 2,
-            ),
-          ],
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.summarize),
-                text: 'Résumé',
-              ),
-              Tab(
-                icon: Icon(Icons.onetwothree),
-                text: 'Cycles',
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            __buildPlacetteResumeWidget(
-              context,
-              ref,
-              placette,
-            ),
-            PlacetteCycleWidget(
-              placette: placette,
-              corCyclePlacetteList: corCyclePlacetteList,
-              dispCycleList: dispCycleList,
-            ),
-          ],
-        ),
-        floatingActionButton: PlacetteFAB(
-          distance: 112.0,
-          children: [
-            if (corCyclePlacetteList.length == dispCycleList.length)
-              ActionButton(
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return SaisiePlacettePage(
-                      placette: placette,
-                      corCyclePlacetteList: corCyclePlacetteList,
-                      dispCycleList: dispCycleList,
-                    );
-                  },
-                )),
-                icon: const Icon(Icons.add),
-              ),
-            ActionButton(
-              onPressed: () {},
-              icon: const Icon(Icons.play_arrow),
-            ),
-          ],
-        ),
-      ),
+          floatingActionButton: corCyclePlacetteList.length ==
+                  dispCycleList.length
+              ? PlacetteFAB(
+                  distance: 112.0,
+                  children: [
+                    ActionButton(
+                      onPressed: corCyclePlacetteList.length ==
+                              dispCycleList.length
+                          ? () =>
+                              Navigator.push(context, MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return SaisiePlacettePage(
+                                    placette: placette,
+                                    corCyclePlacetteList: corCyclePlacetteList,
+                                    dispCycleList: dispCycleList,
+                                  );
+                                },
+                              ))
+                          : null, // Make button not clickable when the lists have the same length
+                      icon: Icon(
+                        Icons.add,
+                        color:
+                            corCyclePlacetteList.length == dispCycleList.length
+                                ? Color(0xFFF4F1E4)
+                                : Color(0xFF8B5500),
+                      ),
+                    ),
+                  ],
+                )
+              : null),
     );
   }
 }
