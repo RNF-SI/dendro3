@@ -1,13 +1,13 @@
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dendro3/presentation/view/placette_page/placette_page.dart';
+import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
-import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/presentation/view/placette_page/placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PlacetteItemCardWidget extends ConsumerWidget {
   const PlacetteItemCardWidget({
@@ -21,6 +21,16 @@ class PlacetteItemCardWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Color definitions based on your color palette
+    const Color colorBlue = Color(0xFF598979);
+    const Color colorGreen = Color(0xFF8AAC3E);
+    const Color colorLightBlue = Color(0xFF7DAB9C);
+    const Color colorBlack = Color(0xFF1A1A18);
+    const Color colorBeige = Color(0xFFF4F1E4);
+    const Color colorBrown = Color(0xFF8B5500);
+    // Color between green and brown
+    const Color colorYellow = Color(0xFFC0C000);
+
     final corCyclePlacetteListViewModel =
         ref.watch(corCyclePlacetteListViewModelStateNotifierProvider.notifier);
 
@@ -33,34 +43,36 @@ class PlacetteItemCardWidget extends ConsumerWidget {
 
     return InkWell(
       child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        color: colorBeige, // Card background color
+        elevation: 5,
+        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+        child: Container(
+          padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RichText(
                       text: TextSpan(
-                        // Note: Styles for TextSpans must be explicitly defined.
-                        // Child text spans will inherit styles from parent
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18.0,
-                          color: Colors.black,
+                          color: colorBlack,
+                          fontWeight: FontWeight.bold,
                         ),
                         children: <TextSpan>[
                           TextSpan(
                             text: "Placette ${placette.idPlacetteOrig}",
                           ),
                           TextSpan(
-                            text: "(${placette.idPlacette})",
-                            style: const TextStyle(
-                              fontSize: 10.0,
-                              color: Colors.black,
+                            text: " (${placette.idPlacette})",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: colorBlue,
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -101,15 +113,18 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                       .corCyclesPlacettes!.values
                       .map((CorCyclePlacette corCycle) => corCycle.idCycle)
                       .contains(data.idCycle);
+
+                  Color bgColor = isCyclePlacetteInProgress
+                      ? colorYellow
+                      : isCyclePlacetteFinished
+                          ? colorBlue
+                          : colorBrown;
                   return CircleAvatar(
-                    backgroundColor: isCyclePlacetteInProgress
-                        ? Colors.yellow
-                        : isCyclePlacetteFinished
-                            ? Colors.green
-                            : Colors.red,
-                    foregroundColor: Colors.white,
-                    radius: 10,
-                    child: Text(data.numCycle.toString()),
+                    backgroundColor: bgColor,
+                    foregroundColor: colorBeige,
+                    radius: 12,
+                    child: Text(data.numCycle.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   );
                 }).toList(),
               ),
