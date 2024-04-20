@@ -803,54 +803,53 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           // Use a different Color for each Cycle
           //For arbre or bmsup30 use mapIdCycleNumCycle, to get the numCycle
           //For other type use mapIdCyclePlacetteNumCycle, to get the numCycle
+          int? cycleNum = mapIdCycleNumCycle[value["idCycle"]] ??
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]];
 
-          if (mapIdCycleNumCycle[value["idCycle"]] == 1 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 1) {
-            return Colors.white;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 2 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 2) {
-            return Colors.blue[200];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 3) {
-            return Colors.blue[400];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 4) {
-            return Colors.blue[600];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 5) {
-            return Colors.blue[800];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 6) {
-            return Colors.blue[900];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 7) {
-            return Colors.green;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 8) {
-            return Colors.lime;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 9) {
-            return Colors.amber;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 10) {
-            return Colors.cyan;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 11) {
-            return Colors.deepOrange;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 12) {
-            return Colors.deepPurple;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 13) {
-            return Colors.lightBlue;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 14) {
-            return Colors.lightGreen;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 15) {
-            return Colors.limeAccent;
+          switch (cycleNum) {
+            case 1:
+              return Color(0xFF598979); // Primary Bleu
+            case 2:
+              return Color(0xFF598979).withOpacity(0.6); // Vert
+            case 3:
+              return Color(0xFF598979).withOpacity(0.2); // Lighter Bleu
+            case 4:
+              return Color(0xFF8AAC3E); // Noir
+            case 5:
+              return Color(0xFF8AAC3E).withOpacity(0.6); // Beige
+            case 6:
+              return Color(0xFF8B5500); // Marron
+            case 7:
+              return Color(0xFF598979)
+                  .withOpacity(0.8); // Slightly transparent Bleu
+            case 8:
+              return Color(0xFF8AAC3E)
+                  .withOpacity(0.8); // Slightly transparent Vert
+            case 9:
+              return Color(0xFF7DAB9C)
+                  .withOpacity(0.8); // Slightly transparent Lighter Bleu
+            case 10:
+              return Color(0xFF1a1a18)
+                  .withOpacity(0.8); // Slightly transparent Noir
+            case 11:
+              return Color(0xFFF4F1E4)
+                  .withOpacity(0.8); // Slightly transparent Beige
+            case 12:
+              return Color(0xFF8B5500)
+                  .withOpacity(0.8); // Slightly transparent Marron
+            case 13:
+              return Color(0xFF598979)
+                  .withOpacity(0.6); // More transparent Bleu
+            case 14:
+              return Color(0xFF8AAC3E)
+                  .withOpacity(0.6); // More transparent Vert
+            case 15:
+              return Color(0xFF7DAB9C)
+                  .withOpacity(0.6); // More transparent Lighter Bleu
+            default:
+              return Color(
+                  0xFFF4F1E4); // Default to Beige if cycle number is undefined
           }
-          return Colors.white;
         }),
       );
     }).toList();
