@@ -30,6 +30,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:collection/collection.dart';
 
+final ThemeData dendro3Theme = ThemeData(
+  primaryColor: Color(0xFF598979), // Bleu
+  hintColor: Color(0xFF8AAC3E), // Vert
+  scaffoldBackgroundColor: Color(0xFFF4F1E4), // Beige
+  colorScheme: ColorScheme(
+    primary: Color(0xFF598979), // Bleu
+    secondary: Color(0xFF8AAC3E), // Vert
+    surface: Color(0xFFF4F1E4), // Beige
+    background: Color(0xFF1a1a18), // Noir
+    error: Color(0xFF8B5500), // Marron
+    onPrimary: Colors.white,
+    onSecondary: Colors.white,
+    onSurface: Colors.black,
+    onBackground: Colors.white,
+    onError: Colors.white,
+    brightness: Brightness.light,
+  ),
+  textTheme: TextTheme(
+    headline6: TextStyle(color: Color(0xFF1a1a18)), // For headers
+    bodyText2: TextStyle(color: Color(0xFF1a1a18)), // For body text
+  ),
+);
+
 class SaisieDataTable extends ConsumerStatefulWidget {
   const SaisieDataTable({
     super.key,
@@ -167,31 +190,45 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               // borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             child: columnNameList.isEmpty
-                ? Text("Il n'y a pas de ${widget.displayTypeState} à afficher")
+                ? Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: dendro3Theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                        "Il n'y a pas de ${widget.displayTypeState} à afficher."),
+                  )
                 : DataTable2(
-                    columnSpacing: 0, // Adjusted for better spacing
-                    horizontalMargin: 1, // Consistent margin
+                    columnSpacing: 10,
+                    horizontalMargin: 10,
                     fixedLeftColumns: 1,
                     scrollController: _controller,
-                    dividerThickness: 1,
-                    showCheckboxColumn: false, // Added dividers for clarity
+                    dividerThickness: 2,
+                    showCheckboxColumn: false,
                     minWidth: _extendedList[0] ? null : arrayWidth,
                     columns: columns,
                     rows: rows,
-                    dataRowHeight:
-                        50, // Uncommented and adjusted for better row visibility
-                    decoration: const BoxDecoration(
-                      color: Colors.white, // Consider using theme-based colors
+                    dataRowHeight: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: Offset(0, 1),
+                        ),
+                      ],
                     ),
-                    headingTextStyle: const TextStyle(
-                      color: Colors.black54,
-                      fontWeight:
-                          FontWeight.bold, // Custom text style for headers
+                    headingTextStyle: TextStyle(
+                      color: dendro3Theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
                     ),
-                    dataTextStyle: const TextStyle(
-                      color: Colors.black, // Custom text style for data
+                    dataTextStyle: TextStyle(
+                      color: dendro3Theme.colorScheme.onSurface,
                     ),
-                    // Additional customizations like row color, sorting functionality, etc.
                   ),
           ),
           Row(
@@ -213,10 +250,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.red[700],
-                selectedColor: Colors.white,
-                fillColor: Colors.red[200],
-                color: Colors.red[400],
+                // selectedBorderColor: Colors.red[700],
+                selectedColor: dendro3Theme.colorScheme.onSecondary,
+                fillColor: Color(0xFF7DAB9C),
+                color: dendro3Theme.colorScheme.secondary,
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,
@@ -238,10 +275,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         .cycleToggleChanged(index);
                   },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  selectedBorderColor: Colors.blue[700],
-                  selectedColor: Colors.white,
-                  fillColor: Colors.blue[200],
-                  color: Colors.blue[400],
+                  selectedColor: dendro3Theme.colorScheme.onSecondary,
+                  fillColor: Color(0xFF7DAB9C),
+                  color: dendro3Theme.colorScheme.secondary,
                   constraints: const BoxConstraints(
                     minHeight: 40.0,
                     minWidth: 40.0,
@@ -899,15 +935,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       // Determine the background color
       Color backgroundColor = isCyclePlacetteInProgress
-          ? Colors.yellow // Yellow for not completed
+          ? dendro3Theme.colorScheme.secondary // Yellow for not completed
           : (currentCorCyclePlacette != null
-              ? Colors.green
-              : Colors.red); // Green if CorCyclePlacette exists, otherwise red
+              ? dendro3Theme.colorScheme.primary
+              : dendro3Theme.colorScheme
+                  .error); // Green if CorCyclePlacette exists, otherwise red
 
       return CircleAvatar(
         backgroundColor: backgroundColor,
         foregroundColor: Colors.white,
-        radius: 10,
+        radius: 14,
         child: Text(data.numCycle.toString()),
       );
     }).toList();
