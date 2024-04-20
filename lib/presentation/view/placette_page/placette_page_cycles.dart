@@ -25,6 +25,16 @@ class PlacetteCycleWidget extends ConsumerStatefulWidget {
   PlacetteCycleWidgetState createState() => PlacetteCycleWidgetState();
 }
 
+class AppColors {
+  static const Color blue1 = Color(0xFF598979);
+  static const Color green = Color(0xFF8AAC3E);
+  static const Color blue2 = Color(0xFF7DAB9C);
+  static const Color black = Color(0xFF1a1a18);
+  static const Color beige = Color(0xFFF4F1E4);
+  static const Color brown = Color(0xFF8B5500);
+  static const Color yellow = Color(0xFFC0C000);
+}
+
 class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
   PlacetteCycleWidgetState();
 
@@ -67,61 +77,123 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
         corCyclePlacetteLocalStorageStatusProvider.isCyclePlacetteInProgress(
             selectedCorCyclePlacette.idCyclePlacette);
 
-    // Ensure that ViewModel instance is used correctly in _generateCircleAvatars
-    return Column(children: [
-      ToggleButtons(
-        isSelected: cycleSelected,
-        onPressed: (int index) {
-          setState(() {
-            for (int i = 0; i < cycleSelected.length; i++) {
-              cycleSelected[i] = i == index;
-            }
-          });
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        selectedBorderColor: Colors.blue[700],
-        selectedColor: Colors.white,
-        fillColor: Colors.blue[200],
-        color: Colors.blue[400],
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 80.0,
-        ),
-        children: _generateCircleAvatars(
-          widget.dispCycleList!,
-          widget.corCyclePlacetteList,
-          corCyclePlacetteLocalStorageStatusProvider, // Pass the ViewModel instance here
+    // Use ThemeData to manage common style properties
+    final ThemeData theme = Theme.of(context).copyWith(
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(backgroundColor: AppColors.blue2),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          foregroundColor: AppColors.beige,
+          backgroundColor: AppColors.green,
+          textStyle: const TextStyle(color: AppColors.black),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
       ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.green;
+          }
+          return null;
+        }),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.green;
+          }
+          return null;
+        }),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.green;
+          }
+          return null;
+        }),
+        trackColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return AppColors.green;
+          }
+          return null;
+        }),
+      ),
+    );
 
-      // Conditionally render the "Mark as Complete" button
-      if (isNewCycle)
-        ElevatedButton(
-          onPressed: () async {
-            await corCyclePlacetteLocalStorageStatusProvider
-                .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
-            setState(() {}); // Refresh the UI
-          },
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue)),
-          child: const Text('Marquer comme complet'),
-        ),
+    return Theme(
+      data: theme,
+      child: Column(
+        children: [
+          ToggleButtons(
+            isSelected: cycleSelected,
+            onPressed: (int index) {
+              setState(() {
+                for (int i = 0; i < cycleSelected.length; i++) {
+                  cycleSelected[i] = i == index;
+                }
+              });
+            },
+            borderRadius: BorderRadius.circular(20),
+            selectedBorderColor: AppColors.blue1,
+            selectedColor: AppColors.beige,
+            fillColor: AppColors.blue2,
+            color: AppColors.black,
+            constraints: const BoxConstraints(
+              minHeight: 40.0,
+              minWidth: 90.0,
+            ),
+            children: _generateCircleAvatars(
+              widget.dispCycleList!,
+              widget.corCyclePlacetteList,
+              corCyclePlacetteLocalStorageStatusProvider,
+            ),
+          ),
+          if (isNewCycle)
+            ElevatedButton(
+              onPressed: () async {
+                await corCyclePlacetteLocalStorageStatusProvider
+                    .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
+                setState(() {});
+              },
+              child: const Text('Marquer comme complet'),
+            ),
 
-      // Afficher le grid seulement si le corcycle existe pour la placette
-      // Sinon Afficher un text et un bouton
-      widget.corCyclePlacetteList.values
-              .map((CorCyclePlacette corCyclePla) => corCyclePla.idCycle)
-              .contains(widget
-                  .dispCycleList![
-                      cycleSelected.indexWhere((selected) => selected == true)]
-                  .idCycle)
-          ? __buildGridText(widget.corCyclePlacetteList[
-              cycleSelected.indexWhere((selected) => selected == true)])
-          : NoCycleWidget(
-              placette: widget.placette,
-              cycle: widget.dispCycleList![
-                  cycleSelected.indexWhere((selected) => selected == true)]),
-    ]);
+          // Afficher le grid seulement si le corcycle existe pour la placette
+          // Sinon Afficher un text et un bouton
+          widget.corCyclePlacetteList.values
+                  .map((CorCyclePlacette corCyclePla) => corCyclePla.idCycle)
+                  .contains(widget
+                      .dispCycleList![cycleSelected
+                          .indexWhere((selected) => selected == true)]
+                      .idCycle)
+              ? __buildGridText(widget.corCyclePlacetteList[
+                  cycleSelected.indexWhere((selected) => selected == true)])
+              : NoCycleWidget(
+                  placette: widget.placette,
+                  cycle: widget.dispCycleList![cycleSelected
+                      .indexWhere((selected) => selected == true)]),
+        ],
+      ),
+    );
   }
 }
 
@@ -142,24 +214,22 @@ List<Widget> _generateCircleAvatars(
       }
     }
 
-    // Check if the cycle placette is new using idCyclePlacette
-    bool isNewCycle = correspondingCorCyclePlacette != null
-        ? corCyclePlacetteLocalStorageStatusStateNotifier
-            .isCyclePlacetteInProgress(
-                correspondingCorCyclePlacette.idCyclePlacette)
-        : false;
+    // Determine the appropriate background color
+    Color backgroundColor = correspondingCorCyclePlacette != null
+        ? (corCyclePlacetteLocalStorageStatusStateNotifier
+                .isCyclePlacetteInProgress(
+                    correspondingCorCyclePlacette.idCyclePlacette)
+            ? AppColors.yellow // New cycle color
+            : AppColors.blue1) // Existing cycle
+        : AppColors.brown; // Cycle not found
 
-    Color backgroundColor = isNewCycle
-        ? Colors.yellow // New cycle color
-        : correspondingCorCyclePlacette != null
-            ? Colors.green // Existing cycle
-            : Colors.red; // Cycle not found
     return CircleAvatar(
       backgroundColor: backgroundColor,
-      foregroundColor: Colors.white,
-      radius: 10,
+      foregroundColor: AppColors.beige,
+      radius: 15, // Increased size for better visibility
       child: Text(
         data.numCycle.toString(),
+        style: const TextStyle(color: AppColors.black),
       ),
     );
   }).toList();
@@ -167,47 +237,56 @@ List<Widget> _generateCircleAvatars(
 
 Widget __buildGridText(CorCyclePlacette corCyclePlacette) {
   return Expanded(
-    child: SizedBox(
-      height: 200.0,
+    child: Padding(
+      padding: const EdgeInsets.all(10.0), // Added padding for spacing
       child: GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 2,
-          childAspectRatio: (1 / .2),
-          children: [
-            buildPropertyTextWidget(
-                'idCyclePlacette', corCyclePlacette.idCyclePlacette),
-            buildPropertyTextWidget('idCycle', corCyclePlacette.idCycle),
-            buildPropertyTextWidget('idPlacette', corCyclePlacette.idPlacette),
-            buildPropertyTextWidget(
-                'dateReleve',
-                corCyclePlacette.dateReleve != null
-                    ? '${corCyclePlacette.dateReleve!.day}/${corCyclePlacette.dateReleve!.month}/${corCyclePlacette.dateReleve!.year}'
-                    : null),
-            buildPropertyTextWidget(
-                'dateIntervention', corCyclePlacette.dateIntervention),
-            buildPropertyTextWidget('annee', corCyclePlacette.annee),
-            buildPropertyTextWidget(
-                'natureIntervention', corCyclePlacette.natureIntervention),
-            buildPropertyTextWidget(
-                'gestionPlacette', corCyclePlacette.gestionPlacette),
-            buildPropertyTextWidget(
-                'idNomenclatureCastor', corCyclePlacette.idNomenclatureCastor),
-            buildPropertyTextWidget('idNomenclatureFrottis',
-                corCyclePlacette.idNomenclatureFrottis),
-            buildPropertyTextWidget(
-                'idNomenclatureBoutis', corCyclePlacette.idNomenclatureBoutis),
-            buildPropertyTextWidget(
-                'recouvHerbesBasses', corCyclePlacette.recouvHerbesBasses),
-            buildPropertyTextWidget(
-                'recouvHerbesHautes', corCyclePlacette.recouvHerbesHautes),
-            buildPropertyTextWidget(
-                'recouvBuissons', corCyclePlacette.recouvBuissons),
-            buildPropertyTextWidget(
-                'recouvArbres', corCyclePlacette.recouvArbres),
-            buildPropertyTextWidget('coeff', corCyclePlacette.coeff),
-            buildPropertyTextWidget('diamLim', corCyclePlacette.diamLim),
-          ]),
+        crossAxisCount: 2,
+        childAspectRatio: (1 / .2), // Adjusted for better spacing
+        children: [
+          buildPropertyTextWidget(
+              'idCyclePlacette', corCyclePlacette.idCyclePlacette),
+          buildPropertyTextWidget('idCycle', corCyclePlacette.idCycle),
+          buildPropertyTextWidget('idPlacette', corCyclePlacette.idPlacette),
+          buildPropertyTextWidget(
+              'dateReleve',
+              corCyclePlacette.dateReleve != null
+                  ? '${corCyclePlacette.dateReleve!.day}/${corCyclePlacette.dateReleve!.month}/${corCyclePlacette.dateReleve!.year}'
+                  : null),
+          buildPropertyTextWidget(
+              'dateIntervention', corCyclePlacette.dateIntervention),
+          buildPropertyTextWidget('annee', corCyclePlacette.annee),
+          buildPropertyTextWidget(
+              'natureIntervention', corCyclePlacette.natureIntervention),
+          buildPropertyTextWidget(
+              'gestionPlacette', corCyclePlacette.gestionPlacette),
+          buildPropertyTextWidget(
+              'idNomenclatureCastor', corCyclePlacette.idNomenclatureCastor),
+          buildPropertyTextWidget(
+              'idNomenclatureFrottis', corCyclePlacette.idNomenclatureFrottis),
+          buildPropertyTextWidget(
+              'idNomenclatureBoutis', corCyclePlacette.idNomenclatureBoutis),
+          buildPropertyTextWidget(
+              'recouvHerbesBasses', corCyclePlacette.recouvHerbesBasses),
+          buildPropertyTextWidget(
+              'recouvHerbesHautes', corCyclePlacette.recouvHerbesHautes),
+          buildPropertyTextWidget(
+              'recouvBuissons', corCyclePlacette.recouvBuissons),
+          buildPropertyTextWidget(
+              'recouvArbres', corCyclePlacette.recouvArbres),
+          buildPropertyTextWidget('coeff', corCyclePlacette.coeff),
+          buildPropertyTextWidget('diamLim', corCyclePlacette.diamLim),
+        ]
+            .map((widget) => Container(
+                  padding:
+                      const EdgeInsets.all(4), // Padding inside each grid cell
+                  decoration: BoxDecoration(
+                    color: AppColors.beige,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: widget,
+                ))
+            .toList(),
+      ),
     ),
   );
 }
@@ -221,27 +300,43 @@ class NoCycleWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        const Text("Ce cycle n'a pas été réalisé pour cette placette"),
-        ElevatedButton(
-          child: const Text("Button"),
-          onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
-            builder: (BuildContext context) {
-              return FormSaisiePlacettePage(
-                formType: "add",
-                type: 'corCyclePlacette',
-                placette: placette,
-                cycle: cycle,
-                corCyclePlacette: null,
-
-                // placette: placette,
-                // cycle: dispCycleList.values[0],
-              );
-            },
-          )),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Ce cycle n'a pas été réalisé pour cette placette",
+            style: TextStyle(
+              color: AppColors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return FormSaisiePlacettePage(
+                  formType: "add",
+                  type: 'corCyclePlacette',
+                  placette: placette,
+                  cycle: cycle,
+                  corCyclePlacette: null,
+                );
+              },
+            )),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(AppColors.green),
+              padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(horizontal: 30, vertical: 15)),
+            ),
+            child: Text(
+              "Ajouter un cycle",
+              style: TextStyle(color: AppColors.beige),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
