@@ -114,15 +114,6 @@ class SaisiePlacettePageState extends ConsumerState<SaisiePlacettePage> {
             ),
           ],
         ),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: (value) async {},
-            itemBuilder: (context) => [],
-            offset: const Offset(0, 50),
-            color: Color(0xFF8AAC3E), // Brand green
-            elevation: 2,
-          ),
-        ],
       ),
       body: __buildAsyncPlacetteListWidget(
         context,
