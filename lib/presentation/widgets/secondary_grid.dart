@@ -1,11 +1,10 @@
 import 'dart:math';
-
+import 'package:flutter/material.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:flutter/material.dart';
 
 class SecondaryGrid extends StatefulWidget {
   final Map<int, int> mapIdCycleNumCycle;
@@ -88,7 +87,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 height: 120,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 child: const Card(
-                  color: Colors.greenAccent, // Different color to distinguish
+                  color: Color(0xFF8AAC3E), // Different color to distinguish
                   child: Center(
                     child: Icon(Icons.add,
                         size: 50, color: Colors.white), // Add icon
@@ -101,32 +100,6 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 .shrink(); // Return an empty widget for non-last cycles
           }
         }
-
-        // // Check if this is the last item
-        // if (index == widget.mesuresList.length) {
-        //   // Return the "Add New Measure" element
-        //   return GestureDetector(
-        //     onTap: () {
-        //       // Handle the addition of a new measure here
-        //       widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
-        //     },
-        //     child: Container(
-        //       width: 200, // Same width as other items
-        //       height: 200,
-        //       margin: const EdgeInsets.symmetric(horizontal: 5),
-        //       child: const Card(
-        //         color: Colors.greenAccent, // Different color to distinguish
-        //         child: Center(
-        //           child: Icon(
-        //             Icons.add,
-        //             size: 50,
-        //             color: Colors.white,
-        //           ), // Add icon
-        //         ),
-        //       ),
-        //     ),
-        //   );
-        // }
 
         Map<String, dynamic> currentItem = widget.mesuresList[index];
 
@@ -149,7 +122,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
         return Container(
           width: 300,
-          height: 120, // Define the width for each item
+          height: 120,
           margin: const EdgeInsets.symmetric(horizontal: 5),
           child: Card(
             child: Column(
@@ -171,7 +144,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                     if (maxNumberCyclePlacette == currentItem['numCycle'] &&
                         widget.mesuresList.length > 1)
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon:
+                            const Icon(Icons.delete, color: Color(0xFF8B5500)),
                         onPressed: () {
                           // Show confirmation dialog
                           showDialog(
@@ -191,7 +165,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                                   ),
                                   TextButton(
                                     child: const Text('Supprimer',
-                                        style: TextStyle(color: Colors.red)),
+                                        style: TextStyle(
+                                            color: Color(0xFF8B5500))),
                                     onPressed: () {
                                       // Close the dialog
                                       Navigator.of(context).pop();
@@ -209,16 +184,6 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                         padding: const EdgeInsets.all(4), // Reduced padding
                         constraints: const BoxConstraints(),
                       ),
-                    // IconButton(
-                    //   icon: Icon(Icons.add, color: Colors.green),
-                    //   onPressed: () {
-                    //     widget.onItemMesureAdded(
-                    //         widget.mesuresList[currentIndex]);
-                    //   },
-                    //   iconSize: 18, // Reduced icon size
-                    //   padding: EdgeInsets.all(4), // Reduced padding
-                    //   constraints: BoxConstraints(),
-                    // ),
                   ],
                 ),
                 Padding(
