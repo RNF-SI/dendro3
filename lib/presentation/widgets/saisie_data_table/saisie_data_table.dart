@@ -340,16 +340,14 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     Map<int, int> mapIdCycleNumCycle,
     Map<String, int> mapNumCyclePlacetteNumCycle,
   ) {
-    // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
-    // Check if selectedItemDetails is null
     if (selectedItemDetailsCo == null) {
-      return const Text("No item selected.");
+      return const Text("No item selected.",
+          style: TextStyle(color: Color(0xFF8AAC3E)));
     }
 
     SimpleElement simpleElements = SimpleElement();
     List<dynamic> mesuresList = [];
 
-    // Extracting the data
     int currentIndex = 0;
     var allValues = selectedItemDetailsCo.getAllValuesMapped();
     for (var entry in allValues.entries) {
@@ -378,10 +376,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       child: Container(
         margin: const EdgeInsets.all(10), // Marge externe
         decoration: BoxDecoration(
-          color: Colors.grey[200], // Couleur de fond
-          borderRadius: BorderRadius.circular(15), // Bords arrondis
+          color: Color(0xFFF4F1E4),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Color(0xFF7DAB9C)),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PrimaryGridWidget(
               simpleElements: simpleElements,
@@ -480,11 +480,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             if (mesuresList.isNotEmpty)
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.all(4),
-                  margin: const EdgeInsets.all(5), // Marge externe
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.grey[400], // Couleur de fond
-                    borderRadius: BorderRadius.circular(15), // Bords arrondis
+                    color: Color(0xFF598979),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: SecondaryGrid(
                     mesuresList: mesuresList,
@@ -808,11 +808,11 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
           switch (cycleNum) {
             case 1:
-              return Color(0xFF598979); // Primary Bleu
+              return Color(0xFF598979).withOpacity(0.2); // Lighter Bleu
             case 2:
               return Color(0xFF598979).withOpacity(0.6); // Vert
             case 3:
-              return Color(0xFF598979).withOpacity(0.2); // Lighter Bleu
+              return Color(0xFF598979); // Primary Bleu
             case 4:
               return Color(0xFF8AAC3E); // Noir
             case 5:
