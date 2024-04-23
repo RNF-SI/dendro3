@@ -178,6 +178,34 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<PlacetteEntity> updatePlacette(final PlacetteEntity placette) async {
+    final db = await database;
+    final int id = placette['id_placette']; // Corrected field access for id.
+
+    late final PlacetteEntity updatedPlacette;
+    await db.transaction((txn) async {
+      var count = await txn.update(
+        _tableName,
+        placette,
+        where: '$_columnId = ?',
+        whereArgs: [id],
+      );
+
+      final results =
+          await txn.query(_tableName, where: '$_columnId = ?', whereArgs: [id]);
+
+      if (results.isNotEmpty) {
+        // Assuming you have a method to convert a Map to a PlacetteEntity
+        updatedPlacette = results.first;
+      } else {
+        throw Exception("No placette found with id $id");
+      }
+    });
+
+    return updatedPlacette;
+  }
   // @override
   // Future<void> updatePlacette(final PlacetteEntity placette) async {
   //   final db = await database;
