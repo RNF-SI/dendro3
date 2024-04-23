@@ -137,6 +137,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
         fieldInfo: "Date de dernière intervention sylvicole",
         fieldUnit: "année",
         initialValue: "",
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         hintText: 'Veuillez entrer le code',
         onChanged: (p0) => _dateIntervention = p0,
       ),
