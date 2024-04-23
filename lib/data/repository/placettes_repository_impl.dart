@@ -45,7 +45,8 @@ class PlacettesRepositoryImpl implements PlacettesRepository {
     }
 
     // delete all he bms linked to the placette
-    List<String> bmsIds = await bmsRepository.getBmSup30IdsForPlacette(placetteId);
+    List<String> bmsIds =
+        await bmsRepository.getBmSup30IdsForPlacette(placetteId);
 
     for (var bmId in bmsIds) {
       await bmsRepository.deleteBmSup30AndBmSup30MesureFromIdBmSup30(bmId);
@@ -64,5 +65,16 @@ class PlacettesRepositoryImpl implements PlacettesRepository {
 
     // Finally, delete the placette itself
     await database.deletePlacette(placetteId);
+  }
+
+  @override
+  Future<Placette> updatePlacette(
+    int placetteId,
+    double pente,
+    int exposition,
+  ) async {
+    final placetteEntity = await database.updatePlacette(
+        PlacetteMapper.transformToNewEntityMap(placetteId, pente, exposition));
+    return PlacetteMapper.transformFromDBToModel(placetteEntity);
   }
 }

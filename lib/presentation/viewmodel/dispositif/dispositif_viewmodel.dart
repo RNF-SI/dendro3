@@ -5,6 +5,7 @@ import 'package:dendro3/domain/usecase/export_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
+import 'package:dendro3/presentation/viewmodel/baseList/placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -55,6 +56,10 @@ class DispositifViewModel
     state = const custom_async_state.State.loading();
     try {
       var dispositif = await _getDispositifUseCase.execute(dispositifId);
+      // inialized the placette list
+      ref
+          .read(placetteListViewModelStateNotifierProvider.notifier)
+          .setPlacetteList(dispositif.placettes!);
       state = custom_async_state.State.success(dispositif);
     } on Exception catch (e) {
       state = custom_async_state.State.error(e);

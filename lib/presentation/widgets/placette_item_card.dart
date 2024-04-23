@@ -1,4 +1,5 @@
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/placette_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/presentation/view/placette_page/placette_page.dart';
@@ -31,6 +32,8 @@ class PlacetteItemCardWidget extends ConsumerWidget {
     // Color between green and brown
     const Color colorYellow = Color(0xFFC0C000);
 
+    final placetteViewModel =
+        ref.watch(placetteViewModelStateNotifierProvider.notifier);
     final corCyclePlacetteListViewModel =
         ref.watch(corCyclePlacetteListViewModelStateNotifierProvider.notifier);
 
@@ -132,6 +135,8 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                 width: 76,
                 child: IconButton(
                   onPressed: () {
+                    placetteViewModel.setPlacette(placette);
+
                     corCyclePlacetteListViewModel
                         .setCorCyclePlacetteList(placette.corCyclesPlacettes!);
 
@@ -142,7 +147,6 @@ class PlacetteItemCardWidget extends ConsumerWidget {
                     Navigator.push(context, MaterialPageRoute<void>(
                       builder: (BuildContext context) {
                         return PlacettePage(
-                          placette: placette,
                           dispCycleList: cycleList,
                         );
                       },

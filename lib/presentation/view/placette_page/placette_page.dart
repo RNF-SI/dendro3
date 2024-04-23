@@ -2,22 +2,37 @@ import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
+import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/view/placette_page/placette_page_cycles.dart';
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 
-class PlacettePage extends ConsumerWidget {
-  PlacettePage({Key? key, required this.placette, required this.dispCycleList})
-      : super(key: key);
+class PlacettePage extends ConsumerStatefulWidget {
+  PlacettePage({
+    Key? key,
+    // required this.placette,
+    required this.dispCycleList,
+  }) : super(key: key);
 
-  Placette placette;
+  Placette? placette;
   CycleList dispCycleList;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  PlacettePageState createState() => PlacettePageState();
+}
+
+class PlacettePageState extends ConsumerState<PlacettePage> {
+  PlacettePageState();
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    final Placette? placette = ref.watch(placetteProvider);
     final CorCyclePlacetteList corCyclePlacetteList =
         ref.watch(corCyclePlacetteListProvider);
 
@@ -28,7 +43,7 @@ class PlacettePage extends ConsumerWidget {
           appBar: AppBar(
             title: Row(
               children: [
-                Text('Placette ${placette.idPlacetteOrig}'),
+                Text('Placette ${placette!.idPlacetteOrig}'),
                 const SizedBox(width: 8),
                 Text(
                   '(DISP ${placette.idDispositif})',
@@ -61,35 +76,35 @@ class PlacettePage extends ConsumerWidget {
               PlacetteCycleWidget(
                 placette: placette,
                 corCyclePlacetteList: corCyclePlacetteList,
-                dispCycleList: dispCycleList,
+                dispCycleList: widget.dispCycleList,
               ),
             ],
           ),
           floatingActionButton: corCyclePlacetteList.length ==
-                  dispCycleList.length
+                  widget.dispCycleList.length
               ? PlacetteFAB(
                   distance: 112.0,
                   children: [
                     ActionButton(
                       onPressed: corCyclePlacetteList.length ==
-                              dispCycleList.length
+                              widget.dispCycleList.length
                           ? () =>
                               Navigator.push(context, MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
                                   return SaisiePlacettePage(
                                     placette: placette,
                                     corCyclePlacetteList: corCyclePlacetteList,
-                                    dispCycleList: dispCycleList,
+                                    dispCycleList: widget.dispCycleList,
                                   );
                                 },
                               ))
                           : null, // Make button not clickable when the lists have the same length
                       icon: Icon(
                         Icons.add,
-                        color:
-                            corCyclePlacetteList.length == dispCycleList.length
-                                ? Color(0xFFF4F1E4)
-                                : Color(0xFF8B5500),
+                        color: corCyclePlacetteList.length ==
+                                widget.dispCycleList.length
+                            ? Color(0xFFF4F1E4)
+                            : Color(0xFF8B5500),
                       ),
                     ),
                   ],
@@ -101,7 +116,6 @@ class PlacettePage extends ConsumerWidget {
 
 Widget __buildPlacetteResumeWidget(
     BuildContext context, WidgetRef ref, Placette placette) {
-  // A list of properties to display in the grid
   List<Map<String, dynamic>> properties = [
     {'property': 'idPlacette', 'value': placette.idPlacette},
     {'property': 'idDispositif', 'value': placette.idDispositif},
@@ -146,7 +160,6 @@ Widget __buildPlacetteResumeWidget(
   List<Map<String, dynamic>> regularProperties = [];
   List<Map<String, dynamic>> longTextProperties = [];
 
-  // Populate the lists based on the 'isLong' flag
   for (var property in properties) {
     if (property.containsKey('isLong') && property['isLong']) {
       longTextProperties.add(property);
@@ -157,11 +170,10 @@ Widget __buildPlacetteResumeWidget(
 
   return CustomScrollView(
     slivers: [
-      // Grid for regular properties
       SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 6, // Adjust as needed
+          childAspectRatio: 6,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -174,8 +186,6 @@ Widget __buildPlacetteResumeWidget(
           childCount: regularProperties.length,
         ),
       ),
-
-      // List for long text properties
       SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -187,6 +197,40 @@ Widget __buildPlacetteResumeWidget(
             );
           },
           childCount: longTextProperties.length,
+        ),
+      ),
+      // Adding a new SliverToBoxAdapter to include a button
+      SliverToBoxAdapter(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return FormSaisiePlacettePage(
+                      formType: "edit",
+                      type: 'Placette',
+                      placette: placette,
+                      cycle: null,
+                      corCyclePlacette: null,
+                    );
+                  },
+                ));
+              },
+              icon: Icon(Icons.refresh), // Icon for visual indication
+              label: Text('Modifier les données'),
+              style: ElevatedButton.styleFrom(
+                // foregroundColor: Colors.white,
+                // backgroundColor: Colors.blue, // Text color
+                textStyle: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+            ),
+          ),
         ),
       ),
     ],

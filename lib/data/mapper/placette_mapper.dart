@@ -165,6 +165,17 @@ class PlacetteMapper {
     };
   }
 
+  static PlacetteEntity transformToNewEntityMap(
+    int idPlacette,
+    double? pente,
+    int? exposition,
+  ) {
+    return {
+      'id_placette': idPlacette,
+      'pente': pente,
+      'exposition': exposition,
+    };
+  }
   // static PlacetteEntity transformToNewEntityMap(
   //   final String name,
   //   final int idOrganisme,

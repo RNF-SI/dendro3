@@ -330,9 +330,9 @@ class NoCycleWidget extends ConsumerWidget {
               padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(horizontal: 30, vertical: 15)),
             ),
-            child: Text(
+            child: const Text(
               "Ajouter un cycle",
-              style: TextStyle(color: AppColors.beige),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ),
         ],

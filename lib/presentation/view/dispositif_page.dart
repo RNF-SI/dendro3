@@ -3,7 +3,9 @@ import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
+import 'package:dendro3/presentation/view/placette_list_widget.dart';
 import 'package:dendro3/presentation/view/sync_result.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/chiffres_widget.dart';
 import 'package:dendro3/presentation/widgets/placette_item_card.dart';
@@ -253,7 +255,7 @@ List<Widget> __buildAsyncPages(
   int dispositifId,
 ) {
   final viewModel = ref.watch(dispositifViewModelProvider(dispositifId));
-
+  // final vm = ref.watch(placetteListViewModelStateNotifierProvider.notifier);
   return [
     __buildAsyncPlacetteListWidget(context, ref, viewModel),
     __buildAsyncCycleInfoWidget(context, ref, viewModel),
@@ -264,38 +266,20 @@ Widget __buildAsyncPlacetteListWidget(
   final BuildContext context,
   WidgetRef ref,
   custom_async_state.State<Dispositif> stateDisp,
+  // PlacetteListViewModel vm,
 ) {
   return stateDisp.maybeWhen(
-    success: (data) =>
-        _buildPlacetteListWidget(context, data.placettes!, data.cycles!),
+    success: (data) {
+      return PlacetteListWidget(
+        cycleList: data.cycles!,
+      );
+    },
     error: (_) => const Center(
       child: Text('Uh oh... Something went wrong...',
           style: TextStyle(color: Colors.white)),
     ),
     orElse: () => const Center(child: CircularProgressIndicator()),
   );
-}
-
-Widget _buildPlacetteListWidget(
-  final BuildContext context,
-  final PlacetteList placetteList,
-  final CycleList cycleList,
-) {
-  if (placetteList.length == 0) {
-    return const Center(child: Text('Pas de Placette'));
-  } else {
-    return ListView.builder(
-      padding: const EdgeInsets.all(8),
-      itemCount: placetteList.length,
-      shrinkWrap: true,
-      itemBuilder: (final BuildContext context, final int index) {
-        return PlacetteItemCardWidget(
-          placette: placetteList[index],
-          cycleList: cycleList,
-        );
-      },
-    );
-  }
 }
 
 Widget __buildAsyncCycleInfoWidget(

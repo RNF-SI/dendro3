@@ -11,6 +11,7 @@ import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/arbre_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/bmSup30_saisie_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/placette_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/transect_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/regeneration_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/repere_saisie_viewmodel.dart';
@@ -113,7 +114,7 @@ class FormSaisiePlacettePageState
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   _errorMessage!,
-                  style: const TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Color(0xFF8B5500)),
                 ),
               ),
             _buildFormWidget(),
@@ -414,7 +415,7 @@ class FormSaisiePlacettePageState
                             fontWeight: FontWeight.normal,
                             color: Color(
                                 0xFF598979), // Bleu for units to differentiate
-                            fontSize: 12,
+                            fontSize: 10,
                           ),
                         ),
                       if (field.fieldRequired)
@@ -614,7 +615,6 @@ ObjectSaisieViewModel getViewModel(
         'regeneration': widget.saisisableObject1,
         'formType': widget.formType,
       }));
-    case 'Repères':
     case 'Reperes':
       return ref.read(repereSaisieViewModelProvider({
         'corCyclePlacette': widget.corCyclePlacette,
@@ -626,6 +626,12 @@ ObjectSaisieViewModel getViewModel(
         'cycle': widget.cycle,
         'placette': widget.placette,
         'corCyclePlacette': widget.saisisableObject1,
+      }));
+    case 'Placette':
+      return ref.read(placetteSaisieViewModelProvider({
+        'cycle': widget.cycle,
+        'placette': widget.placette,
+        'formType': widget.formType,
       }));
     default:
       throw Exception('Invalid type: $type');

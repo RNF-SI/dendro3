@@ -78,6 +78,8 @@ import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_placette_usecase.dart';
+import 'package:dendro3/domain/usecase/update_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_repere_usecase.dart';
@@ -132,6 +134,9 @@ final loginUseCaseProvider = Provider<LoginUseCase>(
 
 final getPlacetteUseCaseProvider = Provider<GetPlacetteUseCase>(
     (ref) => GetPlacetteUseCaseImpl(ref.watch(placettesRepositoryProvider)));
+
+final updatePlacetteUseCaseProvider = Provider<UpdatePlacetteUseCase>(
+    (ref) => UpdatePlacetteUseCaseImpl(ref.watch(placettesRepositoryProvider)));
 
 final actualiserCyclesDispositifUseCaseProvider =
     Provider<ActualiserCyclesDispositifUseCase>((ref) =>
