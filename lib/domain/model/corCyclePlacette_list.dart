@@ -5,6 +5,7 @@ import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/domain/model/viewmodel_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:collection/collection.dart';
 
 part 'corCyclePlacette_list.freezed.dart';
 
@@ -78,8 +79,8 @@ class CorCyclePlacetteList
 
   // Get the corcyclePlacette corresponding to the given idCycle
   CorCyclePlacette? getCorCyclePlacetteByIdCycle(final int idCycle) {
-    return values
-        .firstWhere((corCyclePlacette) => corCyclePlacette.idCycle == idCycle);
+    return values.firstWhereOrNull(
+        (corCyclePlacette) => corCyclePlacette.idCycle == idCycle);
   }
 
   @override
@@ -95,5 +96,9 @@ class CorCyclePlacetteList
     return values.any((corCyclePlacette) =>
         corCyclePlacette.idCycle == idCycle &&
         corCyclePlacette.idPlacette == idPlacette);
+  }
+
+  bool isLastCycle(CorCyclePlacette corCyclePlacette) {
+    return values.last.idCyclePlacette == corCyclePlacette.idCyclePlacette;
   }
 }

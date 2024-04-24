@@ -44,6 +44,11 @@ class CorCyclePlacetteLocalStorageStatusNotifier
     state = List.from(state)..remove(idCyclePlacette);
   }
 
+  Future<void> unCompleteCycle(String idCyclePlacette) async {
+    await _setCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
+    state = List.from(state)..add(idCyclePlacette);
+  }
+
   bool isCyclePlacetteInProgress(String idCyclePlacette) =>
       state.contains(idCyclePlacette);
 

@@ -76,6 +76,9 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
     bool isNewCycle = selectedCorCyclePlacette != null &&
         corCyclePlacetteLocalStorageStatusProvider.isCyclePlacetteInProgress(
             selectedCorCyclePlacette.idCyclePlacette);
+    Cycle lastCycle = widget.dispCycleList!.findIdOfCycleWithLargestNumCycle()!;
+    CorCyclePlacette? lastCorCyclePlacette = widget.corCyclePlacetteList
+        .getCorCyclePlacetteByIdCycle(lastCycle.idCycle);
 
     // Use ThemeData to manage common style properties
     final ThemeData theme = Theme.of(context).copyWith(
@@ -167,16 +170,35 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
               corCyclePlacetteLocalStorageStatusProvider,
             ),
           ),
-          if (isNewCycle)
+          if (widget.dispCycleList
+                  ?.findIdOfCycleWithLargestNumCycle()!
+                  .dateFin ==
+              null)
+            if (isNewCycle)
+              ElevatedButton(
+                onPressed: () async {
+                  await corCyclePlacetteLocalStorageStatusProvider
+                      .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
+                  setState(() {});
+                },
+                child: const Text('Marquer comme complet'),
+              ),
+
+          if (selectedCorCyclePlacette != null &&
+              !isNewCycle &&
+
+              // Check if the cycle placette is the last cycle
+              lastCorCyclePlacette != null &&
+              selectedCorCyclePlacette.idCyclePlacette ==
+                  lastCorCyclePlacette.idCyclePlacette)
             ElevatedButton(
               onPressed: () async {
                 await corCyclePlacetteLocalStorageStatusProvider
-                    .completeCycle(selectedCorCyclePlacette!.idCyclePlacette);
+                    .unCompleteCycle(selectedCorCyclePlacette!.idCyclePlacette);
                 setState(() {});
               },
-              child: const Text('Marquer comme complet'),
+              child: const Text('Marquer comme non terminé'),
             ),
-
           // Afficher le grid seulement si le corcycle existe pour la placette
           // Sinon Afficher un text et un bouton
           widget.corCyclePlacetteList.values
