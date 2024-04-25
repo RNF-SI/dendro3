@@ -620,7 +620,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         filterFn: (dynamic essence, filter) =>
             essence.essenceFilterByCodeEssence(filter),
-        itemAsString: (dynamic e) => e.codeEssence,
+        itemAsString: (dynamic e) {
+          return e.codeEssence + ' - ' + e.nom;
+        },
         onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
         validator: (dynamic text, formData) => validateCodeEssence(),
