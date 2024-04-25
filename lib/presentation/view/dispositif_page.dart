@@ -255,7 +255,6 @@ List<Widget> __buildAsyncPages(
   int dispositifId,
 ) {
   final viewModel = ref.watch(dispositifViewModelProvider(dispositifId));
-  // final vm = ref.watch(placetteListViewModelStateNotifierProvider.notifier);
   return [
     __buildAsyncPlacetteListWidget(context, ref, viewModel),
     __buildAsyncCycleInfoWidget(context, ref, viewModel),

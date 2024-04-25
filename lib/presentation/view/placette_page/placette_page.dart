@@ -1,4 +1,6 @@
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
+import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
@@ -7,6 +9,7 @@ import 'package:dendro3/presentation/view/placette_page/placette_page_cycles.dar
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
@@ -35,6 +38,13 @@ class PlacettePageState extends ConsumerState<PlacettePage> {
     final Placette? placette = ref.watch(placetteProvider);
     final CorCyclePlacetteList corCyclePlacetteList =
         ref.watch(corCyclePlacetteListProvider);
+    final corCyclePlacetteLocalStorageStatusProvider = ref.watch(
+        corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
+    final List<String>? corCyclePlacetteOpened =
+        ref.watch(corCyclePlacetteLocalStorageListProvider);
+    Cycle lastCycle = widget.dispCycleList!.findIdOfCycleWithLargestNumCycle()!;
+    CorCyclePlacette? lastCorCyclePlacette =
+        corCyclePlacetteList.getCorCyclePlacetteByIdCycle(lastCycle.idCycle);
 
     return DefaultTabController(
       initialIndex: 1,
@@ -80,8 +90,13 @@ class PlacettePageState extends ConsumerState<PlacettePage> {
               ),
             ],
           ),
-          floatingActionButton: corCyclePlacetteList.length ==
-                  widget.dispCycleList.length
+          floatingActionButton: ((corCyclePlacetteList.length ==
+                      widget.dispCycleList.length) &&
+                  (lastCorCyclePlacette != null) &&
+                  corCyclePlacetteOpened != null &&
+                  corCyclePlacetteLocalStorageStatusProvider
+                      .isCyclePlacetteInProgress(
+                          lastCorCyclePlacette.idCyclePlacette))
               ? PlacetteFAB(
                   distance: 112.0,
                   children: [

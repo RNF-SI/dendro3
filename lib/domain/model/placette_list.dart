@@ -40,12 +40,23 @@ class PlacetteList
   @override
   PlacetteList updateItemInList(final dynamic item) {
     if (item is Placette) {
+      return updatePlacette(item);
+    }
+    throw ArgumentError('Item must be of type Placette');
+  }
+
+  PlacetteList updateItemExpositionPenteAndCorCyclePlacetteInList(
+      final dynamic item) {
+    if (item is Placette) {
       // update only 2 properties if the item: pente and exposition
       return copyWith(
           values: values
               .map((placette) => placette.idPlacette == item.idPlacette
                   ? placette.copyWith(
-                      exposition: item.exposition, pente: item.pente)
+                      exposition: item.exposition,
+                      pente: item.pente,
+                      corCyclesPlacettes: item.corCyclesPlacettes,
+                    )
                   : placette)
               .toList());
     }

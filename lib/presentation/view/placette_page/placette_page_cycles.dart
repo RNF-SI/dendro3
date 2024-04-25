@@ -344,7 +344,7 @@ class NoCycleWidget extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             "Ce cycle n'a pas été réalisé pour cette placette",
             style: TextStyle(
               color: AppColors.black,

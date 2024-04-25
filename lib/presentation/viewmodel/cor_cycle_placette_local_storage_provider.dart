@@ -6,6 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum CorCyclePlacetteStatus { finished, started, notStarted }
 
+final corCyclePlacetteLocalStorageListProvider = Provider<List<String>?>((ref) {
+  final state =
+      ref.watch(corCyclePlacetteLocalStorageStatusStateNotifierProvider);
+  return state;
+});
+
 final corCyclePlacetteLocalStorageStatusStateNotifierProvider =
     StateNotifierProvider<CorCyclePlacetteLocalStorageStatusNotifier,
         List<String>>((ref) {

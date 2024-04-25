@@ -1,6 +1,8 @@
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
+import 'package:dendro3/domain/model/corCyclePlacette.dart';
+import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
@@ -76,5 +78,25 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
 
     state = State.success(newPlacette);
     // final value = state.data!.updatePlacette(newPlacette);
+  }
+
+  Future<void> appendToCorCyclePlacetteList(
+      CorCyclePlacette corCyclePlacette) async {
+    final Placette placette = state.data!;
+    placette.corCyclesPlacettes?.addItemToList(corCyclePlacette);
+    _placetteListViewModel.updateList(placette);
+    state = State.success(placette);
+  }
+
+  Future<void> updateCorCyclePlacetteList(
+      CorCyclePlacette updatedCorCyclePlacette) async {
+    final Placette oldPlacette = state.data!;
+    final newCorCyclesPlacettes = oldPlacette.corCyclesPlacettes
+        ?.updateCorCyclePlacette(updatedCorCyclePlacette);
+
+    final Placette newPlacette =
+        oldPlacette.copyWith(corCyclesPlacettes: newCorCyclesPlacettes);
+    _placetteListViewModel.updateList(newPlacette);
+    state = State.success(newPlacette);
   }
 }
