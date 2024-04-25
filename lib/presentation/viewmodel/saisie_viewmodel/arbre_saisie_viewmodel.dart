@@ -619,7 +619,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return null;
         },
         filterFn: (dynamic essence, filter) =>
-            essence.essenceFilterByCodeEssence(filter),
+            essence.essenceFilterByCodeEssenceOrNom(filter),
         itemAsString: (dynamic e) {
           return e.codeEssence + ' - ' + e.nom;
         },

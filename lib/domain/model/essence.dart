@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'essence.freezed.dart';
@@ -16,7 +15,7 @@ class Essence with _$Essence {
 
   const Essence._();
 
-  bool essenceFilterByCodeEssence(String filter) {
-    return codeEssence.toLowerCase().contains(filter.toLowerCase());
+  bool essenceFilterByCodeEssenceOrNom(String filter) {
+    return (codeEssence + nom).toLowerCase().contains(filter.toLowerCase());
   }
 }

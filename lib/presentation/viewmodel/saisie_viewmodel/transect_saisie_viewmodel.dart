@@ -1,4 +1,3 @@
-
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/essence.dart';
@@ -301,8 +300,10 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
           return null;
         },
         filterFn: (dynamic essence, filter) =>
-            essence.essenceFilterByCodeEssence(filter),
-        itemAsString: (dynamic e) => e.codeEssence,
+            essence.essenceFilterByCodeEssenceOrNom(filter),
+        itemAsString: (dynamic e) {
+          return e.codeEssence + ' - ' + e.nom;
+        },
         onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
         validator: (dynamic text, formData) => validateCodeEssence(),
