@@ -15,4 +15,8 @@ class Cycle with _$Cycle {
       CorCyclePlacetteList? corCyclesPlacettes}) = _Cycle;
 
   const Cycle._();
+
+  bool isTerminated() {
+    return dateFin != null;
+  }
 }
