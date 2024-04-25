@@ -351,6 +351,7 @@ class FormSaisiePlacettePageState
         // return CheckboxFormField or whatever the widget should be
       } else if (field is DateFieldConfig) {
         formWidget = DateTimeFormField(
+          initialValue: field.initialValue,
           decoration: InputDecoration(
             hintStyle:
                 TextStyle(color: Color(0xFF7DAB9C)), // Light Blue for hint
@@ -625,7 +626,8 @@ ObjectSaisieViewModel getViewModel(
       return ref.read(corCyclePlacetteSaisieViewModelProvider({
         'cycle': widget.cycle,
         'placette': widget.placette,
-        'corCyclePlacette': widget.saisisableObject1,
+        'corCyclePlacette': widget.corCyclePlacette,
+        'formType': widget.formType,
       }));
     case 'Placette':
       return ref.read(placetteSaisieViewModelProvider({

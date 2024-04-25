@@ -1,9 +1,11 @@
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 
 class DateFieldConfig extends FieldConfig {
+  final DateTime initialValue;
   final void Function(DateTime) onDateSelected;
 
   DateFieldConfig({
+    required this.initialValue,
     required String fieldName,
     fieldRequired = false,
     String fieldUnit = '',
