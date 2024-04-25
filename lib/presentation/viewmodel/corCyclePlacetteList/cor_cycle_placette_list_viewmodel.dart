@@ -8,6 +8,7 @@ import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/update_cor_cycle_placette_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,12 +20,15 @@ final corCyclePlacetteListProvider = Provider<CorCyclePlacetteList>((ref) {
 final corCyclePlacetteListViewModelStateNotifierProvider =
     StateNotifierProvider<CorCyclePlacetteListViewModel,
         State<CorCyclePlacetteList>>((ref) {
+  final placetteViewModel =
+      ref.watch(placetteViewModelStateNotifierProvider.notifier);
   return CorCyclePlacetteListViewModel(
     ref.watch(createCorCyclePlacetteUseCaseProvider),
     ref.watch(updateCorCyclePlacetteUseCaseProvider),
     ref.watch(setCyclePlacetteCreatedUseCaseProvider),
     ref.watch(completeCyclePlacetteCreatedUseCaseProvider),
     ref.watch(corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier),
+    placetteViewModel,
   );
 });
 
@@ -36,6 +40,7 @@ class CorCyclePlacetteListViewModel
   final CompleteCyclePlacetteCreatedUseCase
       _completeCyclePlacetteCreatedUseCaseProvider;
   final CorCyclePlacetteLocalStorageStatusNotifier _localStorageStatusNotifier;
+  late final PlacetteViewModel _placetteViewModel;
 
   CorCyclePlacetteListViewModel(
     this._createCorCyclePlacetteUseCase,
@@ -43,6 +48,7 @@ class CorCyclePlacetteListViewModel
     this._setCyclePlacetteCreatedUseCaseProvider,
     this._completeCyclePlacetteCreatedUseCaseProvider,
     this._localStorageStatusNotifier,
+    this._placetteViewModel,
   ) : super(const State.init());
 
   actualiser() {
@@ -75,6 +81,7 @@ class CorCyclePlacetteListViewModel
       await _localStorageStatusNotifier.startCyclePlacette(newCorCyclePlacette
           .idCyclePlacette); // Mark the cycle as created using SetCycleCreatedUseCase
       state = State.success(state.data!.addItemToList(newCorCyclePlacette));
+      _placetteViewModel.appendToCorCyclePlacetteList(newCorCyclePlacette);
     } on Exception catch (e) {
       state = State.error(e);
     }
@@ -109,6 +116,7 @@ class CorCyclePlacetteListViewModel
       );
       state =
           State.success(state.data!.updateItemInList(updatedCorCyclePlacette));
+      _placetteViewModel.updateCorCyclePlacetteList(updatedCorCyclePlacette);
     } on Exception catch (e) {
       state = State.error(e);
     }
