@@ -23,10 +23,9 @@ final corCyclePlacetteSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['cycle'],
       arbreInfoObj['placette'],
       arbreInfoObj['corCyclePlacette'],
+      arbreInfoObj['formType'],
       corCyclePlacetteListViewModel);
-}
-        // ref.watch(insertArbreUseCaseProvider))
-        );
+});
 
 class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   // late final ListViewModel _baseListViewModel;
@@ -35,10 +34,12 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   final Ref ref;
   Placette placette;
   Cycle cycle;
+  CorCyclePlacette? corCyclePlacette;
+  final String formType;
 
   int? _idCycle;
   var _idPlacette;
-
+  late String? _idCyclePlacette;
   DateTime? _dateReleve;
   String? _dateIntervention = '';
   int? _annee;
@@ -60,7 +61,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
     this.ref,
     this.cycle,
     this.placette,
-    final CorCyclePlacette? corCyclePlacette,
+    this.corCyclePlacette,
+    this.formType,
     this._corCyclePlacetteListViewModel,
     // this._insertArbreUseCase,
   ) {
@@ -70,9 +72,11 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   _initCorCyclePlacette(final CorCyclePlacette? corCyclePlacette) {
     _idCycle = cycle.idCycle;
     _idPlacette = placette.idPlacette;
-    if (corCyclePlacette == null) {
+    if (formType == 'add') {
       _isNewCorCyclePlacette = true;
+      _idCyclePlacette = null;
     } else {
+      _idCyclePlacette = corCyclePlacette!.idCyclePlacette;
       _dateReleve = corCyclePlacette.dateReleve;
       _dateIntervention = corCyclePlacette.dateIntervention;
       _annee = corCyclePlacette.annee;
@@ -115,6 +119,25 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
 
   @override
   Future<String> updateObject() async {
+    _corCyclePlacetteListViewModel.updateItem({
+      'idCyclePlacette': _idCyclePlacette,
+      'idCycle': _idCycle,
+      'idPlacette': _idPlacette,
+      'dateReleve': _dateReleve,
+      'dateIntervention': _dateIntervention,
+      'annee': _annee,
+      'natureIntervention': _natureIntervention,
+      'gestionPlacette': _gestionPlacette,
+      'idNomenclatureCastor': _idNomenclatureCastor,
+      'idNomenclatureFrottis': _idNomenclatureFrottis,
+      'idNomenclatureBoutis': _idNomenclatureBoutis,
+      'recouvHerbesBasses': _recouvHerbesBasses,
+      'recouvHerbesHautes': _recouvHerbesHautes,
+      'recouvBuissons': _recouvBuissons,
+      'recouvArbres': _recouvArbres,
+      'coeff': _coeff,
+      'diamLim': _diamLim,
+    });
     return '';
   }
 
@@ -128,6 +151,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       DateFieldConfig(
         fieldName: "Date de Releve",
         fieldRequired: true,
+        fieldInfo: "Date de relevé de la placette",
+        initialValue: intialDateReleve(),
         onDateSelected: (DateTime date) {
           _dateReleve = date;
         },
@@ -136,7 +161,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: "Date Intervention",
         fieldInfo: "Date de dernière intervention sylvicole",
         fieldUnit: "année",
-        initialValue: "",
+        initialValue: initialDateIntervention(),
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         hintText: 'Veuillez entrer le code',
@@ -156,7 +181,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: "Nature de l'intervention",
         fieldInfo: "Ex: Coupe Rase, Coupe d'éclaircie, ...",
-        initialValue: "",
+        initialValue: initialNatureIntervention(),
         hintText: 'Veuillez entrer le code',
         onChanged: (p0) => _natureIntervention = p0,
       ),
@@ -182,7 +207,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: "Coeff",
         keyboardType: TextInputType.number,
-        initialValue: "",
+        initialValue: initialCoeff(),
         hintText: "Veuillez entre le coefficient",
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         onChanged: (p0) => _coeff = int.parse(p0),
@@ -191,7 +216,7 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: "Diamètre limite",
         keyboardType: TextInputType.number,
-        initialValue: "",
+        initialValue: initialDiamLim(),
         hintText: "Veuillez entrer le diamètre limite",
         onChanged: (p0) => _diamLim = double.parse(p0),
       ),
@@ -200,5 +225,46 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
 
   setAnnee(String value) {
     _annee = int.parse(value);
+  }
+
+  String initialDateIntervention() {
+    if (_dateIntervention == '') {
+      return '';
+    } else {
+      return _dateIntervention!;
+    }
+  }
+
+  initialDiamLim() {
+    if (_diamLim == null) {
+      return '';
+    } else {
+      return _diamLim.toString();
+    }
+  }
+
+  initialCoeff() {
+    if (_coeff == null) {
+      return '';
+    } else {
+      return _coeff.toString();
+    }
+  }
+
+  initialNatureIntervention() {
+    if (_natureIntervention == '') {
+      return '';
+    } else {
+      return _natureIntervention!;
+    }
+  }
+
+  intialDateReleve() {
+    if (_dateReleve == null) {
+      _dateReleve = DateTime.now();
+      return DateTime.now();
+    } else {
+      return _dateReleve;
+    }
   }
 }

@@ -170,11 +170,9 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
               corCyclePlacetteLocalStorageStatusProvider,
             ),
           ),
-          if (widget.dispCycleList
-                  ?.findIdOfCycleWithLargestNumCycle()!
-                  .dateFin ==
-              null)
-            if (isNewCycle)
+          // La possibilité de marquer un cycle comme complet ou non terminé dépend de la date de fin du cycle (si null alors le cycle n'est pas fini)
+          if (!widget.dispCycleList!.cyclesAreTerminated()) ...[
+            if (isNewCycle) ...[
               ElevatedButton(
                 onPressed: () async {
                   await corCyclePlacetteLocalStorageStatusProvider
@@ -183,22 +181,41 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
                 },
                 child: const Text('Marquer comme complet'),
               ),
+              ElevatedButton(
+                onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return FormSaisiePlacettePage(
+                      formType: "edit",
+                      type: 'corCyclePlacette',
+                      placette: widget.placette,
+                      cycle: selectedCycle!,
+                      corCyclePlacette: selectedCorCyclePlacette,
+                    );
+                  },
+                )),
+                child: const Text('Mettre à jour'),
+              ),
+            ],
+            if (selectedCorCyclePlacette != null &&
+                !isNewCycle &&
 
-          if (selectedCorCyclePlacette != null &&
-              !isNewCycle &&
+                // Check if the cycle placette is the last cycle
+                lastCorCyclePlacette != null &&
+                selectedCorCyclePlacette.idCyclePlacette ==
+                    lastCorCyclePlacette.idCyclePlacette) ...[
+              ElevatedButton(
+                onPressed: () async {
+                  await corCyclePlacetteLocalStorageStatusProvider
+                      .unCompleteCycle(
+                          selectedCorCyclePlacette!.idCyclePlacette);
+                  setState(() {});
+                },
+                child: const Text('Marquer comme non terminé'),
+              ),
+            ],
+          ],
 
-              // Check if the cycle placette is the last cycle
-              lastCorCyclePlacette != null &&
-              selectedCorCyclePlacette.idCyclePlacette ==
-                  lastCorCyclePlacette.idCyclePlacette)
-            ElevatedButton(
-              onPressed: () async {
-                await corCyclePlacetteLocalStorageStatusProvider
-                    .unCompleteCycle(selectedCorCyclePlacette!.idCyclePlacette);
-                setState(() {});
-              },
-              child: const Text('Marquer comme non terminé'),
-            ),
           // Afficher le grid seulement si le corcycle existe pour la placette
           // Sinon Afficher un text et un bouton
           widget.corCyclePlacetteList.values
