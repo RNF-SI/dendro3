@@ -192,4 +192,44 @@ class CorCyclePlacetteMapper {
       'diam_lim': diamLim,
     };
   }
+
+  static CorCyclePlacetteEntity transformToEntityMap(
+    final String idCyclePlacette,
+    final int idCycle,
+    final int idPlacette,
+    final DateTime? dateReleve,
+    final String? dateIntervention,
+    final int? annee,
+    final String? natureIntervention,
+    final String gestionPlacette,
+    final int? idNomenclatureCastor,
+    final int? idNomenclatureFrottis,
+    final int? idNomenclatureBoutis,
+    final double? recouvHerbesBasses,
+    final double? recouvHerbesHautes,
+    final double? recouvBuissons,
+    final double? recouvArbres,
+    final int? coeff,
+    final double? diamLim,
+  ) {
+    return {
+      'id_cycle_placette': idCyclePlacette,
+      'id_cycle': idCycle,
+      'id_placette': idPlacette,
+      'date_releve': dateReleve,
+      'date_intervention': dateIntervention,
+      'annee': annee,
+      'nature_intervention': natureIntervention,
+      'gestion_placette': gestionPlacette,
+      'id_nomenclature_castor': idNomenclatureCastor,
+      'id_nomenclature_frottis': idNomenclatureFrottis,
+      'id_nomenclature_boutis': idNomenclatureBoutis,
+      'recouv_herbes_basses': recouvHerbesBasses,
+      'recouv_herbes_hautes': recouvHerbesHautes,
+      'recouv_buissons': recouvBuissons,
+      'recouv_arbres': recouvArbres,
+      'coeff': coeff,
+      'diam_lim': diamLim,
+    };
+  }
 }

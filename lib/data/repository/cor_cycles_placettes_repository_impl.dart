@@ -1,4 +1,5 @@
 import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
+import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/mapper/corCyclePlacette_mapper.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
@@ -78,5 +79,49 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
         .removeFromInProgressCorCyclePlacette(corCyclePlacetteId);
 
     await database.deleteCorCyclePlacette(corCyclePlacetteId);
+  }
+
+  @override
+  Future<CorCyclePlacette> updateCorCyclePlacette(
+    String idCyclePlacette,
+    int idCycle,
+    int idPlacette,
+    DateTime? dateReleve,
+    String? dateIntervention,
+    int? annee,
+    String? natureIntervention,
+    String gestionPlacette,
+    int? idNomenclatureCastor,
+    int? idNomenclatureFrottis,
+    int? idNomenclatureBoutis,
+    double? recouvHerbesBasses,
+    double? recouvHerbesHautes,
+    double? recouvBuissons,
+    double? recouvArbres,
+    int? coeff,
+    double? diamLim,
+  ) async {
+    final corCyclePlacetteEntity = await database
+        .updateCorCyclePlacette(CorCyclePlacetteMapper.transformToEntityMap(
+      idCyclePlacette,
+      idCycle,
+      idPlacette,
+      dateReleve,
+      dateIntervention,
+      annee,
+      natureIntervention,
+      gestionPlacette,
+      idNomenclatureCastor,
+      idNomenclatureFrottis,
+      idNomenclatureBoutis,
+      recouvHerbesBasses,
+      recouvHerbesHautes,
+      recouvBuissons,
+      recouvArbres,
+      coeff,
+      diamLim,
+    ));
+
+    return CorCyclePlacetteMapper.transformToModel(corCyclePlacetteEntity);
   }
 }

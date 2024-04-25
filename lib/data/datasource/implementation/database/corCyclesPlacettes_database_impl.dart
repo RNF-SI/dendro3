@@ -250,4 +250,38 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<CorCyclePlacetteEntity> updateCorCyclePlacette(
+      final CorCyclePlacetteEntity corCyclePlacette) async {
+    final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    corCyclePlacette["date_releve"] =
+        formatter.format(corCyclePlacette["date_releve"]);
+
+    late final CorCyclePlacetteEntity corCyclePlacetteEntity;
+    await db.transaction((txn) async {
+      var updatedCorCyclePlacette = Map<String, dynamic>.from(corCyclePlacette)
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
+
+      await txn.update(
+        _tableName,
+        updatedCorCyclePlacette,
+        where: '$_columnId = ?',
+        whereArgs: [corCyclePlacette['id_cycle_placette']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?',
+          whereArgs: [corCyclePlacette['id_cycle_placette']]);
+      corCyclePlacetteEntity = results.first;
+    });
+    return corCyclePlacetteEntity;
+  }
 }
