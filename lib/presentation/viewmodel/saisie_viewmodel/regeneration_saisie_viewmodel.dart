@@ -315,7 +315,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   String initialObservation() => _observation ?? '';
   String initialRecouvrement() {
     if (_recouvrement == null) {
-      return '';
+      return '0';
     }
     return _recouvrement == _recouvrement!.toInt()
         ? _recouvrement!.toInt().toString()
