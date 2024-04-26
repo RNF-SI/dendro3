@@ -73,24 +73,16 @@ class FormSaisiePlacettePageState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _viewModel = getViewModel(ref, widget.type, widget);
     _errorMessage = null;
-    // distanceController.addListener(() {
-    //   updateDistanceWarning();
-    // })
   }
 
-  int stadeD = 2;
-  // void updateDistanceWarning() {
-  //   if(distanceController.value!=null &&){
   late final String _selectedValue = '1';
   List<String> listOfValue = ['1', '2', '3', '4', '5'];
 
   Map<String, dynamic> formData = {};
-  //   }
-  // }
+
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -451,7 +443,7 @@ class FormSaisiePlacettePageState
                                       child: Text('OK',
                                           style: TextStyle(
                                               color: Color(
-                                                  0xFF8AAC3E))), // Vert for button text
+                                                  0xFFC0C000))), // Vert for button text
                                     ),
                                   ],
                                 );
@@ -479,58 +471,6 @@ class FormSaisiePlacettePageState
       child: Column(children: formFields),
     );
   }
-
-  // Future _showIntegerDialogStadeDurete() async {
-  //   await showDialog<int>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return new NumberPickerDialog.integer(
-  //         minValue: 1,
-  //         maxValue: 5,
-  //         step: 1,
-  //         initialIntegerValue: _currentCurrentStadeDValue,
-  //         title: new Text("Sélectionner un stade de dureté"),
-  //       );
-  //     },
-  //   ).then(_handleValueChangedExternally);
-  // }
-
-  // Future _showIntegerDialogStadeDurete() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Select Weight', textAlign: TextAlign.center),
-  //         content: StatefulBuilder(builder: (context, setState) {
-  //           return Container(
-  //             height: 350,
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //               children: [
-  //                 NumberPicker(
-  //                   step: 1,
-  //                   itemCount: 5,
-  //                   minValue: 1,
-  //                   maxValue: 5,
-  //                   value: stadeD,
-  //                   onChanged: (value) => setState(() {
-  //                     stadeD = value;
-  //                   }),
-  //                 ),
-  //                 ElevatedButton(
-  //                   child: Text('Approve'),
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         }),
-  //       );
-  //     },
-  //   );
-  // }
 }
 
 class CheckboxFormField extends FormField<bool> {
