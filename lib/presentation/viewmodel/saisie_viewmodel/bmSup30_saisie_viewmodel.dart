@@ -479,8 +479,10 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'idArbre',
         fieldInfo:
-            'Lorsque 2 pièce de BMsup30 appartiennent au même individu, indiquer le même Arbre',
+            'Lorsque 2 billons de BMsup30 appartiennent au même individu, indiquer le même Arbre',
         initialValue: initialIdArbreValue(),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         hintText: 'Veuillez entrer le code',
         onChanged: (value) => _idArbre = int.parse(value),
       ),

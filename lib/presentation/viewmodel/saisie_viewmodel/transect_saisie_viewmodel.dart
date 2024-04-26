@@ -410,7 +410,7 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Angle',
         fieldUnit: '°',
         fieldInfo:
-            "Angle entre l'horizontal et la pièce ce bois - voir notice. Min 0°, Max 50°",
+            "Angle entre l'horizontal et la pièce de bois - voir notice. Min 0°, Max 50°",
         fieldRequired: true,
         initialValue: initialAngleValue(),
         keyboardType: TextInputType.number,

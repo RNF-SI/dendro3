@@ -376,7 +376,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       child: Container(
         margin: const EdgeInsets.all(10), // Marge externe
         decoration: BoxDecoration(
-          color: Color(0xFFF4F1E4),
+          color: Color(0xFF7DAB9C),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Color(0xFF7DAB9C)),
         ),
@@ -480,7 +480,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             if (mesuresList.isNotEmpty)
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Color(0xFF598979),
