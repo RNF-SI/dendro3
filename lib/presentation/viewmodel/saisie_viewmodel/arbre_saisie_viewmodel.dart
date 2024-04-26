@@ -842,7 +842,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) {
           return true;
         },
-        itemAsString: (dynamic e) => e.labelDefault,
+        itemAsString: (dynamic e) {
+          return e.idNomenclature.toString() + ' - ' + e.labelDefault;
+        },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
             return (formData['Type'] != null && formData['Type'] != '') ||
@@ -880,8 +882,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) {
           return true;
         },
-        itemAsString: (dynamic e) => e.labelDefault,
-
+        itemAsString: (dynamic e) {
+          return '${e.idNomenclature} - ' + e.labelDefault;
+        },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
             return (formData['Type'] != null && formData['Type'] != '') ||

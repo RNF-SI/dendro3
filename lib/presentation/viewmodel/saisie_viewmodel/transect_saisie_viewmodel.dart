@@ -450,7 +450,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) {
           return true;
         },
-        itemAsString: (dynamic e) => e.labelDefault,
+        itemAsString: (dynamic e) {
+          return '${e.idNomenclature} - ' + e.labelDefault;
+        },
         onChanged: (dynamic data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
         validator: (dynamic text, formData) {
@@ -477,7 +479,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) {
           return true;
         },
-        itemAsString: (dynamic e) => e.labelDefault,
+        itemAsString: (dynamic e) {
+          return '${e.idNomenclature} - ' + e.labelDefault;
+        },
         onChanged: (dynamic data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
         validator: (dynamic text, formData) {
