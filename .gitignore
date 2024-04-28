@@ -48,3 +48,6 @@ sqlite-db-copy
 
 # Copy of sql script
 /assets/db/db_init_gn_module_psdrf.sql
+
+/lib/config/config_dev.dart
+/lib/config/config_prod.dart
