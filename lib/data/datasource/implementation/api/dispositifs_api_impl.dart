@@ -4,7 +4,7 @@ import 'package:dendro3/core/error/failure.dart';
 import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
-import 'package:dendro3/data/common/constants.dart';
+import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
 
 class DispositifsApiImpl implements DispositifsApi {

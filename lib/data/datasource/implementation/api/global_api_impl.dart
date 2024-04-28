@@ -2,7 +2,7 @@ import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/entity/essences_entity.dart';
 import 'package:dendro3/data/entity/nomencluresTypes_entity.dart';
 import 'package:dendro3/data/entity/nomenclatures_entity.dart';
-import 'package:dendro3/data/common/constants.dart';
+import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
 
 class GlobalApiImpl implements GlobalApi {

@@ -1,6 +1,6 @@
 import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
 import 'package:dendro3/data/entity/cycles_entity.dart';
-import 'package:dendro3/data/common/constants.dart';
+import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
 
 class CyclesApiImpl implements CyclesApi {

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dendro3/data/datasource/interface/api/authentication_api.dart';
 import 'package:dendro3/data/entity/user_entity.dart';
-import 'package:dendro3/data/common/constants.dart';
+import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
 
 class AuthenticationApiImpl implements AuthenticationApi {
