@@ -1,2 +1,13 @@
-// Choose the appropriate file based on the condition.
-export 'config_dev.dart' if (dart.library.prod) 'config_prod.dart';
+import 'config_dev.dart';
+import 'config_prod.dart';
+
+class Config {
+  static String get apiBase {
+    const environment = String.fromEnvironment('ENV', defaultValue: 'DEV');
+    if (environment == 'PROD') {
+      return ConfigProd.apiBase;
+    } else {
+      return ConfigDev.apiBase;
+    }
+  }
+}
