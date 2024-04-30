@@ -4,6 +4,7 @@ import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
+import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/model/dispositifInfo_list.dart';
@@ -38,6 +39,7 @@ final userDispositifListViewModelStateNotifierProvider =
     ref.watch(getUserDispositifListFromDBUseCaseProvider),
     ref.watch(downloadDispositifDataUseCaseProvider),
     ref.watch(deleteDispositifUseCaseProvider),
+    ref.watch(getUserIdFromLocalStorageUseCaseProvider),
   );
 });
 
@@ -49,6 +51,7 @@ class UserDispositifsViewModel
   final GetUserDispositifListFromDBUseCase _getUserDispositifsListFromDBUseCase;
   final DownloadDispositifDataUseCase _downloadDispositifDataUseCase;
   final DeleteDispositifUseCase _deleteDispositifUseCase;
+  final GetUserIdFromLocalStorageUseCase _getUserIdFromLocalStorageUseCase;
 
   UserDispositifsViewModel(
     AsyncValue<DispositifInfoList> userDispList,
@@ -57,6 +60,7 @@ class UserDispositifsViewModel
     this._getUserDispositifsListFromDBUseCase,
     this._downloadDispositifDataUseCase,
     this._deleteDispositifUseCase,
+    this._getUserIdFromLocalStorageUseCase,
   ) : super(const custom_async_state.State.init()) {
     _init();
     // Creates db tables and insert liste data (ex:essences, etc.)
@@ -80,8 +84,12 @@ class UserDispositifsViewModel
     List<DispositifInfo> finalDispositifs = [];
     Set<int> dbIDs = Set();
 
+    // get userId in the local storage
+    final userId = await _getUserIdFromLocalStorageUseCase.execute();
+
     // Always fetch from DB first to determine downloaded status
-    var dbDispositifs = await _getUserDispositifsListFromDBUseCase.execute(3);
+    var dbDispositifs =
+        await _getUserDispositifsListFromDBUseCase.execute(userId);
     for (var dbDisp in dbDispositifs.values) {
       // Add all DB dispositifs as downloaded
       finalDispositifs.add(DispositifInfo(
@@ -93,7 +101,7 @@ class UserDispositifsViewModel
       try {
         // Fetch dispositifs from API
         var apiDispositifs =
-            await _getUserDispositifsListFromAPIUseCase.execute(3);
+            await _getUserDispositifsListFromAPIUseCase.execute(userId);
         for (var apiDisp in apiDispositifs.values) {
           if (!dbIDs.contains(apiDisp.id)) {
             // If not in DB, mark as not downloaded

@@ -81,8 +81,14 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
           await prefs.setBool('isLoggedIn', true);
           print("isLoggedIn set to: ${await prefs.getBool('isLoggedIn')}");
           // Save the user's name. Replace `user.name` with the actual property that holds the user's name in your User model.
-          await prefs.setString('userName',
-              identifiant); // Assuming 'user.name' holds the name of the user
+          await prefs.setString(
+            'userName',
+            identifiant,
+          ); // Assuming 'user.name' holds the name of the user
+          await prefs.setString(
+            'userId',
+            user.id.toString(),
+          );
           print(
               'Login state and user name saved'); // Added for debugging purposes
           ref.refresh(isLoggedInProvider);

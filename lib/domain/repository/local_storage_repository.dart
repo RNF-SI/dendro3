@@ -7,4 +7,5 @@ abstract class LocalStorageRepository {
   Future<void> setLastSyncTimeForDispositif(
       int dispositifId, DateTime dateTime);
   Future<String?> getLastSyncTimeForDispositif(int dispositifId);
+  Future<int> getUserId();
 }

@@ -73,4 +73,11 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
     final String? lastSyncString = prefs.getString(key);
     return lastSyncString;
   }
+
+  @override
+  Future<int> getUserId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('userId');
+    return int.parse(userId!);
+  }
 }

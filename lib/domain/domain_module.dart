@@ -64,6 +64,8 @@ import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
@@ -305,3 +307,7 @@ final exportDispositifDataUseCaseProvider =
 
 final deleteDatabaseUseCaseProvider = Provider<DeleteDatabaseUseCase>((ref) =>
     DeleteDatabaseUseCaseImpl(ref.watch(globalDatabaseRepositoryProvider)));
+
+final getUserIdFromLocalStorageUseCaseProvider =
+    Provider<GetUserIdFromLocalStorageUseCase>((ref) =>
+        GetUserIdFromLocalStorageUseCaseImpl(ref.watch(localStorageProvider)));
