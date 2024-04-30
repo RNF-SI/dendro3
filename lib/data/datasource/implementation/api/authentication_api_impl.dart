@@ -15,6 +15,7 @@ class AuthenticationApiImpl implements AuthenticationApi {
       'id_application': 1
     };
 
+    var apiBase = Config.apiBase;
     Response response = await Dio().post("$apiBase/auth/login",
         options: Options(headers: {
           HttpHeaders.contentTypeHeader: "application/json",

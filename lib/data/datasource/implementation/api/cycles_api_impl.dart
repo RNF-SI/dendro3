@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 class CyclesApiImpl implements CyclesApi {
   @override
   Future<CycleListEntity> getDispositifCycles(final int dispId) async {
+    var apiBase = Config.apiBase;
     Response response =
         await Dio().get("$apiBase/psdrf/dispositif-cycles/$dispId");
     CycleListEntity dispListEnt = [];

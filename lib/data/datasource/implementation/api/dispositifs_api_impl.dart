@@ -8,6 +8,8 @@ import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
 
 class DispositifsApiImpl implements DispositifsApi {
+  final String apiBase = Config.apiBase;
+
   @override
   Future<DispositifListEntity> getAllDispositifs() async {
     Response response = await Dio().get("$apiBase/psdrf/dispositifsList");
