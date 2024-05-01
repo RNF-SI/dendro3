@@ -47,10 +47,14 @@ class _ChiffresWidgetState extends State<ChiffresWidget> {
           constraints: const BoxConstraints(minHeight: 40.0, minWidth: 90.0),
           children: _generateCircleAvatars(widget.cycleList!),
         ),
-        ..._buildGridText(
-          widget.cycleList![
-              cycleSelected.indexWhere((bool selected) => selected)],
-        ),
+        // display if cycleList is not empty else display info about no cycle was defined
+        if (widget.cycleList?.length != 0)
+          ..._buildGridText(
+            widget.cycleList![
+                cycleSelected.indexWhere((bool selected) => selected)],
+          ),
+        if (widget.cycleList?.length == 0)
+          const Text("Aucun cycle n'a été défini pour ce dispositif"),
       ],
     );
   }
