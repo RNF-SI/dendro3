@@ -57,7 +57,7 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
 
     final dispositifEntity = await api.getDispositifFromId(dispositifId);
     final mappedDispositif =
-        DispositifMapper.transformFromApiToModel(dispositifEntity);
+        DispositifMapper.transformFromApiToModel(dispositifEntity["data"]);
 
     final dispositifEntityFromDB = await database
         .insertDispositif(DispositifMapper.transformToMap(mappedDispositif));

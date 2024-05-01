@@ -46,13 +46,65 @@ class DispositifsApiImpl implements DispositifsApi {
     }
   }
 
+  // @override
+  // Future<DispositifEntity> getDispositifFromId(final int dispId) async {
+  //   Response response =
+  //       await Dio().get("$apiBase/psdrf/dispositif-complet/$dispId");
+  //   DispositifEntity dispEnt = {};
+  //   response.data.forEach((k, v) => {dispEnt[k] = v});
+  //   return dispEnt;
+  // }
+
   @override
   Future<DispositifEntity> getDispositifFromId(final int dispId) async {
-    Response response =
-        await Dio().get("$apiBase/psdrf/dispositif-complet/$dispId");
-    DispositifEntity dispEnt = {};
-    response.data.forEach((k, v) => {dispEnt[k] = v});
-    return dispEnt;
+    final url = "$apiBase/psdrf/dispositif-complet/$dispId";
+    try {
+      final response = await Dio().get(url);
+      if (response.statusCode == 202) {
+        final taskId = response.data['task_id'];
+        return pollTaskForDispositif(taskId);
+      } else {
+        throw Exception('Failed to initiate task: ${response.statusCode}');
+      }
+    } on DioException catch (err) {
+      throw Exception(
+          'Error retrieving dispositif: ${err.response?.statusMessage}');
+    }
+  }
+
+  Future<DispositifEntity> pollTaskForDispositif(String taskId) async {
+    final statusUrl = "$apiBase/psdrf/dispositif-complet/status/$taskId";
+    while (true) {
+      final statusResponse = await Dio().get(statusUrl);
+      if (statusResponse.statusCode == 200 &&
+          statusResponse.data['state'] == 'SUCCESS') {
+        return fetchDispositifResult(taskId);
+      } else if (statusResponse.data['state'] == 'FAILURE') {
+        throw Exception(
+            'Task failed with error: ${statusResponse.data['status']}');
+      } else if (statusResponse.statusCode == 202) {
+        // Task is still processing, continue polling
+        print('Task is still processing, waiting to retry...');
+      } else {
+        // Handle unexpected response status
+        throw Exception(
+            'Unexpected response status: ${statusResponse.statusCode}');
+      }
+      await Future.delayed(Duration(seconds: 20)); // Wait before polling again
+    }
+  }
+
+  Future<DispositifEntity> fetchDispositifResult(String taskId) async {
+    final resultUrl = "$apiBase/psdrf/dispositif-complet/result/$taskId";
+    final resultResponse = await Dio().get(resultUrl);
+    if (resultResponse.statusCode == 200) {
+      DispositifEntity dispEnt = {};
+      resultResponse.data.forEach((k, v) => {dispEnt[k] = v});
+      return dispEnt;
+    } else {
+      throw Exception(
+          'Failed to fetch dispositif result: ${resultResponse.statusCode}');
+    }
   }
 
   @override
