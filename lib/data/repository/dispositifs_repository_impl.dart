@@ -47,15 +47,15 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
     return DispositifListMapper.transformToModel(dispositifListEntity);
   }
 
-  @override
   Future<Dispositif> downloadDispositifData(
     final int dispositifId,
+    Function(double) onProgressUpdate,
   ) async {
-    // Store the current time as the last sync time for this dispositif
     await _localStorageRepository.setLastSyncTimeForDispositif(
         dispositifId, DateTime.now());
 
-    final dispositifEntity = await api.getDispositifFromId(dispositifId);
+    final dispositifEntity =
+        await api.getDispositifFromId(dispositifId, onProgressUpdate);
     final mappedDispositif =
         DispositifMapper.transformFromApiToModel(dispositifEntity["data"]);
 

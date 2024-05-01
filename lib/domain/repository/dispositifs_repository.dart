@@ -13,6 +13,7 @@ abstract class DispositifsRepository {
   );
   Future<void> downloadDispositifData(
     final int id,
+    Function(double) onProgressUpdate,
   );
   Future<Dispositif> createDispositif(
     final String name,

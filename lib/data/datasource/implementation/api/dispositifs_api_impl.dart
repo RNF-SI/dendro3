@@ -55,14 +55,14 @@ class DispositifsApiImpl implements DispositifsApi {
   //   return dispEnt;
   // }
 
-  @override
-  Future<DispositifEntity> getDispositifFromId(final int dispId) async {
+  Future<DispositifEntity> getDispositifFromId(
+      final int dispId, Function(double) onProgressUpdate) async {
     final url = "$apiBase/psdrf/dispositif-complet/$dispId";
     try {
       final response = await Dio().get(url);
       if (response.statusCode == 202) {
         final taskId = response.data['task_id'];
-        return pollTaskForDispositif(taskId);
+        return pollTaskForDispositif(taskId, onProgressUpdate);
       } else {
         throw Exception('Failed to initiate task: ${response.statusCode}');
       }
@@ -72,21 +72,30 @@ class DispositifsApiImpl implements DispositifsApi {
     }
   }
 
-  Future<DispositifEntity> pollTaskForDispositif(String taskId) async {
+  Future<DispositifEntity> pollTaskForDispositif(
+      String taskId, Function(double) onProgressUpdate) async {
     final statusUrl = "$apiBase/psdrf/dispositif-complet/status/$taskId";
+    double progress = 0.0;
+    const int maxSteps = 30;
+    int currentStep = 0;
+
     while (true) {
       final statusResponse = await Dio().get(statusUrl);
       if (statusResponse.statusCode == 200 &&
           statusResponse.data['state'] == 'SUCCESS') {
+        onProgressUpdate(1.0); // Full progress when completed
         return fetchDispositifResult(taskId);
       } else if (statusResponse.data['state'] == 'FAILURE') {
         throw Exception(
             'Task failed with error: ${statusResponse.data['status']}');
       } else if (statusResponse.statusCode == 202) {
-        // Task is still processing, continue polling
-        print('Task is still processing, waiting to retry...');
+        progress = currentStep / maxSteps;
+        progress = progress < 1.0
+            ? progress
+            : 0.95; // Never reach full progress unless completed
+        onProgressUpdate(progress);
+        currentStep++;
       } else {
-        // Handle unexpected response status
         throw Exception(
             'Unexpected response status: ${statusResponse.statusCode}');
       }

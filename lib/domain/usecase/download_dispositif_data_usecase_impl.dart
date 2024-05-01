@@ -10,7 +10,8 @@ class DownloadDispositifDataUseCaseImpl
   @override
   Future<void> execute(
     final int id,
+    Function(double) onProgressUpdate,
   ) {
-    return _repository.downloadDispositifData(id);
+    return _repository.downloadDispositifData(id, onProgressUpdate);
   }
 }

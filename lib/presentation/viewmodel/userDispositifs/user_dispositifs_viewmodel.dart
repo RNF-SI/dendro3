@@ -132,7 +132,8 @@ class UserDispositifsViewModel
     return false;
   }
 
-  downloadDispositif(final DispositifInfo dispositifInfo, context) async {
+  downloadDispositif(
+      final DispositifInfo dispositifInfo, BuildContext context) async {
     final id = dispositifInfo.dispositif.id;
     bool isConnected = await hasInternetConnection();
     if (!isConnected) {
@@ -140,24 +141,39 @@ class UserDispositifsViewModel
         content:
             Text("Téléchargement impossible: Connexion internet indisponible."),
       ));
-    } else {
-      // Internet connection is available, proceed with the download
-      try {
-        var newDispositifInfo =
-            dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloading);
-        state = custom_async_state.State.success(
-            state.data!.updateDispositifInfo(newDispositifInfo));
-        await _downloadDispositifDataUseCase.execute(id);
+      return;
+    }
+
+    // Initially set the state to downloading
+    var newDispositifInfo = dispositifInfo.copyWith(
+        downloadStatus: DownloadStatus.downloading,
+        downloadProgress: 0.0 // Explicitly set progress to 0 on start
+        );
+    state = custom_async_state.State.success(
+        state.data!.updateDispositifInfo(newDispositifInfo));
+
+    try {
+      await _downloadDispositifDataUseCase.execute(id, (double progress) {
+        // Directly update state inside the callback to reflect real-time progress
         newDispositifInfo =
-            dispositifInfo.copyWith(downloadStatus: DownloadStatus.downloaded);
+            newDispositifInfo.copyWith(downloadProgress: progress);
         state = custom_async_state.State.success(
             state.data!.updateDispositifInfo(newDispositifInfo));
-      } on Exception catch (e) {
-        state = custom_async_state.State.error(e);
-      } catch (e) {
-        print(e);
-        state = custom_async_state.State.error(Exception(e));
-      }
+      });
+
+      // Once download is complete, update the state to reflect this
+      newDispositifInfo = newDispositifInfo.copyWith(
+          downloadStatus: DownloadStatus.downloaded,
+          downloadProgress:
+              1.0 // Ensure progress is set to 100% when downloaded
+          );
+      state = custom_async_state.State.success(
+          state.data!.updateDispositifInfo(newDispositifInfo));
+    } on Exception catch (e) {
+      state = custom_async_state.State.error(e);
+    } catch (e) {
+      print(e);
+      state = custom_async_state.State.error(Exception(e));
     }
   }
 

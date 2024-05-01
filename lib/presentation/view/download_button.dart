@@ -101,29 +101,26 @@ class DownloadButton extends HookConsumerWidget {
                   isDownloading: _isDownloading,
                   isFetching: _isFetching,
                   isRemoving: _isRemoving,
+                  downloadProgress: dispInfo.downloadProgress,
                 ),
-                Positioned.fill(
-                  child: AnimatedOpacity(
-                    duration: transitionDuration,
-                    opacity: _isDownloading || _isFetching ? 1.0 : 0.0,
-                    curve: Curves.ease,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ProgressIndicatorWidget(
-                          isDownloading: _isDownloading,
-                          isFetching: _isFetching,
-                        ),
-                        if (_isDownloading)
-                          const Icon(
-                            Icons.stop,
-                            size: 14,
-                            color: colorGreen,
+                if (_isDownloading || _isFetching)
+                  Positioned.fill(
+                    child: AnimatedOpacity(
+                      duration: transitionDuration,
+                      opacity: _isDownloading || _isFetching ? 1.0 : 0.0,
+                      curve: Curves.ease,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ProgressIndicatorWidget(
+                            isDownloading: _isDownloading,
+                            isFetching: _isFetching,
+                            progress: dispInfo.downloadProgress,
                           ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           );
@@ -140,11 +137,13 @@ class ButtonShapeWidget extends StatelessWidget {
     required this.isFetching,
     required this.isRemoving,
     required this.transitionDuration,
+    this.downloadProgress = 0.0,
   });
 
   final bool isDownloading;
   final bool isDownloaded;
   final bool isFetching;
+  final double downloadProgress;
   final Duration transitionDuration;
   final bool isRemoving;
 
@@ -162,8 +161,14 @@ class ButtonShapeWidget extends StatelessWidget {
       );
     }
 
+    // Update button text based on the state
     String buttonText = isDownloaded ? 'OPEN' : 'GET';
-    if (isRemoving) {
+    if (isDownloading) {
+      if (downloadProgress == 1.0) {
+        buttonText = '${(downloadProgress * 99).toInt()}%';
+      } else
+        buttonText = '${(downloadProgress * 100).toInt()}%';
+    } else if (isRemoving) {
       buttonText = 'REMOVING...'; // New text for the removing state
     }
 
@@ -176,7 +181,9 @@ class ButtonShapeWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: AnimatedOpacity(
           duration: transitionDuration,
-          opacity: isDownloading || isFetching ? 0.0 : 1.0,
+          opacity: isDownloading || isFetching
+              ? 0.5
+              : 1.0, // Slight opacity change when downloading
           curve: Curves.ease,
           child: Text(
             buttonText,
@@ -196,10 +203,12 @@ class ButtonShapeWidget extends StatelessWidget {
 class ProgressIndicatorWidget extends StatelessWidget {
   const ProgressIndicatorWidget({
     super.key,
+    this.progress = 0.0,
     required this.isDownloading,
     required this.isFetching,
   });
 
+  final double progress;
   final bool isDownloading;
   final bool isFetching;
 
@@ -212,6 +221,7 @@ class ProgressIndicatorWidget extends StatelessWidget {
           valueColor: AlwaysStoppedAnimation(
             isFetching ? colorBlue1 : colorGreen,
           ),
+          value: isDownloading ? (progress == 1.0 ? 0.99 : progress) : null,
           strokeWidth: 2,
         ));
   }
