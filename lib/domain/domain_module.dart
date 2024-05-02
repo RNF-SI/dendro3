@@ -60,6 +60,8 @@ import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dar
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_terminal_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_terminal_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
@@ -78,6 +80,8 @@ import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case.dart';
@@ -330,4 +334,14 @@ final getUserNameFromLocalStorageUseCaseProvider =
 final setUserNameFromLocalStorageUseCaseProvider =
     Provider<SetUserNameFromLocalStorageUseCase>((ref) =>
         SetUserNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final setTerminalNameFromLocalStorageUseCaseProvider =
+    Provider<SetTerminalNameFromLocalStorageUseCase>((ref) =>
+        SetTerminalNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final getTerminalNameFromLocalStorageUseCaseProvider =
+    Provider<GetTerminalNameFromLocalStorageUseCase>((ref) =>
+        GetTerminalNameFromLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));

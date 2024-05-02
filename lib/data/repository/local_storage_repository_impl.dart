@@ -95,4 +95,14 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   Future<String?> getUserName() async {
     return _preferences?.getString('userName');
   }
+
+  @override
+  Future<void> setTerminalName(String terminalName) async {
+    await _preferences?.setString('terminalName', terminalName);
+  }
+
+  @override
+  Future<String?> getTerminalName() async {
+    return _preferences?.getString('terminalName');
+  }
 }
