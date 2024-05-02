@@ -54,6 +54,8 @@ import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
+import 'package:dendro3/domain/usecase/get_is_logged_in_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_is_logged_in_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
@@ -80,6 +82,8 @@ import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
@@ -344,4 +348,14 @@ final setTerminalNameFromLocalStorageUseCaseProvider =
 final getTerminalNameFromLocalStorageUseCaseProvider =
     Provider<GetTerminalNameFromLocalStorageUseCase>((ref) =>
         GetTerminalNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final setIsLoggedInFromLocalStorageUseCaseProvider =
+    Provider<SetIsLoggedInFromLocalStorageUseCase>((ref) =>
+        SetIsLoggedInFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final getIsLoggedInFromLocalStorageUseCaseProvider =
+    Provider<GetIsLoggedInFromLocalStorageUseCase>((ref) =>
+        GetIsLoggedInFromLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));
