@@ -66,6 +66,8 @@ import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/get_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_user_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
@@ -76,6 +78,10 @@ import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
@@ -311,3 +317,17 @@ final deleteDatabaseUseCaseProvider = Provider<DeleteDatabaseUseCase>((ref) =>
 final getUserIdFromLocalStorageUseCaseProvider =
     Provider<GetUserIdFromLocalStorageUseCase>((ref) =>
         GetUserIdFromLocalStorageUseCaseImpl(ref.watch(localStorageProvider)));
+
+final setUserIdFromLocalStorageUseCaseProvider =
+    Provider<SetUserIdFromLocalStorageUseCase>((ref) =>
+        SetUserIdFromLocalStorageUseCaseImpl(ref.watch(localStorageProvider)));
+
+final getUserNameFromLocalStorageUseCaseProvider =
+    Provider<GetUserNameFromLocalStorageUseCase>((ref) =>
+        GetUserNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final setUserNameFromLocalStorageUseCaseProvider =
+    Provider<SetUserNameFromLocalStorageUseCase>((ref) =>
+        SetUserNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));

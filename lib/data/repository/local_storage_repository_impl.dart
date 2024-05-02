@@ -80,4 +80,19 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
     final String? userId = prefs.getString('userId');
     return int.parse(userId!);
   }
+
+  @override
+  Future<void> setUserId(int userId) async {
+    await _preferences?.setString('userId', userId.toString());
+  }
+
+  @override
+  Future<void> setUserName(String userName) async {
+    await _preferences?.setString('userName', userName);
+  }
+
+  @override
+  Future<String?> getUserName() async {
+    return _preferences?.getString('userName');
+  }
 }
