@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
@@ -32,7 +33,8 @@ final authenticationViewModelProvider =
       ref.watch(loginUseCaseProvider),
       ref.watch(setUserIdFromLocalStorageUseCaseProvider),
       ref.watch(setUserNameFromLocalStorageUseCaseProvider),
-      ref.watch(setTerminalNameFromLocalStorageUseCaseProvider));
+      ref.watch(setTerminalNameFromLocalStorageUseCaseProvider),
+      ref.watch(setIsLoggedInFromLocalStorageUseCaseProvider));
 });
 
 class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
@@ -48,12 +50,15 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
   final SetUserNameFromLocalStorageUseCase _setUserNameFromLocalStorageUseCase;
   final SetTerminalNameFromLocalStorageUseCase
       _setTerminalNameFromLocalStorageUseCase;
+  final SetIsLoggedInFromLocalStorageUseCase
+      _setIsLoggedInFromLocalStorageUseCase;
 
   AuthenticationViewModel(
     this._loginUseCase,
     this._setUserIdFromLocalStorageUseCase,
     this._setUserNameFromLocalStorageUseCase,
     this._setTerminalNameFromLocalStorageUseCase,
+    this._setIsLoggedInFromLocalStorageUseCase,
   ) : super(const dendroState.State.init()) {
     controller.add(user);
   }
@@ -75,15 +80,17 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
         await _setTerminalNameFromLocalStorageUseCase.execute();
 
         try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+          // Set logged in status using use case
+          await _setIsLoggedInFromLocalStorageUseCase.execute(true);
+          print("isLoggedIn set to: true"); // Added for debugging purposes
 
-          await prefs.setBool('isLoggedIn', true);
-          print("isLoggedIn set to: ${await prefs.getBool('isLoggedIn')}");
-          // Save the user's name. Replace `user.name` with the actual property that holds the user's name in your User model.
-          _setUserIdFromLocalStorageUseCase.execute(user.id);
-          _setUserNameFromLocalStorageUseCase.execute(identifiant);
+          // Save the user's ID and name using respective use cases
+          await _setUserIdFromLocalStorageUseCase.execute(user.id);
+          await _setUserNameFromLocalStorageUseCase.execute(identifiant);
           print(
               'Login state and user name saved'); // Added for debugging purposes
+
+          // Refresh UI or state management solution
           ref.refresh(isLoggedInProvider);
           state = dendroState.State.success(user);
         } catch (e) {
