@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/presentation/viewmodel/auth/auth_viewmodel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/model/user.dart';
 

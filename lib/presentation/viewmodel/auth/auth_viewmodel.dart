@@ -22,7 +22,6 @@ import 'package:dendro3/domain/usecase/login_usecase.dart';
 
 import 'package:dendro3/domain/model/user.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Pour le Checker
 final authStateProvider = StreamProvider<User?>((ref) {

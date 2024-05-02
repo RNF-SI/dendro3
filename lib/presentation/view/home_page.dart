@@ -1,6 +1,7 @@
 // import 'package:authentication_riverpod/providers/auth_provider.dart';
 import 'dart:io';
 
+import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/presentation/view/login_page.dart';
 import 'package:dendro3/presentation/view/user_dispositif_list.dart';
 import 'package:dendro3/presentation/viewmodel/auth/auth_viewmodel.dart';
@@ -34,9 +35,10 @@ class HomePage extends ConsumerWidget {
                   .read(
                       userDispositifListViewModelStateNotifierProvider.notifier)
                   .refreshDispositifs();
-              String deviceName = await getDeviceName();
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.setString('terminalName', deviceName);
+              // Save the device name in shared preferences
+              await ref
+                  .read(setTerminalNameFromLocalStorageUseCaseProvider)
+                  .execute();
             },
           ),
           IconButton(
@@ -57,22 +59,6 @@ class HomePage extends ConsumerWidget {
         child: UserDispositifList(),
       ),
     );
-  }
-
-  Future<String> getDeviceName() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    try {
-      if (Platform.isAndroid) {
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        return '${androidInfo.brand} ${androidInfo.model} - Android ${androidInfo.version.release}';
-      } else if (Platform.isIOS) {
-        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        return '${iosInfo.utsname.machine} - iOS ${iosInfo.systemVersion}';
-      }
-    } catch (e) {
-      print('Failed to get device info: $e');
-    }
-    return 'Unknown Device';
   }
 
   void _confirmDelete(BuildContext context, DatabaseService databaseService,
