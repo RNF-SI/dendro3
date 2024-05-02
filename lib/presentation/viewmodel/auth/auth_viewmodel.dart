@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case.dart';
 
 import 'package:dendro3/presentation/state/state.dart' as dendroState;
 import 'package:dendro3/presentation/view/auth_checker.dart';
@@ -25,6 +28,8 @@ final authenticationViewModelProvider =
     Provider<AuthenticationViewModel>((ref) {
   return AuthenticationViewModel(
     ref.watch(loginUseCaseProvider),
+    ref.watch(setUserIdFromLocalStorageUseCaseProvider),
+    ref.watch(setUserNameFromLocalStorageUseCaseProvider),
   );
 });
 
@@ -37,9 +42,14 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
   StreamController<User?> controller = StreamController<User?>();
 
   final LoginUseCase _loginUseCase;
+  final SetUserIdFromLocalStorageUseCase _setUserIdFromLocalStorageUseCase;
+  final SetUserNameFromLocalStorageUseCase _setUserNameFromLocalStorageUseCase;
 
-  AuthenticationViewModel(this._loginUseCase)
-      : super(const dendroState.State.init()) {
+  AuthenticationViewModel(
+    this._loginUseCase,
+    this._setUserIdFromLocalStorageUseCase,
+    this._setUserNameFromLocalStorageUseCase,
+  ) : super(const dendroState.State.init()) {
     controller.add(user);
   }
 
@@ -81,14 +91,8 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
           await prefs.setBool('isLoggedIn', true);
           print("isLoggedIn set to: ${await prefs.getBool('isLoggedIn')}");
           // Save the user's name. Replace `user.name` with the actual property that holds the user's name in your User model.
-          await prefs.setString(
-            'userName',
-            identifiant,
-          ); // Assuming 'user.name' holds the name of the user
-          await prefs.setString(
-            'userId',
-            user.id.toString(),
-          );
+          _setUserIdFromLocalStorageUseCase.execute(user.id);
+          _setUserNameFromLocalStorageUseCase.execute(identifiant);
           print(
               'Login state and user name saved'); // Added for debugging purposes
           ref.refresh(isLoggedInProvider);
