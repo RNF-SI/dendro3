@@ -1,6 +1,5 @@
 // List that can be displayed in the SaisieDataTable Component
 import 'package:dendro3/core/types/saisie_data_table_types.dart';
-import 'package:dendro3/domain/model/saisisable_object.dart';
 
 abstract class DisplayableList {
   List<Map<String, dynamic>> getObjectMapped({
@@ -10,7 +9,7 @@ abstract class DisplayableList {
 
   getObjectFromId(final String id);
 
-  getFirstElementIdOrig();
+  getFirstElementId();
 
   bool isEmpty();
 }
@@ -32,7 +31,7 @@ class EmptyDisplayableList extends DisplayableList {
   }
 
   @override
-  getFirstElementIdOrig() {
+  getFirstElementId() {
     // Return null or an appropriate default value.
     return null;
   }

@@ -1,10 +1,9 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/transects_database.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
-import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TransectsDatabaseImpl implements TransectsDatabase {
@@ -34,31 +33,31 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   }
 
   static Future<Map<String, List<TransectEntity>>>
-      getCorCyclePlacetteTransectsForDataSync(Database db,
+      getCorCyclePlacetteTransectsForDataSync(Transaction txn,
           final String corCyclePlacetteId, String lastSyncTime) async {
-    var created_transects = await db.query(
+    var createdTransects = await txn.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_cycle_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
-    var updated_transects = await db.query(
+    var updatedTransects = await txn.query(
       _tableName,
       where:
-          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_cycle_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
-    var deleted_transects = await db.query(
+    var deletedTransects = await txn.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_cycle_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
     return {
-      "created": created_transects,
-      "updated": updated_transects,
-      "deleted": deleted_transects,
+      "created": createdTransects,
+      "updated": updatedTransects,
+      "deleted": deletedTransects,
     };
   }
 
@@ -67,10 +66,27 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   Future<TransectEntity> addTransect(final TransectEntity transect) async {
     final db = await database;
     late final TransectEntity transectEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.transaction((txn) async {
       String transectUuid = generateUuid();
-
       transect['id_transect'] = transectUuid;
+
+      int? maxIdOrig = Sqflite.firstIntValue(await txn.rawQuery(
+              'SELECT MAX(id_transect_orig) FROM $_tableName WHERE id_cycle_placette = ?',
+              [transect['id_cycle_placette']])) ??
+          0;
+      transect['id_transect_orig'] = maxIdOrig + 1;
+      // Par défaut created_at et update_at sont remplies.
+      transect['created_by'] = userName; // Set created_by
+      transect['updated_by'] = userName; // Set updated_by on creation as well
+      transect['created_on'] = terminalName;
+      transect['updated_on'] = terminalName;
+      transect['created_at'] = formattedDate;
+      transect['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,
@@ -89,10 +105,16 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   // Function called when one arbre is updated (not updating arbre mesure)
   Future<TransectEntity> updateTransect(final TransectEntity transect) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final TransectEntity transectEntity;
     await db.transaction((txn) async {
       var updatedTransect = Map<String, dynamic>.from(transect)
-        ..['last_update'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,
@@ -111,9 +133,18 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   @override
   Future<void> deleteTransect(String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -122,9 +153,18 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   @override
   Future<void> deleteTransectsForCorCyclePlacette(String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: 'id_cycle_placette = ?',
       whereArgs: [id],
     );
@@ -150,5 +190,4 @@ class TransectsDatabaseImpl implements TransectsDatabase {
   //     whereArgs: [id],
   //   );
   // }
-
 }

@@ -8,6 +8,7 @@ abstract class PlacettesDatabase {
   Future<List<PlacetteEntity>> getPlacettesByDispositifId(
       final int dispositifId);
   Future<void> deletePlacette(final int id);
+  Future<PlacetteEntity> updatePlacette(final PlacetteEntity placetteEntity);
   // Future<void> updatePlacette(final PlacetteEntity placetteEntity);
   // Future<void> deletePlacette(final int id);
 }

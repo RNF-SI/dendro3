@@ -1,7 +1,4 @@
-import 'dart:ffi';
 
-import 'package:dendro3/domain/model/cycle_list.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'nomenclatureType.freezed.dart';

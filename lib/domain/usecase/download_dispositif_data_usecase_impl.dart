@@ -1,4 +1,3 @@
-import 'package:dendro3/domain/model/dispositif_list.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 
@@ -11,7 +10,8 @@ class DownloadDispositifDataUseCaseImpl
   @override
   Future<void> execute(
     final int id,
+    Function(double) onProgressUpdate,
   ) {
-    return _repository.downloadDispositifData(id);
+    return _repository.downloadDispositifData(id, onProgressUpdate);
   }
 }

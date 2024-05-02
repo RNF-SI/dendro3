@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'transect_id.dart';
 
@@ -12,7 +12,7 @@ part of 'transect_id.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$TransectId {
@@ -57,22 +57,22 @@ class _$TransectIdCopyWithImpl<$Res, $Val extends TransectId>
 }
 
 /// @nodoc
-abstract class _$$_TransectIdCopyWith<$Res>
+abstract class _$$TransectIdImplCopyWith<$Res>
     implements $TransectIdCopyWith<$Res> {
-  factory _$$_TransectIdCopyWith(
-          _$_TransectId value, $Res Function(_$_TransectId) then) =
-      __$$_TransectIdCopyWithImpl<$Res>;
+  factory _$$TransectIdImplCopyWith(
+          _$TransectIdImpl value, $Res Function(_$TransectIdImpl) then) =
+      __$$TransectIdImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int value});
 }
 
 /// @nodoc
-class __$$_TransectIdCopyWithImpl<$Res>
-    extends _$TransectIdCopyWithImpl<$Res, _$_TransectId>
-    implements _$$_TransectIdCopyWith<$Res> {
-  __$$_TransectIdCopyWithImpl(
-      _$_TransectId _value, $Res Function(_$_TransectId) _then)
+class __$$TransectIdImplCopyWithImpl<$Res>
+    extends _$TransectIdCopyWithImpl<$Res, _$TransectIdImpl>
+    implements _$$TransectIdImplCopyWith<$Res> {
+  __$$TransectIdImplCopyWithImpl(
+      _$TransectIdImpl _value, $Res Function(_$TransectIdImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_TransectIdCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
   }) {
-    return _then(_$_TransectId(
+    return _then(_$TransectIdImpl(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -91,8 +91,8 @@ class __$$_TransectIdCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_TransectId implements _TransectId {
-  const _$_TransectId({required this.value});
+class _$TransectIdImpl implements _TransectId {
+  const _$TransectIdImpl({required this.value});
 
   @override
   final int value;
@@ -103,10 +103,10 @@ class _$_TransectId implements _TransectId {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TransectId &&
+            other is _$TransectIdImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -116,17 +116,17 @@ class _$_TransectId implements _TransectId {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TransectIdCopyWith<_$_TransectId> get copyWith =>
-      __$$_TransectIdCopyWithImpl<_$_TransectId>(this, _$identity);
+  _$$TransectIdImplCopyWith<_$TransectIdImpl> get copyWith =>
+      __$$TransectIdImplCopyWithImpl<_$TransectIdImpl>(this, _$identity);
 }
 
 abstract class _TransectId implements TransectId {
-  const factory _TransectId({required final int value}) = _$_TransectId;
+  const factory _TransectId({required final int value}) = _$TransectIdImpl;
 
   @override
   int get value;
   @override
   @JsonKey(ignore: true)
-  _$$_TransectIdCopyWith<_$_TransectId> get copyWith =>
+  _$$TransectIdImplCopyWith<_$TransectIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,9 +1,4 @@
-import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/dispositif.dart';
-import 'package:dendro3/domain/model/dispositif_list.dart';
-import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 
 abstract class ArbresMesuresRepository {
   Future<ArbreMesure> insertArbreMesure(
@@ -54,11 +49,6 @@ abstract class ArbresMesuresRepository {
     final String idArbre,
     final int? idCycle,
     int? numCycle,
-  );
-
-  Future<ArbreMesure> updateLastArbreMesureCoupe(
-    final String idArbreMesure,
-    final String? coupe,
   );
 
   Future<void> deleteArbreMesureFromIdArbre(final String idArbre);

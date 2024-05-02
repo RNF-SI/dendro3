@@ -1,13 +1,16 @@
 import 'package:dendro3/domain/domain_module.dart';
-import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider.dart';
-import 'package:dendro3/domain/usecase/is_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
-import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum CorCyclePlacetteStatus { finished, started, notStarted }
+
+final corCyclePlacetteLocalStorageListProvider = Provider<List<String>?>((ref) {
+  final state =
+      ref.watch(corCyclePlacetteLocalStorageStatusStateNotifierProvider);
+  return state;
+});
 
 final corCyclePlacetteLocalStorageStatusStateNotifierProvider =
     StateNotifierProvider<CorCyclePlacetteLocalStorageStatusNotifier,
@@ -45,6 +48,11 @@ class CorCyclePlacetteLocalStorageStatusNotifier
   Future<void> completeCycle(String idCyclePlacette) async {
     await _completeCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
     state = List.from(state)..remove(idCyclePlacette);
+  }
+
+  Future<void> unCompleteCycle(String idCyclePlacette) async {
+    await _setCyclePlacetteCreatedUseCaseProvider.execute(idCyclePlacette);
+    state = List.from(state)..add(idCyclePlacette);
   }
 
   bool isCyclePlacetteInProgress(String idCyclePlacette) =>

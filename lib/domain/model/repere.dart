@@ -90,24 +90,36 @@ class Repere with _$Repere implements SaisisableObject {
     ].contains(columnName);
   }
 
-  static List<String> changeColumnName(List<String> columnNames) {
+  static List<Map<String, dynamic>> changeColumnName(List<String> columnNames) {
+    String displayName;
+    bool isVisible;
+
     return columnNames.map((columnName) {
+      isVisible = true;
       switch (columnName) {
         case 'idRepere':
-          return 'id';
+          displayName = 'id';
+          // isVisible = false;
+          break;
         case 'azimut':
-          return 'Azimut';
+          displayName = 'Azimut';
+          break;
         case 'distance':
-          return 'Dist';
+          displayName = 'Dist';
+          break;
         case 'diametre':
-          return 'Diam';
+          displayName = 'Diam';
+          break;
         case 'repere':
-          return 'Repere';
+          displayName = 'Repere';
+          break;
         case 'observation':
-          return 'Obs';
+          displayName = 'Obs';
+          break;
         default:
-          return columnName;
+          displayName = columnName;
       }
+      return {'title': displayName, 'visible': isVisible};
     }).toList();
   }
 
@@ -115,7 +127,7 @@ class Repere with _$Repere implements SaisisableObject {
     return columnNames.map((columnName) {
       switch (columnName) {
         case 'idRepere':
-          return 'id';
+          return 'idRepere';
         case 'azimut':
           return 'Azimut';
         case 'distance':

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'dispositifInfo.dart';
 
@@ -12,12 +12,13 @@ part of 'dispositifInfo.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$DispositifInfo {
   Dispositif get dispositif => throw _privateConstructorUsedError;
   DownloadStatus get downloadStatus => throw _privateConstructorUsedError;
+  double get downloadProgress => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DispositifInfoCopyWith<DispositifInfo> get copyWith =>
@@ -30,7 +31,10 @@ abstract class $DispositifInfoCopyWith<$Res> {
           DispositifInfo value, $Res Function(DispositifInfo) then) =
       _$DispositifInfoCopyWithImpl<$Res, DispositifInfo>;
   @useResult
-  $Res call({Dispositif dispositif, DownloadStatus downloadStatus});
+  $Res call(
+      {Dispositif dispositif,
+      DownloadStatus downloadStatus,
+      double downloadProgress});
 
   $DispositifCopyWith<$Res> get dispositif;
 }
@@ -50,6 +54,7 @@ class _$DispositifInfoCopyWithImpl<$Res, $Val extends DispositifInfo>
   $Res call({
     Object? dispositif = null,
     Object? downloadStatus = null,
+    Object? downloadProgress = null,
   }) {
     return _then(_value.copyWith(
       dispositif: null == dispositif
@@ -60,6 +65,10 @@ class _$DispositifInfoCopyWithImpl<$Res, $Val extends DispositifInfo>
           ? _value.downloadStatus
           : downloadStatus // ignore: cast_nullable_to_non_nullable
               as DownloadStatus,
+      downloadProgress: null == downloadProgress
+          ? _value.downloadProgress
+          : downloadProgress // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 
@@ -73,25 +82,28 @@ class _$DispositifInfoCopyWithImpl<$Res, $Val extends DispositifInfo>
 }
 
 /// @nodoc
-abstract class _$$_DispositifInfoCopyWith<$Res>
+abstract class _$$DispositifInfoImplCopyWith<$Res>
     implements $DispositifInfoCopyWith<$Res> {
-  factory _$$_DispositifInfoCopyWith(
-          _$_DispositifInfo value, $Res Function(_$_DispositifInfo) then) =
-      __$$_DispositifInfoCopyWithImpl<$Res>;
+  factory _$$DispositifInfoImplCopyWith(_$DispositifInfoImpl value,
+          $Res Function(_$DispositifInfoImpl) then) =
+      __$$DispositifInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Dispositif dispositif, DownloadStatus downloadStatus});
+  $Res call(
+      {Dispositif dispositif,
+      DownloadStatus downloadStatus,
+      double downloadProgress});
 
   @override
   $DispositifCopyWith<$Res> get dispositif;
 }
 
 /// @nodoc
-class __$$_DispositifInfoCopyWithImpl<$Res>
-    extends _$DispositifInfoCopyWithImpl<$Res, _$_DispositifInfo>
-    implements _$$_DispositifInfoCopyWith<$Res> {
-  __$$_DispositifInfoCopyWithImpl(
-      _$_DispositifInfo _value, $Res Function(_$_DispositifInfo) _then)
+class __$$DispositifInfoImplCopyWithImpl<$Res>
+    extends _$DispositifInfoCopyWithImpl<$Res, _$DispositifInfoImpl>
+    implements _$$DispositifInfoImplCopyWith<$Res> {
+  __$$DispositifInfoImplCopyWithImpl(
+      _$DispositifInfoImpl _value, $Res Function(_$DispositifInfoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -99,8 +111,9 @@ class __$$_DispositifInfoCopyWithImpl<$Res>
   $Res call({
     Object? dispositif = null,
     Object? downloadStatus = null,
+    Object? downloadProgress = null,
   }) {
-    return _then(_$_DispositifInfo(
+    return _then(_$DispositifInfoImpl(
       dispositif: null == dispositif
           ? _value.dispositif
           : dispositif // ignore: cast_nullable_to_non_nullable
@@ -109,52 +122,66 @@ class __$$_DispositifInfoCopyWithImpl<$Res>
           ? _value.downloadStatus
           : downloadStatus // ignore: cast_nullable_to_non_nullable
               as DownloadStatus,
+      downloadProgress: null == downloadProgress
+          ? _value.downloadProgress
+          : downloadProgress // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_DispositifInfo extends _DispositifInfo {
-  const _$_DispositifInfo(
-      {required this.dispositif, required this.downloadStatus})
+class _$DispositifInfoImpl extends _DispositifInfo {
+  const _$DispositifInfoImpl(
+      {required this.dispositif,
+      required this.downloadStatus,
+      this.downloadProgress = 0.0})
       : super._();
 
   @override
   final Dispositif dispositif;
   @override
   final DownloadStatus downloadStatus;
+  @override
+  @JsonKey()
+  final double downloadProgress;
 
   @override
   String toString() {
-    return 'DispositifInfo(dispositif: $dispositif, downloadStatus: $downloadStatus)';
+    return 'DispositifInfo(dispositif: $dispositif, downloadStatus: $downloadStatus, downloadProgress: $downloadProgress)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DispositifInfo &&
+            other is _$DispositifInfoImpl &&
             (identical(other.dispositif, dispositif) ||
                 other.dispositif == dispositif) &&
             (identical(other.downloadStatus, downloadStatus) ||
-                other.downloadStatus == downloadStatus));
+                other.downloadStatus == downloadStatus) &&
+            (identical(other.downloadProgress, downloadProgress) ||
+                other.downloadProgress == downloadProgress));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, dispositif, downloadStatus);
+  int get hashCode =>
+      Object.hash(runtimeType, dispositif, downloadStatus, downloadProgress);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DispositifInfoCopyWith<_$_DispositifInfo> get copyWith =>
-      __$$_DispositifInfoCopyWithImpl<_$_DispositifInfo>(this, _$identity);
+  _$$DispositifInfoImplCopyWith<_$DispositifInfoImpl> get copyWith =>
+      __$$DispositifInfoImplCopyWithImpl<_$DispositifInfoImpl>(
+          this, _$identity);
 }
 
 abstract class _DispositifInfo extends DispositifInfo {
   const factory _DispositifInfo(
       {required final Dispositif dispositif,
-      required final DownloadStatus downloadStatus}) = _$_DispositifInfo;
+      required final DownloadStatus downloadStatus,
+      final double downloadProgress}) = _$DispositifInfoImpl;
   const _DispositifInfo._() : super._();
 
   @override
@@ -162,7 +189,9 @@ abstract class _DispositifInfo extends DispositifInfo {
   @override
   DownloadStatus get downloadStatus;
   @override
+  double get downloadProgress;
+  @override
   @JsonKey(ignore: true)
-  _$$_DispositifInfoCopyWith<_$_DispositifInfo> get copyWith =>
+  _$$DispositifInfoImplCopyWith<_$DispositifInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

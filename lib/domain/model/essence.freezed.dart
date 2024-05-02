@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'essence.dart';
 
@@ -12,7 +12,7 @@ part of 'essence.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Essence {
@@ -91,10 +91,10 @@ class _$EssenceCopyWithImpl<$Res, $Val extends Essence>
 }
 
 /// @nodoc
-abstract class _$$_EssenceCopyWith<$Res> implements $EssenceCopyWith<$Res> {
-  factory _$$_EssenceCopyWith(
-          _$_Essence value, $Res Function(_$_Essence) then) =
-      __$$_EssenceCopyWithImpl<$Res>;
+abstract class _$$EssenceImplCopyWith<$Res> implements $EssenceCopyWith<$Res> {
+  factory _$$EssenceImplCopyWith(
+          _$EssenceImpl value, $Res Function(_$EssenceImpl) then) =
+      __$$EssenceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -107,10 +107,11 @@ abstract class _$$_EssenceCopyWith<$Res> implements $EssenceCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_EssenceCopyWithImpl<$Res>
-    extends _$EssenceCopyWithImpl<$Res, _$_Essence>
-    implements _$$_EssenceCopyWith<$Res> {
-  __$$_EssenceCopyWithImpl(_$_Essence _value, $Res Function(_$_Essence) _then)
+class __$$EssenceImplCopyWithImpl<$Res>
+    extends _$EssenceCopyWithImpl<$Res, _$EssenceImpl>
+    implements _$$EssenceImplCopyWith<$Res> {
+  __$$EssenceImplCopyWithImpl(
+      _$EssenceImpl _value, $Res Function(_$EssenceImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -123,7 +124,7 @@ class __$$_EssenceCopyWithImpl<$Res>
     Object? essReg = freezed,
     Object? couleur = freezed,
   }) {
-    return _then(_$_Essence(
+    return _then(_$EssenceImpl(
       codeEssence: null == codeEssence
           ? _value.codeEssence
           : codeEssence // ignore: cast_nullable_to_non_nullable
@@ -154,8 +155,8 @@ class __$$_EssenceCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Essence extends _Essence {
-  const _$_Essence(
+class _$EssenceImpl extends _Essence {
+  const _$EssenceImpl(
       {required this.codeEssence,
       this.cdNom,
       required this.nom,
@@ -183,10 +184,10 @@ class _$_Essence extends _Essence {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Essence &&
+            other is _$EssenceImpl &&
             (identical(other.codeEssence, codeEssence) ||
                 other.codeEssence == codeEssence) &&
             (identical(other.cdNom, cdNom) || other.cdNom == cdNom) &&
@@ -204,8 +205,8 @@ class _$_Essence extends _Essence {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EssenceCopyWith<_$_Essence> get copyWith =>
-      __$$_EssenceCopyWithImpl<_$_Essence>(this, _$identity);
+  _$$EssenceImplCopyWith<_$EssenceImpl> get copyWith =>
+      __$$EssenceImplCopyWithImpl<_$EssenceImpl>(this, _$identity);
 }
 
 abstract class _Essence extends Essence {
@@ -215,7 +216,7 @@ abstract class _Essence extends Essence {
       required final String nom,
       final String? nomLatin,
       final String? essReg,
-      final String? couleur}) = _$_Essence;
+      final String? couleur}) = _$EssenceImpl;
   const _Essence._() : super._();
 
   @override
@@ -232,6 +233,6 @@ abstract class _Essence extends Essence {
   String? get couleur;
   @override
   @JsonKey(ignore: true)
-  _$$_EssenceCopyWith<_$_Essence> get copyWith =>
+  _$$EssenceImplCopyWith<_$EssenceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

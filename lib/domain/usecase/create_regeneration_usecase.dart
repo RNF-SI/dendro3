@@ -1,5 +1,4 @@
 import 'package:dendro3/domain/model/regeneration.dart';
-import 'package:dendro3/domain/model/repere.dart';
 
 abstract class CreateRegenerationUseCase {
   Future<Regeneration> execute(

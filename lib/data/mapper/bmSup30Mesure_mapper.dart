@@ -39,7 +39,7 @@ class BmSup30MesureMapper {
       print("Error in BmSup30Mesure transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -70,7 +70,7 @@ class BmSup30MesureMapper {
       print("Error in BmSup30Mesure transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'arbre_id.dart';
 
@@ -12,7 +12,7 @@ part of 'arbre_id.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ArbreId {
@@ -55,20 +55,21 @@ class _$ArbreIdCopyWithImpl<$Res, $Val extends ArbreId>
 }
 
 /// @nodoc
-abstract class _$$_ArbreIdCopyWith<$Res> implements $ArbreIdCopyWith<$Res> {
-  factory _$$_ArbreIdCopyWith(
-          _$_ArbreId value, $Res Function(_$_ArbreId) then) =
-      __$$_ArbreIdCopyWithImpl<$Res>;
+abstract class _$$ArbreIdImplCopyWith<$Res> implements $ArbreIdCopyWith<$Res> {
+  factory _$$ArbreIdImplCopyWith(
+          _$ArbreIdImpl value, $Res Function(_$ArbreIdImpl) then) =
+      __$$ArbreIdImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int value});
 }
 
 /// @nodoc
-class __$$_ArbreIdCopyWithImpl<$Res>
-    extends _$ArbreIdCopyWithImpl<$Res, _$_ArbreId>
-    implements _$$_ArbreIdCopyWith<$Res> {
-  __$$_ArbreIdCopyWithImpl(_$_ArbreId _value, $Res Function(_$_ArbreId) _then)
+class __$$ArbreIdImplCopyWithImpl<$Res>
+    extends _$ArbreIdCopyWithImpl<$Res, _$ArbreIdImpl>
+    implements _$$ArbreIdImplCopyWith<$Res> {
+  __$$ArbreIdImplCopyWithImpl(
+      _$ArbreIdImpl _value, $Res Function(_$ArbreIdImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -76,7 +77,7 @@ class __$$_ArbreIdCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
   }) {
-    return _then(_$_ArbreId(
+    return _then(_$ArbreIdImpl(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -87,8 +88,8 @@ class __$$_ArbreIdCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ArbreId implements _ArbreId {
-  const _$_ArbreId({required this.value});
+class _$ArbreIdImpl implements _ArbreId {
+  const _$ArbreIdImpl({required this.value});
 
   @override
   final int value;
@@ -99,10 +100,10 @@ class _$_ArbreId implements _ArbreId {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ArbreId &&
+            other is _$ArbreIdImpl &&
             (identical(other.value, value) || other.value == value));
   }
 
@@ -112,17 +113,17 @@ class _$_ArbreId implements _ArbreId {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ArbreIdCopyWith<_$_ArbreId> get copyWith =>
-      __$$_ArbreIdCopyWithImpl<_$_ArbreId>(this, _$identity);
+  _$$ArbreIdImplCopyWith<_$ArbreIdImpl> get copyWith =>
+      __$$ArbreIdImplCopyWithImpl<_$ArbreIdImpl>(this, _$identity);
 }
 
 abstract class _ArbreId implements ArbreId {
-  const factory _ArbreId({required final int value}) = _$_ArbreId;
+  const factory _ArbreId({required final int value}) = _$ArbreIdImpl;
 
   @override
   int get value;
   @override
   @JsonKey(ignore: true)
-  _$$_ArbreIdCopyWith<_$_ArbreId> get copyWith =>
+  _$$ArbreIdImplCopyWith<_$ArbreIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

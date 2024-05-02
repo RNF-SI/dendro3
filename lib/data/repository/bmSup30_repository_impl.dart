@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/mapper/bmSup30_mapper.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
@@ -88,5 +86,11 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
       String idBmSup30) async {
     await bmsSup30MesuresRepository.deleteBmSup30FromIdBmSup30(idBmSup30);
     await database.deleteBmSup30(idBmSup30);
+  }
+
+  @override
+  Future<void> actualizeBmIdBmSup30OrigAfterSync(
+      List<Map<String, dynamic>> bmsList) async {
+    await database.actualizeBmIdBmSup30OrigAfterSync(bmsList);
   }
 }

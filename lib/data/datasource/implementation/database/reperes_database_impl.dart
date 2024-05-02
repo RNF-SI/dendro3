@@ -1,10 +1,9 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/reperes_database.dart';
 import 'package:dendro3/data/entity/reperes_entity.dart';
-import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ReperesDatabaseImpl implements ReperesDatabase {
@@ -33,33 +32,33 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   }
 
   static Future<Map<String, List<RepereEntity>>> getPlacetteReperesForDataSync(
-      Database db, int placetteId, String lastSyncTime) async {
+      Transaction txn, int placetteId, String lastSyncTime) async {
     // Fetch newly created Repere records
-    List<RepereEntity> created_reperes = await db.query(
+    List<RepereEntity> createdReperes = await txn.query(
       _tableName,
-      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Fetch updated Repere records
-    List<RepereEntity> updated_reperes = await db.query(
+    List<RepereEntity> updatedReperes = await txn.query(
       _tableName,
       where:
-          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted Repere records
-    List<RepereEntity> deleted_reperes = await db.query(
+    List<RepereEntity> deletedReperes = await txn.query(
       _tableName,
-      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     return {
-      "created": created_reperes,
-      "updated": updated_reperes,
-      "deleted": deleted_reperes,
+      "created": createdReperes,
+      "updated": updatedReperes,
+      "deleted": deletedReperes,
     };
   }
 
@@ -68,10 +67,23 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   Future<RepereEntity> addRepere(final RepereEntity repere) async {
     final db = await database;
     late final RepereEntity repereEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.transaction((txn) async {
       String repereUuid = generateUuid();
 
       repere['id_repere'] = repereUuid;
+      // Par défaut created_at et update_at sont remplies.
+      repere['created_by'] = userName; // Set created_by
+      repere['updated_by'] = userName; // Set updated_by on creation as well
+      repere['created_on'] = terminalName;
+      repere['updated_on'] = terminalName;
+      repere['created_at'] = formattedDate;
+      repere['updated_at'] = formattedDate;
+
       await txn.insert(
         _tableName,
         repere,
@@ -89,10 +101,16 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   // Function called when one arbre is updated (not updating arbre mesure)
   Future<RepereEntity> updateRepere(final RepereEntity repere) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final RepereEntity transectEntity;
     await db.transaction((txn) async {
       var updatedRepere = Map<String, dynamic>.from(repere)
-        ..['last_update'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,
@@ -122,9 +140,19 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   @override
   Future<void> deleteRepere(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -133,9 +161,19 @@ class ReperesDatabaseImpl implements ReperesDatabase {
   @override
   Future<void> deleteRepereFromPlacetteId(final int placetteId) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: 'id_placette = ?',
       whereArgs: [placetteId],
     );

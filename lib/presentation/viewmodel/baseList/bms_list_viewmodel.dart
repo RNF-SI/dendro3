@@ -11,7 +11,6 @@ import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final bmSup30ListProvider = Provider<BmSup30List>((ref) {
@@ -62,7 +61,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     // final BmSup30List bmsup30Liste
     this._lastSelectedProvider,
     this._displayableListNotifier,
-  ) : super(const State.init()) {}
+  ) : super(const State.init());
 
   // completeBmSup30(final BmSup30 todo) {
   //   final newBmSup30 = todo.copyWith(isCompleted: true);
@@ -209,19 +208,65 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   }
 
   @override
-  Future<void> deleteItem(String id) {
-    // TODO: implement deleteItem
-    throw UnimplementedError();
-  }
-
-  Future<void> deleteItemMesure(String id) async {
+  Future<bool> deleteItem(String id) async {
     try {
-      await _deleteBmSup30MesureUseCase.execute(id);
+      await _deleteBmSup30AndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('BmsSup30', null);
       state = State.success(state.data!.removeItemFromList(id));
       _displayableListNotifier.setDisplayableList(state.data!);
+      return true;
     } on Exception catch (e) {
       state = State.error(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteItemMesure(
+    String idBmSup30,
+    String idBmSup30Mesure,
+  ) async {
+    try {
+      BmSup30? targetedBmSup30;
+      for (var bm in state.data!.values) {
+        if (bm.idBmSup30 == idBmSup30) {
+          targetedBmSup30 = bm;
+          break;
+        }
+      }
+
+      if (targetedBmSup30 == null) {
+        throw Exception('BmSup30 not found');
+      }
+
+      // Check if the bmsup30 has more than one mesure
+      if (targetedBmSup30.bmsSup30Mesures!.length <= 1) {
+        throw Exception('BmSup30 has only one mesure');
+      }
+
+      BmSup30 bmSup30AfterDeletion = await _deleteBmSup30MesureUseCase.execute(
+        targetedBmSup30,
+        idBmSup30Mesure,
+      );
+
+      List<BmSup30> updatedBmsSup30 = [];
+      for (var tempBm in state.data!.values) {
+        if (tempBm.idBmSup30 == idBmSup30) {
+          updatedBmsSup30.add(bmSup30AfterDeletion);
+        } else {
+          updatedBmsSup30.add(tempBm);
+        }
+      }
+
+      // Set the new state with the updated Arbres list
+      BmSup30List updatedBmSup30List = BmSup30List(values: updatedBmsSup30);
+      state = State.success(updatedBmSup30List);
+      _displayableListNotifier.setDisplayableList(updatedBmSup30List);
+
+      _lastSelectedProvider.setLastSelectedId('BmsSup30', null);
+      return true;
+    } on Exception catch (e) {
+      state = State.error(e);
+      return false;
     }
   }
 

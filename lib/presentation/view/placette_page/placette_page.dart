@@ -3,121 +3,134 @@ import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/lib/utils.dart';
+import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/view/placette_page/placette_page_cycles.dart';
 import 'package:dendro3/presentation/view/saisie_placette_page.dart';
+import 'package:dendro3/presentation/viewmodel/baseList/placette_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
+import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 
-class PlacettePage extends ConsumerWidget {
-  PlacettePage({Key? key, required this.placette, required this.dispCycleList})
-      : super(key: key);
+class PlacettePage extends ConsumerStatefulWidget {
+  PlacettePage({
+    Key? key,
+    // required this.placette,
+    required this.dispCycleList,
+  }) : super(key: key);
 
-  Placette placette;
+  Placette? placette;
   CycleList dispCycleList;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  PlacettePageState createState() => PlacettePageState();
+}
+
+class PlacettePageState extends ConsumerState<PlacettePage> {
+  PlacettePageState();
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    final Placette? placette = ref.watch(placetteProvider);
     final CorCyclePlacetteList corCyclePlacetteList =
         ref.watch(corCyclePlacetteListProvider);
+    final corCyclePlacetteLocalStorageStatusProvider = ref.watch(
+        corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
+    final List<String>? corCyclePlacetteOpened =
+        ref.watch(corCyclePlacetteLocalStorageListProvider);
+    Cycle lastCycle = widget.dispCycleList!.findIdOfCycleWithLargestNumCycle()!;
+    CorCyclePlacette? lastCorCyclePlacette =
+        corCyclePlacetteList.getCorCyclePlacetteByIdCycle(lastCycle.idCycle);
 
     return DefaultTabController(
       initialIndex: 1,
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Text('Placette ${placette.idPlacetteOrig}'),
-              const SizedBox(width: 8),
-              Text(
-                '(DISP ${placette.idDispositif})',
-                style: const TextStyle(
-                  fontSize: 12,
+          appBar: AppBar(
+            title: Row(
+              children: [
+                Text('Placette ${placette!.idPlacetteOrig}'),
+                const SizedBox(width: 8),
+                Text(
+                  '(DISP ${placette.idDispositif})',
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
                 ),
+              ],
+            ),
+            bottom: const TabBar(
+              tabs: <Widget>[
+                Tab(
+                  icon: Icon(Icons.summarize),
+                  text: 'Résumé',
+                ),
+                Tab(
+                  icon: Icon(Icons.onetwothree),
+                  text: 'Cycles',
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              __buildPlacetteResumeWidget(
+                context,
+                ref,
+                placette,
+              ),
+              PlacetteCycleWidget(
+                placette: placette,
+                corCyclePlacetteList: corCyclePlacetteList,
+                dispCycleList: widget.dispCycleList,
               ),
             ],
           ),
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              onSelected: (value) async {
-                switch (value) {
-                  case 'open_remove_dialog':
-                  // return showAlertDialog(
-                  //     context, ref, dispositifId, dispositifName);
-                  default:
-                    throw UnimplementedError();
-                }
-              },
-              itemBuilder: (context) => [],
-              offset: Offset(0, 50),
-              color: Colors.white,
-              elevation: 2,
-            ),
-          ],
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.summarize),
-                text: 'Résumé',
-              ),
-              Tab(
-                icon: Icon(Icons.onetwothree),
-                text: 'Cycles',
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            __buildPlacetteResumeWidget(
-              context,
-              ref,
-              placette,
-            ),
-            PlacetteCycleWidget(
-              placette: placette,
-              corCyclePlacetteList: corCyclePlacetteList,
-              dispCycleList: dispCycleList,
-            ),
-          ],
-        ),
-        floatingActionButton: PlacetteFAB(
-          distance: 112.0,
-          children: [
-            if (corCyclePlacetteList.length == dispCycleList.length)
-              ActionButton(
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return SaisiePlacettePage(
-                      placette: placette,
-                      corCyclePlacetteList: corCyclePlacetteList,
-                      dispCycleList: dispCycleList,
-                    );
-                  },
-                )),
-                icon: const Icon(Icons.add),
-              ),
-            ActionButton(
-              onPressed: () => null,
-              icon: const Icon(Icons.play_arrow),
-            ),
-          ],
-        ),
-      ),
+          floatingActionButton: ((corCyclePlacetteList.length ==
+                      widget.dispCycleList.length) &&
+                  (lastCorCyclePlacette != null) &&
+                  corCyclePlacetteOpened != null &&
+                  corCyclePlacetteLocalStorageStatusProvider
+                      .isCyclePlacetteInProgress(
+                          lastCorCyclePlacette.idCyclePlacette))
+              ? PlacetteFAB(
+                  distance: 112.0,
+                  children: [
+                    ActionButton(
+                      onPressed: corCyclePlacetteList.length ==
+                              widget.dispCycleList.length
+                          ? () =>
+                              Navigator.push(context, MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return SaisiePlacettePage(
+                                    placette: placette,
+                                    corCyclePlacetteList: corCyclePlacetteList,
+                                    dispCycleList: widget.dispCycleList,
+                                  );
+                                },
+                              ))
+                          : null, // Make button not clickable when the lists have the same length
+                      icon: Icon(
+                        Icons.add,
+                        color: corCyclePlacetteList.length ==
+                                widget.dispCycleList.length
+                            ? Color(0xFFF4F1E4)
+                            : Color(0xFF8B5500),
+                      ),
+                    ),
+                  ],
+                )
+              : null),
     );
   }
 }
 
 Widget __buildPlacetteResumeWidget(
     BuildContext context, WidgetRef ref, Placette placette) {
-  // A list of properties to display in the grid
   List<Map<String, dynamic>> properties = [
     {'property': 'idPlacette', 'value': placette.idPlacette},
     {'property': 'idDispositif', 'value': placette.idDispositif},
@@ -162,22 +175,20 @@ Widget __buildPlacetteResumeWidget(
   List<Map<String, dynamic>> regularProperties = [];
   List<Map<String, dynamic>> longTextProperties = [];
 
-  // Populate the lists based on the 'isLong' flag
-  properties.forEach((property) {
+  for (var property in properties) {
     if (property.containsKey('isLong') && property['isLong']) {
       longTextProperties.add(property);
     } else {
       regularProperties.add(property);
     }
-  });
+  }
 
   return CustomScrollView(
     slivers: [
-      // Grid for regular properties
       SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 6, // Adjust as needed
+          childAspectRatio: 6,
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -190,8 +201,6 @@ Widget __buildPlacetteResumeWidget(
           childCount: regularProperties.length,
         ),
       ),
-
-      // List for long text properties
       SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
@@ -203,6 +212,40 @@ Widget __buildPlacetteResumeWidget(
             );
           },
           childCount: longTextProperties.length,
+        ),
+      ),
+      // Adding a new SliverToBoxAdapter to include a button
+      SliverToBoxAdapter(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return FormSaisiePlacettePage(
+                      formType: "edit",
+                      type: 'Placette',
+                      placette: placette,
+                      cycle: null,
+                      corCyclePlacette: null,
+                    );
+                  },
+                ));
+              },
+              icon: Icon(Icons.refresh), // Icon for visual indication
+              label: Text('Modifier les données'),
+              style: ElevatedButton.styleFrom(
+                // foregroundColor: Colors.white,
+                // backgroundColor: Colors.blue, // Text color
+                textStyle: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+            ),
+          ),
         ),
       ),
     ],

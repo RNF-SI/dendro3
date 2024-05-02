@@ -107,7 +107,7 @@ class Transect with _$Transect implements SaisisableObject {
     return [
       'idTransect',
       'idCyclePlacette',
-      // 'idTransectOrig',
+      'idTransectOrig',
       'codeEssence',
       'refTransect',
       // 'distance',
@@ -126,20 +126,30 @@ class Transect with _$Transect implements SaisisableObject {
     ].contains(columnName);
   }
 
-  static List<String> changeColumnName(List<String> columnNames) {
+  static List<Map<String, dynamic>> changeColumnName(List<String> columnNames) {
+    String displayName;
+    bool isVisible;
+
     return columnNames.map((columnName) {
+      isVisible = true;
       switch (columnName) {
-        // case 'idTransect':
-        //   return 'idTransectOrigine';
+        case 'idTransect':
+          displayName = 'idTransect';
+          isVisible = false;
+          break;
         case 'idCyclePlacette':
-          return 'NumCycle';
+          displayName = 'NumCycle';
+          break;
         case 'codeEssence':
-          return 'Ess';
+          displayName = 'Ess';
+          break;
         case 'diametre':
-          return 'Diam';
+          displayName = 'Diam';
+          break;
         default:
-          return columnName;
+          displayName = columnName;
       }
+      return {'title': displayName, 'visible': isVisible};
     }).toList();
   }
 
@@ -147,7 +157,9 @@ class Transect with _$Transect implements SaisisableObject {
     return columnNames.map((columnName) {
       switch (columnName) {
         case 'idTransect':
-          return 'idTransectOrigine';
+          return 'idTransect';
+        case 'idTransectOrig':
+          return 'idTransectOrig';
         case 'idCyclePlacette':
           return 'NumCycle';
         case 'codeEssence':

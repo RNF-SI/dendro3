@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'corCyclePlacette_list.dart';
 
@@ -12,7 +12,7 @@ part of 'corCyclePlacette_list.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CorCyclePlacetteList {
@@ -58,22 +58,22 @@ class _$CorCyclePlacetteListCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_CorCyclePlacetteListCopyWith<$Res>
+abstract class _$$CorCyclePlacetteListImplCopyWith<$Res>
     implements $CorCyclePlacetteListCopyWith<$Res> {
-  factory _$$_CorCyclePlacetteListCopyWith(_$_CorCyclePlacetteList value,
-          $Res Function(_$_CorCyclePlacetteList) then) =
-      __$$_CorCyclePlacetteListCopyWithImpl<$Res>;
+  factory _$$CorCyclePlacetteListImplCopyWith(_$CorCyclePlacetteListImpl value,
+          $Res Function(_$CorCyclePlacetteListImpl) then) =
+      __$$CorCyclePlacetteListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<CorCyclePlacette> values});
 }
 
 /// @nodoc
-class __$$_CorCyclePlacetteListCopyWithImpl<$Res>
-    extends _$CorCyclePlacetteListCopyWithImpl<$Res, _$_CorCyclePlacetteList>
-    implements _$$_CorCyclePlacetteListCopyWith<$Res> {
-  __$$_CorCyclePlacetteListCopyWithImpl(_$_CorCyclePlacetteList _value,
-      $Res Function(_$_CorCyclePlacetteList) _then)
+class __$$CorCyclePlacetteListImplCopyWithImpl<$Res>
+    extends _$CorCyclePlacetteListCopyWithImpl<$Res, _$CorCyclePlacetteListImpl>
+    implements _$$CorCyclePlacetteListImplCopyWith<$Res> {
+  __$$CorCyclePlacetteListImplCopyWithImpl(_$CorCyclePlacetteListImpl _value,
+      $Res Function(_$CorCyclePlacetteListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -81,7 +81,7 @@ class __$$_CorCyclePlacetteListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_CorCyclePlacetteList(
+    return _then(_$CorCyclePlacetteListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -92,14 +92,16 @@ class __$$_CorCyclePlacetteListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CorCyclePlacetteList extends _CorCyclePlacetteList {
-  const _$_CorCyclePlacetteList({required final List<CorCyclePlacette> values})
+class _$CorCyclePlacetteListImpl extends _CorCyclePlacetteList {
+  const _$CorCyclePlacetteListImpl(
+      {required final List<CorCyclePlacette> values})
       : _values = values,
         super._();
 
   final List<CorCyclePlacette> _values;
   @override
   List<CorCyclePlacette> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -110,10 +112,10 @@ class _$_CorCyclePlacetteList extends _CorCyclePlacetteList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CorCyclePlacetteList &&
+            other is _$CorCyclePlacetteListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -124,20 +126,22 @@ class _$_CorCyclePlacetteList extends _CorCyclePlacetteList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CorCyclePlacetteListCopyWith<_$_CorCyclePlacetteList> get copyWith =>
-      __$$_CorCyclePlacetteListCopyWithImpl<_$_CorCyclePlacetteList>(
-          this, _$identity);
+  _$$CorCyclePlacetteListImplCopyWith<_$CorCyclePlacetteListImpl>
+      get copyWith =>
+          __$$CorCyclePlacetteListImplCopyWithImpl<_$CorCyclePlacetteListImpl>(
+              this, _$identity);
 }
 
 abstract class _CorCyclePlacetteList extends CorCyclePlacetteList {
   const factory _CorCyclePlacetteList(
-      {required final List<CorCyclePlacette> values}) = _$_CorCyclePlacetteList;
+          {required final List<CorCyclePlacette> values}) =
+      _$CorCyclePlacetteListImpl;
   const _CorCyclePlacetteList._() : super._();
 
   @override
   List<CorCyclePlacette> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_CorCyclePlacetteListCopyWith<_$_CorCyclePlacetteList> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CorCyclePlacetteListImplCopyWith<_$CorCyclePlacetteListImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

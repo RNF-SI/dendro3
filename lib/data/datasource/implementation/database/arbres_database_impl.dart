@@ -2,14 +2,13 @@ import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/arbres_mesures_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/log_error.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_database.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:dendro3/domain/model/arbre.dart';
-import 'package:path/path.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ArbresDatabaseImpl implements ArbresDatabase {
   static const _tableName = 't_arbres';
@@ -25,6 +24,7 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   // }
 
   // Function called to add an arbre and his arbre mesures
+  // Only used for download Dispositif
   static Future<void> insertArbre(Batch batch, final ArbreEntity arbre) async {
     final arbreInsertProperties = {
       for (var property in arbre.keys.where((k) =>
@@ -35,7 +35,13 @@ class ArbresDatabaseImpl implements ArbresDatabase {
           k == 'azimut' ||
           k == 'distance' ||
           k == 'taillis' ||
-          k == 'observation'))
+          k == 'observation' ||
+          k == 'created_by' ||
+          k == 'updated_by' ||
+          k == 'created_on' ||
+          k == 'updated_on' ||
+          k == 'created_at' ||
+          k == 'updated_at'))
         property: arbre[property]
     };
 
@@ -69,37 +75,37 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   }
 
   static Future<Map<String, List<ArbreEntity>>> getPlacetteArbresForDataSync(
-      Database db, final int placetteId, String lastSyncTime) async {
-    // Fetch newly created arbres (creation_date after lastSyncTime and not deleted)
-    List<ArbreEntity> created_arbres = await db.query(
+      Transaction txn, final int placetteId, String lastSyncTime) async {
+    // Fetch newly created arbres (created_at after lastSyncTime and not deleted)
+    List<ArbreEntity> createdArbres = await txn.query(
       _tableName,
-      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
-    // Fetch updated arbres (last_update after lastSyncTime and not deleted)
-    List<ArbreEntity> updated_arbres = await db.query(
+    // Fetch updated arbres (updated_at after lastSyncTime and not deleted)
+    List<ArbreEntity> updatedArbres = await txn.query(
       _tableName,
       where:
-          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
-    // Fetch deleted arbres (deleted flag set and last_update after lastSyncTime)
-    List<ArbreEntity> deleted_arbres = await db.query(
+    // Fetch deleted arbres (deleted flag set and updated_at after lastSyncTime)
+    List<ArbreEntity> deletedArbres = await txn.query(
       _tableName,
-      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Process each list to include arbre_mesures, if needed
     Map<String, List<ArbreEntity>> arbreData = {
       "created":
-          await _processArbresWithMesures(db, created_arbres, lastSyncTime),
+          await _processArbresWithMesures(txn, createdArbres, lastSyncTime),
       "updated":
-          await _processArbresWithMesures(db, updated_arbres, lastSyncTime),
+          await _processArbresWithMesures(txn, updatedArbres, lastSyncTime),
       "deleted":
-          deleted_arbres // Assuming no need to add arbre_mesures for deleted arbres
+          deletedArbres, // Assuming no need to add arbre_mesures for deleted arbres
     };
 
     return arbreData;
@@ -107,11 +113,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
   // Helper function to process arbres and include their measures
   static Future<List<ArbreEntity>> _processArbresWithMesures(
-      Database db, List<ArbreEntity> arbres, String lastSyncTime) async {
+      Transaction txn, List<ArbreEntity> arbres, String lastSyncTime) async {
     return Future.wait(arbres.map((ArbreEntity arbreEntity) async {
       Map<String, List<ArbreMesureEntity>> arbreMesureObj =
           await ArbresMesuresDatabaseImpl.getArbreArbresMesuresForDataSync(
-              db,
+              txn,
               arbreEntity["id_arbre"],
               lastSyncTime); // Assuming you also update getArbreArbresMesures similarly
       return {...arbreEntity, 'arbres_mesures': arbreMesureObj};
@@ -123,6 +129,11 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   Future<ArbreEntity> addArbre(final ArbreEntity arbre) async {
     final db = await database;
     late final ArbreEntity arbreEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.transaction((txn) async {
       String idArbreUuid = generateUuid();
 
@@ -133,6 +144,13 @@ class ArbresDatabaseImpl implements ArbresDatabase {
 
       arbre['id_arbre'] = idArbreUuid;
       arbre['id_arbre_orig'] = maxIdOrig + 1;
+      // Par défaut created_at et update_at sont remplies.
+      arbre['created_by'] = userName; // Set created_by
+      arbre['updated_by'] = userName; // Set updated_by on creation as well
+      arbre['created_on'] = terminalName;
+      arbre['updated_on'] = terminalName;
+      arbre['created_at'] = formattedDate;
+      arbre['updated_at'] = formattedDate;
       await txn.insert(
         _tableName,
         arbre,
@@ -150,11 +168,17 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   // Function called when one arbre is updated (not updating arbre mesure)
   Future<ArbreEntity> updateArbre(final ArbreEntity arbre) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final ArbreEntity arbreEntity;
     await db.transaction((txn) async {
       var updatedArbre = Map<String, dynamic>.from(arbre)
-        ..['last_update'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
+        ..['updated_at'] =
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,
@@ -185,9 +209,19 @@ class ArbresDatabaseImpl implements ArbresDatabase {
   @override
   Future<void> deleteArbre(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the record as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -208,6 +242,31 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       logError(
           e, stackTrace, 'getArbreIdsForPlacette', {'idPlacette': idPlacette});
       return []; // or rethrow, depending on how you want to handle the error
+    }
+  }
+
+  @override
+  Future<void> actualizeArbreIdArbreOrigAfterSync(
+      List<Map<String, dynamic>> arbresList) async {
+    final db =
+        await database; // Assuming database is a Future or already opened instance
+
+    // Iterate over the list of arbres data
+    for (var arbreData in arbresList) {
+      if (arbreData['status'] == 'created') {
+        // Fetch the Arbre object based on idArbre
+        var arbre = await db.query(_tableName,
+            where: '$_columnId = ?', whereArgs: [arbreData['id']]);
+        if (arbre.isNotEmpty) {
+          // Update the Arbre object's idArbreOrig
+          await db.update(
+            _tableName,
+            {'id_arbre_orig': arbreData['new_id_arbre_orig']},
+            where: '$_columnId = ?',
+            whereArgs: [arbreData['id']],
+          );
+        }
+      }
     }
   }
 }

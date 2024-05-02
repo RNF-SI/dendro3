@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'bmSup30Mesure.dart';
 
@@ -12,7 +12,7 @@ part of 'bmSup30Mesure.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$BmSup30Mesure {
@@ -149,11 +149,11 @@ class _$BmSup30MesureCopyWithImpl<$Res, $Val extends BmSup30Mesure>
 }
 
 /// @nodoc
-abstract class _$$_BmSup30MesureCopyWith<$Res>
+abstract class _$$BmSup30MesureImplCopyWith<$Res>
     implements $BmSup30MesureCopyWith<$Res> {
-  factory _$$_BmSup30MesureCopyWith(
-          _$_BmSup30Mesure value, $Res Function(_$_BmSup30Mesure) then) =
-      __$$_BmSup30MesureCopyWithImpl<$Res>;
+  factory _$$BmSup30MesureImplCopyWith(
+          _$BmSup30MesureImpl value, $Res Function(_$BmSup30MesureImpl) then) =
+      __$$BmSup30MesureImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -174,11 +174,11 @@ abstract class _$$_BmSup30MesureCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BmSup30MesureCopyWithImpl<$Res>
-    extends _$BmSup30MesureCopyWithImpl<$Res, _$_BmSup30Mesure>
-    implements _$$_BmSup30MesureCopyWith<$Res> {
-  __$$_BmSup30MesureCopyWithImpl(
-      _$_BmSup30Mesure _value, $Res Function(_$_BmSup30Mesure) _then)
+class __$$BmSup30MesureImplCopyWithImpl<$Res>
+    extends _$BmSup30MesureCopyWithImpl<$Res, _$BmSup30MesureImpl>
+    implements _$$BmSup30MesureImplCopyWith<$Res> {
+  __$$BmSup30MesureImplCopyWithImpl(
+      _$BmSup30MesureImpl _value, $Res Function(_$BmSup30MesureImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -199,7 +199,7 @@ class __$$_BmSup30MesureCopyWithImpl<$Res>
     Object? stadeEcorce = null,
     Object? observation = freezed,
   }) {
-    return _then(_$_BmSup30Mesure(
+    return _then(_$BmSup30MesureImpl(
       idBmSup30Mesure: null == idBmSup30Mesure
           ? _value.idBmSup30Mesure
           : idBmSup30Mesure // ignore: cast_nullable_to_non_nullable
@@ -262,8 +262,8 @@ class __$$_BmSup30MesureCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BmSup30Mesure extends _BmSup30Mesure {
-  const _$_BmSup30Mesure(
+class _$BmSup30MesureImpl extends _BmSup30Mesure {
+  const _$BmSup30MesureImpl(
       {required this.idBmSup30Mesure,
       required this.idBmSup30,
       required this.idCycle,
@@ -315,10 +315,10 @@ class _$_BmSup30Mesure extends _BmSup30Mesure {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BmSup30Mesure &&
+            other is _$BmSup30MesureImpl &&
             (identical(other.idBmSup30Mesure, idBmSup30Mesure) ||
                 other.idBmSup30Mesure == idBmSup30Mesure) &&
             (identical(other.idBmSup30, idBmSup30) ||
@@ -367,8 +367,8 @@ class _$_BmSup30Mesure extends _BmSup30Mesure {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BmSup30MesureCopyWith<_$_BmSup30Mesure> get copyWith =>
-      __$$_BmSup30MesureCopyWithImpl<_$_BmSup30Mesure>(this, _$identity);
+  _$$BmSup30MesureImplCopyWith<_$BmSup30MesureImpl> get copyWith =>
+      __$$BmSup30MesureImplCopyWithImpl<_$BmSup30MesureImpl>(this, _$identity);
 }
 
 abstract class _BmSup30Mesure extends BmSup30Mesure {
@@ -386,7 +386,7 @@ abstract class _BmSup30Mesure extends BmSup30Mesure {
       required final bool chablis,
       required final int stadeDurete,
       required final int stadeEcorce,
-      final String? observation}) = _$_BmSup30Mesure;
+      final String? observation}) = _$BmSup30MesureImpl;
   const _BmSup30Mesure._() : super._();
 
   @override
@@ -419,6 +419,6 @@ abstract class _BmSup30Mesure extends BmSup30Mesure {
   String? get observation;
   @override
   @JsonKey(ignore: true)
-  _$$_BmSup30MesureCopyWith<_$_BmSup30Mesure> get copyWith =>
+  _$$BmSup30MesureImplCopyWith<_$BmSup30MesureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

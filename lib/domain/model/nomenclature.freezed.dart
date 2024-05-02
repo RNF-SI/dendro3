@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'nomenclature.dart';
 
@@ -12,7 +12,7 @@ part of 'nomenclature.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Nomenclature {
@@ -198,11 +198,11 @@ class _$NomenclatureCopyWithImpl<$Res, $Val extends Nomenclature>
 }
 
 /// @nodoc
-abstract class _$$_NomenclatureCopyWith<$Res>
+abstract class _$$NomenclatureImplCopyWith<$Res>
     implements $NomenclatureCopyWith<$Res> {
-  factory _$$_NomenclatureCopyWith(
-          _$_Nomenclature value, $Res Function(_$_Nomenclature) then) =
-      __$$_NomenclatureCopyWithImpl<$Res>;
+  factory _$$NomenclatureImplCopyWith(
+          _$NomenclatureImpl value, $Res Function(_$NomenclatureImpl) then) =
+      __$$NomenclatureImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -230,11 +230,11 @@ abstract class _$$_NomenclatureCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_NomenclatureCopyWithImpl<$Res>
-    extends _$NomenclatureCopyWithImpl<$Res, _$_Nomenclature>
-    implements _$$_NomenclatureCopyWith<$Res> {
-  __$$_NomenclatureCopyWithImpl(
-      _$_Nomenclature _value, $Res Function(_$_Nomenclature) _then)
+class __$$NomenclatureImplCopyWithImpl<$Res>
+    extends _$NomenclatureCopyWithImpl<$Res, _$NomenclatureImpl>
+    implements _$$NomenclatureImplCopyWith<$Res> {
+  __$$NomenclatureImplCopyWithImpl(
+      _$NomenclatureImpl _value, $Res Function(_$NomenclatureImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -262,7 +262,7 @@ class __$$_NomenclatureCopyWithImpl<$Res>
     Object? hierarchy = freezed,
     Object? active = freezed,
   }) {
-    return _then(_$_Nomenclature(
+    return _then(_$NomenclatureImpl(
       idNomenclature: null == idNomenclature
           ? _value.idNomenclature
           : idNomenclature // ignore: cast_nullable_to_non_nullable
@@ -353,8 +353,8 @@ class __$$_NomenclatureCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Nomenclature extends _Nomenclature {
-  const _$_Nomenclature(
+class _$NomenclatureImpl extends _Nomenclature {
+  const _$NomenclatureImpl(
       {required this.idNomenclature,
       required this.idType,
       required this.cdNomenclature,
@@ -427,10 +427,10 @@ class _$_Nomenclature extends _Nomenclature {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Nomenclature &&
+            other is _$NomenclatureImpl &&
             (identical(other.idNomenclature, idNomenclature) ||
                 other.idNomenclature == idNomenclature) &&
             (identical(other.idType, idType) || other.idType == idType) &&
@@ -495,8 +495,8 @@ class _$_Nomenclature extends _Nomenclature {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NomenclatureCopyWith<_$_Nomenclature> get copyWith =>
-      __$$_NomenclatureCopyWithImpl<_$_Nomenclature>(this, _$identity);
+  _$$NomenclatureImplCopyWith<_$NomenclatureImpl> get copyWith =>
+      __$$NomenclatureImplCopyWithImpl<_$NomenclatureImpl>(this, _$identity);
 }
 
 abstract class _Nomenclature extends Nomenclature {
@@ -521,7 +521,7 @@ abstract class _Nomenclature extends Nomenclature {
       final String? statut,
       final int? idBroader,
       final String? hierarchy,
-      final bool? active}) = _$_Nomenclature;
+      final bool? active}) = _$NomenclatureImpl;
   const _Nomenclature._() : super._();
 
   @override
@@ -568,6 +568,6 @@ abstract class _Nomenclature extends Nomenclature {
   bool? get active;
   @override
   @JsonKey(ignore: true)
-  _$$_NomenclatureCopyWith<_$_Nomenclature> get copyWith =>
+  _$$NomenclatureImplCopyWith<_$NomenclatureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -21,14 +21,12 @@ class CycleMapper {
         idDispositif:
             entity['id_dispositif'] ?? logAndReturnNull<int>('id_dispositif'),
         numCycle: entity['num_cycle'] ?? logAndReturnNull<int>('num_cycle'),
-        coeff: entity['coeff'] as int?,
         dateDebut: entity['date_debut'] != null
             ? DateTime.parse(entity['date_debut'])
             : null,
         dateFin: entity['date_fin'] != null
             ? DateTime.parse(entity['date_fin'])
             : null,
-        diamLim: entity['diam_lim'] as double?,
         monitor: entity['monitor'] as String?,
         corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
             ? CorCyclePlacetteListMapper.transformFromApiToModel(
@@ -38,7 +36,7 @@ class CycleMapper {
     } catch (e) {
       print("Error in Cycle transformFromApiToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -49,14 +47,12 @@ class CycleMapper {
         idDispositif:
             entity['id_dispositif'] ?? logAndReturnNull<int>('id_dispositif'),
         numCycle: entity['num_cycle'] ?? logAndReturnNull<int>('num_cycle'),
-        coeff: entity['coeff'] as int?,
         dateDebut: entity['date_debut'] != null
             ? DateTime.parse(entity['date_debut'])
             : null,
         dateFin: entity['date_fin'] != null
             ? DateTime.parse(entity['date_fin'])
             : null,
-        diamLim: entity['diam_lim'] as double?,
         monitor: entity['monitor'] as String?,
         corCyclesPlacettes: entity.containsKey('corCyclesPlacettes')
             ? CorCyclePlacetteListMapper.transformFromDBToModel(
@@ -66,7 +62,7 @@ class CycleMapper {
     } catch (e) {
       print("Error in Cycle transformFromDBToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -76,12 +72,10 @@ class CycleMapper {
       'id_cycle': model.idCycle,
       'id_dispositif': model.idDispositif,
       'num_cycle': model.numCycle,
-      'coeff': model.coeff,
       'date_debut':
           model.dateDebut == null ? null : formatter.format(model.dateDebut!),
       'date_fin':
           model.dateFin == null ? null : formatter.format(model.dateFin!),
-      'diam_lim': model.diamLim,
       'monitor': model.monitor,
       'corCyclesPlacettes': model.corCyclesPlacettes != null
           ? CorCyclePlacetteListMapper.transformToMap(model.corCyclesPlacettes!)

@@ -1,13 +1,10 @@
-import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure_list.dart';
 import 'package:dendro3/domain/repository/bmsSup30_mesures_repository.dart';
 import 'package:dendro3/domain/repository/bmsSup30_repository.dart';
 
-import 'package:dendro3/domain/repository/essences_repository.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
-import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 
 class UpdateBmSup30AndMesureUseCaseImpl
     implements UpdateBmSup30AndMesureUseCase {
@@ -45,7 +42,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
     int stadeEcorce,
     String? observationMesure,
   ) async {
-    BmSup30 bmsup30 = await _bmsup30Repository.updateBmSup30(
+    BmSup30 bmsup30Updated = await _bmsup30Repository.updateBmSup30(
       idBmSup30,
       idBmSup30Orig,
       idPlacette,
@@ -62,7 +59,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
     BmSup30Mesure bmsup30MesureUpdated =
         await _bmsup30MesureRepositoryMesure.updateBmSup30Mesure(
             idBmSup30Mesure,
-            idBmSup30,
+            bmsup30Updated.idBmSup30,
             idCycle,
             diametreIni,
             diametreMed,
@@ -86,7 +83,7 @@ class UpdateBmSup30AndMesureUseCaseImpl
       updatedMesures[mesureIndex] = bmsup30MesureUpdated;
     }
 
-    return bmsup30.copyWith(
+    return bmsup30Updated.copyWith(
         bmsSup30Mesures: BmSup30MesureList(values: updatedMesures));
   }
 }

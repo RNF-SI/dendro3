@@ -1,19 +1,27 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case.dart';
 
 import 'package:dendro3/presentation/state/state.dart' as dendroState;
+import 'package:dendro3/presentation/view/auth_checker.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dendro3/domain/usecase/login_usecase.dart';
 
 import 'package:dendro3/domain/model/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../domain/model/authentication.dart';
+import 'package:go_router/go_router.dart';
 
 // Pour le Checker
 final authStateProvider = StreamProvider<User?>((ref) {
@@ -24,21 +32,43 @@ final authenticationViewModelProvider =
     Provider<AuthenticationViewModel>((ref) {
   return AuthenticationViewModel(
     ref.watch(loginUseCaseProvider),
+    ref.watch(setUserIdFromLocalStorageUseCaseProvider),
+    ref.watch(setUserNameFromLocalStorageUseCaseProvider),
+    ref.watch(setTerminalNameFromLocalStorageUseCaseProvider),
+    ref.watch(setIsLoggedInFromLocalStorageUseCaseProvider),
+    ref.watch(clearUserIdFromLocalStorageUseCaseProvider),
+    ref.watch(clearUserNameFromLocalStorageUseCaseProvider),
   );
 });
 
 class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
-  var _email = '';
-  var _password = '';
+  final _email = '';
+  final _password = '';
 
   User? user;
 
   StreamController<User?> controller = StreamController<User?>();
 
   final LoginUseCase _loginUseCase;
+  final SetUserIdFromLocalStorageUseCase _setUserIdFromLocalStorageUseCase;
+  final SetUserNameFromLocalStorageUseCase _setUserNameFromLocalStorageUseCase;
+  final SetTerminalNameFromLocalStorageUseCase
+      _setTerminalNameFromLocalStorageUseCase;
+  final SetIsLoggedInFromLocalStorageUseCase
+      _setIsLoggedInFromLocalStorageUseCase;
+  final ClearUserIdFromLocalStorageUseCase _clearUserIdFromLocalStorageUseCase;
+  final ClearUserNameFromLocalStorageUseCase
+      _clearUserNameFromLocalStorageUseCase;
 
-  AuthenticationViewModel(this._loginUseCase)
-      : super(const dendroState.State.init()) {
+  AuthenticationViewModel(
+    this._loginUseCase,
+    this._setUserIdFromLocalStorageUseCase,
+    this._setUserNameFromLocalStorageUseCase,
+    this._setTerminalNameFromLocalStorageUseCase,
+    this._setIsLoggedInFromLocalStorageUseCase,
+    this._clearUserIdFromLocalStorageUseCase,
+    this._clearUserNameFromLocalStorageUseCase,
+  ) : super(const dendroState.State.init()) {
     controller.add(user);
   }
 
@@ -48,23 +78,37 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
     final String identifiant,
     final String password,
     BuildContext context,
+    WidgetRef ref,
   ) async {
     try {
       state = const dendroState.State.loading();
-      await _loginUseCase.execute(identifiant, password).then((evt) async {
-        controller.add(evt);
+      await _loginUseCase.execute(identifiant, password).then((user) async {
+        controller.add(user);
+
+        // Set terminal name using use case
+        await _setTerminalNameFromLocalStorageUseCase.execute();
+
         try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('isLoggedIn', true);
-          print('Login state saved'); // Added for debugging purposes
-        } catch (e) {
+          // Set logged in status using use case
+          await _setIsLoggedInFromLocalStorageUseCase.execute(true);
+          print("isLoggedIn set to: true"); // Added for debugging purposes
+
+          // Save the user's ID and name using respective use cases
+          await _setUserIdFromLocalStorageUseCase.execute(user.id);
+          await _setUserNameFromLocalStorageUseCase.execute(identifiant);
           print(
-              'Error saving login state: $e'); // Error handling for SharedPreferences
+              'Login state and user name saved'); // Added for debugging purposes
+
+          // Refresh UI or state management solution
+          ref.refresh(isLoggedInProvider);
+          state = dendroState.State.success(user);
+        } catch (e) {
+          print('Error saving login state and user name: $e');
         }
       });
     } on DioError catch (e) {
       var errorObj = {};
-      var errorText;
+      String errorText;
       if (e.response != null) {
         errorObj['data'] = e.response!.data;
         errorObj['headers'] = e.response!.headers;
@@ -87,13 +131,13 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
               itemCount: errorObj.length,
               itemBuilder: (BuildContext context, int index) {
                 String key = errorObj.keys.elementAt(index);
-                return new Column(
+                return Column(
                   children: <Widget>[
-                    new ListTile(
-                      title: new Text("$key"),
-                      subtitle: new Text("${errorObj[key]}"),
+                    ListTile(
+                      title: Text(key),
+                      subtitle: Text("${errorObj[key]}"),
                     ),
-                    new Divider(
+                    const Divider(
                       height: 2.0,
                     ),
                   ],
@@ -132,16 +176,19 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
   }
 
   // Method to handle user logout
-  Future<void> signOut() async {
+  Future<void> signOut(ref, context) async {
     try {
       // Clear user data
       user = null;
       controller.add(user);
 
-      // Update shared preferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', false);
+      // Clear login state and user details using use cases
+      await _setIsLoggedInFromLocalStorageUseCase.execute(false);
+      await _clearUserNameFromLocalStorageUseCase.execute();
+      await _clearUserIdFromLocalStorageUseCase.execute();
+      ref.refresh(isLoggedInProvider);
 
+      GoRouter.of(context).go('/');
       // Update state
       state = const dendroState.State.init();
     } catch (e) {

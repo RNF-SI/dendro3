@@ -1,7 +1,4 @@
-import 'dart:ffi';
 
-import 'package:dendro3/domain/model/cycle_list.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'nomenclature.freezed.dart';
@@ -35,6 +32,6 @@ class Nomenclature with _$Nomenclature {
   const Nomenclature._();
 
   bool codeEcoloFilterByLabelDefault(String filter) {
-    return this.labelDefault.toLowerCase().contains(filter.toLowerCase());
+    return labelDefault.toLowerCase().contains(filter.toLowerCase());
   }
 }

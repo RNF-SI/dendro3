@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'repere.dart';
 
@@ -12,7 +12,7 @@ part of 'repere.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Repere {
@@ -98,9 +98,10 @@ class _$RepereCopyWithImpl<$Res, $Val extends Repere>
 }
 
 /// @nodoc
-abstract class _$$_RepereCopyWith<$Res> implements $RepereCopyWith<$Res> {
-  factory _$$_RepereCopyWith(_$_Repere value, $Res Function(_$_Repere) then) =
-      __$$_RepereCopyWithImpl<$Res>;
+abstract class _$$RepereImplCopyWith<$Res> implements $RepereCopyWith<$Res> {
+  factory _$$RepereImplCopyWith(
+          _$RepereImpl value, $Res Function(_$RepereImpl) then) =
+      __$$RepereImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -114,10 +115,11 @@ abstract class _$$_RepereCopyWith<$Res> implements $RepereCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_RepereCopyWithImpl<$Res>
-    extends _$RepereCopyWithImpl<$Res, _$_Repere>
-    implements _$$_RepereCopyWith<$Res> {
-  __$$_RepereCopyWithImpl(_$_Repere _value, $Res Function(_$_Repere) _then)
+class __$$RepereImplCopyWithImpl<$Res>
+    extends _$RepereCopyWithImpl<$Res, _$RepereImpl>
+    implements _$$RepereImplCopyWith<$Res> {
+  __$$RepereImplCopyWithImpl(
+      _$RepereImpl _value, $Res Function(_$RepereImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -131,7 +133,7 @@ class __$$_RepereCopyWithImpl<$Res>
     Object? repere = freezed,
     Object? observation = freezed,
   }) {
-    return _then(_$_Repere(
+    return _then(_$RepereImpl(
       idRepere: null == idRepere
           ? _value.idRepere
           : idRepere // ignore: cast_nullable_to_non_nullable
@@ -166,8 +168,8 @@ class __$$_RepereCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Repere extends _Repere {
-  const _$_Repere(
+class _$RepereImpl extends _Repere {
+  const _$RepereImpl(
       {required this.idRepere,
       required this.idPlacette,
       this.azimut,
@@ -198,10 +200,10 @@ class _$_Repere extends _Repere {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Repere &&
+            other is _$RepereImpl &&
             (identical(other.idRepere, idRepere) ||
                 other.idRepere == idRepere) &&
             (identical(other.idPlacette, idPlacette) ||
@@ -223,8 +225,8 @@ class _$_Repere extends _Repere {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RepereCopyWith<_$_Repere> get copyWith =>
-      __$$_RepereCopyWithImpl<_$_Repere>(this, _$identity);
+  _$$RepereImplCopyWith<_$RepereImpl> get copyWith =>
+      __$$RepereImplCopyWithImpl<_$RepereImpl>(this, _$identity);
 }
 
 abstract class _Repere extends Repere {
@@ -235,7 +237,7 @@ abstract class _Repere extends Repere {
       final double? distance,
       final double? diametre,
       final String? repere,
-      final String? observation}) = _$_Repere;
+      final String? observation}) = _$RepereImpl;
   const _Repere._() : super._();
 
   @override
@@ -254,6 +256,6 @@ abstract class _Repere extends Repere {
   String? get observation;
   @override
   @JsonKey(ignore: true)
-  _$$_RepereCopyWith<_$_Repere> get copyWith =>
+  _$$RepereImplCopyWith<_$RepereImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

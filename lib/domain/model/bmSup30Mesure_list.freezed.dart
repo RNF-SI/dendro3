@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'bmSup30Mesure_list.dart';
 
@@ -12,7 +12,7 @@ part of 'bmSup30Mesure_list.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$BmSup30MesureList {
@@ -57,22 +57,22 @@ class _$BmSup30MesureListCopyWithImpl<$Res, $Val extends BmSup30MesureList>
 }
 
 /// @nodoc
-abstract class _$$_BmSup30MesureListCopyWith<$Res>
+abstract class _$$BmSup30MesureListImplCopyWith<$Res>
     implements $BmSup30MesureListCopyWith<$Res> {
-  factory _$$_BmSup30MesureListCopyWith(_$_BmSup30MesureList value,
-          $Res Function(_$_BmSup30MesureList) then) =
-      __$$_BmSup30MesureListCopyWithImpl<$Res>;
+  factory _$$BmSup30MesureListImplCopyWith(_$BmSup30MesureListImpl value,
+          $Res Function(_$BmSup30MesureListImpl) then) =
+      __$$BmSup30MesureListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<BmSup30Mesure> values});
 }
 
 /// @nodoc
-class __$$_BmSup30MesureListCopyWithImpl<$Res>
-    extends _$BmSup30MesureListCopyWithImpl<$Res, _$_BmSup30MesureList>
-    implements _$$_BmSup30MesureListCopyWith<$Res> {
-  __$$_BmSup30MesureListCopyWithImpl(
-      _$_BmSup30MesureList _value, $Res Function(_$_BmSup30MesureList) _then)
+class __$$BmSup30MesureListImplCopyWithImpl<$Res>
+    extends _$BmSup30MesureListCopyWithImpl<$Res, _$BmSup30MesureListImpl>
+    implements _$$BmSup30MesureListImplCopyWith<$Res> {
+  __$$BmSup30MesureListImplCopyWithImpl(_$BmSup30MesureListImpl _value,
+      $Res Function(_$BmSup30MesureListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_BmSup30MesureListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_BmSup30MesureList(
+    return _then(_$BmSup30MesureListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -91,14 +91,15 @@ class __$$_BmSup30MesureListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BmSup30MesureList extends _BmSup30MesureList {
-  const _$_BmSup30MesureList({required final List<BmSup30Mesure> values})
+class _$BmSup30MesureListImpl extends _BmSup30MesureList {
+  const _$BmSup30MesureListImpl({required final List<BmSup30Mesure> values})
       : _values = values,
         super._();
 
   final List<BmSup30Mesure> _values;
   @override
   List<BmSup30Mesure> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -109,10 +110,10 @@ class _$_BmSup30MesureList extends _BmSup30MesureList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BmSup30MesureList &&
+            other is _$BmSup30MesureListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -123,20 +124,20 @@ class _$_BmSup30MesureList extends _BmSup30MesureList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BmSup30MesureListCopyWith<_$_BmSup30MesureList> get copyWith =>
-      __$$_BmSup30MesureListCopyWithImpl<_$_BmSup30MesureList>(
+  _$$BmSup30MesureListImplCopyWith<_$BmSup30MesureListImpl> get copyWith =>
+      __$$BmSup30MesureListImplCopyWithImpl<_$BmSup30MesureListImpl>(
           this, _$identity);
 }
 
 abstract class _BmSup30MesureList extends BmSup30MesureList {
   const factory _BmSup30MesureList(
-      {required final List<BmSup30Mesure> values}) = _$_BmSup30MesureList;
+      {required final List<BmSup30Mesure> values}) = _$BmSup30MesureListImpl;
   const _BmSup30MesureList._() : super._();
 
   @override
   List<BmSup30Mesure> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_BmSup30MesureListCopyWith<_$_BmSup30MesureList> get copyWith =>
+  _$$BmSup30MesureListImplCopyWith<_$BmSup30MesureListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,11 +1,9 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/regenerations_database.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RegenerationsDatabaseImpl implements RegenerationsDatabase {
@@ -36,31 +34,31 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   }
 
   static Future<Map<String, List<RegenerationEntity>>>
-      getCorCyclePlacetteRegenerationsForDataSync(Database db,
+      getCorCyclePlacetteRegenerationsForDataSync(Transaction txn,
           final String corCyclePlacetteId, String lastSyncTime) async {
-    var created_regenerations = await db.query(
+    var createdRegenerations = await txn.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_cycle_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
-    var updated_regenerations = await db.query(
+    var updatedRegenerations = await txn.query(
       _tableName,
       where:
-          'id_cycle_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_cycle_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [corCyclePlacetteId, lastSyncTime, lastSyncTime],
     );
 
-    var deleted_regenerations = await db.query(
+    var deletedRegenerations = await txn.query(
       _tableName,
-      where: 'id_cycle_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_cycle_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [corCyclePlacetteId, lastSyncTime],
     );
 
     return {
-      "created": created_regenerations,
-      "updated": updated_regenerations,
-      "deleted": deleted_regenerations,
+      "created": createdRegenerations,
+      "updated": updatedRegenerations,
+      "deleted": deletedRegenerations,
     };
   }
 
@@ -70,10 +68,23 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
       final RegenerationEntity regeneration) async {
     final db = await database;
     late final RegenerationEntity regenerationEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.transaction((txn) async {
       String regenerationUuid = generateUuid();
 
       regeneration['id_regeneration'] = regenerationUuid;
+      // Par défaut created_at et update_at sont remplies.
+      regeneration['created_by'] = userName; // Set created_by
+      regeneration['updated_by'] =
+          userName; // Set updated_by on creation as well
+      regeneration['created_on'] = terminalName;
+      regeneration['updated_on'] = terminalName;
+      regeneration['created_at'] = formattedDate;
+      regeneration['updated_at'] = formattedDate;
       await txn.insert(
         _tableName,
         regeneration,
@@ -91,10 +102,16 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   Future<RegenerationEntity> updateRegeneration(
       final RegenerationEntity regeneration) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final RegenerationEntity regenerationEntity;
     await db.transaction((txn) async {
       var updatedRegeneration = Map<String, dynamic>.from(regeneration)
-        ..['last_update'] = formatDateTime(DateTime.now());
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,
@@ -126,9 +143,19 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   @override
   Future<void> deleteRegeneration(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the record as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );
@@ -137,9 +164,19 @@ class RegenerationsDatabaseImpl implements RegenerationsDatabase {
   @override
   Future<void> deleteRegenerationsForCorCyclePlacette(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the records as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: 'id_cycle_placette = ?',
       whereArgs: [id],
     );

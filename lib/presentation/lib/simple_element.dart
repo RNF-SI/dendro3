@@ -23,7 +23,7 @@ class SimpleElement {
   }
 
   // Method to get a value by key
-  int? getValue(String key) {
+  String? getValue(String key) {
     for (var entry in _entries) {
       if (entry.key == key) {
         return entry.value;

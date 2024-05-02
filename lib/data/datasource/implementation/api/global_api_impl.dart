@@ -1,18 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/entity/essences_entity.dart';
 import 'package:dendro3/data/entity/nomencluresTypes_entity.dart';
 import 'package:dendro3/data/entity/nomenclatures_entity.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
+import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// const String apiBase = "http://10.0.2.2:8000";
-const String apiBase = "http://192.168.1.64:8000";
 
 class GlobalApiImpl implements GlobalApi {
+  var apiBase = Config.apiBase;
+
   @override
   Future<EssenceListEntity> getBibEssences() async {
     Response response = await Dio().get('$apiBase/psdrf/essences');

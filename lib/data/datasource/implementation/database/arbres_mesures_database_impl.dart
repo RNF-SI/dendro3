@@ -1,14 +1,12 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/arbres_mesures_database.dart';
-import 'package:dendro3/data/datasource/interface/database/cycles_database.dart';
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
@@ -24,9 +22,22 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       final ArbreMesureEntity arbreMesure) async {
     final db = await database;
     late final ArbreEntity arbreEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.transaction((txn) async {
       String idArbreMesureUuid = generateUuid();
       arbreMesure['id_arbre_mesure'] = idArbreMesureUuid;
+      // Par défaut created_at et update_at sont remplies
+      arbreMesure['created_by'] = userName;
+      arbreMesure['updated_by'] = userName;
+      arbreMesure['created_on'] = terminalName;
+      arbreMesure['updated_on'] = terminalName;
+      arbreMesure['created_at'] = formattedDate;
+      arbreMesure['updated_at'] = formattedDate;
+
       await txn.insert(
         _tableName,
         arbreMesure,
@@ -45,16 +56,21 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
       final ArbreMesureEntity arbreMesure) async {
     final db = await database;
     late final ArbreMesureEntity arbreMesureEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
 
     await db.transaction((txn) async {
-      // Create a copy of the arbreMesure map and add/modify the last_update field
+      // Create a copy of the arbreMesure map and add/modify the updated_at field
       var updatedArbreMesure = Map<String, dynamic>.from(arbreMesure)
-        ..['last_update'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
+        ..['updated_at'] =
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
 
       await txn.update(
         _tableName,
-        updatedArbreMesure, // Use the updated map with the new last_update value
+        updatedArbreMesure, // Use the updated map with the new updated_at value
         where: '$_columnId = ?',
         whereArgs: [arbreMesure['id_arbre_mesure']],
       );
@@ -83,33 +99,33 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
 
   static Future<Map<String, List<ArbreMesureEntity>>>
       getArbreArbresMesuresForDataSync(
-          Database db, final String arbreId, String lastSyncTime) async {
+          Transaction txn, final String arbreId, String lastSyncTime) async {
     // Fetch newly created arbreMesures
-    List<ArbreMesureEntity> created_arbreMesures = await db.query(
+    List<ArbreMesureEntity> createdArbremesures = await txn.query(
       _tableName,
-      where: 'id_arbre = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_arbre = ? AND created_at > ? AND deleted = 0',
       whereArgs: [arbreId, lastSyncTime],
     );
 
     // Fetch updated arbreMesures
-    List<ArbreMesureEntity> updated_arbreMesures = await db.query(
+    List<ArbreMesureEntity> updatedArbremesures = await txn.query(
       _tableName,
       where:
-          'id_arbre = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_arbre = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [arbreId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted arbreMesures
-    List<ArbreMesureEntity> deleted_arbreMesures = await db.query(
+    List<ArbreMesureEntity> deletedArbremesures = await txn.query(
       _tableName,
-      where: 'id_arbre = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_arbre = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [arbreId, lastSyncTime],
     );
 
     return {
-      "created": created_arbreMesures,
-      "updated": updated_arbreMesures,
-      "deleted": deleted_arbreMesures,
+      "created": createdArbremesures,
+      "updated": updatedArbremesures,
+      "deleted": deletedArbremesures,
     };
   }
 
@@ -135,38 +151,21 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   }
 
   @override
-  Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
-      final String idArbreMesure, final String? coupe) async {
-    final db = await database;
-    late final ArbreMesureEntity arbreMesureEntity;
-
-    await db.transaction((txn) async {
-      var updateData = {
-        'coupe': coupe,
-        'last_update': formatDateTime(DateTime.now())
-      };
-
-      await txn.update(
-        _tableName,
-        updateData,
-        where: '$_columnId = ?',
-        whereArgs: [idArbreMesure],
-      );
-
-      final results = await txn.query(_tableName,
-          where: '$_columnId = ?', whereArgs: [idArbreMesure]);
-      arbreMesureEntity = results.first;
-    });
-
-    return arbreMesureEntity;
-  }
-
-  @override
   Future<void> deleteArbreMesureFromIdArbre(final String idArbre) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the record as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: 'id_arbre = ?',
       whereArgs: [idArbre],
     );
@@ -175,9 +174,19 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   @override
   Future<void> deleteArbreMesure(final String idArbreMesure) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.update(
       _tableName,
-      {'deleted': 1}, // Mark the record as deleted
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [idArbreMesure],
     );
@@ -204,5 +213,4 @@ class ArbresMesuresDatabaseImpl implements ArbresMesuresDatabase {
   //     whereArgs: [id],
   //   );
   // }
-
 }

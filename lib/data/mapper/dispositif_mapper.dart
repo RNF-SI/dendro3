@@ -2,7 +2,6 @@ import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:dendro3/data/mapper/cycle_list_mapper.dart';
 import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/data/mapper/placette_list_mapper.dart';
-import 'package:dendro3/data/mapper/placette_mapper.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 // import 'package:dendro3/domain/model/dispositif_id.dart';
 
@@ -34,7 +33,7 @@ class DispositifMapper {
     } catch (e) {
       print("Error in Dispositif transformFromApiToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -54,7 +53,7 @@ class DispositifMapper {
     } catch (e) {
       print("Error in Dispositif transformFromDBToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 

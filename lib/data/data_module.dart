@@ -44,7 +44,6 @@ import 'package:dendro3/data/repository/placettes_repository_impl.dart';
 import 'package:dendro3/data/repository/regenerations_repository_impl.dart';
 import 'package:dendro3/data/repository/reperes_repository_impl.dart';
 import 'package:dendro3/data/repository/transects_repository_impl.dart';
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
 import 'package:dendro3/domain/repository/bmsSup30_mesures_repository.dart';

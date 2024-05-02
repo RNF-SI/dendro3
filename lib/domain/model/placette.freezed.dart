@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'placette.dart';
 
@@ -12,7 +12,7 @@ part of 'placette.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Placette {
@@ -315,10 +315,11 @@ class _$PlacetteCopyWithImpl<$Res, $Val extends Placette>
 }
 
 /// @nodoc
-abstract class _$$_PlacetteCopyWith<$Res> implements $PlacetteCopyWith<$Res> {
-  factory _$$_PlacetteCopyWith(
-          _$_Placette value, $Res Function(_$_Placette) then) =
-      __$$_PlacetteCopyWithImpl<$Res>;
+abstract class _$$PlacetteImplCopyWith<$Res>
+    implements $PlacetteCopyWith<$Res> {
+  factory _$$PlacetteImplCopyWith(
+          _$PlacetteImpl value, $Res Function(_$PlacetteImpl) then) =
+      __$$PlacetteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -364,11 +365,11 @@ abstract class _$$_PlacetteCopyWith<$Res> implements $PlacetteCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_PlacetteCopyWithImpl<$Res>
-    extends _$PlacetteCopyWithImpl<$Res, _$_Placette>
-    implements _$$_PlacetteCopyWith<$Res> {
-  __$$_PlacetteCopyWithImpl(
-      _$_Placette _value, $Res Function(_$_Placette) _then)
+class __$$PlacetteImplCopyWithImpl<$Res>
+    extends _$PlacetteCopyWithImpl<$Res, _$PlacetteImpl>
+    implements _$$PlacetteImplCopyWith<$Res> {
+  __$$PlacetteImplCopyWithImpl(
+      _$PlacetteImpl _value, $Res Function(_$PlacetteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -405,7 +406,7 @@ class __$$_PlacetteCopyWithImpl<$Res>
     Object? bmsSup30 = freezed,
     Object? reperes = freezed,
   }) {
-    return _then(_$_Placette(
+    return _then(_$PlacetteImpl(
       idPlacette: null == idPlacette
           ? _value.idPlacette
           : idPlacette // ignore: cast_nullable_to_non_nullable
@@ -532,8 +533,8 @@ class __$$_PlacetteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Placette extends _Placette {
-  const _$_Placette(
+class _$PlacetteImpl extends _Placette {
+  const _$PlacetteImpl(
       {required this.idPlacette,
       required this.idDispositif,
       required this.idPlacetteOrig,
@@ -633,10 +634,10 @@ class _$_Placette extends _Placette {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Placette &&
+            other is _$PlacetteImpl &&
             (identical(other.idPlacette, idPlacette) ||
                 other.idPlacette == idPlacette) &&
             (identical(other.idDispositif, idDispositif) ||
@@ -727,8 +728,8 @@ class _$_Placette extends _Placette {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlacetteCopyWith<_$_Placette> get copyWith =>
-      __$$_PlacetteCopyWithImpl<_$_Placette>(this, _$identity);
+  _$$PlacetteImplCopyWith<_$PlacetteImpl> get copyWith =>
+      __$$PlacetteImplCopyWithImpl<_$PlacetteImpl>(this, _$identity);
 }
 
 abstract class _Placette extends Placette {
@@ -762,7 +763,7 @@ abstract class _Placette extends Placette {
       final CorCyclePlacetteList? corCyclesPlacettes,
       final ArbreList? arbres,
       final BmSup30List? bmsSup30,
-      final RepereList? reperes}) = _$_Placette;
+      final RepereList? reperes}) = _$PlacetteImpl;
   const _Placette._() : super._();
 
   @override
@@ -827,6 +828,6 @@ abstract class _Placette extends Placette {
   RepereList? get reperes;
   @override
   @JsonKey(ignore: true)
-  _$$_PlacetteCopyWith<_$_Placette> get copyWith =>
+  _$$PlacetteImplCopyWith<_$PlacetteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -38,6 +38,8 @@ class CorCyclePlacetteMapper {
       recouvHerbesHautes: entity['recouv_herbes_hautes'],
       recouvBuissons: entity['recouv_buissons'],
       recouvArbres: entity['recouv_arbres'],
+      coeff: entity['coeff'],
+      diamLim: entity['diam_lim'],
     );
   }
 
@@ -64,6 +66,8 @@ class CorCyclePlacetteMapper {
         recouvHerbesHautes: entity['recouv_herbes_hautes'] as double?,
         recouvBuissons: entity['recouv_buissons'] as double?,
         recouvArbres: entity['recouv_arbres'] as double?,
+        coeff: entity['coeff'] as int?,
+        diamLim: entity['diam_lim'] as double?,
         transects: entity.containsKey('transects')
             ? TransectListMapper.transformFromApiToModel(entity['transects'])
             : null,
@@ -75,7 +79,7 @@ class CorCyclePlacetteMapper {
     } catch (e) {
       print("Error in CorCyclePlacette transformFromApiToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -102,6 +106,8 @@ class CorCyclePlacetteMapper {
         recouvHerbesHautes: entity['recouv_herbes_hautes'] as double?,
         recouvBuissons: entity['recouv_buissons'] as double?,
         recouvArbres: entity['recouv_arbres'] as double?,
+        coeff: entity['coeff'] as int?,
+        diamLim: entity['diam_lim'] as double?,
         transects: entity.containsKey('transects')
             ? TransectListMapper.transformFromDBToModel(entity['transects'])
             : null,
@@ -113,7 +119,7 @@ class CorCyclePlacetteMapper {
     } catch (e) {
       print("Error in CorCyclePlacette transformFromDBToModel: $e");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -136,6 +142,8 @@ class CorCyclePlacetteMapper {
       'recouv_herbes_hautes': model.recouvHerbesHautes,
       'recouv_buissons': model.recouvBuissons,
       'recouv_arbres': model.recouvArbres,
+      'coeff': model.coeff,
+      'diam_lim': model.diamLim,
       'transects': model.transects != null
           ? TransectListMapper.transformToMap(model.transects!)
           : null,
@@ -147,37 +155,81 @@ class CorCyclePlacetteMapper {
 
   static CorCyclePlacetteEntity transformToNewEntityMap(
     // final int id_cor_cycle_placette,
-    final int id_cycle,
-    final int id_placette,
-    final DateTime? date_releve,
-    final String? date_intervention,
+    final int idCycle,
+    final int idPlacette,
+    final DateTime? dateReleve,
+    final String? dateIntervention,
     final int? annee,
-    final String? nature_intervention,
-    final String gestion_placette,
-    final int? id_nomenclature_castor,
-    final int? id_nomenclature_frottis,
-    final int? id_nomenclature_boutis,
-    final double? recouv_herbes_basses,
-    final double? recouv_herbes_hautes,
-    final double? recouv_buissons,
-    final double? recouv_arbres,
+    final String? natureIntervention,
+    final String gestionPlacette,
+    final int? idNomenclatureCastor,
+    final int? idNomenclatureFrottis,
+    final int? idNomenclatureBoutis,
+    final double? recouvHerbesBasses,
+    final double? recouvHerbesHautes,
+    final double? recouvBuissons,
+    final double? recouvArbres,
+    final int? coeff,
+    final double? diamLim,
   ) {
     return {
       'id_cycle_placette': null,
-      'id_cycle': id_cycle,
-      'id_placette': id_placette,
-      'date_releve': date_releve,
-      'date_intervention': date_intervention,
+      'id_cycle': idCycle,
+      'id_placette': idPlacette,
+      'date_releve': dateReleve,
+      'date_intervention': dateIntervention,
       'annee': annee,
-      'nature_intervention': nature_intervention,
-      'gestion_placette': gestion_placette,
-      'id_nomenclature_castor': id_nomenclature_castor,
-      'id_nomenclature_frottis': id_nomenclature_frottis,
-      'id_nomenclature_boutis': id_nomenclature_boutis,
-      'recouv_herbes_basses': recouv_herbes_basses,
-      'recouv_herbes_hautes': recouv_herbes_hautes,
-      'recouv_buissons': recouv_buissons,
-      'recouv_arbres': recouv_arbres,
+      'nature_intervention': natureIntervention,
+      'gestion_placette': gestionPlacette,
+      'id_nomenclature_castor': idNomenclatureCastor,
+      'id_nomenclature_frottis': idNomenclatureFrottis,
+      'id_nomenclature_boutis': idNomenclatureBoutis,
+      'recouv_herbes_basses': recouvHerbesBasses,
+      'recouv_herbes_hautes': recouvHerbesHautes,
+      'recouv_buissons': recouvBuissons,
+      'recouv_arbres': recouvArbres,
+      'coeff': coeff,
+      'diam_lim': diamLim,
+    };
+  }
+
+  static CorCyclePlacetteEntity transformToEntityMap(
+    final String idCyclePlacette,
+    final int idCycle,
+    final int idPlacette,
+    final DateTime? dateReleve,
+    final String? dateIntervention,
+    final int? annee,
+    final String? natureIntervention,
+    final String gestionPlacette,
+    final int? idNomenclatureCastor,
+    final int? idNomenclatureFrottis,
+    final int? idNomenclatureBoutis,
+    final double? recouvHerbesBasses,
+    final double? recouvHerbesHautes,
+    final double? recouvBuissons,
+    final double? recouvArbres,
+    final int? coeff,
+    final double? diamLim,
+  ) {
+    return {
+      'id_cycle_placette': idCyclePlacette,
+      'id_cycle': idCycle,
+      'id_placette': idPlacette,
+      'date_releve': dateReleve,
+      'date_intervention': dateIntervention,
+      'annee': annee,
+      'nature_intervention': natureIntervention,
+      'gestion_placette': gestionPlacette,
+      'id_nomenclature_castor': idNomenclatureCastor,
+      'id_nomenclature_frottis': idNomenclatureFrottis,
+      'id_nomenclature_boutis': idNomenclatureBoutis,
+      'recouv_herbes_basses': recouvHerbesBasses,
+      'recouv_herbes_hautes': recouvHerbesHautes,
+      'recouv_buissons': recouvBuissons,
+      'recouv_arbres': recouvArbres,
+      'coeff': coeff,
+      'diam_lim': diamLim,
     };
   }
 }

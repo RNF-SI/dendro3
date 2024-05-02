@@ -1,13 +1,8 @@
-import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
-import 'package:dendro3/domain/model/essence.dart';
-import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
-import 'package:dendro3/domain/repository/essences_repository.dart';
-import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 
 class CreateArbreAndMesureUseCaseImpl implements CreateArbreAndMesureUseCase {

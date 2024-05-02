@@ -1,11 +1,10 @@
 import 'dart:math';
-
+import 'package:flutter/material.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:flutter/material.dart';
 
 class SecondaryGrid extends StatefulWidget {
   final Map<int, int> mapIdCycleNumCycle;
@@ -17,7 +16,7 @@ class SecondaryGrid extends StatefulWidget {
   final int currentIndex;
   final String displayTypeState;
 
-  SecondaryGrid({
+  const SecondaryGrid({
     Key? key,
     required this.mesuresList,
     required this.onItemSelected,
@@ -47,7 +46,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
     currentIndex = widget.currentIndex;
     if (widget.mesuresList.isEmpty) {
-      return SizedBox.shrink(); // Return an empty widget if the list is empty
+      return const SizedBox
+          .shrink(); // Return an empty widget if the list is empty
     }
 
     var maxNumberCyclePlacette = widget.mapIdCycleNumCycle.isNotEmpty
@@ -57,53 +57,26 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         ? widget.mapIdCycleNumCycle.keys.firstWhere(
             (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette)
         : null;
+    var lastPassageIdCyclePlacette = (maxNumberCyclePlacette != null &&
+            maxNumberCyclePlacette > 1)
+        ? widget.mapIdCycleNumCycle.keys.firstWhere(
+            (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette - 1)
+        : null;
 
-    return
-        // Column(
-        //   children: [
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     IconButton(
-        //       icon: Icon(Icons.edit),
-        //       onPressed: () {
-        //         widget.onItemMesureUpdated(widget.mesuresList[currentIndex]);
-        //       },
-        //       iconSize: 18, // Reduced icon size
-        //       padding: EdgeInsets.all(4), // Reduced padding
-        //       constraints: BoxConstraints(),
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.delete, color: Colors.red),
-        //       onPressed: () {
-        //         widget.onItemMesureDeleted(widget.mesuresList[currentIndex]);
-        //       },
-        //       iconSize: 18, // Reduced icon size
-        //       padding: EdgeInsets.all(4), // Reduced padding
-        //       constraints: BoxConstraints(),
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.add, color: Colors.green),
-        //       onPressed: () {
-        //         widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
-        //       },
-        //       iconSize: 18, // Reduced icon size
-        //       padding: EdgeInsets.all(4), // Reduced padding
-        //       constraints: BoxConstraints(),
-        //     ),
-        //   ],
-        // ),
-        ListView.builder(
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.mesuresList.length + 1,
       itemBuilder: (context, index) {
         if (index == widget.mesuresList.length) {
           if (widget.mapIdCycleNumCycle.isEmpty) {
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
 
           // Afficher le bouton ajout seulement si le dernier cycle de la mesure n'est pas le dernier cycle de la placette
-          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette) {
+          // Et qu'il n'y a pas eu de saut de cycle: que le cycle précédent soit le dernier cycle de la placette
+          if (widget.mesuresList.last['idCycle'] != maxIdCyclePlacette &&
+              widget.mesuresList.last['idCycle'] ==
+                  lastPassageIdCyclePlacette) {
             // Return the "Add New Measure" element
             return GestureDetector(
               onTap: () {
@@ -112,9 +85,9 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               child: Container(
                 width: 200, // Same width as other items
                 height: 120,
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                child: Card(
-                  color: Colors.greenAccent, // Different color to distinguish
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: const Card(
+                  color: Color(0xFF8AAC3E), // Different color to distinguish
                   child: Center(
                     child: Icon(Icons.add,
                         size: 50, color: Colors.white), // Add icon
@@ -123,36 +96,10 @@ class _SecondaryGridState extends State<SecondaryGrid> {
               ),
             );
           } else {
-            return SizedBox
+            return const SizedBox
                 .shrink(); // Return an empty widget for non-last cycles
           }
         }
-
-        // // Check if this is the last item
-        // if (index == widget.mesuresList.length) {
-        //   // Return the "Add New Measure" element
-        //   return GestureDetector(
-        //     onTap: () {
-        //       // Handle the addition of a new measure here
-        //       widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
-        //     },
-        //     child: Container(
-        //       width: 200, // Same width as other items
-        //       height: 200,
-        //       margin: const EdgeInsets.symmetric(horizontal: 5),
-        //       child: const Card(
-        //         color: Colors.greenAccent, // Different color to distinguish
-        //         child: Center(
-        //           child: Icon(
-        //             Icons.add,
-        //             size: 50,
-        //             color: Colors.white,
-        //           ), // Add icon
-        //         ),
-        //       ),
-        //     ),
-        //   );
-        // }
 
         Map<String, dynamic> currentItem = widget.mesuresList[index];
 
@@ -175,8 +122,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
         return Container(
           width: 300,
-          height: 120, // Define the width for each item
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          height: 120,
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           child: Card(
             child: Column(
               children: [
@@ -184,40 +131,42 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () {
                         widget.onItemMesureUpdated(index);
                       },
                       iconSize: 18, // Reduced icon size
-                      padding: EdgeInsets.all(4), // Reduced padding
-                      constraints: BoxConstraints(),
+                      padding: const EdgeInsets.all(4), // Reduced padding
+                      constraints: const BoxConstraints(),
                     ),
                     // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
                     // ou bien si il y a plus de 1 mesure de cet arbre
                     if (maxNumberCyclePlacette == currentItem['numCycle'] &&
                         widget.mesuresList.length > 1)
                       IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
+                        icon:
+                            const Icon(Icons.delete, color: Color(0xFF8B5500)),
                         onPressed: () {
                           // Show confirmation dialog
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Confirmer la suppression'),
-                                content: Text(
+                                title: const Text('Confirmer la suppression'),
+                                content: const Text(
                                     'Etes vous sûr de vouloir supprimer cet élément?'),
                                 actions: <Widget>[
                                   TextButton(
-                                    child: Text('Annuler'),
+                                    child: const Text('Annuler'),
                                     onPressed: () {
                                       // Close the dialog
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   TextButton(
-                                    child: Text('Supprimer',
-                                        style: TextStyle(color: Colors.red)),
+                                    child: const Text('Supprimer',
+                                        style: TextStyle(
+                                            color: Color(0xFF8B5500))),
                                     onPressed: () {
                                       // Close the dialog
                                       Navigator.of(context).pop();
@@ -232,29 +181,20 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           );
                         },
                         iconSize: 18, // Reduced icon size
-                        padding: EdgeInsets.all(4), // Reduced padding
-                        constraints: BoxConstraints(),
+                        padding: const EdgeInsets.all(4), // Reduced padding
+                        constraints: const BoxConstraints(),
                       ),
-                    // IconButton(
-                    //   icon: Icon(Icons.add, color: Colors.green),
-                    //   onPressed: () {
-                    //     widget.onItemMesureAdded(
-                    //         widget.mesuresList[currentIndex]);
-                    //   },
-                    //   iconSize: 18, // Reduced icon size
-                    //   padding: EdgeInsets.all(4), // Reduced padding
-                    //   constraints: BoxConstraints(),
-                    // ),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
 
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics:
-                        NeverScrollableScrollPhysics(), // to disable GridView's scrolling
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4, // Number of columns in the grid
                       childAspectRatio: 2, // Aspect ratio of each grid cell
                     ),
@@ -284,7 +224,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           Flexible(
                             child: Text(
                               "$titleName:",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 11),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -292,7 +232,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                           Flexible(
                             child: Text(
                               displayValue,
-                              style: TextStyle(fontSize: 15),
+                              style: const TextStyle(fontSize: 15),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -353,7 +293,7 @@ class _SecondaryGridState extends State<SecondaryGrid> {
       case 'BmsSup30':
         return BmSup30.changeTitleGridNames(columnList);
       default:
-        throw ArgumentError('Unknown type: ${type}');
+        throw ArgumentError('Unknown type: $type');
     }
   }
 }

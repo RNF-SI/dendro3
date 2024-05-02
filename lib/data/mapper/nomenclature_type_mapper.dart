@@ -1,7 +1,4 @@
 import 'package:dendro3/data/entity/nomencluresTypes_entity.dart';
-import 'package:dendro3/data/mapper/cycle_list_mapper.dart';
-import 'package:dendro3/data/mapper/placette_list_mapper.dart';
-import 'package:dendro3/data/mapper/placette_mapper.dart';
 import 'package:dendro3/domain/model/nomenclatureType.dart';
 // import 'package:dendro3/domain/model/nomenclaturetype_id.dart';
 

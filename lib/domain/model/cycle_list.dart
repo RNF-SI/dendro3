@@ -32,12 +32,17 @@ class CycleList with _$CycleList {
     );
   }
 
-  Cycle? findIdOfCycleWithLargestNumCycle() {
-    if (values.isEmpty) {
-      return null;
-    }
+  Cycle findIdOfCycleWithLargestNumCycle() {
     Cycle? cycleWithLargestNumCycle = values.reduce(
         (current, next) => current.numCycle > next.numCycle ? current : next);
     return cycleWithLargestNumCycle;
+  }
+
+  bool cyclesAreTerminated() {
+    // Find the cycle with the largest numCycle
+    Cycle cycleWithLargestNumCycle = findIdOfCycleWithLargestNumCycle();
+
+    // Check if the `datefin` attribute of the found cycle is not null
+    return cycleWithLargestNumCycle.isTerminated();
   }
 }

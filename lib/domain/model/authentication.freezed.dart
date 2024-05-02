@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'authentication.dart';
 
@@ -12,7 +12,7 @@ part of 'authentication.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Authentication {}
@@ -36,25 +36,25 @@ class _$AuthenticationCopyWithImpl<$Res, $Val extends Authentication>
 }
 
 /// @nodoc
-abstract class _$$_AuthenticationCopyWith<$Res> {
-  factory _$$_AuthenticationCopyWith(
-          _$_Authentication value, $Res Function(_$_Authentication) then) =
-      __$$_AuthenticationCopyWithImpl<$Res>;
+abstract class _$$AuthenticationImplCopyWith<$Res> {
+  factory _$$AuthenticationImplCopyWith(_$AuthenticationImpl value,
+          $Res Function(_$AuthenticationImpl) then) =
+      __$$AuthenticationImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_AuthenticationCopyWithImpl<$Res>
-    extends _$AuthenticationCopyWithImpl<$Res, _$_Authentication>
-    implements _$$_AuthenticationCopyWith<$Res> {
-  __$$_AuthenticationCopyWithImpl(
-      _$_Authentication _value, $Res Function(_$_Authentication) _then)
+class __$$AuthenticationImplCopyWithImpl<$Res>
+    extends _$AuthenticationCopyWithImpl<$Res, _$AuthenticationImpl>
+    implements _$$AuthenticationImplCopyWith<$Res> {
+  __$$AuthenticationImplCopyWithImpl(
+      _$AuthenticationImpl _value, $Res Function(_$AuthenticationImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_Authentication extends _Authentication {
-  const _$_Authentication() : super._();
+class _$AuthenticationImpl extends _Authentication {
+  const _$AuthenticationImpl() : super._();
 
   @override
   String toString() {
@@ -62,9 +62,9 @@ class _$_Authentication extends _Authentication {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Authentication);
+        (other.runtimeType == runtimeType && other is _$AuthenticationImpl);
   }
 
   @override
@@ -72,6 +72,6 @@ class _$_Authentication extends _Authentication {
 }
 
 abstract class _Authentication extends Authentication {
-  const factory _Authentication() = _$_Authentication;
+  const factory _Authentication() = _$AuthenticationImpl;
   const _Authentication._() : super._();
 }

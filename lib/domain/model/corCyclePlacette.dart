@@ -22,6 +22,8 @@ class CorCyclePlacette with _$CorCyclePlacette {
       double? recouvHerbesHautes,
       double? recouvBuissons,
       double? recouvArbres,
+      int? coeff,
+      double? diamLim,
       TransectList? transects,
       RegenerationList? regenerations}) = _CorCyclePlacette;
 

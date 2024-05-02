@@ -1,13 +1,14 @@
 import 'package:dendro3/data/data_module.dart';
-import 'package:dendro3/data/repository/essences_repository_impl.dart';
-import 'package:dendro3/domain/repository/essences_repository.dart';
-import 'package:dendro3/domain/repository/local_storage_repository.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
@@ -28,6 +29,8 @@ import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/delete_database_usecase.dart';
+import 'package:dendro3/domain/usecase/delete_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_regeneration_usecase_impl.dart';
@@ -37,6 +40,8 @@ import 'package:dendro3/domain/usecase/delete_transect_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_transect_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/download_dispositif_data_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/export_dispositif_data_usecase.dart';
+import 'package:dendro3/domain/usecase/export_dispositif_data_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_cor_cycle_placette_local_storage_provider.dart';
@@ -53,16 +58,24 @@ import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
+import 'package:dendro3/domain/usecase/get_is_logged_in_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_is_logged_in_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_terminal_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_terminal_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_api_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase.dart';
 import 'package:dendro3/domain/usecase/get_user_dispositif_list_from_db_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_user_id_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/get_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/get_user_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase.dart';
 import 'package:dendro3/domain/usecase/init_local_PSDRF_database_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
@@ -73,10 +86,22 @@ import 'package:dendro3/domain/usecase/login_usecase.dart';
 import 'package:dendro3/domain/usecase/login_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/set_cycle_placette_created_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_cor_cycle_placette_usecase.dart';
+import 'package:dendro3/domain/usecase/update_cor_cycle_placette_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_placette_usecase.dart';
+import 'package:dendro3/domain/usecase/update_placette_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_repere_usecase.dart';
@@ -131,6 +156,9 @@ final loginUseCaseProvider = Provider<LoginUseCase>(
 
 final getPlacetteUseCaseProvider = Provider<GetPlacetteUseCase>(
     (ref) => GetPlacetteUseCaseImpl(ref.watch(placettesRepositoryProvider)));
+
+final updatePlacetteUseCaseProvider = Provider<UpdatePlacetteUseCase>(
+    (ref) => UpdatePlacetteUseCaseImpl(ref.watch(placettesRepositoryProvider)));
 
 final actualiserCyclesDispositifUseCaseProvider =
     Provider<ActualiserCyclesDispositifUseCase>((ref) =>
@@ -192,6 +220,11 @@ final createBmSup30AndMesureUseCaseProvider =
 final createCorCyclePlacetteUseCaseProvider =
     Provider<CreateCorCyclePlacetteUseCase>((ref) =>
         CreateCorCyclePlacetteUseCaseImpl(
+            ref.watch(corCyclePlacetteRepositoryProvider)));
+
+final updateCorCyclePlacetteUseCaseProvider =
+    Provider<UpdateCorCyclePlacetteUseCase>((ref) =>
+        UpdateCorCyclePlacetteUseCaseImpl(
             ref.watch(corCyclePlacetteRepositoryProvider)));
 
 final updateBmSup30AndMesureUseCaseProvider =
@@ -278,4 +311,65 @@ final completeCyclePlacetteCreatedUseCaseProvider =
 final getCorCyclePlacetteLocalStorageUseCaseprovider =
     Provider<GetInProgressCorCyclePlacetteLocalStorageUseCase>((ref) =>
         GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final exportDispositifDataUseCaseProvider =
+    Provider<ExportDispositifDataUseCase>(
+  (ref) => ExportDispositifDataUseCaseImpl(
+    ref.watch(dispositifsRepositoryProvider),
+    ref.watch(arbresRepositoryProvider),
+    ref.watch(bmsSup30RepositoryProvider),
+    ref.watch(localStorageProvider),
+  ),
+);
+
+final deleteDatabaseUseCaseProvider = Provider<DeleteDatabaseUseCase>((ref) =>
+    DeleteDatabaseUseCaseImpl(ref.watch(globalDatabaseRepositoryProvider)));
+
+final getUserIdFromLocalStorageUseCaseProvider =
+    Provider<GetUserIdFromLocalStorageUseCase>((ref) =>
+        GetUserIdFromLocalStorageUseCaseImpl(ref.watch(localStorageProvider)));
+
+final setUserIdFromLocalStorageUseCaseProvider =
+    Provider<SetUserIdFromLocalStorageUseCase>((ref) =>
+        SetUserIdFromLocalStorageUseCaseImpl(ref.watch(localStorageProvider)));
+
+final getUserNameFromLocalStorageUseCaseProvider =
+    Provider<GetUserNameFromLocalStorageUseCase>((ref) =>
+        GetUserNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final setUserNameFromLocalStorageUseCaseProvider =
+    Provider<SetUserNameFromLocalStorageUseCase>((ref) =>
+        SetUserNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final setTerminalNameFromLocalStorageUseCaseProvider =
+    Provider<SetTerminalNameFromLocalStorageUseCase>((ref) =>
+        SetTerminalNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final getTerminalNameFromLocalStorageUseCaseProvider =
+    Provider<GetTerminalNameFromLocalStorageUseCase>((ref) =>
+        GetTerminalNameFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final setIsLoggedInFromLocalStorageUseCaseProvider =
+    Provider<SetIsLoggedInFromLocalStorageUseCase>((ref) =>
+        SetIsLoggedInFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final getIsLoggedInFromLocalStorageUseCaseProvider =
+    Provider<GetIsLoggedInFromLocalStorageUseCase>((ref) =>
+        GetIsLoggedInFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final clearUserIdFromLocalStorageUseCaseProvider =
+    Provider<ClearUserIdFromLocalStorageUseCase>((ref) =>
+        ClearUserIdFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final clearUserNameFromLocalStorageUseCaseProvider =
+    Provider<ClearUserNameFromLocalStorageUseCase>((ref) =>
+        ClearUserNameFromLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));

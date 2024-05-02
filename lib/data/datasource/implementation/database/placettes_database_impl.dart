@@ -2,17 +2,13 @@ import 'package:dendro3/data/datasource/implementation/database/arbres_database_
 import 'package:dendro3/data/datasource/implementation/database/bmsSup30_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/corCyclesPlacettes_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/reperes_database_impl.dart';
-import 'package:dendro3/data/datasource/interface/database/bmsSup30_database.dart';
 import 'package:dendro3/data/datasource/interface/database/placettes_database.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/placettes_entity.dart';
 import 'package:dendro3/data/entity/reperes_entity.dart';
-import 'package:dendro3/data/mapper/placette_mapper.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PlacettesDatabaseImpl implements PlacettesDatabase {
@@ -92,47 +88,46 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
   }
 
   static Future<PlacetteListEntity> getDispPlacettesAllData(
-    Database db,
-    final int dispositifId,
-    String lastSyncTime,
-  ) async {
-    PlacetteListEntity placetteList = await db.query(_tableName,
-        where: 'id_dispositif = ?', whereArgs: [dispositifId]);
-    List<PlacetteListEntity> placetteObj;
-    return Future.wait(placetteList.map((PlacetteEntity placetteEntity) async {
-      Map<String, CorCyclePlacetteListEntity> corCyclesPlacettesObj =
-          await CorCyclesPlacettesDatabaseImpl
-              .getPlacetteCorCyclesPlacettesForDataSync(
-        db,
-        placetteEntity['id_placette'],
-        lastSyncTime,
+      Database db, final int dispositifId, String lastSyncTime) async {
+    return db.transaction((txn) async {
+      List<Map<String, dynamic>> placetteList = await txn.query(
+        _tableName,
+        where: 'id_dispositif = ?',
+        whereArgs: [dispositifId],
       );
-      Map<String, ArbreListEntity> arbresObj =
-          await ArbresDatabaseImpl.getPlacetteArbresForDataSync(
-        db,
-        placetteEntity['id_placette'],
-        lastSyncTime,
-      );
-      Map<String, BmSup30ListEntity> bmsObj =
-          await BmsSup30DatabaseImpl.getPlacetteBmSup30ForDataSync(
-        db,
-        placetteEntity['id_placette'],
-        lastSyncTime,
-      );
-      Map<String, RepereListEntity> repereObj =
-          await ReperesDatabaseImpl.getPlacetteReperesForDataSync(
-        db,
-        placetteEntity['id_placette'],
-        lastSyncTime,
-      );
-      return {
-        ...placetteEntity,
-        'corCyclesPlacettes': corCyclesPlacettesObj,
-        'arbres': arbresObj,
-        'bms': bmsObj,
-        'reperes': repereObj
-      };
-    }).toList());
+
+      List<Map<String, dynamic>> results = [];
+
+      for (var placetteEntity in placetteList) {
+        var placetteId = placetteEntity['id_placette'];
+
+        Map<String, dynamic> corCyclesPlacettesObj =
+            await CorCyclesPlacettesDatabaseImpl
+                .getPlacetteCorCyclesPlacettesForDataSync(
+                    txn, placetteId, lastSyncTime);
+
+        Map<String, dynamic> arbresObj =
+            await ArbresDatabaseImpl.getPlacetteArbresForDataSync(
+                txn, placetteId, lastSyncTime);
+
+        Map<String, dynamic> bmsObj =
+            await BmsSup30DatabaseImpl.getPlacetteBmSup30ForDataSync(
+                txn, placetteId, lastSyncTime);
+
+        Map<String, dynamic> repereObj =
+            await ReperesDatabaseImpl.getPlacetteReperesForDataSync(
+                txn, placetteId, lastSyncTime);
+
+        results.add({
+          ...placetteEntity,
+          'corCyclesPlacettes': corCyclesPlacettesObj,
+          'arbres': arbresObj,
+          'bms': bmsObj,
+          'reperes': repereObj
+        });
+      }
+      return results;
+    });
   }
 
   @override
@@ -183,6 +178,34 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
       whereArgs: [id],
     );
   }
+
+  @override
+  Future<PlacetteEntity> updatePlacette(final PlacetteEntity placette) async {
+    final db = await database;
+    final int id = placette['id_placette']; // Corrected field access for id.
+
+    late final PlacetteEntity updatedPlacette;
+    await db.transaction((txn) async {
+      var count = await txn.update(
+        _tableName,
+        placette,
+        where: '$_columnId = ?',
+        whereArgs: [id],
+      );
+
+      final results =
+          await txn.query(_tableName, where: '$_columnId = ?', whereArgs: [id]);
+
+      if (results.isNotEmpty) {
+        // Assuming you have a method to convert a Map to a PlacetteEntity
+        updatedPlacette = results.first;
+      } else {
+        throw Exception("No placette found with id $id");
+      }
+    });
+
+    return updatedPlacette;
+  }
   // @override
   // Future<void> updatePlacette(final PlacetteEntity placette) async {
   //   final db = await database;
@@ -204,5 +227,4 @@ class PlacettesDatabaseImpl implements PlacettesDatabase {
   //     whereArgs: [id],
   //   );
   // }
-
 }

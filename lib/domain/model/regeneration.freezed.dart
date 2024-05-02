@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'regeneration.dart';
 
@@ -12,7 +12,7 @@ part of 'regeneration.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Regeneration {
@@ -135,11 +135,11 @@ class _$RegenerationCopyWithImpl<$Res, $Val extends Regeneration>
 }
 
 /// @nodoc
-abstract class _$$_RegenerationCopyWith<$Res>
+abstract class _$$RegenerationImplCopyWith<$Res>
     implements $RegenerationCopyWith<$Res> {
-  factory _$$_RegenerationCopyWith(
-          _$_Regeneration value, $Res Function(_$_Regeneration) then) =
-      __$$_RegenerationCopyWithImpl<$Res>;
+  factory _$$RegenerationImplCopyWith(
+          _$RegenerationImpl value, $Res Function(_$RegenerationImpl) then) =
+      __$$RegenerationImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -158,11 +158,11 @@ abstract class _$$_RegenerationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_RegenerationCopyWithImpl<$Res>
-    extends _$RegenerationCopyWithImpl<$Res, _$_Regeneration>
-    implements _$$_RegenerationCopyWith<$Res> {
-  __$$_RegenerationCopyWithImpl(
-      _$_Regeneration _value, $Res Function(_$_Regeneration) _then)
+class __$$RegenerationImplCopyWithImpl<$Res>
+    extends _$RegenerationCopyWithImpl<$Res, _$RegenerationImpl>
+    implements _$$RegenerationImplCopyWith<$Res> {
+  __$$RegenerationImplCopyWithImpl(
+      _$RegenerationImpl _value, $Res Function(_$RegenerationImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -181,7 +181,7 @@ class __$$_RegenerationCopyWithImpl<$Res>
     Object? idNomenclatureAbroutissement = freezed,
     Object? observation = freezed,
   }) {
-    return _then(_$_Regeneration(
+    return _then(_$RegenerationImpl(
       idRegeneration: null == idRegeneration
           ? _value.idRegeneration
           : idRegeneration // ignore: cast_nullable_to_non_nullable
@@ -236,8 +236,8 @@ class __$$_RegenerationCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Regeneration extends _Regeneration {
-  const _$_Regeneration(
+class _$RegenerationImpl extends _Regeneration {
+  const _$RegenerationImpl(
       {required this.idRegeneration,
       required this.idCyclePlacette,
       required this.sousPlacette,
@@ -283,10 +283,10 @@ class _$_Regeneration extends _Regeneration {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Regeneration &&
+            other is _$RegenerationImpl &&
             (identical(other.idRegeneration, idRegeneration) ||
                 other.idRegeneration == idRegeneration) &&
             (identical(other.idCyclePlacette, idCyclePlacette) ||
@@ -330,8 +330,8 @@ class _$_Regeneration extends _Regeneration {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RegenerationCopyWith<_$_Regeneration> get copyWith =>
-      __$$_RegenerationCopyWithImpl<_$_Regeneration>(this, _$identity);
+  _$$RegenerationImplCopyWith<_$RegenerationImpl> get copyWith =>
+      __$$RegenerationImplCopyWithImpl<_$RegenerationImpl>(this, _$identity);
 }
 
 abstract class _Regeneration extends Regeneration {
@@ -347,7 +347,7 @@ abstract class _Regeneration extends Regeneration {
       required final bool taillis,
       required final bool abroutissement,
       final int? idNomenclatureAbroutissement,
-      final String? observation}) = _$_Regeneration;
+      final String? observation}) = _$RegenerationImpl;
   const _Regeneration._() : super._();
 
   @override
@@ -376,6 +376,6 @@ abstract class _Regeneration extends Regeneration {
   String? get observation;
   @override
   @JsonKey(ignore: true)
-  _$$_RegenerationCopyWith<_$_Regeneration> get copyWith =>
+  _$$RegenerationImplCopyWith<_$RegenerationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

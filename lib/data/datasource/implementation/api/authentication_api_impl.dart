@@ -3,15 +3,8 @@ import 'dart:io';
 
 import 'package:dendro3/data/datasource/interface/api/authentication_api.dart';
 import 'package:dendro3/data/entity/user_entity.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:dendro3/config/config.dart';
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
-
-// const String apiBase = "http://10.0.2.2:8000";
-const String apiBase = "http://192.168.1.64:8000";
-// const String apiBase = "https://192.168.1.54:8000";
-// const String apiBase = "https://192.168.122.1:8000";
 
 class AuthenticationApiImpl implements AuthenticationApi {
   @override
@@ -22,6 +15,7 @@ class AuthenticationApiImpl implements AuthenticationApi {
       'id_application': 1
     };
 
+    var apiBase = Config.apiBase;
     Response response = await Dio().post("$apiBase/auth/login",
         options: Options(headers: {
           HttpHeaders.contentTypeHeader: "application/json",

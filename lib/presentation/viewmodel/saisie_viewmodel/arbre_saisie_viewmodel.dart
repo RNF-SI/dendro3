@@ -1,10 +1,6 @@
-import 'dart:ffi';
-
-import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/arbre_id.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
@@ -13,7 +9,6 @@ import 'package:dendro3/domain/model/nomenclature_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_code_ecolo_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_durete_nomenclature_usecase.dart';
 import 'package:dendro3/domain/usecase/get_stade_ecorce_nomenclature_usecase.dart';
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
@@ -22,15 +17,10 @@ import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart'
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
-import 'package:dendro3/presentation/view/login_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:dendro3/presentation/state/state.dart';
 
 //TODO: à clean et revoir lorsque ce sera fini
 
@@ -45,7 +35,8 @@ final arbreSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['arbre'],
       arbreInfoObj['arbreMesure'],
       arbreInfoObj['formType'],
-      arbreInfoObj['previousCycleCoupe'],
+      arbreInfoObj['nextCycleType'],
+      arbreInfoObj['hasNextMeasurements'],
       ref.watch(getEssencesUseCaseProvider),
       ref.watch(getStadeDureteNomenclaturesUseCaseProvider),
       ref.watch(getStadeEcorceNomenclaturesUseCaseProvider),
@@ -66,7 +57,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   final String formType;
 
-  final String? previousCycleCoupe;
+  final String? nextCycleType;
+  final bool hasNextMeasurements;
   // late TodoId _id;
   // var _title = '';
   // var _description = '';
@@ -133,7 +125,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     this.arbre,
     final ArbreMesure? arbreMesure,
     this.formType,
-    this.previousCycleCoupe,
+    this.nextCycleType,
+    this.hasNextMeasurements,
     this._getEssencesUseCase,
     this._getStadeDureteNomenclaturesUseCase,
     this._getStadeEcorceNomenclaturesUseCase,
@@ -295,7 +288,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _liane = arbreMesure.liane ?? '';
       _diametreLiane = arbreMesure.diametreLiane;
       _coupe =
-          previousCycleCoupe != null ? previousCycleCoupe!.toUpperCase() : '';
+          arbreMesure.coupe != null ? arbreMesure.coupe!.toUpperCase() : '';
       _limite = arbreMesure.limite ?? false;
       _idNomenclatureCodeSanitaire = arbreMesure.idNomenclatureCodeSanitaire;
       _codeEcolo = arbreMesure.codeEcolo ?? '';
@@ -325,6 +318,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
     }
   }
 
+  @override
   Future<String> createObject() async {
     if (formType == 'add') {
       _arbreListViewModel.addItem({
@@ -338,14 +332,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'numCycle': cycle.numCycle,
         'diametre1': _diametre1,
         'diametre2': _diametre2,
-        'type': _type,
+        'type': _type == '' ? null : _type,
         'hauteurTotale': _hauteurTotale,
         'hauteurBranche': _hauteurBranche,
         'stadeDurete': _stadeDurete,
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': '',
+        'coupe': _coupe == '' ? null : _coupe,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -367,14 +361,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           'numCycle': cycle.numCycle,
           'diametre1': _diametre1,
           'diametre2': _diametre2,
-          'type': _type,
+          'type': _type == '' ? null : _type,
           'hauteurTotale': _hauteurTotale,
           'hauteurBranche': _hauteurBranche,
           'stadeDurete': _stadeDurete,
           'stadeEcorce': _stadeEcorce,
           'liane': _liane,
           'diametreLiane': _diametreLiane,
-          'coupe': _coupe,
+          'coupe': _coupe == '' ? null : _coupe,
           'limite': _limite,
           'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
           'codeEcolo': _codeEcolo,
@@ -404,14 +398,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         'numCycle': cycle.numCycle,
         'diametre1': _diametre1,
         'diametre2': _diametre2,
-        'type': _type,
+        'type': _type == '' ? null : _type,
         'hauteurTotale': _hauteurTotale,
         'hauteurBranche': _hauteurBranche,
         'stadeDurete': _stadeDurete,
         'stadeEcorce': _stadeEcorce,
         'liane': _liane,
         'diametreLiane': _diametreLiane,
-        'coupe': _coupe,
+        'coupe': _coupe == '' ? null : _coupe,
         'limite': _limite,
         'idNomenclatureCodeSanitaire': _idNomenclatureCodeSanitaire,
         'codeEcolo': _codeEcolo,
@@ -505,14 +499,14 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
   // setters ArbreMesure
   setDiametre1(final String? value) {
-    _diametre1 = (value != null && value != '') ? double.parse(value!) : null;
+    _diametre1 = (value != null && value != '') ? double.parse(value) : null;
   }
 
   setDiametre2(final String? value) =>
-      _diametre2 = (value != null && value != '') ? double.parse(value!) : null;
+      _diametre2 = (value != null && value != '') ? double.parse(value) : null;
   setType(final String value) => _type = value;
-  setHauteurTotale(final String? value) =>
-      _hauteurTotale = value != null ? double.parse(value) : null;
+  setHauteurTotale(final String? value) => _hauteurTotale =
+      (value != null && value.isNotEmpty) ? double.tryParse(value) : null;
   setHauteurBranche(final String value) =>
       _hauteurBranche = double.parse(value);
   setStadeDurete(final int? value) => _stadeDurete = value;
@@ -534,8 +528,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
   String? validateCodeEssence() {
     if (_codeEssence == '') {
       return 'Le champ code Essence est nécessaire.';
-    } else
+    } else {
       return null;
+    }
   }
 
   String? validateAzimut() {
@@ -624,11 +619,13 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return null;
         },
         filterFn: (dynamic essence, filter) =>
-            essence.essenceFilterByCodeEssence(filter),
-        itemAsString: (dynamic e) => e.codeEssence,
-        onChanged: (dynamic? data) =>
+            essence.essenceFilterByCodeEssenceOrNom(filter),
+        itemAsString: (dynamic e) {
+          return e.codeEssence + ' - ' + e.nom;
+        },
+        onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
-        validator: (dynamic? text, formData) => validateCodeEssence(),
+        validator: (dynamic text, formData) => validateCodeEssence(),
         futureVariable: essenceFuture,
       ),
       TextFieldConfig(
@@ -709,7 +706,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             if (formData.isNotEmpty) {
               return (formData['Diametre1'] != null &&
                       formData['Diametre1'] != '' &&
-                      int.parse(formData['Diametre1']) > 30) ||
+                      double.parse(formData['Diametre1']) > 30) ||
                   (_diametre1 != null && _diametre1! > 30);
             } else {
               return (_diametre1 != null && _diametre1! > 30);
@@ -751,7 +748,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         onChanged: (value) {
           setType(value);
-          if (value == null || value == '') {
+          if (value == '') {
             setStadeDurete(null);
             setStadeEcorce(null);
             setHauteurTotale(null);
@@ -776,7 +773,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: 'Hauteur',
         initialValue: initialHauteurTotaleValue(),
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
           DecimalTextInputFormatter(decimalRange: 1),
@@ -845,7 +842,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) {
           return true;
         },
-        itemAsString: (dynamic e) => e.labelDefault,
+        itemAsString: (dynamic e) {
+          return e.idNomenclature.toString() + ' - ' + e.labelDefault;
+        },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
             return (formData['Type'] != null && formData['Type'] != '') ||
@@ -854,7 +853,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             return (_type != '');
           }
         },
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeDurete(data.idNomenclature),
         validator: (value, formData) {
           if ((value == null || value == '')) {
@@ -883,8 +882,9 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         filterFn: (dynamic essence, filter) {
           return true;
         },
-        itemAsString: (dynamic e) => e.labelDefault,
-
+        itemAsString: (dynamic e) {
+          return '${e.idNomenclature} - ' + e.labelDefault;
+        },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
             return (formData['Type'] != null && formData['Type'] != '') ||
@@ -893,7 +893,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
             return (_type != '');
           }
         },
-        onChanged: (dynamic? data) =>
+        onChanged: (dynamic data) =>
             data == null ? '' : setStadeEcorce(data.idNomenclature),
         validator: (value, formData) {
           if ((value == null || value == '')) {
@@ -929,7 +929,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: 'Coupe',
         value: _coupe,
         fieldInfo:
-            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, modifier le champs 'coupe' du cycle précédent",
+            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, vous devez modifier le champs 'coupe' du cycle précédent",
         items: [
           const MapEntry('', 'Sélectionnez une option'),
           const MapEntry('C', 'chablis'),
@@ -941,23 +941,21 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         },
         isVisibleFn: (formData) {
           if (formData.isNotEmpty) {
-            if (cycle.numCycle == 1) {
+            if (!hasNextMeasurements) {
               return false;
-            } else if (((formData['Type'] != null) &&
-                    (formData['Type'] != '')) ||
-                (_type != '')) {
+            } else if (((nextCycleType != null) && (nextCycleType != '')) ||
+                (nextCycleType != '')) {
               return true;
-            } else
+            } else {
               return false;
-          } else if (cycle.numCycle == 1) {
-            return false;
+            }
           } else {
-            return true;
+            return ((nextCycleType != null) && (nextCycleType != ''));
           }
         },
         onChanged: (value) => setCoupe(value),
         importantMessage:
-            "En cas de coupe, l'information que vous saisirez ci-dessous sera directement renseignée en base de donnée pour le cycle précédent (Cycle numéro ${cycle.numCycle - 1})",
+            "Lorsque l'arbre a été coupé ou est tombé (chablis) au cycle en cours, vous devez modifier le champs 'coupe' du cycle précédent",
       ),
 
       // TextFieldConfig(
@@ -989,7 +987,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
 
       DropdownFieldConfig<dynamic>(
         fieldName: 'Référentiel DMH',
-        value: _refCodeEcolo != null ? _refCodeEcolo : 'EFI',
+        value: _refCodeEcolo ?? 'EFI',
         items: [
           const MapEntry('EFI', 'EFI'),
           const MapEntry('engref', 'engref'),
@@ -1036,7 +1034,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
         //     : [],
 
         selectedItems: () {
-          if (_codeEcolo != null && _codeEcolo.isNotEmpty) {
+          if (_codeEcolo.isNotEmpty) {
             return currentCodeEcoloNomenclature!
                 .where((nomenclature) => _codeEcolo
                     .split('-')
@@ -1047,7 +1045,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           return [];
         },
         itemAsString: (dynamic e) => e.labelDefault,
-        onChanged: (dynamic? data) => data == null
+        onChanged: (dynamic data) => data == null
             ? []
             : setCodeEcolo(data
                 .map((item) => item.cdNomenclature.toString())

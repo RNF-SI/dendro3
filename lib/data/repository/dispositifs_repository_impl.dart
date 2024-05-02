@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
@@ -48,17 +47,17 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
     return DispositifListMapper.transformToModel(dispositifListEntity);
   }
 
-  @override
   Future<Dispositif> downloadDispositifData(
     final int dispositifId,
+    Function(double) onProgressUpdate,
   ) async {
-    // Store the current time as the last sync time for this dispositif
     await _localStorageRepository.setLastSyncTimeForDispositif(
         dispositifId, DateTime.now());
 
-    final dispositifEntity = await api.getDispositifFromId(dispositifId);
+    final dispositifEntity =
+        await api.getDispositifFromId(dispositifId, onProgressUpdate);
     final mappedDispositif =
-        DispositifMapper.transformFromApiToModel(dispositifEntity);
+        DispositifMapper.transformFromApiToModel(dispositifEntity["data"]);
 
     final dispositifEntityFromDB = await database
         .insertDispositif(DispositifMapper.transformToMap(mappedDispositif));
@@ -110,14 +109,12 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
       await database.deleteDispositif(id);
 
   @override
-  Future<void> exportDispositifData(int idDispositif) async {
-    String? lastSyncTime = await _localStorageRepository
-        .getLastSyncTimeForDispositif(idDispositif);
-
+  Future<TaskResult> exportDispositifData(
+      int idDispositif, String? lastSyncTime) async {
     // get dispositif and all data linked to the dispositif
     DispositifEntity data =
         await database.getDispositifAllData(idDispositif, lastSyncTime!);
 
-    await api.exportDispositifData(data);
+    return await api.exportDispositifData(data);
   }
 }

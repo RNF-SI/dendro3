@@ -1,4 +1,3 @@
-import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 
 abstract class CreateArbreAndMesureUseCase {

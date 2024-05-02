@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'dispositif_list.dart';
 
@@ -12,7 +12,7 @@ part of 'dispositif_list.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$DispositifList {
@@ -57,22 +57,22 @@ class _$DispositifListCopyWithImpl<$Res, $Val extends DispositifList>
 }
 
 /// @nodoc
-abstract class _$$_DispositifListCopyWith<$Res>
+abstract class _$$DispositifListImplCopyWith<$Res>
     implements $DispositifListCopyWith<$Res> {
-  factory _$$_DispositifListCopyWith(
-          _$_DispositifList value, $Res Function(_$_DispositifList) then) =
-      __$$_DispositifListCopyWithImpl<$Res>;
+  factory _$$DispositifListImplCopyWith(_$DispositifListImpl value,
+          $Res Function(_$DispositifListImpl) then) =
+      __$$DispositifListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Dispositif> values});
 }
 
 /// @nodoc
-class __$$_DispositifListCopyWithImpl<$Res>
-    extends _$DispositifListCopyWithImpl<$Res, _$_DispositifList>
-    implements _$$_DispositifListCopyWith<$Res> {
-  __$$_DispositifListCopyWithImpl(
-      _$_DispositifList _value, $Res Function(_$_DispositifList) _then)
+class __$$DispositifListImplCopyWithImpl<$Res>
+    extends _$DispositifListCopyWithImpl<$Res, _$DispositifListImpl>
+    implements _$$DispositifListImplCopyWith<$Res> {
+  __$$DispositifListImplCopyWithImpl(
+      _$DispositifListImpl _value, $Res Function(_$DispositifListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_DispositifListCopyWithImpl<$Res>
   $Res call({
     Object? values = null,
   }) {
-    return _then(_$_DispositifList(
+    return _then(_$DispositifListImpl(
       values: null == values
           ? _value._values
           : values // ignore: cast_nullable_to_non_nullable
@@ -91,14 +91,15 @@ class __$$_DispositifListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_DispositifList extends _DispositifList {
-  const _$_DispositifList({required final List<Dispositif> values})
+class _$DispositifListImpl extends _DispositifList {
+  const _$DispositifListImpl({required final List<Dispositif> values})
       : _values = values,
         super._();
 
   final List<Dispositif> _values;
   @override
   List<Dispositif> get values {
+    if (_values is EqualUnmodifiableListView) return _values;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_values);
   }
@@ -109,10 +110,10 @@ class _$_DispositifList extends _DispositifList {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DispositifList &&
+            other is _$DispositifListImpl &&
             const DeepCollectionEquality().equals(other._values, _values));
   }
 
@@ -123,19 +124,20 @@ class _$_DispositifList extends _DispositifList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DispositifListCopyWith<_$_DispositifList> get copyWith =>
-      __$$_DispositifListCopyWithImpl<_$_DispositifList>(this, _$identity);
+  _$$DispositifListImplCopyWith<_$DispositifListImpl> get copyWith =>
+      __$$DispositifListImplCopyWithImpl<_$DispositifListImpl>(
+          this, _$identity);
 }
 
 abstract class _DispositifList extends DispositifList {
   const factory _DispositifList({required final List<Dispositif> values}) =
-      _$_DispositifList;
+      _$DispositifListImpl;
   const _DispositifList._() : super._();
 
   @override
   List<Dispositif> get values;
   @override
   @JsonKey(ignore: true)
-  _$$_DispositifListCopyWith<_$_DispositifList> get copyWith =>
+  _$$DispositifListImplCopyWith<_$DispositifListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

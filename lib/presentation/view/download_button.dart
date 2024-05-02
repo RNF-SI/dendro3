@@ -6,9 +6,15 @@ import 'package:dendro3/presentation/viewmodel/userDispositifs/user_dispositifs_
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// Custom Colors
+const Color colorBlue1 = Color(0xFF598979); // Bleu
+const Color colorGreen = Color(0xFF8AAC3E); // Vert
+const Color colorBlue2 = Color(0xFF7DAB9C); // Bleu
+const Color colorBlack = Color(0xFF1a1a18); // Noir
+const Color colorBeige = Color(0xFFF4F1E4); // Beige
+const Color colorBrown = Color(0xFF8B5500); // Marron
 
 @immutable
 class DownloadButton extends HookConsumerWidget {
@@ -17,7 +23,6 @@ class DownloadButton extends HookConsumerWidget {
     required this.dispInfo,
   });
 
-  // final DownloadStatus status;
   final DispositifInfo dispInfo;
   final Duration transitionDuration = const Duration(milliseconds: 500);
 
@@ -32,51 +37,57 @@ class DownloadButton extends HookConsumerWidget {
 
   bool get _isRemoving => dispInfo.downloadStatus == DownloadStatus.removing;
 
-  void _onPressed(BuildContext context, WidgetRef ref) {
-    switch (dispInfo.downloadStatus) {
-      case DownloadStatus.notDownloaded:
-        ref
-            .read(userDispositifListViewModelStateNotifierProvider.notifier)
-            .downloadDispositif(dispInfo);
-        break;
-      case DownloadStatus.fetchingDownload:
-        // do nothing.
-        break;
-      case DownloadStatus.downloading:
-        ref
-            .read(userDispositifListViewModelStateNotifierProvider.notifier)
-            .stopDownloadDispositif(dispInfo);
-        break;
-      case DownloadStatus.downloaded:
-        ref
-            .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider
-                .notifier)
-            .reinitializeList();
-        Navigator.push(context, MaterialPageRoute<void>(
-          builder: (BuildContext context) {
-            return DispositifPage(
-              dispInfo: dispInfo,
-            );
-          },
-        ));
-        break;
-      case DownloadStatus.removing:
-        // Handle the removing state, perhaps do nothing or show a message
-        break;
+  void _onPressed(BuildContext context, WidgetRef ref) async {
+    try {
+      switch (dispInfo.downloadStatus) {
+        case DownloadStatus.notDownloaded:
+          ref
+              .read(userDispositifListViewModelStateNotifierProvider.notifier)
+              .downloadDispositif(dispInfo, context);
+          break;
+        case DownloadStatus.fetchingDownload:
+          // do nothing.
+          break;
+        case DownloadStatus.downloading:
+          ref
+              .read(userDispositifListViewModelStateNotifierProvider.notifier)
+              .stopDownloadDispositif(dispInfo);
+          break;
+        case DownloadStatus.downloaded:
+          ref
+              .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider
+                  .notifier)
+              .reinitializeList();
+          Navigator.push(context, MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return DispositifPage(
+                dispInfo: dispInfo,
+              );
+            },
+          ));
+          break;
+        case DownloadStatus.removing:
+          // Handle the removing state, perhaps do nothing or show a message
+          break;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Download failed: No internet connection."),
+      ));
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _controller = useAnimationController(duration: transitionDuration);
-    _controller.addStatusListener((status) {
+    final controller = useAnimationController(duration: transitionDuration);
+    controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _controller.reverse();
+        controller.reverse();
       }
     });
 
     return AnimatedBuilder(
-        animation: _controller,
+        animation: controller,
         builder: (context, child) {
           return GestureDetector(
             onTap: () {
@@ -90,30 +101,26 @@ class DownloadButton extends HookConsumerWidget {
                   isDownloading: _isDownloading,
                   isFetching: _isFetching,
                   isRemoving: _isRemoving,
+                  downloadProgress: dispInfo.downloadProgress,
                 ),
-                Positioned.fill(
-                  child: AnimatedOpacity(
-                    duration: transitionDuration,
-                    opacity: _isDownloading || _isFetching ? 1.0 : 0.0,
-                    curve: Curves.ease,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ProgressIndicatorWidget(
-                          // downloadProgress: downloadProgress,
-                          isDownloading: _isDownloading,
-                          isFetching: _isFetching,
-                        ),
-                        if (_isDownloading)
-                          const Icon(
-                            Icons.stop,
-                            size: 14,
-                            color: CupertinoColors.activeBlue,
+                if (_isDownloading || _isFetching)
+                  Positioned.fill(
+                    child: AnimatedOpacity(
+                      duration: transitionDuration,
+                      opacity: _isDownloading || _isFetching ? 1.0 : 0.0,
+                      curve: Curves.ease,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ProgressIndicatorWidget(
+                            isDownloading: _isDownloading,
+                            isFetching: _isFetching,
+                            progress: dispInfo.downloadProgress,
                           ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           );
@@ -130,30 +137,38 @@ class ButtonShapeWidget extends StatelessWidget {
     required this.isFetching,
     required this.isRemoving,
     required this.transitionDuration,
+    this.downloadProgress = 0.0,
   });
 
   final bool isDownloading;
   final bool isDownloaded;
   final bool isFetching;
+  final double downloadProgress;
   final Duration transitionDuration;
   final bool isRemoving;
 
   @override
   Widget build(BuildContext context) {
-    var shape = const ShapeDecoration(
+    var shape = ShapeDecoration(
       shape: StadiumBorder(),
-      color: CupertinoColors.lightBackgroundGray,
+      color: isDownloaded ? colorBlue1 : colorBeige,
     );
 
     if (isDownloading || isFetching) {
       shape = ShapeDecoration(
-        shape: const CircleBorder(),
-        color: Colors.white.withOpacity(0),
+        shape: CircleBorder(),
+        color: Colors.white.withOpacity(0.7),
       );
     }
 
+    // Update button text based on the state
     String buttonText = isDownloaded ? 'OPEN' : 'GET';
-    if (isRemoving) {
+    if (isDownloading) {
+      if (downloadProgress == 1.0) {
+        buttonText = '${(downloadProgress * 99).toInt()}%';
+      } else
+        buttonText = '${(downloadProgress * 100).toInt()}%';
+    } else if (isRemoving) {
       buttonText = 'REMOVING...'; // New text for the removing state
     }
 
@@ -166,14 +181,16 @@ class ButtonShapeWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: AnimatedOpacity(
           duration: transitionDuration,
-          opacity: isDownloading || isFetching ? 0.0 : 1.0,
+          opacity: isDownloading || isFetching
+              ? 0.5
+              : 1.0, // Slight opacity change when downloading
           curve: Curves.ease,
           child: Text(
             buttonText,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.button?.copyWith(
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: CupertinoColors.activeBlue,
+                  color: isDownloading ? colorGreen : colorBlack,
                 ),
           ),
         ),
@@ -186,12 +203,12 @@ class ButtonShapeWidget extends StatelessWidget {
 class ProgressIndicatorWidget extends StatelessWidget {
   const ProgressIndicatorWidget({
     super.key,
-    // required this.downloadProgress,
+    this.progress = 0.0,
     required this.isDownloading,
     required this.isFetching,
   });
 
-  // final double downloadProgress;
+  final double progress;
   final bool isDownloading;
   final bool isFetching;
 
@@ -199,24 +216,13 @@ class ProgressIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
         aspectRatio: 1,
-        child:
-            // TweenAnimationBuilder<double>(
-            // tween: Tween(begin: 0, end: downloadProgress),
-            // duration: const Duration(milliseconds: 200),
-            // builder: (context, progress, child) {
-            // return
-            CircularProgressIndicator(
-          backgroundColor: isDownloading
-              ? CupertinoColors.lightBackgroundGray
-              : Colors.white.withOpacity(0),
-          valueColor: AlwaysStoppedAnimation(isFetching
-              ? CupertinoColors.lightBackgroundGray
-              : CupertinoColors.activeBlue),
+        child: CircularProgressIndicator(
+          backgroundColor: colorBeige,
+          valueColor: AlwaysStoppedAnimation(
+            isFetching ? colorBlue1 : colorGreen,
+          ),
+          value: isDownloading ? (progress == 1.0 ? 0.99 : progress) : null,
           strokeWidth: 2,
-          // value: isFetching ? null : progress,
-        )
-        //   },
-        // ),
-        );
+        ));
   }
 }

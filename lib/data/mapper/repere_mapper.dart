@@ -27,7 +27,7 @@ class RepereMapper {
     } catch (e) {
       print("Error in Repere transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
-      throw e;
+      rethrow;
     }
   }
 
@@ -46,7 +46,7 @@ class RepereMapper {
     } catch (e) {
       print("Error in Repere transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
-      throw e;
+      rethrow;
     }
   }
 

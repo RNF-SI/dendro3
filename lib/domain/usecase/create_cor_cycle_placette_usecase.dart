@@ -16,5 +16,7 @@ abstract class CreateCorCyclePlacetteUseCase {
     recouvHerbesHautes,
     recouvBuissons,
     recouvArbres,
+    coeff,
+    diamLim,
   );
 }

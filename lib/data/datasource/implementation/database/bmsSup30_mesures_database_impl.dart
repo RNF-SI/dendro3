@@ -1,12 +1,10 @@
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/core/helpers/format_DateTime.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/bmsSup30_mesures_database.dart';
 import 'package:dendro3/data/entity/bmsSup30Mesures_entity.dart';
 import 'package:dendro3/data/entity/bmsSup30_entity.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
@@ -37,33 +35,33 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
 
   static Future<Map<String, BmSup30MesureListEntity>>
       getbmSup30bmsSup30MesuresForDataSync(
-          Database db, final String bmsSup30Id, String lastSyncTime) async {
+          Transaction txn, final String bmsSup30Id, String lastSyncTime) async {
     // Fetch newly created BmSup30Mesure records
-    List<BmSup30MesureEntity> created_bmSup30Mesure = await db.query(
+    List<BmSup30MesureEntity> createdBmsup30mesure = await txn.query(
       _tableName,
-      where: 'id_bm_sup_30 = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_bm_sup_30 = ? AND created_at > ? AND deleted = 0',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
     // Fetch updated BmSup30Mesure records
-    List<BmSup30MesureEntity> updated_bmSup30Mesure = await db.query(
+    List<BmSup30MesureEntity> updatedBmsup30mesure = await txn.query(
       _tableName,
       where:
-          'id_bm_sup_30 = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_bm_sup_30 = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [bmsSup30Id, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted BmSup30Mesure records
-    List<BmSup30MesureEntity> deleted_bmSup30Mesure = await db.query(
+    List<BmSup30MesureEntity> deletedBmsup30mesure = await txn.query(
       _tableName,
-      where: 'id_bm_sup_30 = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_bm_sup_30 = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [bmsSup30Id, lastSyncTime],
     );
 
     return {
-      "created": created_bmSup30Mesure,
-      "updated": updated_bmSup30Mesure,
-      "deleted": deleted_bmSup30Mesure,
+      "created": createdBmsup30mesure,
+      "updated": updatedBmsup30mesure,
+      "deleted": deletedBmsup30mesure,
     };
   }
 
@@ -72,9 +70,22 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
       BmSup30MesureEntity bmSup30Mesure) async {
     final db = await database;
     late final BmSup30Entity bmsup30Entity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
     await db.transaction((txn) async {
       String idBmSup30MesureUUID = generateUuid();
       bmSup30Mesure['id_bm_sup_30_mesure'] = idBmSup30MesureUUID;
+      // Par défaut created_at et update_at sont remplies.
+      bmSup30Mesure['created_by'] = userName; // Set created_by
+      bmSup30Mesure['updated_by'] =
+          userName; // Set updated_by on creation as well
+      bmSup30Mesure['created_on'] = terminalName;
+      bmSup30Mesure['updated_on'] = terminalName;
+      bmSup30Mesure['created_at'] = formattedDate;
+      bmSup30Mesure['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,
@@ -94,12 +105,17 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
     final BmSup30MesureEntity bmSup30Mesure,
   ) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
     late final BmSup30MesureEntity bmSup30MesureEntity;
     await db.transaction((txn) async {
       var updatedBmSup30Mesure = Map<String, dynamic>.from(bmSup30Mesure)
-        ..['last_update'] =
-            formatDateTime(DateTime.now()); // Add current timestamp
-
+        ..['updated_at'] =
+            formatDateTime(DateTime.now()) // Add current timestamp
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
       await txn.update(
         _tableName,
         updatedBmSup30Mesure,
@@ -129,9 +145,18 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   @override
   Future<void> deleteBmSup30MesureFromIdBmSup30(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: 'id_bm_sup_30 = ?',
       whereArgs: [id],
     );
@@ -140,9 +165,18 @@ class BmsSup30MesuresDatabaseImpl implements BmsSup30MesuresDatabase {
   @override
   Future<void> deleteBmSup30Mesure(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
       where: '$_columnId = ?',
       whereArgs: [id],
     );

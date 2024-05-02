@@ -1,16 +1,14 @@
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/core/helpers/generate_Uuid.dart';
-import 'package:dendro3/data/datasource/implementation/database/arbres_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
-import 'package:dendro3/data/datasource/implementation/database/global_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/regenerations_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/transects_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/corCyclesPlacettes_database.dart';
 import 'package:dendro3/data/entity/corCyclesPlacettes_entity.dart';
 import 'package:dendro3/data/entity/regenerations_entity.dart';
 import 'package:dendro3/data/entity/transects_entity.dart';
-import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
@@ -45,7 +43,15 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
           k == 'recouv_herbes_basses' ||
           k == 'recouv_herbes_hautes' ||
           k == 'recouv_buissons' ||
-          k == 'recouv_arbres'))
+          k == 'recouv_arbres' ||
+          k == 'coeff' ||
+          k == 'diam_lim' ||
+          k == 'created_by' ||
+          k == 'updated_by' ||
+          k == 'created_on' ||
+          k == 'updated_on' ||
+          k == 'created_at' ||
+          k == 'updated_at'))
         property: corCyclePlacette[property]
     };
 
@@ -89,58 +95,58 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
 
   static Future<Map<String, List<Map<String, dynamic>>>>
       getPlacetteCorCyclesPlacettesForDataSync(
-          Database db, final int placetteId, String lastSyncTime) async {
+          Transaction txn, final int placetteId, String lastSyncTime) async {
     // Fetch newly created CorCyclePlacette records
-    var created_corCyclePlacette = await db.query(
+    var createdCorcycleplacette = await txn.query(
       _tableName,
-      where: 'id_placette = ? AND creation_date > ? AND deleted = 0',
+      where: 'id_placette = ? AND created_at > ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Fetch updated CorCyclePlacette records
-    var updated_corCyclePlacette = await db.query(
+    var updatedCorcycleplacette = await txn.query(
       _tableName,
       where:
-          'id_placette = ? AND last_update > ? AND creation_date <= ? AND deleted = 0',
+          'id_placette = ? AND updated_at > ? AND created_at <= ? AND deleted = 0',
       whereArgs: [placetteId, lastSyncTime, lastSyncTime],
     );
 
     // Fetch deleted CorCyclePlacette records
-    var deleted_corCyclePlacette = await db.query(
+    var deletedCorcycleplacette = await txn.query(
       _tableName,
-      where: 'id_placette = ? AND deleted = 1 AND last_update > ?',
+      where: 'id_placette = ? AND deleted = 1 AND updated_at > ?',
       whereArgs: [placetteId, lastSyncTime],
     );
 
     // Process each list to include Transects and Regenerations
     return {
       "created": await _processCorCyclePlacetteWithDetails(
-        db,
-        created_corCyclePlacette,
+        txn,
+        createdCorcycleplacette,
         lastSyncTime,
       ),
       "updated": await _processCorCyclePlacetteWithDetails(
-        db,
-        updated_corCyclePlacette,
+        txn,
+        updatedCorcycleplacette,
         lastSyncTime,
       ),
       "deleted":
-          deleted_corCyclePlacette, // Assuming no need to add details for deleted records
+          deletedCorcycleplacette, // Assuming no need to add details for deleted records
     };
   }
 
 // Helper function to process CorCyclePlacette and include Transects and Regenerations
   static Future<List<Map<String, dynamic>>> _processCorCyclePlacetteWithDetails(
-      Database db,
+      Transaction txn,
       List<CorCyclePlacetteEntity> corCyclePlacetteList,
       String lastSyncTime) async {
     return Future.wait(corCyclePlacetteList.map((corCyclePlacetteEntity) async {
       var transectObj =
           await TransectsDatabaseImpl.getCorCyclePlacetteTransectsForDataSync(
-              db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
+              txn, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
       var regenerationObj = await RegenerationsDatabaseImpl
           .getCorCyclePlacetteRegenerationsForDataSync(
-              db, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
+              txn, corCyclePlacetteEntity["id_cycle_placette"], lastSyncTime);
       return {
         ...corCyclePlacetteEntity,
         'transects': transectObj,
@@ -155,6 +161,10 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
       final CorCyclePlacetteEntity corCyclePlacette) async {
     final db = await database;
     late final CorCyclePlacetteEntity corCyclePlacetteEntity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     corCyclePlacette["date_releve"] =
@@ -163,6 +173,15 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     await db.transaction((txn) async {
       String corCyclePlacetteUuid = generateUuid();
       corCyclePlacette[_columnId] = corCyclePlacetteUuid;
+
+      // Par défaut created_at et update_at sont remplies.
+      corCyclePlacette['created_by'] = userName; // Set created_by
+      corCyclePlacette['updated_by'] =
+          userName; // Set updated_by on creation as well
+      corCyclePlacette['created_on'] = terminalName;
+      corCyclePlacette['updated_on'] = terminalName;
+      corCyclePlacette['created_at'] = formattedDate;
+      corCyclePlacette['updated_at'] = formattedDate;
 
       await txn.insert(
         _tableName,
@@ -215,11 +234,54 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
   @override
   Future<void> deleteCorCyclePlacette(final String id) async {
     final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
     await db.update(
       _tableName,
-      {'deleted': 1},
+      {
+        'deleted': 1,
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
       where: '$_columnId = ?',
       whereArgs: [id],
     );
+  }
+
+  @override
+  Future<CorCyclePlacetteEntity> updateCorCyclePlacette(
+      final CorCyclePlacetteEntity corCyclePlacette) async {
+    final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    corCyclePlacette["date_releve"] =
+        formatter.format(corCyclePlacette["date_releve"]);
+
+    late final CorCyclePlacetteEntity corCyclePlacetteEntity;
+    await db.transaction((txn) async {
+      var updatedCorCyclePlacette = Map<String, dynamic>.from(corCyclePlacette)
+        ..['updated_at'] = formatDateTime(DateTime.now())
+        ..['updated_by'] = userName
+        ..['updated_on'] = terminalName;
+
+      await txn.update(
+        _tableName,
+        updatedCorCyclePlacette,
+        where: '$_columnId = ?',
+        whereArgs: [corCyclePlacette['id_cycle_placette']],
+      );
+
+      final results = await txn.query(_tableName,
+          where: '$_columnId = ?',
+          whereArgs: [corCyclePlacette['id_cycle_placette']]);
+      corCyclePlacetteEntity = results.first;
+    });
+    return corCyclePlacetteEntity;
   }
 }

@@ -13,11 +13,6 @@ abstract class ArbresMesuresDatabase {
     int? numCycle,
   );
 
-  Future<ArbreMesureEntity> updateLastArbreMesureCoupe(
-    final String idArbreMesure,
-    final String? coupe,
-  );
-
   Future<void> deleteArbreMesureFromIdArbre(final String idArbre);
 
   Future<void> deleteArbreMesure(final String idArbreMesure);

@@ -1,9 +1,4 @@
-import 'package:dendro3/data/entity/arbres_entity.dart';
-import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
-import 'package:dendro3/domain/model/dispositif.dart';
-import 'package:dendro3/domain/model/dispositif_list.dart';
-import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 
 abstract class BmsSup30Repository {
   Future<BmSup30> insertBmSup30(
@@ -38,4 +33,7 @@ abstract class BmsSup30Repository {
 
   Future<void> deleteBmSup30AndBmSup30MesureFromIdBmSup30(
       final String idBmSup30);
+
+  Future<void> actualizeBmIdBmSup30OrigAfterSync(
+      final List<Map<String, dynamic>> bms);
 }

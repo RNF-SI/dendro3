@@ -1,11 +1,7 @@
-import 'dart:ui';
 
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
-import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/usecase/delete_dispositif_usecase.dart';
-import 'package:dendro3/domain/usecase/get_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/get_placette_usecase.dart';
 import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
@@ -14,7 +10,6 @@ import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmo
 import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // TODO: clean when finished

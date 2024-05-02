@@ -10,24 +10,9 @@ class DispositifInfo with _$DispositifInfo {
   const factory DispositifInfo({
     required Dispositif dispositif,
     required DownloadStatus downloadStatus,
+    @Default(0.0)
+    double downloadProgress, // Default to 0.0, indicating no progress
   }) = _DispositifInfo;
 
   const DispositifInfo._();
-
-  // factory Dispositif.fromJson(Map<String, dynamic> json) => Dispositif(
-  //       id: json["id"],
-  //       name: json["name"],
-  //       idOrganisme: json["idOrganisme"],
-  //       alluvial: json["alluvial"],
-  //     );
-
-  // Map<String, dynamic> toJson() => {
-  //       "id": id,
-  //       "name": name,
-  //       "idOrganisme": idOrganisme,
-  //       "alluvial": alluvial,
-  //     };
-  // Dispositif complete() => copyWith(isCompleted: true);
-
-  // Dispositif incomplete() => copyWith(isCompleted: false);
 }

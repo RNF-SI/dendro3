@@ -1,28 +1,19 @@
-import 'dart:ffi';
-
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/essence.dart';
 import 'package:dendro3/domain/model/essence_list.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
-import 'package:dendro3/domain/model/cycle.dart';
-import 'package:dendro3/domain/model/placette.dart';
 import 'package:dendro3/domain/usecase/get_essences_usecase.dart';
-import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/object_saisie_viewmodel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dendro3/presentation/lib/form_config/checkbox_field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/custom_text_input/decimal_text_input_formatter.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
-import 'package:dendro3/presentation/lib/form_config/field_config.dart';
-import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
 //TODO: à clean et revoir lorsque ce sera fini
 
 final regenerationSaisieViewModelProvider = Provider.autoDispose
@@ -142,8 +133,9 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   String? validateCodeEssence() {
     if (_codeEssence == '') {
       return 'Le champ code Essence est nécessaire.';
-    } else
+    } else {
       return null;
+    }
   }
 
   @override
@@ -192,6 +184,12 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   }
 
   bool isUniqueCombination() {
+    // Check if corCyclePlacette or corCyclePlacette.regenerations is null before proceeding.
+    if (corCyclePlacette == null || corCyclePlacette!.regenerations == null) {
+      // If there's no regenerations data, we might consider the combination unique by default
+      // Or handle the logic differently depending on the application's requirements
+      return true; // or false, depending on your logic needs.
+    }
     return corCyclePlacette!.regenerations!
         .isUniqueCombination(_sousPlacette, _codeEssence, _taillis);
   }
@@ -222,7 +220,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
         asyncItems: (String filter, [Map<String, dynamic>? options]) =>
             getAndSetInitialEssence(),
         selectedItem: () {
-          if (_codeEssence != '' && _codeEssence != null) {
+          if (_codeEssence != '') {
             return _essences!.values
                 .where((element) => element.codeEssence == _codeEssence)
                 .first;
@@ -230,11 +228,13 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
           return null;
         },
         filterFn: (dynamic essence, filter) =>
-            essence.essenceFilterByCodeEssence(filter),
-        itemAsString: (dynamic e) => e.codeEssence,
-        onChanged: (dynamic? data) =>
+            essence.essenceFilterByCodeEssenceOrNom(filter),
+        itemAsString: (dynamic e) {
+          return e.codeEssence + ' - ' + e.nom;
+        },
+        onChanged: (dynamic data) =>
             data == null ? '' : setCodeEssence(data.codeEssence),
-        validator: (dynamic? text, formData) => validateCodeEssence(),
+        validator: (dynamic text, formData) => validateCodeEssence(),
         futureVariable: essenceFuture,
       ),
       TextFieldConfig(
@@ -315,7 +315,7 @@ class RegenerationSaisieViewModel extends ObjectSaisieViewModel {
   String initialObservation() => _observation ?? '';
   String initialRecouvrement() {
     if (_recouvrement == null) {
-      return '';
+      return '0';
     }
     return _recouvrement == _recouvrement!.toInt()
         ? _recouvrement!.toInt().toString()

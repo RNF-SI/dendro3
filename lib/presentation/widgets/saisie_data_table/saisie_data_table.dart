@@ -1,32 +1,18 @@
-import 'package:dendro3/data/mapper/arbreMesure_mapper.dart';
-import 'package:dendro3/data/mapper/arbre_mapper.dart';
-import 'package:dendro3/data/mapper/bmSup30Mesure_mapper.dart';
-import 'package:dendro3/data/mapper/bmSup30_mapper.dart';
-import 'package:dendro3/data/mapper/corCyclePlacette_mapper.dart';
-import 'package:dendro3/data/mapper/regeneration_mapper.dart';
-import 'package:dendro3/data/mapper/repere_mapper.dart';
-import 'package:dendro3/data/mapper/transect_mapper.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
-import 'package:dendro3/domain/model/bmSup30_list.dart';
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/corCyclePlacette_list.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/displayable_list.dart';
 import 'package:dendro3/domain/model/placette.dart';
-import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
-import 'package:dendro3/domain/model/regeneration_list.dart';
 import 'package:dendro3/domain/model/repere.dart';
-import 'package:dendro3/domain/model/repere_list.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:dendro3/domain/model/transect.dart';
-import 'package:dendro3/domain/model/transect_list.dart';
 import 'package:dendro3/presentation/lib/simple_element.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
@@ -34,26 +20,41 @@ import 'package:dendro3/presentation/viewmodel/baseList/bms_list_viewmodel.dart'
 import 'package:dendro3/presentation/viewmodel/baseList/regeneration_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/repere_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/transect_list_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
-import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
-import 'package:dendro3/presentation/viewmodel/placette/saisie_placette_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/primary_grid.dart';
 import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
-import 'package:dendro3/core/types/saisie_data_table_types.dart';
 import 'package:dendro3/presentation/widgets/secondary_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'dart:math' as math;
 import 'package:data_table_2/data_table_2.dart';
+import 'package:collection/collection.dart';
 
-import 'package:flutter/scheduler.dart';
+final ThemeData dendro3Theme = ThemeData(
+  primaryColor: Color(0xFF598979), // Bleu
+  hintColor: Color(0xFF8AAC3E), // Vert
+  scaffoldBackgroundColor: Color(0xFFF4F1E4), // Beige
+  colorScheme: ColorScheme(
+    primary: Color(0xFF598979), // Bleu
+    secondary: Color(0xFF8AAC3E), // Vert
+    surface: Color(0xFFF4F1E4), // Beige
+    background: Color(0xFF1a1a18), // Noir
+    error: Color(0xFF8B5500), // Marron
+    onPrimary: Colors.white,
+    onSecondary: Colors.white,
+    onSurface: Colors.black,
+    onBackground: Colors.white,
+    onError: Colors.white,
+    brightness: Brightness.light,
+  ),
+  textTheme: TextTheme(
+    headline6: TextStyle(color: Color(0xFF1a1a18)), // For headers
+    bodyText2: TextStyle(color: Color(0xFF1a1a18)), // For body text
+  ),
+);
 
 class SaisieDataTable extends ConsumerStatefulWidget {
-  SaisieDataTable({
+  const SaisieDataTable({
     super.key,
     required this.placette,
     // required this.itemList,
@@ -92,7 +93,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref
           .watch(cycleSelectedProvider.notifier)
-          .setCycles(widget.dispCycleList!.values);
+          .setCycles(widget.dispCycleList.values);
       ref
           .watch(reducedToggleProvider.notifier)
           .setToggleList([true, false, false]);
@@ -131,7 +132,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     Map<String, int> mapNumCyclePlacetteNumCycle = {};
 
     // create a Map with key idCyclePlacette and value numCycle
-    if (cycleList != null && cycleList.isNotEmpty) {
+    if (cycleList.isNotEmpty) {
       mapNumCyclePlacetteNumCycle = {
         for (CorCyclePlacette corCyclePlacette
             in widget.corCyclePlacetteList.values)
@@ -162,16 +163,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     final corCyclePlacetteLocalStorageStatusProvider = ref
         .read(corCyclePlacetteLocalStorageStatusStateNotifierProvider.notifier);
 
-    final _columns = _createColumns(
+    final columns = _createColumns(
       columnNameList,
     );
+    Map<String, bool> columnVisibility =
+        getColumnVisibility(columnNameList, widget.displayTypeState);
 
-    final _rows = _createRows(
+    final rows = _createRows(
       sortedCycleRowList,
       items,
       mapIdCycleNumCycle,
       mapNumCyclePlacetteNumCycle,
       selectedItemDetails,
+      columnVisibility,
     );
 
     return Scaffold(
@@ -179,38 +183,52 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         children: [
           Container(
             height: 300,
-            padding: EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.only(right: 12),
+            decoration: const BoxDecoration(
               color: Colors.white,
               // border: Border(),
               // borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             child: columnNameList.isEmpty
-                ? Text("Il n'y a pas de ${widget.displayTypeState} à afficher")
+                ? Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: dendro3Theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                        "Il n'y a pas de ${widget.displayTypeState} à afficher."),
+                  )
                 : DataTable2(
-                    columnSpacing: 0, // Adjusted for better spacing
-                    horizontalMargin: 1, // Consistent margin
+                    columnSpacing: 10,
+                    horizontalMargin: 10,
                     fixedLeftColumns: 1,
                     scrollController: _controller,
-                    dividerThickness: 1,
-                    showCheckboxColumn: false, // Added dividers for clarity
+                    dividerThickness: 2,
+                    showCheckboxColumn: false,
                     minWidth: _extendedList[0] ? null : arrayWidth,
-                    columns: _columns,
-                    rows: _rows,
-                    dataRowHeight:
-                        50, // Uncommented and adjusted for better row visibility
+                    columns: columns,
+                    rows: rows,
+                    dataRowHeight: 50,
                     decoration: BoxDecoration(
-                      color: Colors.white, // Consider using theme-based colors
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: Offset(0, 1),
+                        ),
+                      ],
                     ),
                     headingTextStyle: TextStyle(
-                      color: Colors.black54,
-                      fontWeight:
-                          FontWeight.bold, // Custom text style for headers
+                      color: dendro3Theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
                     ),
                     dataTextStyle: TextStyle(
-                      color: Colors.black, // Custom text style for data
+                      color: dendro3Theme.colorScheme.onSurface,
                     ),
-                    // Additional customizations like row color, sorting functionality, etc.
                   ),
           ),
           Row(
@@ -232,18 +250,18 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.red[700],
-                selectedColor: Colors.white,
-                fillColor: Colors.red[200],
-                color: Colors.red[400],
+                // selectedBorderColor: Colors.red[700],
+                selectedColor: dendro3Theme.colorScheme.onSecondary,
+                fillColor: Color(0xFF7DAB9C),
+                color: dendro3Theme.colorScheme.secondary,
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,
                 ),
                 isSelected: _extendedList,
-                children: <Widget>[Text('Synthese'), Text('Complet')],
+                children: const <Widget>[Text('Synthese'), Text('Complet')],
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Visibility(
                 visible: [0, 1].contains(
                     reducedMesureList.indexWhere((mesure) => mesure == true)),
@@ -257,10 +275,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         .cycleToggleChanged(index);
                   },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  selectedBorderColor: Colors.blue[700],
-                  selectedColor: Colors.white,
-                  fillColor: Colors.blue[200],
-                  color: Colors.blue[400],
+                  selectedColor: dendro3Theme.colorScheme.onSecondary,
+                  fillColor: Color(0xFF7DAB9C),
+                  color: dendro3Theme.colorScheme.secondary,
                   constraints: const BoxConstraints(
                     minHeight: 40.0,
                     minWidth: 40.0,
@@ -311,8 +328,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             ),
           );
         },
-        child: Icon(Icons.add),
         tooltip: 'Ajouter un ${widget.displayTypeState}',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -323,19 +340,17 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     Map<int, int> mapIdCycleNumCycle,
     Map<String, int> mapNumCyclePlacetteNumCycle,
   ) {
-    // final selectedItemDetailsCo = ref.read(selectedItemDetailsProvider);
-    // Check if selectedItemDetails is null
     if (selectedItemDetailsCo == null) {
-      return Text("No item selected.");
+      return const Text("No item selected.",
+          style: TextStyle(color: Color(0xFF8AAC3E)));
     }
 
     SimpleElement simpleElements = SimpleElement();
     List<dynamic> mesuresList = [];
 
-    // Extracting the data
     int currentIndex = 0;
-    var allValues = selectedItemDetailsCo!.getAllValuesMapped();
-    allValues.entries.forEach((entry) {
+    var allValues = selectedItemDetailsCo.getAllValuesMapped();
+    for (var entry in allValues.entries) {
       if (entry.key == "arbresMesures" && entry.value is List) {
         mesuresList = entry.value;
         selectedItemDetailsCo as Arbre;
@@ -355,16 +370,18 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         mesuresList = [];
         simpleElements.addEntry(entry.key, entry.value);
       }
-    });
+    }
 
     return Expanded(
       child: Container(
-        margin: EdgeInsets.all(10), // Marge externe
+        margin: const EdgeInsets.all(10), // Marge externe
         decoration: BoxDecoration(
-          color: Colors.grey[200], // Couleur de fond
-          borderRadius: BorderRadius.circular(15), // Bords arrondis
+          color: Color(0xFF7DAB9C),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Color(0xFF7DAB9C)),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PrimaryGridWidget(
               simpleElements: simpleElements,
@@ -392,35 +409,46 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                   },
                 ));
               },
-              onItemDeleted: (dynamic item) {
+              onItemDeleted: (dynamic item) async {
+                bool deletionResult = false;
                 if (selectedItemDetailsCo is Arbre) {
                   final arbreListViewModel = ref
                       .read(arbreListViewModelStateNotifierProvider.notifier);
                   // Arbre? arbreDetails = selectedItemDetailsCo as Arbre?;
                   // if (arbreDetails != null) {
-                  arbreListViewModel.deleteItem(selectedItemDetailsCo.idArbre);
+                  deletionResult = await arbreListViewModel
+                      .deleteItem(selectedItemDetailsCo.idArbre);
                   // }
                 } else if (selectedItemDetailsCo is BmSup30) {
                   final bmSup30ListViewModel = ref
                       .read(bmSup30ListViewModelStateNotifierProvider.notifier);
-                  bmSup30ListViewModel
+                  deletionResult = await bmSup30ListViewModel
                       .deleteItem(selectedItemDetailsCo.idBmSup30);
                 } else if (selectedItemDetailsCo is Regeneration) {
                   final regenerationListViewModel = ref.read(
                       regenerationListViewModelStateNotifierProvider.notifier);
-                  regenerationListViewModel
+                  deletionResult = await regenerationListViewModel
                       .deleteItem(selectedItemDetailsCo.idRegeneration);
                 } else if (selectedItemDetailsCo is Repere) {
                   final repereListViewModel = ref
                       .read(repereListViewModelStateNotifierProvider.notifier);
-                  repereListViewModel
+                  deletionResult = await repereListViewModel
                       .deleteItem(selectedItemDetailsCo.idRepere);
                 } else if (selectedItemDetailsCo is Transect) {
                   final transectListViewModel = ref.read(
                       transectListViewModelStateNotifierProvider.notifier);
-                  transectListViewModel
+                  deletionResult = await transectListViewModel
                       .deleteItem(selectedItemDetailsCo.idTransect);
                 }
+                // Display the SnackBar based on the result of deletion
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(deletionResult
+                        ? 'Le ${widget.displayTypeState} a été supprimé sans problème. La sélection a été réinitialisée.'
+                        : 'Problème rencontré lors de la suppression du ${widget.displayTypeState}.'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
               },
               onItemUpdated: (dynamic item) {
                 // Logic for updating an item
@@ -452,11 +480,12 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             if (mesuresList.isNotEmpty)
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(4),
-                  margin: EdgeInsets.all(5), // Marge externe
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.grey[400], // Couleur de fond
-                    borderRadius: BorderRadius.circular(15), // Bords arrondis
+                    color: Color(0xFF598979),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: SecondaryGrid(
                     mesuresList: mesuresList,
@@ -473,6 +502,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     onItemMesureAdded: (dynamic adedItem) async {
                       Navigator.push(context, MaterialPageRoute<void>(
                         builder: (BuildContext context) {
+                          bool hasNextMeasurements = false;
+                          if (widget.displayTypeState == "Arbres") {
+                            selectedItemDetailsCo as SaisisableObjectMesure;
+                            hasNextMeasurements =
+                                selectedItemDetailsCo.getMesureValuesLength() >
+                                        0
+                                    ? true
+                                    : false;
+                          }
+
                           return FormSaisiePlacettePage(
                             formType: "newMesure",
                             type: widget.displayTypeState,
@@ -488,6 +527,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             ),
                             saisisableObject1: selectedItemDetailsCo,
                             saisisableObject2: null,
+                            hasNextMeasurements: hasNextMeasurements,
                           );
                         },
                       ));
@@ -505,48 +545,60 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                             deletedItem['idCycle'],
                             mapIdCycleNumCycle[deletedItem['idCycle']]!);
                       } else if (deletedItem.containsKey('idBmSup30Mesure')) {
+                        selectedItemDetailsCo as BmSup30;
                         final bmSup30ListViewModel = ref.read(
                             bmSup30ListViewModelStateNotifierProvider.notifier);
-                        bmSup30ListViewModel
-                            .deleteItemMesure(deletedItem['idBmSup30Mesure']);
-                      }
-
-                      if (!result) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'Cannot delete the only mesure of an arbre.'),
-                            duration: Duration(seconds: 3),
-                          ),
+                        result = await bmSup30ListViewModel.deleteItemMesure(
+                          selectedItemDetailsCo.idBmSup30,
+                          deletedItem['idBmSup30Mesure'],
                         );
                       }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(result
+                              ? 'La mesure du ${widget.displayTypeState} a été supprimée sans problème. La sélection a été réinitialisée.'
+                              : 'Un problème a eu lieu lors de la suppression.'),
+                          duration: Duration(seconds: 4),
+                        ),
+                      );
                     },
                     onItemMesureUpdated: (int index) {
                       Navigator.push(context, MaterialPageRoute<void>(
                         builder: (BuildContext context) {
                           // Get the coupe info of the previous cycle
                           // Get previous cycle
-                          String? previousCycleCoupe;
+                          String? nextCycleType;
+                          bool hasNextMeasurements = false;
                           if (widget.displayTypeState == "Arbres") {
                             selectedItemDetailsCo as SaisisableObjectMesure;
                             int? numCycle = mapIdCycleNumCycle[
                                 selectedItemDetailsCo
                                     .getMesureFromIndex(index)
                                     .idCycle];
-                            // get previous cycle with numCycle - 1
-                            int? previousCycle = numCycle! - 1;
-                            if (previousCycle != 0) {
-                              // get previous cycle idCycle
-                              int? previousCycleIdCycle = mapIdCycleNumCycle
-                                  .entries
-                                  .firstWhere((element) =>
-                                      element.value == previousCycle)
-                                  .key;
+                            // get next cycle with numCycle + 1
+                            int? nextCycle = numCycle! + 1;
+                            // get next cycle idCycle
+                            int? nextCycleIdCycle = mapIdCycleNumCycle.entries
+                                .firstWhereOrNull(
+                                    (element) => element.value == nextCycle)
+                                ?.key;
 
-                              // get coupe value of previous Cycle with previousCycleIdCycle
-                              previousCycleCoupe = selectedItemDetailsCo
-                                  .getMesureFromIdCycle(previousCycleIdCycle)
-                                  .coupe;
+                            // get coupe value of previous Cycle with previousCycleIdCycle
+                            if (nextCycleIdCycle != null) {
+                              ArbreMesure? nextArbreMesure =
+                                  selectedItemDetailsCo
+                                      .getMesureFromIdCycle(nextCycleIdCycle);
+                              if (nextArbreMesure != null) {
+                                hasNextMeasurements = true;
+                                nextCycleType = nextArbreMesure.type;
+                              } else {
+                                hasNextMeasurements = false;
+                                nextCycleType = '';
+                              }
+                            } else {
+                              hasNextMeasurements = false;
+                              nextCycleType = '';
                             }
                           }
                           return FormSaisiePlacettePage(
@@ -573,7 +625,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                                     ? selectedItemDetailsCo
                                         .getMesureFromIndex(index)
                                     : null,
-                            previousCycleCoupe: previousCycleCoupe,
+                            nextCycleType: nextCycleType,
+                            hasNextMeasurements: hasNextMeasurements,
                           );
                         },
                       ));
@@ -598,60 +651,18 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         .setSelectedItemDetails(value, widget.displayTypeState);
 
     if (selectedItem is Arbre) {
-      selectedItem as Arbre;
+      selectedItem;
       ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
               .arbresMesures!
               .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
           0;
     } else if (selectedItem is BmSup30) {
-      selectedItem as BmSup30;
+      selectedItem;
       ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
               .bmsSup30Mesures!
               .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
           0;
     }
-
-    // ref
-    //     .read(selectedItemMesureDetailsProvider.notifier)
-    //     .setSelectedItemMesureDetails(selectedIndex);
-
-    // if (selectedItemDetails is Arbre) {
-    //   Arbre arbreDetails = selectedItemDetails as Arbre;
-    //   selectedItemMesureDetails =
-    //       arbreDetails.arbresMesures!.values[selectedIndex];
-    // }
-    // onSelectedItemIndexChanged(selectedIndex);
-    // switch (widget.displayTypeState) {
-    //   case 'Arbres':
-    //     selectedItemMesureDetails = selectedItemDetails!
-    //         .arbresMesures.values[selectedIndex] as ArbreMesure;
-    //     // selectedItemMesureDetails =
-    //     //     getObjectFromType(selectedItemDetails!.arbresMesures.values[selectedIndex], items, 'Arbres');
-    //     // selectedItemMesureDetails =
-    //     // selectedItemDetails!.arbresMesures.values[selectedIndex];
-
-    //     break;
-    //   case 'BmsSup30':
-
-    // case 'BmsSup30':
-    //   return items.getObjectFromId(value['idBmSup30Orig']);
-    // case 'Regenerations':
-    //   return items.getObjectFromId(value['idRegeneration']);
-    // case 'Repères':
-    //   return items.getObjectFromId(value['idRepere']);
-    // case 'Transects':
-    //   return items.getObjectFromId(value['idTransectOrig']);
-    // default:
-    //   throw ArgumentError('Unknown type: ${items.runtimeType}');
-    // }
-
-    // if (selectedItemDetails != null &&
-    //     selectedIndex < selectedItemDetails?.arbresMesures.values.length) {
-    //   setState(() {
-    //     selectedArbreMesure =
-    //         selectedItemDetails?.arbresMesures.values[selectedIndex];
-    //   });
-    // }
   }
 
   List<DataColumn> _createColumns(List<String> columnList) {
@@ -663,7 +674,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     //         shouldIncludeColumn(columnStr, widget.displayTypeState))
     //     .toList();
 
-    List<String> columnTitles =
+    List<Map<String, dynamic>> columnTitles =
         _getColumnTitlesForType(columnList, widget.displayTypeState);
 
     // Ajouter d'abord la colonne "update"
@@ -673,29 +684,34 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       ),
     );
 
-    for (var columnStr in columnTitles) {
-      // Check if column should be included based on displayType
-      columns.add(DataColumn2(
-        label: Text(columnStr, style: TextStyle(fontSize: 12)),
-        numeric: true,
-        onSort: (columnIndex, _) {
-          setState(() {
-            if (_sortColumnIndex == columnIndex) {
-              // If the same column is clicked again, toggle the sort direction
-              _sortAscending = !_sortAscending;
-            } else {
-              // If a different column is clicked, start with ascending order
-              _sortColumnIndex = columnIndex;
-              _sortAscending = true;
-            }
-          });
+    for (var columnInfo in columnTitles) {
+      if (columnInfo['visible']) {
+        // Check if column should be included based on displayType
+        columns.add(DataColumn2(
+          label:
+              Text(columnInfo['title'], style: const TextStyle(fontSize: 12)),
+          numeric: true,
+          onSort: (columnIndex, _) {
+            setState(() {
+              if (_sortColumnIndex == columnIndex) {
+                // If the same column is clicked again, toggle the sort direction
+                _sortAscending = !_sortAscending;
+              } else {
+                // If a different column is clicked, start with ascending order
+                _sortColumnIndex = columnIndex;
+                _sortAscending = true;
+              }
+            });
 
-          ref
-              .read(sortedCycleRowsProvider.notifier)
-              .sortRows(columnIndex - 1, _sortAscending);
-          // _onSortColumn(columnIndex, ascending);
-        },
-      ));
+            // On utilise la function sort row avec columnIndex -1 car on a une colonne pour cliquer la ligne
+            // Mais on ajoute 1, car l'id n'est affiché pour aucune des tables
+            ref
+                .read(sortedCycleRowsProvider.notifier)
+                .sortRows(columnIndex, _sortAscending);
+            // _onSortColumn(columnIndex, ascending);
+          },
+        ));
+      }
     }
 
     return columns;
@@ -707,6 +723,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
     Map<int, int> mapIdCycleNumCycle,
     Map<String, int> mapNumCyclePlacetteNumCycle,
     SaisisableObject? selectedItemDetails,
+    Map<String, bool> columnVisibility,
   ) {
     return valueList.map<DataRow>((value) {
       List<DataCell> cellList = [];
@@ -714,7 +731,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       int selectedIndex = 0;
 
       if (selectedItemDetails != null) {
-        if (selectedItemDetails!.isEqualToMap(value)) {
+        if (selectedItemDetails.isEqualToMap(value)) {
           isSelected = true;
         }
       }
@@ -726,7 +743,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             width: 24, // Adjust the width as needed
             height: 24,
             child: IconButton(
-              padding: EdgeInsets.only(left: 6, right: 30),
+              padding: const EdgeInsets.only(left: 6, right: 30),
               icon: Icon(
                 isSelected
                     ? Icons.radio_button_checked
@@ -748,34 +765,36 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       // Create cells based on the new column order
       value.forEach((key, val) {
-        if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
-          cellList.add(DataCell(Text(
-            mapIdCycleNumCycle[val].toString(),
-            style: TextStyle(fontSize: 15),
-          )));
-        } else if (key == "idCyclePlacette" &&
-            mapNumCyclePlacetteNumCycle.containsKey(val)) {
-          cellList.add(DataCell(Text(
-            mapNumCyclePlacetteNumCycle[val].toString(),
-            style: TextStyle(fontSize: 15),
-          )));
-        } else {
-          String displayValue;
-          if (val is double) {
-            displayValue = val == val.toInt()
-                ? val.toInt().toString()
-                : val.toStringAsFixed(1);
+        if (columnVisibility[key] ?? true) {
+          if (key == "idCycle" && mapIdCycleNumCycle.containsKey(val)) {
+            cellList.add(DataCell(Text(
+              mapIdCycleNumCycle[val].toString(),
+              style: const TextStyle(fontSize: 15),
+            )));
+          } else if (key == "idCyclePlacette" &&
+              mapNumCyclePlacetteNumCycle.containsKey(val)) {
+            cellList.add(DataCell(Text(
+              mapNumCyclePlacetteNumCycle[val].toString(),
+              style: const TextStyle(fontSize: 15),
+            )));
           } else {
-            displayValue = val.toString();
-          }
-          cellList.add(
-            DataCell(
-              Text(
-                displayValue,
-                style: TextStyle(fontSize: 15),
+            String displayValue;
+            if (val is double) {
+              displayValue = val == val.toInt()
+                  ? val.toInt().toString()
+                  : val.toStringAsFixed(1);
+            } else {
+              displayValue = val.toString();
+            }
+            cellList.add(
+              DataCell(
+                Text(
+                  displayValue,
+                  style: const TextStyle(fontSize: 15),
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       });
 
@@ -785,59 +804,60 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
           // Use a different Color for each Cycle
           //For arbre or bmsup30 use mapIdCycleNumCycle, to get the numCycle
           //For other type use mapIdCyclePlacetteNumCycle, to get the numCycle
+          int? cycleNum = mapIdCycleNumCycle[value["idCycle"]] ??
+              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]];
 
-          if (mapIdCycleNumCycle[value["idCycle"]] == 1 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 1) {
-            return Colors.white;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 2 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 2) {
-            return Colors.blue[200];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 3 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 3) {
-            return Colors.blue[400];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 4 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 4) {
-            return Colors.blue[600];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 5 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 5) {
-            return Colors.blue[800];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 6 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 6) {
-            return Colors.blue[900];
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 7 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 7) {
-            return Colors.green;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 8 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 8) {
-            return Colors.lime;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 9 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 9) {
-            return Colors.amber;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 10 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 10) {
-            return Colors.cyan;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 11 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 11) {
-            return Colors.deepOrange;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 12 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 12) {
-            return Colors.deepPurple;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 13 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 13) {
-            return Colors.lightBlue;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 14 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 14) {
-            return Colors.lightGreen;
-          } else if (mapIdCycleNumCycle[value["idCycle"]] == 15 ||
-              mapNumCyclePlacetteNumCycle[value["idCyclePlacette"]] == 15) {
-            return Colors.limeAccent;
+          switch (cycleNum) {
+            case 1:
+              return Color(0xFF598979).withOpacity(0.2); // Lighter Bleu
+            case 2:
+              return Color(0xFF598979).withOpacity(0.6); // Vert
+            case 3:
+              return Color(0xFF598979); // Primary Bleu
+            case 4:
+              return Color(0xFF8AAC3E); // Noir
+            case 5:
+              return Color(0xFF8AAC3E).withOpacity(0.6); // Beige
+            case 6:
+              return Color(0xFF8B5500); // Marron
+            case 7:
+              return Color(0xFF598979)
+                  .withOpacity(0.8); // Slightly transparent Bleu
+            case 8:
+              return Color(0xFF8AAC3E)
+                  .withOpacity(0.8); // Slightly transparent Vert
+            case 9:
+              return Color(0xFF7DAB9C)
+                  .withOpacity(0.8); // Slightly transparent Lighter Bleu
+            case 10:
+              return Color(0xFF1a1a18)
+                  .withOpacity(0.8); // Slightly transparent Noir
+            case 11:
+              return Color(0xFFF4F1E4)
+                  .withOpacity(0.8); // Slightly transparent Beige
+            case 12:
+              return Color(0xFF8B5500)
+                  .withOpacity(0.8); // Slightly transparent Marron
+            case 13:
+              return Color(0xFF598979)
+                  .withOpacity(0.6); // More transparent Bleu
+            case 14:
+              return Color(0xFF8AAC3E)
+                  .withOpacity(0.6); // More transparent Vert
+            case 15:
+              return Color(0xFF7DAB9C)
+                  .withOpacity(0.6); // More transparent Lighter Bleu
+            default:
+              return Color(
+                  0xFFF4F1E4); // Default to Beige if cycle number is undefined
           }
         }),
       );
     }).toList();
   }
 
-  List<String> _getColumnTitlesForType(List<String> columnList, String type) {
+  List<Map<String, dynamic>> _getColumnTitlesForType(
+      List<String> columnList, String type) {
     switch (type) {
       case 'Arbres':
         return Arbre.changeColumnName(columnList);
@@ -849,12 +869,24 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         return Regeneration.changeColumnName(columnList);
       case 'Transects':
         return Transect.changeColumnName(columnList);
-      case 'Reperes':
       case 'Repères':
         return Repere.changeColumnName(columnList);
       default:
-        throw ArgumentError('Unknown type: ${type}');
+        throw ArgumentError('Unknown type: $type');
     }
+  }
+
+  // This function should be called to get the column visibility information
+  Map<String, bool> getColumnVisibility(List<String> columnList, String type) {
+    List<Map<String, dynamic>> columnTitles =
+        _getColumnTitlesForType(columnList, type);
+    Map<String, bool> columnVisibility = {};
+
+    for (var columnInfo in columnTitles) {
+      columnVisibility[columnInfo['title']] = columnInfo['visible'];
+    }
+
+    return columnVisibility;
   }
 
 //   List<Widget> _generateCircleAvatars(
@@ -903,37 +935,19 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
       // Determine the background color
       Color backgroundColor = isCyclePlacetteInProgress
-          ? Colors.yellow // Yellow for not completed
+          ? dendro3Theme.colorScheme.secondary // Yellow for not completed
           : (currentCorCyclePlacette != null
-              ? Colors.green
-              : Colors.red); // Green if CorCyclePlacette exists, otherwise red
+              ? dendro3Theme.colorScheme.primary
+              : dendro3Theme.colorScheme
+                  .error); // Green if CorCyclePlacette exists, otherwise red
 
       return CircleAvatar(
         backgroundColor: backgroundColor,
         foregroundColor: Colors.white,
-        radius: 10,
+        radius: 14,
         child: Text(data.numCycle.toString()),
       );
     }).toList();
-  }
-}
-
-SaisisableObject getObjectFromType(
-    Map<String, dynamic> value, DisplayableList items, String type) {
-  switch (type) {
-    case 'Arbres':
-      return items.getObjectFromId(value['idArbreOrig']);
-    case 'BmsSup30':
-      return items.getObjectFromId(value['idBmSup30Orig']);
-    case 'Regenerations':
-      return items.getObjectFromId(value['idRegeneration']);
-    case 'Reperes':
-    case 'Repères':
-      return items.getObjectFromId(value['idRepere']);
-    case 'Transects':
-      return items.getObjectFromId(value['idTransectOrig']);
-    default:
-      throw ArgumentError('Unknown type: ${items.runtimeType}');
   }
 }
 
@@ -941,12 +955,12 @@ Cycle? getCycleFromType(String formType, CycleList dispCycleList,
     [SaisisableObject? selectedItemMesureDetails]) {
   if (formType == 'edit') {
     if (selectedItemMesureDetails is ArbreMesure) {
-      return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+      return dispCycleList.findCycleById(selectedItemMesureDetails.idCycle);
     } else if (selectedItemMesureDetails is BmSup30Mesure) {
-      return dispCycleList.findCycleById(selectedItemMesureDetails!.idCycle);
+      return dispCycleList.findCycleById(selectedItemMesureDetails.idCycle);
     } else if (selectedItemMesureDetails is CorCyclePlacette) {
       CorCyclePlacette aaa = selectedItemMesureDetails as CorCyclePlacette;
-      return dispCycleList.findCycleById(aaa!.idCycle);
+      return dispCycleList.findCycleById(aaa.idCycle);
     } else {
       return null;
     }

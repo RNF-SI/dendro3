@@ -44,7 +44,7 @@ class TransectMapper {
     } catch (e) {
       print("Error in Transect transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
-      throw e;
+      rethrow;
     }
   }
 
@@ -80,7 +80,7 @@ class TransectMapper {
     } catch (e) {
       print("Error in Transect transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
-      throw e;
+      rethrow;
     }
   }
 

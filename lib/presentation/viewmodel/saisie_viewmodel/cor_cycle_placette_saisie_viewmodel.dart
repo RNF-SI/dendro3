@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:dendro3/domain/model/corCyclePlacette.dart';
 import 'package:dendro3/domain/model/cycle.dart';
 import 'package:dendro3/domain/model/placette.dart';
@@ -25,10 +23,9 @@ final corCyclePlacetteSaisieViewModelProvider = Provider.autoDispose
       arbreInfoObj['cycle'],
       arbreInfoObj['placette'],
       arbreInfoObj['corCyclePlacette'],
+      arbreInfoObj['formType'],
       corCyclePlacetteListViewModel);
-}
-        // ref.watch(insertArbreUseCaseProvider))
-        );
+});
 
 class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   // late final ListViewModel _baseListViewModel;
@@ -37,10 +34,12 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   final Ref ref;
   Placette placette;
   Cycle cycle;
+  CorCyclePlacette? corCyclePlacette;
+  final String formType;
 
   int? _idCycle;
   var _idPlacette;
-
+  late String? _idCyclePlacette;
   DateTime? _dateReleve;
   String? _dateIntervention = '';
   int? _annee;
@@ -53,6 +52,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   double? _recouvHerbesHautes;
   double? _recouvBuissons;
   double? _recouvArbres;
+  int? _coeff;
+  double? _diamLim;
 
   bool _isNewCorCyclePlacette = true;
 
@@ -60,7 +61,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
     this.ref,
     this.cycle,
     this.placette,
-    final CorCyclePlacette? corCyclePlacette,
+    this.corCyclePlacette,
+    this.formType,
     this._corCyclePlacetteListViewModel,
     // this._insertArbreUseCase,
   ) {
@@ -70,9 +72,11 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
   _initCorCyclePlacette(final CorCyclePlacette? corCyclePlacette) {
     _idCycle = cycle.idCycle;
     _idPlacette = placette.idPlacette;
-    if (corCyclePlacette == null) {
+    if (formType == 'add') {
       _isNewCorCyclePlacette = true;
+      _idCyclePlacette = null;
     } else {
+      _idCyclePlacette = corCyclePlacette!.idCyclePlacette;
       _dateReleve = corCyclePlacette.dateReleve;
       _dateIntervention = corCyclePlacette.dateIntervention;
       _annee = corCyclePlacette.annee;
@@ -85,6 +89,8 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       _recouvHerbesHautes = corCyclePlacette.recouvHerbesHautes;
       _recouvBuissons = corCyclePlacette.recouvBuissons;
       _recouvArbres = corCyclePlacette.recouvArbres;
+      _coeff = corCyclePlacette.coeff;
+      _diamLim = corCyclePlacette.diamLim;
     }
   }
 
@@ -105,11 +111,33 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       'recouvHerbesHautes': _recouvHerbesHautes,
       'recouvBuissons': _recouvBuissons,
       'recouvArbres': _recouvArbres,
+      'coeff': _coeff,
+      'diamLim': _diamLim,
     });
     return '';
   }
 
+  @override
   Future<String> updateObject() async {
+    _corCyclePlacetteListViewModel.updateItem({
+      'idCyclePlacette': _idCyclePlacette,
+      'idCycle': _idCycle,
+      'idPlacette': _idPlacette,
+      'dateReleve': _dateReleve,
+      'dateIntervention': _dateIntervention,
+      'annee': _annee,
+      'natureIntervention': _natureIntervention,
+      'gestionPlacette': _gestionPlacette,
+      'idNomenclatureCastor': _idNomenclatureCastor,
+      'idNomenclatureFrottis': _idNomenclatureFrottis,
+      'idNomenclatureBoutis': _idNomenclatureBoutis,
+      'recouvHerbesBasses': _recouvHerbesBasses,
+      'recouvHerbesHautes': _recouvHerbesHautes,
+      'recouvBuissons': _recouvBuissons,
+      'recouvArbres': _recouvArbres,
+      'coeff': _coeff,
+      'diamLim': _diamLim,
+    });
     return '';
   }
 
@@ -122,6 +150,9 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       // hintText: 'Veuillez entrer le code'),
       DateFieldConfig(
         fieldName: "Date de Releve",
+        fieldRequired: true,
+        fieldInfo: "Date de relevé de la placette",
+        initialValue: intialDateReleve(),
         onDateSelected: (DateTime date) {
           _dateReleve = date;
         },
@@ -130,7 +161,9 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
         fieldName: "Date Intervention",
         fieldInfo: "Date de dernière intervention sylvicole",
         fieldUnit: "année",
-        initialValue: "",
+        initialValue: initialDateIntervention(),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         hintText: 'Veuillez entrer le code',
         onChanged: (p0) => _dateIntervention = p0,
       ),
@@ -148,62 +181,90 @@ class CorCyclePlacetteSaisieViewModel extends ObjectSaisieViewModel {
       TextFieldConfig(
         fieldName: "Nature de l'intervention",
         fieldInfo: "Ex: Coupe Rase, Coupe d'éclaircie, ...",
-        initialValue: "",
+        initialValue: initialNatureIntervention(),
         hintText: 'Veuillez entrer le code',
         onChanged: (p0) => _natureIntervention = p0,
       ),
 
       DropdownFieldConfig<dynamic>(
-          fieldName: 'gestionPlacette',
-          value: _gestionPlacette != null ? _gestionPlacette.toString() : '',
-          items: [
-            const MapEntry('', 'Sélectionnez une option'),
-            const MapEntry('gérée', 'Gérée'),
-            const MapEntry('Non gérée', 'Non gérée'),
-          ],
-          validator: (value, formData) {
-            return null;
-          },
-          onChanged: (value) {
-            _gestionPlacette = value;
-          },
-          fieldInfo:
-              "Géré: Parcelle soumise à exploitation sylvicole; \nNon Gérée: Peuplement en libre évolution garantie sur le long terme"),
+        fieldName: 'gestionPlacette',
+        value: _gestionPlacette != null ? _gestionPlacette.toString() : '',
+        items: [
+          const MapEntry('', 'Sélectionnez une option'),
+          const MapEntry('gérée', 'Gérée'),
+          const MapEntry('Non gérée', 'Non gérée'),
+        ],
+        validator: (value, formData) {
+          return null;
+        },
+        onChanged: (value) {
+          _gestionPlacette = value;
+        },
+        fieldInfo:
+            "Géré: Parcelle soumise à exploitation sylvicole; \nNon Gérée: Peuplement en libre évolution garantie sur le long terme",
+      ),
 
-      // TextFieldConfig(
-      //     fieldName: "idNomenclatureCastor",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code',
+      TextFieldConfig(
+        fieldName: "Coeff",
+        keyboardType: TextInputType.number,
+        initialValue: initialCoeff(),
+        hintText: "Veuillez entre le coefficient",
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        onChanged: (p0) => _coeff = int.parse(p0),
+      ),
 
-      //     ),
-      // TextFieldConfig(
-      //     fieldName: "idNomenclatureFrottis",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code'),
-      // TextFieldConfig(
-      //     fieldName: "idNomenclatureBoutis",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code'),
-      // TextFieldConfig(
-      //     fieldName: "recouvHerbesBasses",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code'),
-      // TextFieldConfig(
-      //     fieldName: "recouvHerbesHautes",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code'),
-      // TextFieldConfig(
-      //     fieldName: "recouvBuissons",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code'),
-      // TextFieldConfig(
-      //     fieldName: "recouvArbres",
-      //     initialValue: "",
-      //     hintText: 'Veuillez entrer le code'),
+      TextFieldConfig(
+        fieldName: "Diamètre limite",
+        keyboardType: TextInputType.number,
+        initialValue: initialDiamLim(),
+        hintText: "Veuillez entrer le diamètre limite",
+        onChanged: (p0) => _diamLim = double.parse(p0),
+      ),
     ];
   }
 
   setAnnee(String value) {
     _annee = int.parse(value);
+  }
+
+  String initialDateIntervention() {
+    if (_dateIntervention == '') {
+      return '';
+    } else {
+      return _dateIntervention!;
+    }
+  }
+
+  initialDiamLim() {
+    if (_diamLim == null) {
+      return '';
+    } else {
+      return _diamLim.toString();
+    }
+  }
+
+  initialCoeff() {
+    if (_coeff == null) {
+      return '';
+    } else {
+      return _coeff.toString();
+    }
+  }
+
+  initialNatureIntervention() {
+    if (_natureIntervention == '') {
+      return '';
+    } else {
+      return _natureIntervention!;
+    }
+  }
+
+  intialDateReleve() {
+    if (_dateReleve == null) {
+      _dateReleve = DateTime.now();
+      return DateTime.now();
+    } else {
+      return _dateReleve;
+    }
   }
 }

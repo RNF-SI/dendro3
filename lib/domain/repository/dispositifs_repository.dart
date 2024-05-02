@@ -1,6 +1,6 @@
+import 'package:dendro3/core/helpers/sync_objects.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/dispositif_list.dart';
-import 'package:dendro3/domain/usecase/download_dispositif_data_usecase.dart';
 
 abstract class DispositifsRepository {
   Future<DispositifList> getDispositifList();
@@ -13,6 +13,7 @@ abstract class DispositifsRepository {
   );
   Future<void> downloadDispositifData(
     final int id,
+    Function(double) onProgressUpdate,
   );
   Future<Dispositif> createDispositif(
     final String name,
@@ -31,5 +32,6 @@ abstract class DispositifsRepository {
     final int id,
   );
 
-  Future<void> exportDispositifData(int idDispositif);
+  Future<TaskResult> exportDispositifData(
+      int idDispositif, String? lastSyncTime);
 }

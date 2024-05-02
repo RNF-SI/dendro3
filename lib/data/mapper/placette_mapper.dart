@@ -68,7 +68,7 @@ class PlacetteMapper {
       print("Error in transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
       // You may want to handle the error or rethrow it
-      throw e;
+      rethrow;
     }
   }
 
@@ -118,7 +118,7 @@ class PlacetteMapper {
       print("Error in transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
       // You may want to handle the error or rethrow it
-      throw e;
+      rethrow;
     }
   }
 
@@ -165,6 +165,17 @@ class PlacetteMapper {
     };
   }
 
+  static PlacetteEntity transformToNewEntityMap(
+    int idPlacette,
+    double? pente,
+    int? exposition,
+  ) {
+    return {
+      'id_placette': idPlacette,
+      'pente': pente,
+      'exposition': exposition,
+    };
+  }
   // static PlacetteEntity transformToNewEntityMap(
   //   final String name,
   //   final int idOrganisme,

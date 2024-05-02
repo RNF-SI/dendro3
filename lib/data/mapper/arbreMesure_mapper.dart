@@ -1,8 +1,6 @@
 import 'package:dendro3/data/entity/arbresMesures_entity.dart';
-import 'package:dendro3/data/entity/placettes_entity.dart';
 import 'package:dendro3/data/mapper/mapper_utils.dart';
 import 'package:dendro3/domain/model/arbreMesure.dart';
-import 'package:dendro3/domain/model/placette.dart';
 
 class ArbreMesureMapper {
   // static ArbreMesure transformToModel(final ArbreMesureEntity entity) {
@@ -44,7 +42,7 @@ class ArbreMesureMapper {
       print("Error in ArbreMesure transformFromApiToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 
@@ -77,7 +75,7 @@ class ArbreMesureMapper {
       print("Error in ArbreMesure transformFromDBToModel: $e");
       print("Entity causing error: ${entity.toString()}");
 
-      throw e;
+      rethrow;
     }
   }
 
