@@ -73,8 +73,11 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextSpan(
                           text: '3',
-                          style:
-                              TextStyle(color: Color(0xFF8AAC3E), fontSize: 40),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF8AAC3E),
+                            fontSize: 45,
+                          ),
                         ),
                       ],
                     ),
