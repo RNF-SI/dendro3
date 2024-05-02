@@ -82,13 +82,23 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   }
 
   @override
-  Future<void> setUserId(int userId) async {
+  Future<void> setUserId(int? userId) async {
     await _preferences?.setString('userId', userId.toString());
   }
 
   @override
   Future<void> setUserName(String userName) async {
     await _preferences?.setString('userName', userName);
+  }
+
+  @override
+  Future<void> clearUserId() async {
+    await _preferences?.remove('userId');
+  }
+
+  @override
+  Future<void> clearUserName() async {
+    await _preferences?.remove('userName');
   }
 
   @override

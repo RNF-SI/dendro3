@@ -5,6 +5,10 @@ import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase.dart';
 import 'package:dendro3/domain/usecase/complete_cycle_placette_created_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
@@ -358,4 +362,14 @@ final setIsLoggedInFromLocalStorageUseCaseProvider =
 final getIsLoggedInFromLocalStorageUseCaseProvider =
     Provider<GetIsLoggedInFromLocalStorageUseCase>((ref) =>
         GetIsLoggedInFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final clearUserIdFromLocalStorageUseCaseProvider =
+    Provider<ClearUserIdFromLocalStorageUseCase>((ref) =>
+        ClearUserIdFromLocalStorageUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
+final clearUserNameFromLocalStorageUseCaseProvider =
+    Provider<ClearUserNameFromLocalStorageUseCase>((ref) =>
+        ClearUserNameFromLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));
