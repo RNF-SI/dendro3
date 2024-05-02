@@ -8,4 +8,7 @@ abstract class LocalStorageRepository {
       int dispositifId, DateTime dateTime);
   Future<String?> getLastSyncTimeForDispositif(int dispositifId);
   Future<int> getUserId();
+  Future<void> setUserId(int userId);
+  Future<void> setUserName(String userName);
+  Future<String?> getUserName();
 }
