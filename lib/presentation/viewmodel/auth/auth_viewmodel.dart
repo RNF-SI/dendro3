@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/set_user_id_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_user_name_from_local_storage_use_case.dart';
 
@@ -27,10 +29,10 @@ final authStateProvider = StreamProvider<User?>((ref) {
 final authenticationViewModelProvider =
     Provider<AuthenticationViewModel>((ref) {
   return AuthenticationViewModel(
-    ref.watch(loginUseCaseProvider),
-    ref.watch(setUserIdFromLocalStorageUseCaseProvider),
-    ref.watch(setUserNameFromLocalStorageUseCaseProvider),
-  );
+      ref.watch(loginUseCaseProvider),
+      ref.watch(setUserIdFromLocalStorageUseCaseProvider),
+      ref.watch(setUserNameFromLocalStorageUseCaseProvider),
+      ref.watch(setTerminalNameFromLocalStorageUseCaseProvider));
 });
 
 class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
@@ -44,11 +46,14 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
   final LoginUseCase _loginUseCase;
   final SetUserIdFromLocalStorageUseCase _setUserIdFromLocalStorageUseCase;
   final SetUserNameFromLocalStorageUseCase _setUserNameFromLocalStorageUseCase;
+  final SetTerminalNameFromLocalStorageUseCase
+      _setTerminalNameFromLocalStorageUseCase;
 
   AuthenticationViewModel(
     this._loginUseCase,
     this._setUserIdFromLocalStorageUseCase,
     this._setUserNameFromLocalStorageUseCase,
+    this._setTerminalNameFromLocalStorageUseCase,
   ) : super(const dendroState.State.init()) {
     controller.add(user);
   }
@@ -65,28 +70,12 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
       state = const dendroState.State.loading();
       await _loginUseCase.execute(identifiant, password).then((user) async {
         controller.add(user);
-        try {
-          DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-          String deviceName = 'Unknown Device';
-          SharedPreferences prefs = await SharedPreferences.getInstance();
 
-          try {
-            if (Platform.isAndroid) {
-              AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-              deviceName =
-                  '${androidInfo.brand} ${androidInfo.model} - Android ${androidInfo.version.release}';
-            } else if (Platform.isIOS) {
-              IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-              deviceName =
-                  '${iosInfo.utsname.machine} - iOS ${iosInfo.systemVersion}';
-            } else {
-              deviceName = 'Unknown Device';
-            }
-            await prefs.setString('terminalName', deviceName);
-            // You can add more platform-specific conditions if you need to
-          } catch (e) {
-            print('Failed to get device info: $e');
-          }
+        // Set terminal name using use case
+        await _setTerminalNameFromLocalStorageUseCase.execute();
+
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
 
           await prefs.setBool('isLoggedIn', true);
           print("isLoggedIn set to: ${await prefs.getBool('isLoggedIn')}");
