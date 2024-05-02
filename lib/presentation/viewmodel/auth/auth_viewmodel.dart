@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/domain_module.dart';
+import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case.dart';
+import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_is_logged_in_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/set_terminal_name_from_local_storage_use_case_impl.dart';
@@ -30,11 +32,14 @@ final authStateProvider = StreamProvider<User?>((ref) {
 final authenticationViewModelProvider =
     Provider<AuthenticationViewModel>((ref) {
   return AuthenticationViewModel(
-      ref.watch(loginUseCaseProvider),
-      ref.watch(setUserIdFromLocalStorageUseCaseProvider),
-      ref.watch(setUserNameFromLocalStorageUseCaseProvider),
-      ref.watch(setTerminalNameFromLocalStorageUseCaseProvider),
-      ref.watch(setIsLoggedInFromLocalStorageUseCaseProvider));
+    ref.watch(loginUseCaseProvider),
+    ref.watch(setUserIdFromLocalStorageUseCaseProvider),
+    ref.watch(setUserNameFromLocalStorageUseCaseProvider),
+    ref.watch(setTerminalNameFromLocalStorageUseCaseProvider),
+    ref.watch(setIsLoggedInFromLocalStorageUseCaseProvider),
+    ref.watch(clearUserIdFromLocalStorageUseCaseProvider),
+    ref.watch(clearUserNameFromLocalStorageUseCaseProvider),
+  );
 });
 
 class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
@@ -52,6 +57,9 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
       _setTerminalNameFromLocalStorageUseCase;
   final SetIsLoggedInFromLocalStorageUseCase
       _setIsLoggedInFromLocalStorageUseCase;
+  final ClearUserIdFromLocalStorageUseCase _clearUserIdFromLocalStorageUseCase;
+  final ClearUserNameFromLocalStorageUseCase
+      _clearUserNameFromLocalStorageUseCase;
 
   AuthenticationViewModel(
     this._loginUseCase,
@@ -59,6 +67,8 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
     this._setUserNameFromLocalStorageUseCase,
     this._setTerminalNameFromLocalStorageUseCase,
     this._setIsLoggedInFromLocalStorageUseCase,
+    this._clearUserIdFromLocalStorageUseCase,
+    this._clearUserNameFromLocalStorageUseCase,
   ) : super(const dendroState.State.init()) {
     controller.add(user);
   }
@@ -173,9 +183,10 @@ class AuthenticationViewModel extends StateNotifier<dendroState.State<User>> {
       user = null;
       controller.add(user);
 
-      // Update shared preferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', false);
+      // Clear login state and user details using use cases
+      await _setIsLoggedInFromLocalStorageUseCase.execute(false);
+      await _clearUserNameFromLocalStorageUseCase.execute();
+      await _clearUserIdFromLocalStorageUseCase.execute();
       ref.refresh(isLoggedInProvider);
 
       GoRouter.of(context).go('/');
