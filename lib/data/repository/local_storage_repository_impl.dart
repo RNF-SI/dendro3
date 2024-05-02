@@ -105,4 +105,14 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   Future<String?> getTerminalName() async {
     return _preferences?.getString('terminalName');
   }
+
+  @override
+  Future<void> setIsLoggedIn(bool isLoggedIn) async {
+    await _preferences?.setBool('isLoggedIn', isLoggedIn);
+  }
+
+  @override
+  Future<bool> getIsLoggedIn() async {
+    return _preferences?.getBool('isLoggedIn') ?? false;
+  }
 }
