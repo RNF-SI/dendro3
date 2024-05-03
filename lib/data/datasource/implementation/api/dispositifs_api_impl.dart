@@ -76,7 +76,7 @@ class DispositifsApiImpl implements DispositifsApi {
       String taskId, Function(double) onProgressUpdate) async {
     final statusUrl = "$apiBase/psdrf/dispositif-complet/status/$taskId";
     double progress = 0.0;
-    const int maxSteps = 30;
+    const int maxSteps = 120;
     int currentStep = 0;
 
     while (true) {
