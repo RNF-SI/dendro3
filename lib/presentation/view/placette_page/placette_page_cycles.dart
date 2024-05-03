@@ -215,6 +215,66 @@ class PlacetteCycleWidgetState extends ConsumerState<PlacetteCycleWidget> {
               ),
             ],
           ],
+          // Si le cycle est terminé, on affiche un message comme quoi on ne peut pas toucher aux données
+          // On peut afficher une icone d'information cliquable pour afficher la règle à partir de laquelle un cycle est terminé
+          if (widget.dispCycleList!.cyclesAreTerminated()) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0), // Adjust horizontal padding as needed
+              child: Row(
+                children: [
+                  Expanded(
+                    // This will allow the text to take up available space without overflowing
+                    child: const Text(
+                      'Les cycles sont terminés, vous ne pouvez pas modifier les données',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    padding: const EdgeInsets.only(
+                        left:
+                            8.0), // Adjust left padding to create space between text and icon
+                    constraints:
+                        const BoxConstraints(), // Check if these constraints are necessary; remove if not
+                    icon: const Icon(
+                      Icons.info_outline,
+                      color: Color(0xFF7DAB9C), // Light blue for info icons
+                      size: 24, // Increased size for better visibility
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Information'),
+                            content: const Text(
+                                "Un cycle est terminé à partir du moment où sa propriété 'dateFin' est renseignée"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'OK',
+                                  style: TextStyle(
+                                    color: Color(
+                                        0xFFC0C000), // Vert for button text
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
 
           // Afficher le grid seulement si le corcycle existe pour la placette
           // Sinon Afficher un text et un bouton
