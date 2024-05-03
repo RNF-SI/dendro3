@@ -34,7 +34,7 @@ class TransectMapper {
         ratioHauteur: entity['ratio_hauteur'] as bool?,
         contact: entity['contact'] ?? logAndReturnNull<double>('contact'),
         angle: entity['angle'] ?? logAndReturnNull<double>('angle'),
-        chablis: entity['chablis'] ?? logAndReturnNull<bool>('chablis'),
+        chablis: entity['chablis'] as bool? ?? false,
         stadeDurete:
             entity['stade_durete'] ?? logAndReturnNull<int>('stade_durete'),
         stadeEcorce:

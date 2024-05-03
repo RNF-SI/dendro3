@@ -22,7 +22,7 @@ class DispositifMapper {
         name: entity['name'] ?? logAndReturnNull<String>('name'),
         idOrganisme:
             entity['id_organisme'] ?? logAndReturnNull<int>('id_organisme'),
-        alluvial: entity['alluvial'] ?? logAndReturnNull<bool>('alluvial'),
+        alluvial: entity['alluvial'] as bool? ?? false,
         placettes: entity.containsKey('placettes')
             ? PlacetteListMapper.transformFromApiToModel(entity['placettes'])
             : null,
