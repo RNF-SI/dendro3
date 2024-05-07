@@ -1,8 +1,8 @@
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
-import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
-import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case.dart';
@@ -200,11 +200,12 @@ final updateArbreAndMesureUseCaseProvider =
               ref.watch(arbresMesuresRepositoryProvider),
             ));
 
-final addArbreMesureUseCaseProvider =
-    Provider<AddArbreMesureUseCase>((ref) => AddArbreMesureUseCaseImpl(
-          ref.watch(arbresRepositoryProvider),
-          ref.watch(arbresMesuresRepositoryProvider),
-        ));
+final updateArbreAndCreateArbreMesureUseCaseProvider =
+    Provider<UpdateArbreAndCreateArbreMesureUseCase>(
+        (ref) => UpdateArbreAndCreateArbreMesureUseCaseImpl(
+              ref.watch(arbresRepositoryProvider),
+              ref.watch(arbresMesuresRepositoryProvider),
+            ));
 
 final addBmSup30MesureUseCaseProvider =
     Provider<AddBmSup30MesureUseCase>((ref) => AddBmSup30MesureUseCaseImpl(

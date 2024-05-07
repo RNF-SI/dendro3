@@ -123,9 +123,9 @@ class DispositifsApiImpl implements DispositifsApi {
 
     dio.options
       ..sendTimeout = const Duration(
-          minutes: 2) // Shorter send timeout, since you're just sending data
+          minutes: 3) // Shorter send timeout, since you're just sending data
       ..receiveTimeout =
-          const Duration(minutes: 2) // Polling should not take long
+          const Duration(minutes: 3) // Polling should not take long
       ..connectTimeout = const Duration(minutes: 1);
 
     dio.interceptors.add(LogInterceptor(

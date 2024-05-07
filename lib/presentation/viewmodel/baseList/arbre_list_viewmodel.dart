@@ -2,7 +2,7 @@ import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/arbre_list.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
-import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case.dart';
 import 'package:dendro3/domain/usecase/create_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_arbre_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_arbre_mesure_usecase.dart';
@@ -27,7 +27,7 @@ final arbreListViewModelStateNotifierProvider =
     // ref.watch(getArbreListUseCaseProvider),
     ref.watch(createArbreAndMesureUseCaseProvider),
     ref.watch(updateArbreAndMesureUseCaseProvider),
-    ref.watch(addArbreMesureUseCaseProvider),
+    ref.watch(updateArbreAndCreateArbreMesureUseCaseProvider),
     ref.watch(deleteArbreAndMesureUseCaseProvider),
     ref.watch(deleteArbreMesureUseCaseProvider),
     // ref.watch(deleteArbreUseCaseProvider),
@@ -45,7 +45,8 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   // final GetArbreListUseCase _getArbreListUseCase;
   final CreateArbreAndMesureUseCase _createArbreAndMesureUseCase;
   final UpdateArbreAndMesureUseCase _updateArbreAndMesureUseCase;
-  final AddArbreMesureUseCase _addArbreMesureUseCase;
+  final UpdateArbreAndCreateArbreMesureUseCase
+      _updateArbreAndCreateArbreMesureUseCase;
   final DeleteArbreAndMesureUseCase _deleteArbreAndMesureUseCase;
   final DeleteArbreMesureUseCase _deleteArbreMesureUseCase;
   // final DeleteArbreUseCase _deleteArbreUseCase;
@@ -54,7 +55,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     // this._getArbreListUseCase,
     this._createArbreAndMesureUseCase,
     this._updateArbreAndMesureUseCase,
-    this._addArbreMesureUseCase,
+    this._updateArbreAndCreateArbreMesureUseCase,
     this._deleteArbreAndMesureUseCase,
     this._deleteArbreMesureUseCase,
     // this._deleteArbreUseCase,
@@ -182,9 +183,17 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     // final int idArbreOrig,
   ) async {
     try {
-      final newArbre = await _addArbreMesureUseCase.execute(
+      final newArbre = await _updateArbreAndCreateArbreMesureUseCase.execute(
         // idArbreOrig,
         arbre,
+        item["idArbre"],
+        item["idArbreOrig"],
+        item["idPlacette"],
+        item["codeEssence"],
+        item["azimut"],
+        item["distance"],
+        item["taillis"],
+        item["observation"],
         item["idCycle"],
         item["numCycle"],
         item["diametre1"],

@@ -351,6 +351,8 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
       _arbreListViewModel.addMesureItem(
         arbre!,
         {
+          'idArbre': _idArbre,
+          'idArbreOrig': _idArbreOrig,
           'idPlacette': _idPlacette,
           'codeEssence': _codeEssence,
           'azimut': _azimut!,

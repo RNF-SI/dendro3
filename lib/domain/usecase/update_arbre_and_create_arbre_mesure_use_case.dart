@@ -1,8 +1,16 @@
 import 'package:dendro3/domain/model/arbre.dart';
 
-abstract class AddArbreMesureUseCase {
+abstract class UpdateArbreAndCreateArbreMesureUseCase {
   Future<Arbre> execute(
     Arbre arbre,
+    final String idArbre,
+    final int idArbreOrig,
+    final int idPlacette,
+    final String codeEssence,
+    final double azimut,
+    final double distance,
+    final bool? taillis,
+    final String? observation,
     final int idCycle,
     int? numCycle,
     double? diametre1,
