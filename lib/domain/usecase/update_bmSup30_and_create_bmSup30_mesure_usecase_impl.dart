@@ -2,18 +2,30 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/repository/bmsSup30_mesures_repository.dart';
 import 'package:dendro3/domain/repository/bmsSup30_repository.dart';
-import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_create_bmSup30_mesure_usecase.dart';
 
-class AddBmSup30MesureUseCaseImpl implements AddBmSup30MesureUseCase {
+class UpdateBmSup30AndCreateBmSup30MesureUseCaseImpl
+    implements UpdateBmSup30AndCreateBmSup30MesureUseCase {
   final BmsSup30Repository _bmsup30Repository;
   final BmsSup30MesuresRepository _bmsup30MesureRepository;
 
-  const AddBmSup30MesureUseCaseImpl(
+  const UpdateBmSup30AndCreateBmSup30MesureUseCaseImpl(
       this._bmsup30Repository, this._bmsup30MesureRepository);
 
   @override
   Future<BmSup30> execute(
     BmSup30 bmsup30,
+    String idBmSup30,
+    int idBmSup30Orig,
+    int idPlacette,
+    int idArbre,
+    String codeEssence,
+    double azimut,
+    double distance,
+    double? orientation,
+    double? azimutSouche,
+    double? distanceSouche,
+    String? observation,
     int idCycle,
     double? diametreIni,
     double? diametreMed,
@@ -27,6 +39,20 @@ class AddBmSup30MesureUseCaseImpl implements AddBmSup30MesureUseCase {
     int stadeEcorce,
     String? observationMesure,
   ) async {
+    BmSup30 bmsup30Updated = await _bmsup30Repository.updateBmSup30(
+      idBmSup30,
+      idBmSup30Orig,
+      idPlacette,
+      idArbre,
+      codeEssence,
+      azimut,
+      distance,
+      orientation,
+      azimutSouche,
+      distanceSouche,
+      observation,
+    );
+
     BmSup30Mesure bmsup30Mesure =
         await _bmsup30MesureRepository.insertBmSup30Mesure(
       bmsup30.idBmSup30,
@@ -47,7 +73,7 @@ class AddBmSup30MesureUseCaseImpl implements AddBmSup30MesureUseCase {
     var updatedMesureList =
         bmsup30.bmsSup30Mesures!.addBmSup30Mesure(bmsup30Mesure);
 
-    return bmsup30.copyWith(
+    return bmsup30Updated.copyWith(
       bmsSup30Mesures: updatedMesureList,
     );
   }

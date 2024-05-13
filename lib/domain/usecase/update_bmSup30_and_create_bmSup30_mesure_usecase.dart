@@ -1,8 +1,19 @@
 import 'package:dendro3/domain/model/bmSup30.dart';
 
-abstract class AddBmSup30MesureUseCase {
+abstract class UpdateBmSup30AndCreateBmSup30MesureUseCase {
   Future<BmSup30> execute(
     BmSup30 bmsup30,
+    String idBmSup30,
+    int idBmSup30Orig,
+    int idPlacette,
+    int idArbre,
+    String codeEssence,
+    double azimut,
+    double distance,
+    double? orientation,
+    double? azimutSouche,
+    double? distanceSouche,
+    String? observation,
     int idCycle,
     double? diametreIni,
     double? diametreMed,

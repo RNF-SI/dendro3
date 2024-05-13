@@ -2,7 +2,7 @@ import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
-import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_create_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase.dart';
@@ -29,7 +29,7 @@ final bmSup30ListViewModelStateNotifierProvider =
     // ref.watch(getBmSup30ListUseCaseProvider),
     ref.watch(createBmSup30AndMesureUseCaseProvider),
     ref.watch(updateBmSup30AndMesureUseCaseProvider),
-    ref.watch(addBmSup30MesureUseCaseProvider),
+    ref.watch(updateBmSup30AndCreateBmSup30MesureUseCaseProvider),
     ref.watch(deleteBmSup30AndMesureUseCaseProvider),
     ref.watch(deleteBmSup30MesureUseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
@@ -48,7 +48,8 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
   final CreateBmSup30AndMesureUseCase _createBmSup30AndMesureUseCase;
   final UpdateBmSup30AndMesureUseCase _updateBmSup30AndMesureUseCase;
-  final AddBmSup30MesureUseCase _addBmSup30MesureUseCase;
+  final UpdateBmSup30AndCreateBmSup30MesureUseCase
+      _updateBmSup30AndCreateBmSup30MesureUseCase;
   final DeleteBmSup30AndMesureUseCase _deleteBmSup30AndMesureUseCase;
   final DeleteBmSup30MesureUseCase _deleteBmSup30MesureUseCase;
 
@@ -58,7 +59,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     // this._getBmSup30ListUseCase,
     this._createBmSup30AndMesureUseCase,
     this._updateBmSup30AndMesureUseCase,
-    this._addBmSup30MesureUseCase,
+    this._updateBmSup30AndCreateBmSup30MesureUseCase,
     this._deleteBmSup30AndMesureUseCase,
     this._deleteBmSup30MesureUseCase,
     // this._deleteBmSup30UseCase,
@@ -178,8 +179,20 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     final Map item,
   ) async {
     try {
-      final newBmSup30 = await _addBmSup30MesureUseCase.execute(
+      final newBmSup30 =
+          await _updateBmSup30AndCreateBmSup30MesureUseCase.execute(
         bmSup30,
+        item['idBmSup30'],
+        item['idBmSup30Orig'],
+        item["idPlacette"],
+        item["idArbre"],
+        item["codeEssence"],
+        item["azimut"],
+        item["distance"],
+        item["orientation"],
+        item["azimutSouche"],
+        item["distanceSouche"],
+        item["observation"],
         item["idCycle"],
         item["diametreIni"],
         item["diametreMed"],
