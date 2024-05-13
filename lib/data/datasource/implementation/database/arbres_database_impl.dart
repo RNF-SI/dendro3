@@ -269,4 +269,26 @@ class ArbresDatabaseImpl implements ArbresDatabase {
       }
     }
   }
+
+  // Fonction qui permet juste de d'actualiser la date d'update de l'arbre lorsqu'un
+  // arbremesure a été supprimé
+  @override
+  Future<void> setArbreAsUpdated(String idArbre) async {
+    final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
+    await db.update(
+      _tableName,
+      {
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
+      where: '$_columnId = ?',
+      whereArgs: [idArbre],
+    );
+  }
 }

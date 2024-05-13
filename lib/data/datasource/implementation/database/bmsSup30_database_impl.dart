@@ -257,4 +257,24 @@ class BmsSup30DatabaseImpl implements BmsSup30Database {
       }
     }
   }
+
+  @override
+  Future<void> setBmSup30AsUpdated(final String idBmSup30) async {
+    final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
+    await db.update(
+      _tableName,
+      {
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      },
+      where: '$_columnId = ?',
+      whereArgs: [idBmSup30],
+    );
+  }
 }

@@ -93,4 +93,9 @@ class BmsSup30RepositoryImpl implements BmsSup30Repository {
       List<Map<String, dynamic>> bmsList) async {
     await database.actualizeBmIdBmSup30OrigAfterSync(bmsList);
   }
+
+  @override
+  Future<void> setBmSup30AsUpdated(String idBmSup30) {
+    return database.setBmSup30AsUpdated(idBmSup30);
+  }
 }

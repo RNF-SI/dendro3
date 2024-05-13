@@ -28,4 +28,6 @@ abstract class ArbresRepository {
 
   Future<void> actualizeArbreIdArbreOrigAfterSync(
       final List<Map<String, dynamic>> arbresList);
+
+  Future<void> setArbreAsUpdated(final String idArbre);
 }

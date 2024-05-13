@@ -2,18 +2,22 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure.dart';
 import 'package:dendro3/domain/model/bmSup30Mesure_list.dart';
 import 'package:dendro3/domain/repository/bmsSup30_mesures_repository.dart';
+import 'package:dendro3/domain/repository/bmsSup30_repository.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase.dart';
 
 class DeleteBmSup30MesureUseCaseImpl implements DeleteBmSup30MesureUseCase {
+  final BmsSup30Repository _bmSup30Repository;
   final BmsSup30MesuresRepository _bmSup30MesuresRepository;
 
-  DeleteBmSup30MesureUseCaseImpl(this._bmSup30MesuresRepository);
+  DeleteBmSup30MesureUseCaseImpl(
+      this._bmSup30Repository, this._bmSup30MesuresRepository);
 
   @override
   Future<BmSup30> execute(
     BmSup30 bmSup30,
     String bmSup30MesureId,
   ) async {
+    await _bmSup30Repository.setBmSup30AsUpdated(bmSup30.idBmSup30);
     await _bmSup30MesuresRepository.deleteBmsSup30Mesure(bmSup30MesureId);
 
     List<BmSup30Mesure> updatedMesures =

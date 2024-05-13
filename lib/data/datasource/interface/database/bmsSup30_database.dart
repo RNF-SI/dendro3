@@ -8,4 +8,5 @@ abstract class BmsSup30Database {
   Future<List<String>> getBmSup30IdsForPlacette(final int idPlacette);
   Future<void> actualizeBmIdBmSup30OrigAfterSync(
       List<Map<String, dynamic>> bmsList);
+  Future<void> setBmSup30AsUpdated(final String idBmSup30);
 }
