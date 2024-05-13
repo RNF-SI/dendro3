@@ -493,8 +493,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     mapIdCycleNumCycle: mapIdCycleNumCycle,
                     displayTypeState: widget.displayTypeState,
                     onItemSelected: (int selectedIndex) {
-                      ref.watch(selectedMesureIndexProvider.notifier).state =
-                          selectedIndex;
+                      ref
+                          .watch(selectedMesureIndexProvider.notifier)
+                          .setSelectedMesureIndex(selectedIndex);
+                      selectedIndex;
                       // ref
                       //     .read(selectedItemMesureDetailsProvider.notifier)
                       //     .setSelectedItemMesureDetails(selectedIndex);
@@ -652,16 +654,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     if (selectedItem is Arbre) {
       selectedItem;
-      ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
-              .arbresMesures!
-              .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
-          0;
+      ref.watch(selectedMesureIndexProvider.notifier).setSelectedMesureIndex(
+          selectedItem.arbresMesures!
+                  .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
+              0);
     } else if (selectedItem is BmSup30) {
       selectedItem;
-      ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
-              .bmsSup30Mesures!
-              .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
-          0;
+      ref.watch(selectedMesureIndexProvider.notifier).setSelectedMesureIndex(
+          selectedItem.bmsSup30Mesures!
+                  .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
+              0);
     }
   }
 

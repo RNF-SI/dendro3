@@ -484,9 +484,18 @@ class SelectedItemDetailsNotifier extends StateNotifier<SaisisableObject?> {
 }
 
 // provider of index of the selected mesure
-final selectedMesureIndexProvider = StateProvider.autoDispose<int>((ref) {
-  return 0;
+final selectedMesureIndexProvider =
+    StateNotifierProvider<SelectedMesureIndexNotifier, int>((ref) {
+  return SelectedMesureIndexNotifier(0);
 });
+
+class SelectedMesureIndexNotifier extends StateNotifier<int> {
+  SelectedMesureIndexNotifier(int index) : super(index);
+
+  void setSelectedMesureIndex(int index) {
+    state = index;
+  }
+}
 
 final selectedItemMesureDetailsProvider = StateNotifierProvider.autoDispose<
     SelectedItemMesureDetailsNotifier, SaisisableObject?>((ref) {

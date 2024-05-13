@@ -12,6 +12,7 @@ import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 
 final arbreListProvider = Provider<ArbreList>((ref) {
   final state = ref.watch(arbreListViewModelStateNotifierProvider);
@@ -22,6 +23,8 @@ final arbreListViewModelStateNotifierProvider =
     StateNotifierProvider<ArbreListViewModel, State<ArbreList>>((ref) {
   final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
+  final selectedMesureIndexProviderRef =
+      ref.watch(selectedMesureIndexProvider.notifier);
 
   return ArbreListViewModel(
     // ref.watch(getArbreListUseCaseProvider),
@@ -34,12 +37,14 @@ final arbreListViewModelStateNotifierProvider =
     // arbreListe,
     lastSelectedProvider,
     displayableListNotifier,
+    selectedMesureIndexProviderRef,
   );
 });
 
 class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
+  late final SelectedMesureIndexNotifier _selectedMesureIndexProviderRef;
 
   // final Ref ref;
   // final GetArbreListUseCase _getArbreListUseCase;
@@ -62,6 +67,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
     // final ArbreList arbreListe
     this._lastSelectedProvider,
     this._displayableListNotifier,
+    this._selectedMesureIndexProviderRef,
   ) : super(const State.init());
 
   // completeArbre(final Arbre todo) {
@@ -229,6 +235,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       await _deleteArbreAndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('Arbres', null);
       state = State.success(state.data!.removeItemFromList(id));
+      _selectedMesureIndexProviderRef.setSelectedMesureIndex(0);
       _displayableListNotifier.setDisplayableList(state.data!);
       return true;
     } on Exception catch (e) {
@@ -277,8 +284,9 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
       // Set the new state with the updated Arbres list
       ArbreList updatedList = ArbreList(values: updatedArbres);
       state = State.success(updatedList);
+      // Remettre l'élément sélectionné à 0 pour être sûr que ce dernier existe
+      _selectedMesureIndexProviderRef.setSelectedMesureIndex(0);
       _displayableListNotifier.setDisplayableList(updatedList);
-
       // Update last Selected ID
       _lastSelectedProvider.setLastSelectedId('Arbres', null);
       return true;
