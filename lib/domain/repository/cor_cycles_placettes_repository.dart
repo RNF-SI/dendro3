@@ -44,4 +44,6 @@ abstract class CorCyclesPlacettesRepository {
 
   Future<void> deleteCorCyclePlacetteTransectAndRege(
       final String corCyclePlacetteId);
+
+  Future<void> setCorCyclePlacetteAsUpdated(String idCyclePlacette);
 }

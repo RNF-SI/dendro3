@@ -124,4 +124,9 @@ class CorCyclesPlacettesRepositoryImpl implements CorCyclesPlacettesRepository {
 
     return CorCyclePlacetteMapper.transformToModel(corCyclePlacetteEntity);
   }
+
+  @override
+  Future<void> setCorCyclePlacetteAsUpdated(String idCyclePlacette) {
+    return database.setCorCyclePlacetteAsUpdated(idCyclePlacette);
+  }
 }

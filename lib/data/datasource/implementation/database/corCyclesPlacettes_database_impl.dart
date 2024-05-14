@@ -284,4 +284,26 @@ class CorCyclesPlacettesDatabaseImpl implements CorCyclesPlacettesDatabase {
     });
     return corCyclePlacetteEntity;
   }
+
+  // Fonction qui permet juste de d'actualiser la date d'update du corCyclePlacette
+  // lorsque un transect ou une rege sont ajoutés, modifiés ou supprimés
+  @override
+  Future<void> setCorCyclePlacetteAsUpdated(String idCyclePlacette) async {
+    final db = await database;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('userName') ?? 'Unknown';
+    String terminalName = prefs.getString('terminalName') ?? 'Unknown';
+    String formattedDate = formatDateTime(DateTime.now());
+
+    await db.update(
+      _tableName,
+      {
+        'updated_at': formattedDate,
+        'updated_by': userName,
+        'updated_on': terminalName,
+      }, // Mark the record as deleted
+      where: '$_columnId = ?',
+      whereArgs: [idCyclePlacette],
+    );
+  }
 }
