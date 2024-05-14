@@ -427,8 +427,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 } else if (selectedItemDetailsCo is Regeneration) {
                   final regenerationListViewModel = ref.read(
                       regenerationListViewModelStateNotifierProvider.notifier);
-                  deletionResult = await regenerationListViewModel
-                      .deleteItem(selectedItemDetailsCo.idRegeneration);
+                  deletionResult = await regenerationListViewModel.deleteItem(
+                    selectedItemDetailsCo.idRegeneration,
+                    idCyclePlacette:  selectedItemDetailsCo.idCyclePlacette,
+                  );
                 } else if (selectedItemDetailsCo is Repere) {
                   final repereListViewModel = ref
                       .read(repereListViewModelStateNotifierProvider.notifier);
@@ -437,8 +439,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 } else if (selectedItemDetailsCo is Transect) {
                   final transectListViewModel = ref.read(
                       transectListViewModelStateNotifierProvider.notifier);
-                  deletionResult = await transectListViewModel
-                      .deleteItem(selectedItemDetailsCo.idTransect);
+                  deletionResult = await transectListViewModel.deleteItem(
+                    selectedItemDetailsCo.idTransect,
+                    idCyclePlacette:  selectedItemDetailsCo.idCyclePlacette,
+                  );
                 }
                 // Display the SnackBar based on the result of deletion
                 ScaffoldMessenger.of(context).showSnackBar(
