@@ -239,20 +239,27 @@ final updateBmSup30AndMesureUseCaseProvider =
 final createRepereUseCaseProvider = Provider<CreateRepereUseCase>(
     (ref) => CreateRepereUseCaseImpl(ref.watch(repereRepositoryProvider)));
 
-final createRegenerationUseCaseProvider = Provider<CreateRegenerationUseCase>(
-    (ref) => CreateRegenerationUseCaseImpl(
-        ref.watch(regenerationRepositoryProvider)));
+final createRegenerationUseCaseProvider =
+    Provider<CreateRegenerationUseCase>((ref) => CreateRegenerationUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
+          ref.watch(regenerationRepositoryProvider),
+        ));
 
-final createTransectUseCaseProvider = Provider<CreateTransectUseCase>(
-    (ref) => CreateTransectUseCaseImpl(ref.watch(transectRepositoryProvider)));
+final createTransectUseCaseProvider =
+    Provider<CreateTransectUseCase>((ref) => CreateTransectUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
+          ref.watch(transectRepositoryProvider),
+        ));
 
 final updateTransectUseCaseProvider =
     Provider<UpdateTransectUseCase>((ref) => UpdateTransectUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(transectRepositoryProvider),
         ));
 
 final updateRegenerationUseCaseProvider =
     Provider<UpdateRegenerationUseCase>((ref) => UpdateRegenerationUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(regenerationRepositoryProvider),
         ));
 
@@ -285,11 +292,13 @@ final deleteBmSup30MesureUseCaseProvider = Provider<DeleteBmSup30MesureUseCase>(
 
 final deleteTransectUseCaseProvider =
     Provider<DeleteTransectUseCase>((ref) => DeleteTransectUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(transectRepositoryProvider),
         ));
 
 final deleteRegenerationUseCaseProvider =
     Provider<DeleteRegenerationUseCase>((ref) => DeleteRegenerationUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(regenerationRepositoryProvider),
         ));
 
