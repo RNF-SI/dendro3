@@ -139,7 +139,7 @@ class CorCyclePlacetteListViewModel
   }
 
   @override
-  Future<bool> deleteItem(String id) {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) {
     // TODO: implement deleteItem
     throw UnimplementedError();
   }

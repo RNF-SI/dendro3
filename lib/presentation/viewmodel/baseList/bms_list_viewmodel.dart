@@ -226,7 +226,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) async {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) async {
     try {
       await _deleteBmSup30AndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('BmsSup30', null);

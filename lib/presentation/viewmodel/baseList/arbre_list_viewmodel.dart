@@ -230,7 +230,7 @@ class ArbreListViewModel extends BaseListViewModel<State<ArbreList>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) async {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) async {
     try {
       await _deleteArbreAndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('Arbres', null);

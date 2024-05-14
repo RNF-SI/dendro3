@@ -31,7 +31,7 @@ class PlacetteListViewModel extends BaseListViewModel<State<PlacetteList>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) {
     // TODO: implement deleteItem
     // Pour l'instant n'est pas à implémenter, si c'est le cas, alors changer String par int
     throw UnimplementedError();
