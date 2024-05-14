@@ -82,10 +82,11 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
 
   Future<void> appendToCorCyclePlacetteList(
       CorCyclePlacette corCyclePlacette) async {
-    final Placette placette = state.data!;
-    placette.corCyclesPlacettes?.addItemToList(corCyclePlacette);
-    _placetteListViewModel.updateList(placette);
-    state = State.success(placette);
+    final Placette oldPlacette = state.data!;
+    final Placette newPlacette = oldPlacette.updateCorCyclesPlacettes(
+        oldPlacette.corCyclesPlacettes?.addItemToList(corCyclePlacette));
+    _placetteListViewModel.updateList(newPlacette);
+    state = State.success(newPlacette);
   }
 
   Future<void> updateCorCyclePlacetteList(
