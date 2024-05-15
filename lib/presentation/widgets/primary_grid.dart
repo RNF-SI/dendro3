@@ -6,7 +6,7 @@ import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/presentation/lib/simple_element.dart';
 
-class PrimaryGridWidget extends StatelessWidget {
+class PrimaryGridWidget extends StatefulWidget {
   final SimpleElement simpleElements;
   final Function(dynamic) onItemAdded;
   final Function(dynamic) onItemDeleted;
@@ -25,29 +25,35 @@ class PrimaryGridWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _PrimaryGridWidgetState createState() => _PrimaryGridWidgetState();
+}
+
+class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
+  @override
   Widget build(BuildContext context) {
-// Bright green from your palette
+    // Bright green from your palette
     final Color deleteColor = Color(0xFF8B5500);
     // Replace idCyclePlacette value by with NumCycle value
-    if (simpleElements.containsKey('idCyclePlacette')) {
-      int? numCyclePlacette = mapNumCyclePlacetteNumCycle[
-          simpleElements.getValue('idCyclePlacette')!];
+    if (widget.simpleElements.containsKey('idCyclePlacette')) {
+      int? numCyclePlacette = widget.mapNumCyclePlacetteNumCycle[
+          widget.simpleElements.getValue('idCyclePlacette')!];
       if (numCyclePlacette != null) {
-        simpleElements.setValue('idCyclePlacette', numCyclePlacette);
+        widget.simpleElements.setValue('idCyclePlacette', numCyclePlacette);
       }
     }
 
     // remove the elements of simpleElements that are not in the displayable columns
-    simpleElements.removeWhere(
-        (element) => !shouldIncludeColumn(element.key, displayTypeState));
+    widget.simpleElements.removeWhere((element) =>
+        !shouldIncludeColumn(element.key, widget.displayTypeState));
 
     // Map for title name changes
     List<String> titleNames = _getTitleGridNamesForType(
-        simpleElements.map((e) => e.key).toList(), displayTypeState);
+        widget.simpleElements.map((e) => e.key).toList(),
+        widget.displayTypeState);
 
     List<Widget> simpleWidgets = [];
-    for (int i = 0; i < simpleElements.length; i++) {
-      MapEntry<String, dynamic> entry = simpleElements.entries[i];
+    for (int i = 0; i < widget.simpleElements.length; i++) {
+      MapEntry<String, dynamic> entry = widget.simpleElements.entries[i];
       String titleName = titleNames[i]; // Get the modified title name
 
       // Determine the display value
@@ -96,11 +102,12 @@ class PrimaryGridWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (displayTypeState != 'Arbres' && displayTypeState != 'BmsSup30')
+            if (widget.displayTypeState != 'Arbres' &&
+                widget.displayTypeState != 'BmsSup30')
               IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () =>
-                    onItemUpdated(simpleElements), // Using onItemMesureUpdated
+                icon: const Icon(Icons.edit, color: Colors.black),
+                onPressed: () => widget.onItemUpdated(
+                    widget.simpleElements), // Using onItemMesureUpdated
                 iconSize: 18, // Reduced icon size
                 padding: const EdgeInsets.all(4), // Reduced padding
                 constraints: const BoxConstraints(),
@@ -131,7 +138,7 @@ class PrimaryGridWidget extends StatelessWidget {
                             // Close the dialog
                             Navigator.of(context).pop();
                             // Perform the delete action
-                            onItemDeleted(simpleElements);
+                            widget.onItemDeleted(widget.simpleElements);
                           },
                         ),
                       ],
