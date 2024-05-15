@@ -49,6 +49,11 @@ class HomePage extends ConsumerWidget {
             },
           ),
           IconButton(
+            icon: const Icon(Icons.info_outline,
+                color: Color(0xFF1a1a18)), // Icon for version info
+            onPressed: () => _showVersionAlert(context),
+          ),
+          IconButton(
             icon: const Icon(Icons.logout,
                 color: Color(0xFF1a1a18)), // Brand noir
             onPressed: () => _confirmSignOut(context, authViewModel, ref),
@@ -58,6 +63,25 @@ class HomePage extends ConsumerWidget {
       body: const SafeArea(
         child: UserDispositifList(),
       ),
+    );
+  }
+
+  void _showVersionAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Attention'),
+          content: const Text(
+              "Attention, cette version de l'application est faite pour qu'un seul mobile soit utilisé par placette.\n\nDe plus, la synchronisation ne se fait que dans un sens: Les données sont prises dans le serveur de production et sont envoyées dans un serveur staging après vos saisies.\n\nEn d'autres termes, les modifications faites avec un autre mobile sur une autre placette de votre dispositif ne seront pas visibles sur votre téléphone même après une synchronisation."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Fermer"),
+            ),
+          ],
+        );
+      },
     );
   }
 
