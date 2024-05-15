@@ -395,7 +395,8 @@ class FormSaisiePlacettePageState
                             : field.fieldName,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 12, // Slightly larger font size
+                          fontSize:
+                              10, // Reduced font size from 12 to 10 for the main text
                           color: Color(
                               0xFF1a1a18), // Noir for text for better readability
                         ),
@@ -408,15 +409,19 @@ class FormSaisiePlacettePageState
                             fontWeight: FontWeight.normal,
                             color: Color(
                                 0xFF598979), // Bleu for units to differentiate
-                            fontSize: 10,
+                            fontSize:
+                                8, // Reduced font size from 10 to 8 for the unit text
                           ),
                         ),
                       if (field.fieldRequired)
                         Text(
                           '*',
                           style: TextStyle(
-                              color: Color(
-                                  0xFF8B5500)), // Marron for required fields
+                            color:
+                                Color(0xFF8B5500), // Marron for required fields
+                            fontSize:
+                                10, // Keeping this size consistent for visibility
+                          ),
                         ),
                       if (field.fieldInfo != '')
                         IconButton(
@@ -426,7 +431,7 @@ class FormSaisiePlacettePageState
                             Icons.info_outline,
                             color:
                                 Color(0xFF7DAB9C), // Light blue for info icons
-                            size: 11,
+                            size: 10, // Reduced icon size from 11 to 10
                           ),
                           onPressed: () {
                             showDialog(
@@ -440,10 +445,12 @@ class FormSaisiePlacettePageState
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: Text('OK',
-                                          style: TextStyle(
-                                              color: Color(
-                                                  0xFFC0C000))), // Vert for button text
+                                      child: Text(
+                                        'OK',
+                                        style: TextStyle(
+                                            color: Color(
+                                                0xFFC0C000)), // Vert for button text
+                                      ),
                                     ),
                                   ],
                                 );
