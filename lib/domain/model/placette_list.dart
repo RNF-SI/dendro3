@@ -45,8 +45,7 @@ class PlacetteList
     throw ArgumentError('Item must be of type Placette');
   }
 
-  PlacetteList updateItemExpositionPenteAndCorCyclePlacetteInList(
-      final dynamic item) {
+  PlacetteList updateItemExpositionAndPenteInList(final dynamic item) {
     if (item is Placette) {
       // update only 2 properties if the item: pente and exposition
       return copyWith(
@@ -55,6 +54,20 @@ class PlacetteList
                   ? placette.copyWith(
                       exposition: item.exposition,
                       pente: item.pente,
+                    )
+                  : placette)
+              .toList());
+    }
+    throw ArgumentError('Item must be of type Placette');
+  }
+
+  PlacetteList updateItemCorCyclePlacetteInList(final dynamic item) {
+    if (item is Placette) {
+      // update only 2 properties if the item: pente and exposition
+      return copyWith(
+          values: values
+              .map((placette) => placette.idPlacette == item.idPlacette
+                  ? placette.copyWith(
                       corCyclesPlacettes: item.corCyclesPlacettes,
                     )
                   : placette)

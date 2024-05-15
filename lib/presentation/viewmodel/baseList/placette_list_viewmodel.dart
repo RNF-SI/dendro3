@@ -52,8 +52,11 @@ class PlacetteListViewModel extends BaseListViewModel<State<PlacetteList>> {
     state = State.success(state.data!.updateItemInList(item));
   }
 
-  Future<void> updateList(Placette item) async {
-    state = State.success(
-        state.data!.updateItemExpositionPenteAndCorCyclePlacetteInList(item));
+  Future<void> updateExpositionAndPenteInPlacette(Placette item) async {
+    state = State.success(state.data!.updateItemExpositionAndPenteInList(item));
+  }
+
+  Future<void> updateCorCyclePlacetteInPlacette(Placette item) async {
+    state = State.success(state.data!.updateItemCorCyclePlacetteInList(item));
   }
 }

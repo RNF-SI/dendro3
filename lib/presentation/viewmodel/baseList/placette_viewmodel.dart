@@ -74,7 +74,7 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
       item["exposition"],
     );
 
-    _placetteListViewModel.updateList(newPlacette);
+    _placetteListViewModel.updateExpositionAndPenteInPlacette(newPlacette);
 
     state = State.success(newPlacette);
     // final value = state.data!.updatePlacette(newPlacette);
@@ -85,7 +85,7 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
     final Placette oldPlacette = state.data!;
     final Placette newPlacette = oldPlacette.updateCorCyclesPlacettes(
         oldPlacette.corCyclesPlacettes?.addItemToList(corCyclePlacette));
-    _placetteListViewModel.updateList(newPlacette);
+    _placetteListViewModel.updateCorCyclePlacetteInPlacette(newPlacette);
     state = State.success(newPlacette);
   }
 
@@ -97,7 +97,7 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
 
     final Placette newPlacette =
         oldPlacette.copyWith(corCyclesPlacettes: newCorCyclesPlacettes);
-    _placetteListViewModel.updateList(newPlacette);
+    _placetteListViewModel.updateCorCyclePlacetteInPlacette(newPlacette);
     state = State.success(newPlacette);
   }
 }
