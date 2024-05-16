@@ -104,81 +104,77 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        Stack(
           children: [
-            if (widget.displayTypeState != 'Arbres' &&
-                widget.displayTypeState != 'BmsSup30')
-              IconButton(
-                icon: const Icon(Icons.edit, color: Colors.black),
-                onPressed: () => widget.onItemUpdated(
-                    widget.simpleElements), // Using onItemMesureUpdated
-                iconSize: 18, // Reduced icon size
-                padding: const EdgeInsets.all(4), // Reduced padding
-                constraints: const BoxConstraints(),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 20,
+                  right: 20 * scale,
+                  left: 10 *
+                      scale), // Adjust padding to ensure grid content isn't overlapped by icons
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: screenWidth > 600
+                    ? 4
+                    : 3, // Adjusting the number of columns based on the screen width
+                childAspectRatio: 3,
+                mainAxisSpacing: 3,
+                crossAxisSpacing: 2,
+                children: simpleWidgets,
               ),
-            IconButton(
-              icon: Icon(Icons.delete, color: deleteColor),
-              onPressed: () {
-                // Show confirmation dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Confirmer la suppression'),
-                      content: const Text(
-                          'Etes vous sûr de vouloir supprimer cet élément?'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('Annuler'),
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: const Text('Supprimer',
-                              style: TextStyle(color: Colors.red)),
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                            // Perform the delete action
-                            widget.onItemDeleted(widget.simpleElements);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              iconSize: 18, // Reduced icon size
-              padding: const EdgeInsets.all(4), // Reduced padding
-              constraints: const BoxConstraints(),
             ),
-            // IconButton(
-            //   icon: Icon(Icons.add, color: Colors.green),
-            //   onPressed: () =>
-            //       onItemAdded(simpleElements), // Using onItemMesureDeleted
-            //   iconSize: 20, // Reduced icon size
-            //   padding: EdgeInsets.all(4), // Reduced padding
-            //   constraints: BoxConstraints(),
-            // ),
+            Positioned(
+              right: 0, // Position icons to the top right corner
+              child: Row(
+                children: [
+                  if (widget.displayTypeState != 'Arbres' &&
+                      widget.displayTypeState != 'BmsSup30')
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.black),
+                      onPressed: () =>
+                          widget.onItemUpdated(widget.simpleElements),
+                      iconSize: 18, // Keep the icon size small to save space
+                      padding: const EdgeInsets.all(4),
+                      constraints: BoxConstraints(),
+                    ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: deleteColor),
+                    onPressed: () {
+                      // Show confirmation dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Confirmer la suppression'),
+                            content: const Text(
+                                'Etes vous sûr de vouloir supprimer cet élément?'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Annuler'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              TextButton(
+                                child: const Text('Supprimer',
+                                    style: TextStyle(color: Colors.red)),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  widget.onItemDeleted(widget.simpleElements);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    iconSize: 18,
+                    padding: const EdgeInsets.all(4),
+                    constraints: BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
           ],
-        ),
-        Padding(
-          padding:
-              EdgeInsets.only(left: 20 * scale), // Dynamically scaling padding
-          child: GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: screenWidth > 600
-                ? 4
-                : 3, // Adjusting the number of columns based on the screen width
-            childAspectRatio: 3,
-            mainAxisSpacing: 3,
-            crossAxisSpacing: 2,
-            children: simpleWidgets,
-          ),
         ),
       ],
     );
