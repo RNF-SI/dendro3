@@ -31,6 +31,11 @@ class PrimaryGridWidget extends StatefulWidget {
 class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
   @override
   Widget build(BuildContext context) {
+    // Screen width for responsive layout
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scale =
+        screenWidth / 360; // Base scale on typical small screen width
+
     // Bright green from your palette
     final Color deleteColor = Color(0xFF8B5500);
     // Replace idCyclePlacette value by with NumCycle value
@@ -69,17 +74,17 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
 
       simpleWidgets.add(
         Container(
-          padding: const EdgeInsets.all(1.0),
+          padding: EdgeInsets.all(1.0 * scale),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(
-                  "$titleName:", // Use the modified title name
-                  style: const TextStyle(
+                  "$titleName:",
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 12 * scale,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -87,7 +92,7 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
               Flexible(
                 child: Text(
                   displayValue,
-                  style: const TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 15 * scale),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -161,13 +166,16 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20), // Ajout d'une marge en haut
+          padding:
+              EdgeInsets.only(left: 20 * scale), // Dynamically scaling padding
           child: GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 4,
-            childAspectRatio: 2.5,
-            mainAxisSpacing: 1,
+            crossAxisCount: screenWidth > 600
+                ? 4
+                : 3, // Adjusting the number of columns based on the screen width
+            childAspectRatio: 3,
+            mainAxisSpacing: 3,
             crossAxisSpacing: 2,
             children: simpleWidgets,
           ),
