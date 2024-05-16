@@ -128,118 +128,127 @@ class _SecondaryGridState extends State<SecondaryGrid> {
           child: Card(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Stack(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        widget.onItemMesureUpdated(index);
-                      },
-                      iconSize: 18 * scale,
-                      padding: EdgeInsets.all(4 * scale),
-                      // constraints: const BoxConstraints(),
-                    ),
-                    // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
-                    // ou bien si il y a plus de 1 mesure de cet arbre
-                    if (maxNumberCyclePlacette == currentItem['numCycle'] &&
-                        widget.mesuresList.length > 1)
-                      IconButton(
-                        icon:
-                            const Icon(Icons.delete, color: Color(0xFF8B5500)),
-                        onPressed: () {
-                          // Show confirmation dialog
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirmer la suppression'),
-                                content: const Text(
-                                    'Etes vous sûr de vouloir supprimer cet élément?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Annuler'),
-                                    onPressed: () {
-                                      // Close the dialog
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Supprimer',
-                                        style: TextStyle(
-                                            color: Color(0xFF8B5500))),
-                                    onPressed: () {
-                                      // Close the dialog
-                                      Navigator.of(context).pop();
-                                      // Perform the delete action
-                                      widget.onItemMesureDeleted(
-                                          widget.mesuresList[index]);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 35,
+                          right: 30,
+                          left: 10), // Ensure enough padding for icons
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics:
+                            const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisSpacing: 3,
+                          crossAxisCount: screenWidth > 600 ? 4 : 3,
+                          childAspectRatio: 2 * scale,
+                        ),
+                        itemCount: currentItem.entries.length,
+                        itemBuilder: (context, itemIndex) {
+                          var entry = currentItem.entries.elementAt(itemIndex);
+                          List<String> titleGridNames =
+                              _getTitleGridNamesForType(
+                                  currentItem.keys.toList(),
+                                  widget.displayTypeState);
+                          String titleName = titleGridNames[
+                              itemIndex]; // Get the modified title name
+
+                          // Determine the display value
+                          String displayValue;
+                          if (entry.value is double) {
+                            double doubleValue = entry.value as double;
+                            displayValue = doubleValue == doubleValue.toInt()
+                                ? doubleValue.toInt().toString()
+                                : doubleValue.toStringAsFixed(1);
+                          } else {
+                            displayValue = entry.value.toString();
+                          }
+
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  "$titleName:",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  displayValue,
+                                  style: const TextStyle(fontSize: 15),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           );
                         },
-                        iconSize: 18 * scale,
-                        padding: EdgeInsets.all(4 * scale),
                       ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 2 * scale, horizontal: 3 * scale),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics:
-                        const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 3,
-                      crossAxisCount: screenWidth > 600 ? 4 : 3,
-                      childAspectRatio: 2.5 * scale,
                     ),
-                    itemCount: currentItem.entries.length,
-                    itemBuilder: (context, itemIndex) {
-                      var entry = currentItem.entries.elementAt(itemIndex);
-                      List<String> titleGridNames = _getTitleGridNamesForType(
-                          currentItem.keys.toList(), widget.displayTypeState);
-                      String titleName = titleGridNames[
-                          itemIndex]; // Get the modified title name
-
-                      // Determine the display value
-                      String displayValue;
-                      if (entry.value is double) {
-                        double doubleValue = entry.value as double;
-                        displayValue = doubleValue == doubleValue.toInt()
-                            ? doubleValue.toInt().toString()
-                            : doubleValue.toStringAsFixed(1);
-                      } else {
-                        displayValue = entry.value.toString();
-                      }
-
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Row(
                         children: [
-                          Flexible(
-                            child: Text(
-                              "$titleName:",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 11),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              widget.onItemMesureUpdated(index);
+                            },
+                            iconSize: 18 * scale,
+                            padding: EdgeInsets.all(4 * scale),
                           ),
-                          Flexible(
-                            child: Text(
-                              displayValue,
-                              style: const TextStyle(fontSize: 15),
-                              overflow: TextOverflow.ellipsis,
+                          // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
+                          // ou bien si il y a plus de 1 mesure de cet arbre
+                          if (maxNumberCyclePlacette ==
+                                  currentItem['numCycle'] &&
+                              widget.mesuresList.length > 1)
+                            IconButton(
+                              icon: const Icon(Icons.delete,
+                                  color: Color(0xFF8B5500)),
+                              onPressed: () {
+                                // Show confirmation dialog
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                          'Confirmer la suppression'),
+                                      content: const Text(
+                                          'Etes vous sûr de vouloir supprimer cet élément?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Annuler'),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                        ),
+                                        TextButton(
+                                          child: const Text('Supprimer',
+                                              style: TextStyle(
+                                                  color: Color(0xFF8B5500))),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            widget.onItemMesureDeleted(
+                                                widget.mesuresList[index]);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              iconSize: 18 * scale,
+                              padding: EdgeInsets.all(4 * scale),
                             ),
-                          ),
                         ],
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
