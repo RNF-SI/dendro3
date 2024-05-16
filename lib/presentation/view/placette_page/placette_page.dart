@@ -11,7 +11,7 @@ import 'package:dendro3/presentation/viewmodel/baseList/placette_viewmodel.dart'
 import 'package:dendro3/presentation/viewmodel/corCyclePlacetteList/cor_cycle_placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/cor_cycle_placette_local_storage_provider.dart';
 import 'package:dendro3/presentation/widgets/action_button.dart';
-import 'package:dendro3/presentation/widgets/expandingFAB.dart';
+import 'package:dendro3/presentation/widgets/placetteFAB.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -98,7 +98,7 @@ class PlacettePageState extends ConsumerState<PlacettePage> {
                   corCyclePlacetteLocalStorageStatusProvider
                       .isCyclePlacetteInProgress(
                           lastCorCyclePlacette.idCyclePlacette))
-              ? ExpandingFAB(
+              ? PlacetteFAB(
                   distance: 112.0,
                   children: [
                     ActionButton(
