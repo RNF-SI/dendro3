@@ -15,6 +15,7 @@ class SecondaryGrid extends StatefulWidget {
   final Function(int) onItemMesureUpdated;
   final int currentIndex;
   final String displayTypeState;
+
   const SecondaryGrid({
     Key? key,
     required this.mesuresList,
@@ -26,6 +27,7 @@ class SecondaryGrid extends StatefulWidget {
     required this.mapIdCycleNumCycle,
     required this.displayTypeState,
   }) : super(key: key);
+
   @override
   _SecondaryGridState createState() => _SecondaryGridState();
 }
@@ -35,6 +37,10 @@ class _SecondaryGridState extends State<SecondaryGrid> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scale =
+        screenWidth / 360; // scale factor based on typical screen width
+
     // Sort mesuresList based on the order of cycles in mapIdCycleNumCycle
     widget.mesuresList.sort((a, b) {
       int cycleNumA = widget.mapIdCycleNumCycle[a['idCycle']] ?? 0;
@@ -78,8 +84,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
               },
               child: Container(
-                width: 200, // Same width as other items
-                height: 120,
+                width: 200 * scale, // Same width as other items
+                height: 120 * scale,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 child: const Card(
                   color: Color(0xFF8AAC3E), // Different color to distinguish
@@ -116,9 +122,9 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         currentItem = filterMesureItem(currentItem, widget.displayTypeState);
 
         return Container(
-          width: 300,
-          height: 120,
-          margin: const EdgeInsets.symmetric(horizontal: 5),
+          width: 250 * scale,
+          height: 150 * scale,
+          margin: EdgeInsets.symmetric(horizontal: 2 * scale),
           child: Card(
             child: Column(
               children: [
@@ -130,9 +136,9 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                       onPressed: () {
                         widget.onItemMesureUpdated(index);
                       },
-                      iconSize: 18, // Reduced icon size
-                      padding: const EdgeInsets.all(4), // Reduced padding
-                      constraints: const BoxConstraints(),
+                      iconSize: 18 * scale,
+                      padding: EdgeInsets.all(4 * scale),
+                      // constraints: const BoxConstraints(),
                     ),
                     // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
                     // ou bien si il y a plus de 1 mesure de cet arbre
@@ -175,22 +181,22 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                             },
                           );
                         },
-                        iconSize: 18, // Reduced icon size
-                        padding: const EdgeInsets.all(4), // Reduced padding
-                        constraints: const BoxConstraints(),
+                        iconSize: 18 * scale,
+                        padding: EdgeInsets.all(4 * scale),
                       ),
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.symmetric(
+                      vertical: 2 * scale, horizontal: 3 * scale),
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics:
                         const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4, // Number of columns in the grid
-                      childAspectRatio: 2, // Aspect ratio of each grid cell
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 3,
+                      crossAxisCount: screenWidth > 600 ? 4 : 3,
+                      childAspectRatio: 2.5 * scale,
                     ),
                     itemCount: currentItem.entries.length,
                     itemBuilder: (context, itemIndex) {
