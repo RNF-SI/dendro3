@@ -108,7 +108,7 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: 20,
+                  top: 35,
                   right: 20 * scale,
                   left: 10 *
                       scale), // Adjust padding to ensure grid content isn't overlapped by icons
