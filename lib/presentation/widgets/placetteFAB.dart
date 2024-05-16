@@ -135,6 +135,7 @@ class PlacetteFABState extends ConsumerState<PlacetteFAB>
           child: FloatingActionButton(
             onPressed: _toggle,
             child: const Icon(Icons.create),
+            heroTag: "PlacetteFAB",
           ),
         ),
       ),
