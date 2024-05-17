@@ -1,3 +1,5 @@
+import 'package:dendro3/presentation/widgets/action_button.dart';
+import 'package:dendro3/presentation/widgets/expandingFAB.dart';
 import 'package:flutter/material.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
@@ -108,7 +110,7 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                  top: 35,
+                  top: 10,
                   right: 20 * scale,
                   left: 10 *
                       scale), // Adjust padding to ensure grid content isn't overlapped by icons
@@ -125,55 +127,54 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
               ),
             ),
             Positioned(
-              right: 0, // Position icons to the top right corner
-              child: Row(
-                children: [
-                  if (widget.displayTypeState != 'Arbres' &&
-                      widget.displayTypeState != 'BmsSup30')
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.black),
-                      onPressed: () =>
-                          widget.onItemUpdated(widget.simpleElements),
-                      iconSize: 18, // Keep the icon size small to save space
-                      padding: const EdgeInsets.all(4),
-                      constraints: BoxConstraints(),
+                right: 0, // Position icons to the top right corner
+                top: 0,
+                child: ExpandingFAB(
+                  distance: 46.0,
+                  heroTag: "primaryGridHeroTag",
+                  children: [
+                    ActionButton(
+                      icon: Icon(Icons.delete, color: deleteColor),
+                      onPressed: () => {
+                        // Show confirmation dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirmer la suppression'),
+                              content: const Text(
+                                  'Etes vous sûr de vouloir supprimer cet élément?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Annuler'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: const Text('Supprimer',
+                                      style: TextStyle(color: Colors.red)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    widget.onItemDeleted(widget.simpleElements);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      },
                     ),
-                  IconButton(
-                    icon: Icon(Icons.delete, color: deleteColor),
-                    onPressed: () {
-                      // Show confirmation dialog
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Confirmer la suppression'),
-                            content: const Text(
-                                'Etes vous sûr de vouloir supprimer cet élément?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Annuler'),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                              TextButton(
-                                child: const Text('Supprimer',
-                                    style: TextStyle(color: Colors.red)),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  widget.onItemDeleted(widget.simpleElements);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    iconSize: 18,
-                    padding: const EdgeInsets.all(4),
-                    constraints: BoxConstraints(),
-                  ),
-                ],
-              ),
-            ),
+                    if (widget.displayTypeState != 'Arbres' &&
+                        widget.displayTypeState != 'BmsSup30')
+                      ActionButton(
+                        icon: const Icon(Icons.edit, color: Colors.black),
+                        onPressed: () =>
+                            widget.onItemUpdated(widget.simpleElements),
+                        // iconSize: 18, // Keep the icon size small to save space
+                        // padding: const EdgeInsets.all(4),
+                        // constraints: BoxConstraints(),
+                      ),
+                  ],
+                )),
           ],
         ),
       ],

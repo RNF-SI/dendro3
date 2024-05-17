@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:dendro3/presentation/widgets/action_button.dart';
+import 'package:dendro3/presentation/widgets/expandingFAB.dart';
 import 'package:flutter/material.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
@@ -131,8 +133,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 Stack(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: 35,
+                      padding: const EdgeInsets.only(
+                          top: 10,
                           right: 30,
                           left: 10), // Ensure enough padding for icons
                       child: GridView.builder(
@@ -193,22 +195,16 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: Row(
+                      child: ExpandingFAB(
+                        distance: 46.0,
+                        heroTag: "secondaryGridHeroTag$index",
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () {
-                              widget.onItemMesureUpdated(index);
-                            },
-                            iconSize: 18 * scale,
-                            padding: EdgeInsets.all(4 * scale),
-                          ),
                           // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
                           // ou bien si il y a plus de 1 mesure de cet arbre
                           if (maxNumberCyclePlacette ==
                                   currentItem['numCycle'] &&
                               widget.mesuresList.length > 1)
-                            IconButton(
+                            ActionButton(
                               icon: const Icon(Icons.delete,
                                   color: Color(0xFF8B5500)),
                               onPressed: () {
@@ -242,9 +238,13 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                                   },
                                 );
                               },
-                              iconSize: 18 * scale,
-                              padding: EdgeInsets.all(4 * scale),
                             ),
+                          ActionButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              widget.onItemMesureUpdated(index);
+                            },
+                          ),
                         ],
                       ),
                     ),
