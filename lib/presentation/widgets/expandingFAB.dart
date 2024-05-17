@@ -9,10 +9,12 @@ class ExpandingFAB extends ConsumerStatefulWidget {
     this.initialOpen,
     required this.distance,
     required this.children,
+    required this.heroTag,
   });
 
   final bool? initialOpen;
   final double distance;
+  final String heroTag;
   final List<Widget> children;
 
   @override
@@ -60,10 +62,13 @@ class ExpandingFABState extends ConsumerState<ExpandingFAB>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
+    return Container(
+      width:
+          85, // Ensuring the container takes full width to properly position the FAB at the far right
+      height: 85.0,
       child: Stack(
-        alignment: Alignment.bottomRight,
-        clipBehavior: Clip.none,
+        alignment: Alignment.topRight, // Align children to the top right
+        clipBehavior: Clip.none, // Allow overflow
         children: [
           _buildTapToCloseFab(),
           ..._buildExpandingActionButtons(),
@@ -85,9 +90,10 @@ class ExpandingFABState extends ConsumerState<ExpandingFAB>
           child: InkWell(
             onTap: _toggle,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Icon(
                 Icons.close,
+                size: 16,
                 color: Theme.of(context).primaryColor,
               ),
             ),
@@ -100,14 +106,14 @@ class ExpandingFABState extends ConsumerState<ExpandingFAB>
   List<Widget> _buildExpandingActionButtons() {
     final children = <Widget>[];
     final count = widget.children.length;
-    final step = 90.0 / (count - 1);
-    for (var i = 0, angleInDegrees = 0.0;
-        i < count;
-        i++, angleInDegrees += step) {
+    for (var i = 0; i < count; i++) {
+      int angleInDegrees = i == 0 ? 320 : 40;
+      int distanceMax = i == 0 ? 3 : 50;
+
       children.add(
         _ExpandingActionButton(
-          directionInDegrees: angleInDegrees,
-          maxDistance: widget.distance,
+          directionInDegrees: angleInDegrees.toDouble(),
+          maxDistance: distanceMax.toDouble(),
           progress: _expandAnimation!,
           child: widget.children[i],
         ),
@@ -134,7 +140,12 @@ class ExpandingFABState extends ConsumerState<ExpandingFAB>
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
             onPressed: _toggle,
-            child: const Icon(Icons.create),
+            child: const Icon(
+              Icons.more_horiz,
+              size: 16,
+            ), // Smaller icon
+            mini: true, // Smaller FAB
+            heroTag: widget.heroTag, // Unique hero tag
           ),
         ),
       ),
