@@ -71,11 +71,11 @@ class _SecondaryGridState extends ConsumerState<SecondaryGrid> {
         break;
       case ScreenSize.large:
         paddingTopStack = 10;
-        fontSizeTitle = 13;
-        fontSizeText = 16;
+        fontSizeTitle = 15;
+        fontSizeText = 18;
         mainAxisSpacing = 3;
-        crossAxisCount = 4;
-        childAspectRatio = 1.5;
+        crossAxisCount = 6;
+        childAspectRatio = 3.5;
         crossAxisSpacing = 2;
         break;
     }

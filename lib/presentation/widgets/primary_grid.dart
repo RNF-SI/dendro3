@@ -45,6 +45,7 @@ class _PrimaryGridWidgetState extends ConsumerState<PrimaryGridWidget> {
         childAspectRatioGrid,
         mainAxisSpacingGrid,
         crossAxisSpacingGrid;
+    int crossAxisCountGrid;
 
     switch (screenSize) {
       case ScreenSize.small:
@@ -53,6 +54,7 @@ class _PrimaryGridWidgetState extends ConsumerState<PrimaryGridWidget> {
         childAspectRatioGrid = 3.5;
         mainAxisSpacingGrid = 1;
         crossAxisSpacingGrid = 1;
+        crossAxisCountGrid = 3;
         break;
       case ScreenSize.medium:
         fontSizeTitle = 13;
@@ -60,13 +62,15 @@ class _PrimaryGridWidgetState extends ConsumerState<PrimaryGridWidget> {
         childAspectRatioGrid = 3;
         mainAxisSpacingGrid = 3;
         crossAxisSpacingGrid = 2;
+        crossAxisCountGrid = 3;
         break;
       case ScreenSize.large:
         fontSizeTitle = 15;
         fontSizeText = 18;
-        childAspectRatioGrid = 3;
-        mainAxisSpacingGrid = 3;
-        crossAxisSpacingGrid = 2;
+        childAspectRatioGrid = 4;
+        mainAxisSpacingGrid = 10;
+        crossAxisSpacingGrid = 10;
+        crossAxisCountGrid = 6;
         break;
     }
 
@@ -149,9 +153,8 @@ class _PrimaryGridWidgetState extends ConsumerState<PrimaryGridWidget> {
               child: GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: screenWidth > 600
-                    ? 4
-                    : 3, // Adjusting the number of columns based on the screen width
+                crossAxisCount:
+                    crossAxisCountGrid, // Adjusting the number of columns based on the screen width
                 childAspectRatio: childAspectRatioGrid,
                 mainAxisSpacing: mainAxisSpacingGrid,
                 crossAxisSpacing: crossAxisSpacingGrid,

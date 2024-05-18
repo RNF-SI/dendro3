@@ -200,9 +200,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
         dataRowHeightDataTable2 = 50;
         break;
       case ScreenSize.large:
-        containerHeight = 400;
-        columnSpacingDataTable2 = 10;
-        horizontalMarginDataTable2 = 10;
+        containerHeight = 350;
+        columnSpacingDataTable2 = 7;
+        horizontalMarginDataTable2 = 8;
         dataRowHeightDataTable2 = 60;
         break;
     }
