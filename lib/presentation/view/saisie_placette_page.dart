@@ -154,7 +154,8 @@ Widget __buildAsyncPlacetteListWidget(
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
               child: Row(
                 children: [
                   DisplayableButton(

@@ -1,3 +1,4 @@
+import 'package:dendro3/presentation/lib/screen_size_provider.dart';
 import 'package:dendro3/presentation/widgets/action_button.dart';
 import 'package:dendro3/presentation/widgets/expandingFAB.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,9 @@ import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
 import 'package:dendro3/presentation/lib/simple_element.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PrimaryGridWidget extends StatefulWidget {
+class PrimaryGridWidget extends ConsumerStatefulWidget {
   final SimpleElement simpleElements;
   final Function(dynamic) onItemAdded;
   final Function(dynamic) onItemDeleted;
@@ -30,13 +32,43 @@ class PrimaryGridWidget extends StatefulWidget {
   _PrimaryGridWidgetState createState() => _PrimaryGridWidgetState();
 }
 
-class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
+class _PrimaryGridWidgetState extends ConsumerState<PrimaryGridWidget> {
   @override
   Widget build(BuildContext context) {
     // Screen width for responsive layout
     double screenWidth = MediaQuery.of(context).size.width;
     double scale =
         screenWidth / 360; // Base scale on typical small screen width
+    final ScreenSize screenSize = ref.watch(screenSizeProvider(context));
+    double fontSizeTitle,
+        fontSizeText,
+        childAspectRatioGrid,
+        mainAxisSpacingGrid,
+        crossAxisSpacingGrid;
+
+    switch (screenSize) {
+      case ScreenSize.small:
+        fontSizeTitle = 10;
+        fontSizeText = 12;
+        childAspectRatioGrid = 3.5;
+        mainAxisSpacingGrid = 1;
+        crossAxisSpacingGrid = 1;
+        break;
+      case ScreenSize.medium:
+        fontSizeTitle = 13;
+        fontSizeText = 16;
+        childAspectRatioGrid = 3;
+        mainAxisSpacingGrid = 3;
+        crossAxisSpacingGrid = 2;
+        break;
+      case ScreenSize.large:
+        fontSizeTitle = 15;
+        fontSizeText = 18;
+        childAspectRatioGrid = 3;
+        mainAxisSpacingGrid = 3;
+        crossAxisSpacingGrid = 2;
+        break;
+    }
 
     // Bright green from your palette
     final Color deleteColor = Color(0xFF8B5500);
@@ -76,7 +108,7 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
 
       simpleWidgets.add(
         Container(
-          padding: EdgeInsets.all(1.0 * scale),
+          padding: EdgeInsets.all(1.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +118,7 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
                   "$titleName:",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 12 * scale,
+                    fontSize: fontSizeTitle,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -94,7 +126,7 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
               Flexible(
                 child: Text(
                   displayValue,
-                  style: TextStyle(fontSize: 15 * scale),
+                  style: TextStyle(fontSize: fontSizeText),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -109,20 +141,20 @@ class _PrimaryGridWidgetState extends State<PrimaryGridWidget> {
         Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(
-                  top: 10,
-                  right: 20 * scale,
-                  left: 10 *
-                      scale), // Adjust padding to ensure grid content isn't overlapped by icons
+              padding: const EdgeInsets.only(
+                top: 10,
+                right: 20,
+                left: 10,
+              ), // Adjust padding to ensure grid content isn't overlapped by icons
               child: GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: screenWidth > 600
                     ? 4
                     : 3, // Adjusting the number of columns based on the screen width
-                childAspectRatio: 3,
-                mainAxisSpacing: 3,
-                crossAxisSpacing: 2,
+                childAspectRatio: childAspectRatioGrid,
+                mainAxisSpacing: mainAxisSpacingGrid,
+                crossAxisSpacing: crossAxisSpacingGrid,
                 children: simpleWidgets,
               ),
             ),

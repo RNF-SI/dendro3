@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:dendro3/presentation/lib/screen_size_provider.dart';
 import 'package:dendro3/presentation/widgets/action_button.dart';
 import 'package:dendro3/presentation/widgets/expandingFAB.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,9 @@ import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SecondaryGrid extends StatefulWidget {
+class SecondaryGrid extends ConsumerStatefulWidget {
   final Map<int, int> mapIdCycleNumCycle;
   final List<dynamic> mesuresList;
   final Function(int) onItemSelected;
@@ -34,11 +36,50 @@ class SecondaryGrid extends StatefulWidget {
   _SecondaryGridState createState() => _SecondaryGridState();
 }
 
-class _SecondaryGridState extends State<SecondaryGrid> {
+class _SecondaryGridState extends ConsumerState<SecondaryGrid> {
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final ScreenSize screenSize = ref.watch(screenSizeProvider(context));
+    double paddingTopStack,
+        fontSizeTitle,
+        fontSizeText,
+        mainAxisSpacing,
+        childAspectRatio,
+        crossAxisSpacing;
+    int crossAxisCount;
+
+    switch (screenSize) {
+      case ScreenSize.small:
+        paddingTopStack = 5;
+        fontSizeTitle = 10;
+        fontSizeText = 12;
+        mainAxisSpacing = 1;
+        crossAxisCount = 3;
+        childAspectRatio = 2.5;
+        crossAxisSpacing = 1;
+        break;
+      case ScreenSize.medium:
+        paddingTopStack = 10;
+        fontSizeTitle = 13;
+        fontSizeText = 16;
+        mainAxisSpacing = 3;
+        crossAxisCount = 3;
+        childAspectRatio = 2;
+        crossAxisSpacing = 5;
+        break;
+      case ScreenSize.large:
+        paddingTopStack = 10;
+        fontSizeTitle = 13;
+        fontSizeText = 16;
+        mainAxisSpacing = 3;
+        crossAxisCount = 4;
+        childAspectRatio = 1.5;
+        crossAxisSpacing = 2;
+        break;
+    }
+
     double screenWidth = MediaQuery.of(context).size.width;
     double scale =
         screenWidth / 360; // scale factor based on typical screen width
@@ -133,8 +174,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10,
+                      padding: EdgeInsets.only(
+                          top: paddingTopStack,
                           right: 30,
                           left: 10), // Ensure enough padding for icons
                       child: GridView.builder(
@@ -142,9 +183,10 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                         physics:
                             const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: 3,
-                          crossAxisCount: screenWidth > 600 ? 4 : 3,
-                          childAspectRatio: 2 * scale,
+                          mainAxisSpacing: mainAxisSpacing,
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: childAspectRatio,
+                          crossAxisSpacing: crossAxisSpacing,
                         ),
                         itemCount: currentItem.entries.length,
                         itemBuilder: (context, itemIndex) {
@@ -174,16 +216,17 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                               Flexible(
                                 child: Text(
                                   "$titleName:",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: fontSizeTitle,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               Flexible(
                                 child: Text(
                                   displayValue,
-                                  style: const TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: fontSizeText),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
