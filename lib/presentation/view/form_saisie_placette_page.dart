@@ -9,6 +9,7 @@ import 'package:dendro3/presentation/lib/form_config/date_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_field_config.dart';
 import 'package:dendro3/presentation/lib/form_config/dropdown_search_config.dart';
 import 'package:dendro3/presentation/lib/form_config/text_field_config.dart';
+import 'package:dendro3/presentation/lib/screen_size_provider.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/arbre_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/bmSup30_saisie_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/saisie_viewmodel/placette_saisie_viewmodel.dart';
@@ -85,6 +86,8 @@ class FormSaisiePlacettePageState
 
   @override
   Widget build(BuildContext context) {
+    final ScreenSize screenSize = ref.watch(screenSizeProvider(context));
+
     // Build a Form widget using the _formKey created above.
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +112,7 @@ class FormSaisiePlacettePageState
                   style: const TextStyle(color: Color(0xFF8B5500)),
                 ),
               ),
-            _buildFormWidget(),
+            _buildFormWidget(screenSize),
           ],
         ),
         // ),
@@ -150,8 +153,38 @@ class FormSaisiePlacettePageState
     );
   }
 
-  Widget _buildFormWidget() {
+  Widget _buildFormWidget(ScreenSize screenSize) {
     late Widget formWidget;
+    double textFieldNameSize,
+        textImportantMessageSize,
+        testUnitSize,
+        textInfoSize,
+        textRequiredSize;
+
+    switch (screenSize) {
+      case ScreenSize.small:
+        textFieldNameSize = 10;
+        textImportantMessageSize = 8;
+        testUnitSize = 8;
+        textInfoSize = 8;
+        textRequiredSize = 8;
+        break;
+      case ScreenSize.medium:
+        textFieldNameSize = 12;
+        textImportantMessageSize = 10;
+        testUnitSize = 10;
+        textInfoSize = 10;
+        textRequiredSize = 10;
+        break;
+      case ScreenSize.large:
+        textFieldNameSize = 14;
+        textImportantMessageSize = 12;
+        testUnitSize = 12;
+        textInfoSize = 12;
+        textRequiredSize = 12;
+        break;
+    }
+
     var formFields = _viewModel.getFormConfig().map<Widget>((field) {
       if (field is TextFieldConfig) {
         formWidget = TextFormField(
@@ -375,7 +408,8 @@ class FormSaisiePlacettePageState
                 child: Text(
                   field.importantMessage!,
                   style: TextStyle(
-                    fontSize: 12, // Slightly larger font for visibility
+                    fontSize:
+                        textImportantMessageSize, // Slightly larger font for visibility
                     color:
                         Color(0xFF8B5500), // Use Marron for important messages
                   ),
@@ -395,9 +429,8 @@ class FormSaisiePlacettePageState
                             : field.fieldName,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize:
-                              10, // Reduced font size from 12 to 10 for the main text
-                          color: Color(
+                          fontSize: textFieldNameSize,
+                          color: const Color(
                               0xFF1a1a18), // Noir for text for better readability
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -410,7 +443,7 @@ class FormSaisiePlacettePageState
                             color: Color(
                                 0xFF598979), // Bleu for units to differentiate
                             fontSize:
-                                8, // Reduced font size from 10 to 8 for the unit text
+                                testUnitSize, // Reduced font size from 10 to 8 for the unit text
                           ),
                         ),
                       if (field.fieldRequired)
@@ -420,18 +453,19 @@ class FormSaisiePlacettePageState
                             color:
                                 Color(0xFF8B5500), // Marron for required fields
                             fontSize:
-                                10, // Keeping this size consistent for visibility
+                                textRequiredSize, // Keeping this size consistent for visibility
                           ),
                         ),
                       if (field.fieldInfo != '')
                         IconButton(
                           padding: const EdgeInsets.only(left: 0.0, right: 0.0),
                           constraints: const BoxConstraints(),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.info_outline,
                             color:
                                 Color(0xFF7DAB9C), // Light blue for info icons
-                            size: 10, // Reduced icon size from 11 to 10
+                            size:
+                                textInfoSize, // Reduced icon size from 11 to 10
                           ),
                           onPressed: () {
                             showDialog(
