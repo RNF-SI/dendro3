@@ -1,4 +1,5 @@
 import 'package:dendro3/core/helpers/export_objects.dart';
+import 'package:dendro3/core/helpers/sync_count.dart';
 import 'package:dendro3/core/helpers/sync_results_object.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
@@ -120,7 +121,7 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
   }
 
   @override
-  Future<SyncResults> syncDispositifsFromStagingServer(
+  Future<SyncCounts> syncDispositifsFromStagingServer(
     int idDispositif,
     String? lastSyncTime,
   ) async {
@@ -131,6 +132,6 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
     // Map and insert/update dispositif and related entities in the database
     await database.insertOrUpdateDispositifWithData(syncResults);
 
-    return syncResults;
+    return syncResults.counts;
   }
 }

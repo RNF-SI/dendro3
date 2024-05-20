@@ -1,4 +1,5 @@
 import 'package:dendro3/core/helpers/export_objects.dart';
+import 'package:dendro3/core/helpers/sync_count.dart';
 import 'package:dendro3/core/helpers/sync_results_object.dart';
 import 'package:dendro3/domain/repository/dispositifs_repository.dart';
 import 'package:dendro3/domain/repository/local_storage_repository.dart';
@@ -12,10 +13,12 @@ class SyncDispositifFromStagingServerUseCaseImpl
   SyncDispositifFromStagingServerUseCaseImpl(
       this._repository, this._localStorageRepository);
 
-  Future<SyncResults> execute(
+  Future<SyncCounts> execute(
       final int dispId, final String? lastSyncTime) async {
-    SyncResults results = await _repository.syncDispositifsFromStagingServer(
-        dispId, lastSyncTime);
+    SyncCounts results = await _repository.syncDispositifsFromStagingServer(
+      dispId,
+      lastSyncTime,
+    );
     await _localStorageRepository.setLastSyncTimeForDispositif(
         dispId, DateTime.now());
     return results;

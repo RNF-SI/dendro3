@@ -1,4 +1,5 @@
 import 'package:dendro3/core/helpers/export_objects.dart';
+import 'package:dendro3/core/helpers/sync_count.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/sync_state_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,18 +21,21 @@ class SyncResultsWidget extends ConsumerWidget {
           ? Center(child: CircularProgressIndicator())
           : syncState.error != null
               ? Text("Error: ${syncState.error}")
-              : _buildSyncResults(context, syncState.results),
+              : _buildSyncResults(context, syncState),
     );
   }
 
-  Widget _buildSyncResults(BuildContext context, ExportResults? results) {
-    if (results == null) {
+  Widget _buildSyncResults(BuildContext context, SyncState state) {
+    if (state.results == null) {
       return Text("No synchronization data available.");
     } else {
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildListSections(results),
+          children: [
+            ..._buildListSections(state.results!),
+            if (state.counts != null) ..._buildCountsView(state.counts!),
+          ],
         ),
       );
     }
@@ -114,5 +118,22 @@ class SyncResultsWidget extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  List<Widget> _buildCountsView(SyncCounts counts) {
+    return [
+      ListTile(
+        title: Text("Sync Summary"),
+        subtitle: Text(
+            "CorCyclePlacettes: Created ${counts.corCyclesPlacettesCreated}, Updated ${counts.corCyclesPlacettesUpdated}\n"
+            "Arbres: Created ${counts.arbresCreated}, Updated ${counts.arbresUpdated}\n"
+            "Arbres Mesures: Created ${counts.arbresMesuresCreated}, Updated ${counts.arbresMesuresUpdated}\n"
+            "Bms: Created ${counts.bmsSup30Created}, Updated ${counts.bmsSup30Updated}\n"
+            "Bms Mesures: Created ${counts.bmSup30MesuresCreated}, Updated ${counts.bmSup30MesuresUpdated}\n"
+            "Reperes: Created ${counts.reperesCreated}, Updated ${counts.reperesUpdated}"
+            "Regenerations: Created ${counts.regenerationsCreated}, Updated ${counts.regenerationsUpdated}\n"
+            "Transects: Created ${counts.transectsCreated}, Updated ${counts.transectsUpdated}\n"),
+      ),
+    ];
   }
 }

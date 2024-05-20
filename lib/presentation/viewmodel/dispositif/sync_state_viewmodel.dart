@@ -1,4 +1,5 @@
 import 'package:dendro3/core/helpers/export_objects.dart';
+import 'package:dendro3/core/helpers/sync_count.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/usecase/export_dispositif_data_usecase.dart';
 import 'package:dendro3/domain/usecase/get_last_sync_time_for_dispositif.dart';
@@ -39,17 +40,15 @@ class SyncStateNotifier extends StateNotifier<SyncState> {
           await _getLastSyncTimeForDispositifUseCase.execute(dispositifId);
 
       // Execute the synchronization use case
-      final results = await Future.wait([
-        _exportDispositifDataUseCase.execute(
-          dispositifId,
-          lastSyncTime,
-        ),
-        _syncDispositifFromStagingServerUseCase.execute(
-          dispositifId,
-          lastSyncTime,
-        ),
-      ]);
-      state = SyncState.success(results[0] as ExportResults);
+      final syncResults = await _syncDispositifFromStagingServerUseCase.execute(
+        dispositifId,
+        lastSyncTime,
+      );
+      final exportResults = await _exportDispositifDataUseCase.execute(
+        dispositifId,
+        lastSyncTime,
+      );
+      state = SyncState.success(exportResults, syncResults);
     } catch (e) {
       state = SyncState.error(e.toString());
     }
@@ -59,21 +58,28 @@ class SyncStateNotifier extends StateNotifier<SyncState> {
 // Define the state classes
 class SyncState {
   final ExportResults? results;
+  final SyncCounts? counts;
   final String? error;
   final bool isLoading;
 
   SyncState.initial()
       : results = null,
+        counts = null,
         error = null,
         isLoading = false;
+
   SyncState.loading()
       : results = null,
+        counts = null,
         error = null,
         isLoading = true;
-  SyncState.success(this.results)
+
+  SyncState.success(this.results, this.counts)
       : error = null,
         isLoading = false;
+
   SyncState.error(this.error)
       : results = null,
+        counts = null,
         isLoading = false;
 }

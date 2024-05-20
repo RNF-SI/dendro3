@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/sync_count.dart';
 import 'package:dendro3/data/datasource/interface/api/cycles_api.dart';
 import 'package:dendro3/data/mapper/arbreMesure_mapper.dart';
 import 'package:dendro3/data/mapper/arbre_mapper.dart';
@@ -23,10 +24,12 @@ import 'package:dendro3/domain/model/transect.dart';
 class SyncResults {
   final List<Cycle> cycles;
   final List<Placette> placettes;
+  final SyncCounts counts;
 
-  SyncResults({required this.cycles, required this.placettes});
+  SyncResults(
+      {required this.cycles, required this.placettes, required this.counts});
 
-  factory SyncResults.fromApi(Map<String, dynamic> jsonData) {
+  factory SyncResults.fromApi(Map<String, dynamic> jsonData, counts) {
     return SyncResults(
       cycles: (jsonData['cycles'] as List)
           .map((item) => CycleMapper.transformFromApiToModel(item))
@@ -34,6 +37,7 @@ class SyncResults {
       placettes: (jsonData['placettes'] as List)
           .map((item) => PlacetteMapper.fromApi(item))
           .toList(),
+      counts: SyncCounts.fromJson(counts),
     );
   }
 }
