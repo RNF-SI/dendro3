@@ -23,6 +23,16 @@ class RepereMapper {
         diametre: entity['diametre'] as double?,
         repere: entity['repere'] as String?,
         observation: entity['observation'] as String?,
+        createdAt: entity['created_at'] != null
+            ? DateTime.parse(entity['created_at'] as String)
+            : null,
+        updatedAt: entity['updated_at'] != null
+            ? DateTime.parse(entity['updated_at'] as String)
+            : null,
+        createdBy: entity['created_by'] as String?,
+        updatedBy: entity['updated_by'] as String?,
+        createdOn: entity['created_on'] as String?,
+        updatedOn: entity['updated_on'] as String?,
       );
     } catch (e) {
       print("Error in Repere transformFromApiToModel: $e");
@@ -58,7 +68,13 @@ class RepereMapper {
       'distance': model.distance,
       'diametre': model.diametre,
       'repere': model.repere,
-      'observation': model.observation
+      'observation': model.observation,
+      'created_at': model.createdAt?.toIso8601String(),
+      'updated_at': model.updatedAt?.toIso8601String(),
+      'created_by': model.createdBy,
+      'updated_by': model.updatedBy,
+      'created_on': model.createdOn,
+      'updated_on': model.updatedOn,
     };
   }
 

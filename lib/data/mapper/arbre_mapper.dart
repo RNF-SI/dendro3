@@ -46,6 +46,16 @@ class ArbreMapper {
         distance: entity['distance'] ?? logAndReturnNull<double>('distance'),
         taillis: entity['taillis'] as bool?,
         observation: entity['observation'] as String?,
+        createdAt: entity['created_at'] != null
+            ? DateTime.parse(entity['created_at'] as String)
+            : null,
+        updatedAt: entity['updated_at'] != null
+            ? DateTime.parse(entity['updated_at'] as String)
+            : null,
+        createdBy: entity['created_by'] as String?,
+        updatedBy: entity['updated_by'] as String?,
+        createdOn: entity['created_on'] as String?,
+        updatedOn: entity['updated_on'] as String?,
         arbresMesures: entity.containsKey('arbres_mesures')
             ? ArbreMesureListMapper.transformFromApiToModel(
                 entity['arbres_mesures'])
@@ -97,6 +107,12 @@ class ArbreMapper {
       'distance': model.distance,
       'taillis': model.taillis,
       'observation': model.observation,
+      'created_at': model.createdAt?.toIso8601String(),
+      'updated_at': model.updatedAt?.toIso8601String(),
+      'created_by': model.createdBy,
+      'updated_by': model.updatedBy,
+      'created_on': model.createdOn,
+      'updated_on': model.updatedOn,
       'arbres_mesures': model.arbresMesures != null
           ? ArbreMesureListMapper.transformToMap(model.arbresMesures!)
           : null

@@ -31,6 +31,16 @@ class BmSup30Mapper {
         azimutSouche: entity['azimut_souche'] as double?,
         distanceSouche: entity['distance_souche'] as double?,
         observation: entity['observation'] as String?,
+        createdAt: entity['created_at'] != null
+            ? DateTime.parse(entity['created_at'] as String)
+            : null,
+        updatedAt: entity['updated_at'] != null
+            ? DateTime.parse(entity['updated_at'] as String)
+            : null,
+        createdBy: entity['created_by'] as String?,
+        updatedBy: entity['updated_by'] as String?,
+        createdOn: entity['created_on'] as String?,
+        updatedOn: entity['updated_on'] as String?,
         bmsSup30Mesures: entity.containsKey('bm_sup_30_mesures')
             ? BmSup30MesureListMapper.transformFromApiToModel(
                 entity['bm_sup_30_mesures'])
@@ -88,6 +98,12 @@ class BmSup30Mapper {
       'azimut_souche': model.azimutSouche,
       'distance_souche': model.distanceSouche,
       'observation': model.observation,
+      'created_at': model.createdAt?.toIso8601String(),
+      'updated_at': model.updatedAt?.toIso8601String(),
+      'created_by': model.createdBy,
+      'updated_by': model.updatedBy,
+      'created_on': model.createdOn,
+      'updated_on': model.updatedOn,
       'bm_sup_30_mesures': model.bmsSup30Mesures != null
           ? BmSup30MesureListMapper.transformToMap(model.bmsSup30Mesures!)
           : null

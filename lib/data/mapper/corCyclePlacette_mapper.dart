@@ -68,6 +68,16 @@ class CorCyclePlacetteMapper {
         recouvArbres: entity['recouv_arbres'] as double?,
         coeff: entity['coeff'] as int?,
         diamLim: entity['diam_lim'] as double?,
+        createdAt: entity['created_at'] != null
+            ? DateTime.parse(entity['created_at'] as String)
+            : null,
+        updatedAt: entity['updated_at'] != null
+            ? DateTime.parse(entity['updated_at'] as String)
+            : null,
+        createdBy: entity['created_by'] as String?,
+        updatedBy: entity['updated_by'] as String?,
+        createdOn: entity['created_on'] as String?,
+        updatedOn: entity['updated_on'] as String?,
         transects: entity.containsKey('transects')
             ? TransectListMapper.transformFromApiToModel(entity['transects'])
             : null,
@@ -144,6 +154,12 @@ class CorCyclePlacetteMapper {
       'recouv_arbres': model.recouvArbres,
       'coeff': model.coeff,
       'diam_lim': model.diamLim,
+      'created_at': model.createdAt?.toIso8601String(),
+      'updated_at': model.updatedAt?.toIso8601String(),
+      'created_by': model.createdBy,
+      'updated_by': model.updatedBy,
+      'created_on': model.createdOn,
+      'updated_on': model.updatedOn,
       'transects': model.transects != null
           ? TransectListMapper.transformToMap(model.transects!)
           : null,
