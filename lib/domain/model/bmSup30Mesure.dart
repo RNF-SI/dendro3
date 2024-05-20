@@ -20,6 +20,12 @@ class BmSup30Mesure with _$BmSup30Mesure implements SaisisableObject {
       required bool chablis,
       required int stadeDurete,
       required int stadeEcorce,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn,
       String? observation}) = _BmSup30Mesure;
 
   const BmSup30Mesure._();

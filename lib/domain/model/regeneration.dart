@@ -18,6 +18,12 @@ class Regeneration with _$Regeneration implements SaisisableObject {
       required bool taillis,
       required bool abroutissement,
       int? idNomenclatureAbroutissement,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn,
       String? observation}) = _Regeneration;
 
   const Regeneration._();

@@ -33,6 +33,12 @@ mixin _$CorCyclePlacette {
   double? get recouvArbres => throw _privateConstructorUsedError;
   int? get coeff => throw _privateConstructorUsedError;
   double? get diamLim => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get createdBy => throw _privateConstructorUsedError;
+  String? get updatedBy => throw _privateConstructorUsedError;
+  String? get createdOn => throw _privateConstructorUsedError;
+  String? get updatedOn => throw _privateConstructorUsedError;
   TransectList? get transects => throw _privateConstructorUsedError;
   RegenerationList? get regenerations => throw _privateConstructorUsedError;
 
@@ -65,6 +71,12 @@ abstract class $CorCyclePlacetteCopyWith<$Res> {
       double? recouvArbres,
       int? coeff,
       double? diamLim,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn,
       TransectList? transects,
       RegenerationList? regenerations});
 
@@ -102,6 +114,12 @@ class _$CorCyclePlacetteCopyWithImpl<$Res, $Val extends CorCyclePlacette>
     Object? recouvArbres = freezed,
     Object? coeff = freezed,
     Object? diamLim = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? createdBy = freezed,
+    Object? updatedBy = freezed,
+    Object? createdOn = freezed,
+    Object? updatedOn = freezed,
     Object? transects = freezed,
     Object? regenerations = freezed,
   }) {
@@ -174,6 +192,30 @@ class _$CorCyclePlacetteCopyWithImpl<$Res, $Val extends CorCyclePlacette>
           ? _value.diamLim
           : diamLim // ignore: cast_nullable_to_non_nullable
               as double?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedOn: freezed == updatedOn
+          ? _value.updatedOn
+          : updatedOn // ignore: cast_nullable_to_non_nullable
+              as String?,
       transects: freezed == transects
           ? _value.transects
           : transects // ignore: cast_nullable_to_non_nullable
@@ -236,6 +278,12 @@ abstract class _$$CorCyclePlacetteImplCopyWith<$Res>
       double? recouvArbres,
       int? coeff,
       double? diamLim,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn,
       TransectList? transects,
       RegenerationList? regenerations});
 
@@ -273,6 +321,12 @@ class __$$CorCyclePlacetteImplCopyWithImpl<$Res>
     Object? recouvArbres = freezed,
     Object? coeff = freezed,
     Object? diamLim = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? createdBy = freezed,
+    Object? updatedBy = freezed,
+    Object? createdOn = freezed,
+    Object? updatedOn = freezed,
     Object? transects = freezed,
     Object? regenerations = freezed,
   }) {
@@ -345,6 +399,30 @@ class __$$CorCyclePlacetteImplCopyWithImpl<$Res>
           ? _value.diamLim
           : diamLim // ignore: cast_nullable_to_non_nullable
               as double?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedOn: freezed == updatedOn
+          ? _value.updatedOn
+          : updatedOn // ignore: cast_nullable_to_non_nullable
+              as String?,
       transects: freezed == transects
           ? _value.transects
           : transects // ignore: cast_nullable_to_non_nullable
@@ -378,6 +456,12 @@ class _$CorCyclePlacetteImpl extends _CorCyclePlacette {
       this.recouvArbres,
       this.coeff,
       this.diamLim,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.updatedBy,
+      this.createdOn,
+      this.updatedOn,
       this.transects,
       this.regenerations})
       : super._();
@@ -417,13 +501,25 @@ class _$CorCyclePlacetteImpl extends _CorCyclePlacette {
   @override
   final double? diamLim;
   @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? createdBy;
+  @override
+  final String? updatedBy;
+  @override
+  final String? createdOn;
+  @override
+  final String? updatedOn;
+  @override
   final TransectList? transects;
   @override
   final RegenerationList? regenerations;
 
   @override
   String toString() {
-    return 'CorCyclePlacette(idCyclePlacette: $idCyclePlacette, idCycle: $idCycle, idPlacette: $idPlacette, dateReleve: $dateReleve, dateIntervention: $dateIntervention, annee: $annee, natureIntervention: $natureIntervention, gestionPlacette: $gestionPlacette, idNomenclatureCastor: $idNomenclatureCastor, idNomenclatureFrottis: $idNomenclatureFrottis, idNomenclatureBoutis: $idNomenclatureBoutis, recouvHerbesBasses: $recouvHerbesBasses, recouvHerbesHautes: $recouvHerbesHautes, recouvBuissons: $recouvBuissons, recouvArbres: $recouvArbres, coeff: $coeff, diamLim: $diamLim, transects: $transects, regenerations: $regenerations)';
+    return 'CorCyclePlacette(idCyclePlacette: $idCyclePlacette, idCycle: $idCycle, idPlacette: $idPlacette, dateReleve: $dateReleve, dateIntervention: $dateIntervention, annee: $annee, natureIntervention: $natureIntervention, gestionPlacette: $gestionPlacette, idNomenclatureCastor: $idNomenclatureCastor, idNomenclatureFrottis: $idNomenclatureFrottis, idNomenclatureBoutis: $idNomenclatureBoutis, recouvHerbesBasses: $recouvHerbesBasses, recouvHerbesHautes: $recouvHerbesHautes, recouvBuissons: $recouvBuissons, recouvArbres: $recouvArbres, coeff: $coeff, diamLim: $diamLim, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy, updatedBy: $updatedBy, createdOn: $createdOn, updatedOn: $updatedOn, transects: $transects, regenerations: $regenerations)';
   }
 
   @override
@@ -461,6 +557,18 @@ class _$CorCyclePlacetteImpl extends _CorCyclePlacette {
                 other.recouvArbres == recouvArbres) &&
             (identical(other.coeff, coeff) || other.coeff == coeff) &&
             (identical(other.diamLim, diamLim) || other.diamLim == diamLim) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.updatedBy, updatedBy) ||
+                other.updatedBy == updatedBy) &&
+            (identical(other.createdOn, createdOn) ||
+                other.createdOn == createdOn) &&
+            (identical(other.updatedOn, updatedOn) ||
+                other.updatedOn == updatedOn) &&
             (identical(other.transects, transects) ||
                 other.transects == transects) &&
             (identical(other.regenerations, regenerations) ||
@@ -487,6 +595,12 @@ class _$CorCyclePlacetteImpl extends _CorCyclePlacette {
         recouvArbres,
         coeff,
         diamLim,
+        createdAt,
+        updatedAt,
+        createdBy,
+        updatedBy,
+        createdOn,
+        updatedOn,
         transects,
         regenerations
       ]);
@@ -518,6 +632,12 @@ abstract class _CorCyclePlacette extends CorCyclePlacette {
       final double? recouvArbres,
       final int? coeff,
       final double? diamLim,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final String? createdBy,
+      final String? updatedBy,
+      final String? createdOn,
+      final String? updatedOn,
       final TransectList? transects,
       final RegenerationList? regenerations}) = _$CorCyclePlacetteImpl;
   const _CorCyclePlacette._() : super._();
@@ -556,6 +676,18 @@ abstract class _CorCyclePlacette extends CorCyclePlacette {
   int? get coeff;
   @override
   double? get diamLim;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get createdBy;
+  @override
+  String? get updatedBy;
+  @override
+  String? get createdOn;
+  @override
+  String? get updatedOn;
   @override
   TransectList? get transects;
   @override

@@ -18,6 +18,12 @@ class Arbre with _$Arbre implements SaisisableObjectMesure {
     bool? taillis,
     String? observation,
     ArbreMesureList? arbresMesures,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? createdBy,
+    String? updatedBy,
+    String? createdOn,
+    String? updatedOn,
   }) = _Arbre;
 
   const Arbre._();

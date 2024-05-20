@@ -6,14 +6,21 @@ part 'repere.freezed.dart';
 
 @freezed
 class Repere with _$Repere implements SaisisableObject {
-  const factory Repere(
-      {required String idRepere,
-      required int idPlacette,
-      double? azimut,
-      double? distance,
-      double? diametre,
-      String? repere,
-      String? observation}) = _Repere;
+  const factory Repere({
+    required String idRepere,
+    required int idPlacette,
+    double? azimut,
+    double? distance,
+    double? diametre,
+    String? repere,
+    String? observation,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? createdBy,
+    String? updatedBy,
+    String? createdOn,
+    String? updatedOn,
+  }) = _Repere;
 
   const Repere._();
 

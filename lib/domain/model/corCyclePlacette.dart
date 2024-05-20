@@ -24,6 +24,12 @@ class CorCyclePlacette with _$CorCyclePlacette {
       double? recouvArbres,
       int? coeff,
       double? diamLim,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn,
       TransectList? transects,
       RegenerationList? regenerations}) = _CorCyclePlacette;
 

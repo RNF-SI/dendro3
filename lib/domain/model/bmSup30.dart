@@ -20,6 +20,12 @@ class BmSup30 with _$BmSup30 implements SaisisableObjectMesure {
       double? azimutSouche,
       double? distanceSouche,
       String? observation,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn,
       BmSup30MesureList? bmsSup30Mesures}) = _BmSup30;
 
   const BmSup30._();

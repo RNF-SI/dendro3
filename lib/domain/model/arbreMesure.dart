@@ -26,6 +26,12 @@ class ArbreMesure with _$ArbreMesure implements SaisisableObject {
     String? refCodeEcolo,
     bool? ratioHauteur,
     String? observation,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? createdBy,
+    String? updatedBy,
+    String? createdOn,
+    String? updatedOn,
   }) = _ArbreMesure;
 
   const ArbreMesure._();

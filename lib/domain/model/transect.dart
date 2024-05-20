@@ -25,6 +25,12 @@ class Transect with _$Transect implements SaisisableObject {
     required int stadeDurete,
     required int stadeEcorce,
     String? observation,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? createdBy,
+    String? updatedBy,
+    String? createdOn,
+    String? updatedOn,
   }) = _Transect;
 
   const Transect._();

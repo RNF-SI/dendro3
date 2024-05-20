@@ -34,6 +34,12 @@ mixin _$Transect {
   int get stadeDurete => throw _privateConstructorUsedError;
   int get stadeEcorce => throw _privateConstructorUsedError;
   String? get observation => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get createdBy => throw _privateConstructorUsedError;
+  String? get updatedBy => throw _privateConstructorUsedError;
+  String? get createdOn => throw _privateConstructorUsedError;
+  String? get updatedOn => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TransectCopyWith<Transect> get copyWith =>
@@ -63,7 +69,13 @@ abstract class $TransectCopyWith<$Res> {
       bool chablis,
       int stadeDurete,
       int stadeEcorce,
-      String? observation});
+      String? observation,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn});
 }
 
 /// @nodoc
@@ -97,6 +109,12 @@ class _$TransectCopyWithImpl<$Res, $Val extends Transect>
     Object? stadeDurete = null,
     Object? stadeEcorce = null,
     Object? observation = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? createdBy = freezed,
+    Object? updatedBy = freezed,
+    Object? createdOn = freezed,
+    Object? updatedOn = freezed,
   }) {
     return _then(_value.copyWith(
       idTransect: null == idTransect
@@ -171,6 +189,30 @@ class _$TransectCopyWithImpl<$Res, $Val extends Transect>
           ? _value.observation
           : observation // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedOn: freezed == updatedOn
+          ? _value.updatedOn
+          : updatedOn // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -201,7 +243,13 @@ abstract class _$$TransectImplCopyWith<$Res>
       bool chablis,
       int stadeDurete,
       int stadeEcorce,
-      String? observation});
+      String? observation,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn});
 }
 
 /// @nodoc
@@ -233,6 +281,12 @@ class __$$TransectImplCopyWithImpl<$Res>
     Object? stadeDurete = null,
     Object? stadeEcorce = null,
     Object? observation = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? createdBy = freezed,
+    Object? updatedBy = freezed,
+    Object? createdOn = freezed,
+    Object? updatedOn = freezed,
   }) {
     return _then(_$TransectImpl(
       idTransect: null == idTransect
@@ -307,6 +361,30 @@ class __$$TransectImplCopyWithImpl<$Res>
           ? _value.observation
           : observation // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedOn: freezed == updatedOn
+          ? _value.updatedOn
+          : updatedOn // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -332,7 +410,13 @@ class _$TransectImpl extends _Transect {
       required this.chablis,
       required this.stadeDurete,
       required this.stadeEcorce,
-      this.observation})
+      this.observation,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.updatedBy,
+      this.createdOn,
+      this.updatedOn})
       : super._();
 
   @override
@@ -371,10 +455,22 @@ class _$TransectImpl extends _Transect {
   final int stadeEcorce;
   @override
   final String? observation;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? createdBy;
+  @override
+  final String? updatedBy;
+  @override
+  final String? createdOn;
+  @override
+  final String? updatedOn;
 
   @override
   String toString() {
-    return 'Transect(idTransect: $idTransect, idCyclePlacette: $idCyclePlacette, idTransectOrig: $idTransectOrig, codeEssence: $codeEssence, refTransect: $refTransect, distance: $distance, orientation: $orientation, azimutSouche: $azimutSouche, distanceSouche: $distanceSouche, diametre: $diametre, diametre130: $diametre130, ratioHauteur: $ratioHauteur, contact: $contact, angle: $angle, chablis: $chablis, stadeDurete: $stadeDurete, stadeEcorce: $stadeEcorce, observation: $observation)';
+    return 'Transect(idTransect: $idTransect, idCyclePlacette: $idCyclePlacette, idTransectOrig: $idTransectOrig, codeEssence: $codeEssence, refTransect: $refTransect, distance: $distance, orientation: $orientation, azimutSouche: $azimutSouche, distanceSouche: $distanceSouche, diametre: $diametre, diametre130: $diametre130, ratioHauteur: $ratioHauteur, contact: $contact, angle: $angle, chablis: $chablis, stadeDurete: $stadeDurete, stadeEcorce: $stadeEcorce, observation: $observation, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy, updatedBy: $updatedBy, createdOn: $createdOn, updatedOn: $updatedOn)';
   }
 
   @override
@@ -414,30 +510,49 @@ class _$TransectImpl extends _Transect {
             (identical(other.stadeEcorce, stadeEcorce) ||
                 other.stadeEcorce == stadeEcorce) &&
             (identical(other.observation, observation) ||
-                other.observation == observation));
+                other.observation == observation) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.updatedBy, updatedBy) ||
+                other.updatedBy == updatedBy) &&
+            (identical(other.createdOn, createdOn) ||
+                other.createdOn == createdOn) &&
+            (identical(other.updatedOn, updatedOn) ||
+                other.updatedOn == updatedOn));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      idTransect,
-      idCyclePlacette,
-      idTransectOrig,
-      codeEssence,
-      refTransect,
-      distance,
-      orientation,
-      azimutSouche,
-      distanceSouche,
-      diametre,
-      diametre130,
-      ratioHauteur,
-      contact,
-      angle,
-      chablis,
-      stadeDurete,
-      stadeEcorce,
-      observation);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        idTransect,
+        idCyclePlacette,
+        idTransectOrig,
+        codeEssence,
+        refTransect,
+        distance,
+        orientation,
+        azimutSouche,
+        distanceSouche,
+        diametre,
+        diametre130,
+        ratioHauteur,
+        contact,
+        angle,
+        chablis,
+        stadeDurete,
+        stadeEcorce,
+        observation,
+        createdAt,
+        updatedAt,
+        createdBy,
+        updatedBy,
+        createdOn,
+        updatedOn
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -465,7 +580,13 @@ abstract class _Transect extends Transect {
       required final bool chablis,
       required final int stadeDurete,
       required final int stadeEcorce,
-      final String? observation}) = _$TransectImpl;
+      final String? observation,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final String? createdBy,
+      final String? updatedBy,
+      final String? createdOn,
+      final String? updatedOn}) = _$TransectImpl;
   const _Transect._() : super._();
 
   @override
@@ -504,6 +625,18 @@ abstract class _Transect extends Transect {
   int get stadeEcorce;
   @override
   String? get observation;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get createdBy;
+  @override
+  String? get updatedBy;
+  @override
+  String? get createdOn;
+  @override
+  String? get updatedOn;
   @override
   @JsonKey(ignore: true)
   _$$TransectImplCopyWith<_$TransectImpl> get copyWith =>

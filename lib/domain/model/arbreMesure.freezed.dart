@@ -35,6 +35,12 @@ mixin _$ArbreMesure {
   String? get refCodeEcolo => throw _privateConstructorUsedError;
   bool? get ratioHauteur => throw _privateConstructorUsedError;
   String? get observation => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get createdBy => throw _privateConstructorUsedError;
+  String? get updatedBy => throw _privateConstructorUsedError;
+  String? get createdOn => throw _privateConstructorUsedError;
+  String? get updatedOn => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ArbreMesureCopyWith<ArbreMesure> get copyWith =>
@@ -66,7 +72,13 @@ abstract class $ArbreMesureCopyWith<$Res> {
       String? codeEcolo,
       String? refCodeEcolo,
       bool? ratioHauteur,
-      String? observation});
+      String? observation,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn});
 }
 
 /// @nodoc
@@ -101,6 +113,12 @@ class _$ArbreMesureCopyWithImpl<$Res, $Val extends ArbreMesure>
     Object? refCodeEcolo = freezed,
     Object? ratioHauteur = freezed,
     Object? observation = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? createdBy = freezed,
+    Object? updatedBy = freezed,
+    Object? createdOn = freezed,
+    Object? updatedOn = freezed,
   }) {
     return _then(_value.copyWith(
       idArbreMesure: null == idArbreMesure
@@ -179,6 +197,30 @@ class _$ArbreMesureCopyWithImpl<$Res, $Val extends ArbreMesure>
           ? _value.observation
           : observation // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedOn: freezed == updatedOn
+          ? _value.updatedOn
+          : updatedOn // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -210,7 +252,13 @@ abstract class _$$ArbreMesureImplCopyWith<$Res>
       String? codeEcolo,
       String? refCodeEcolo,
       bool? ratioHauteur,
-      String? observation});
+      String? observation,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? createdBy,
+      String? updatedBy,
+      String? createdOn,
+      String? updatedOn});
 }
 
 /// @nodoc
@@ -243,6 +291,12 @@ class __$$ArbreMesureImplCopyWithImpl<$Res>
     Object? refCodeEcolo = freezed,
     Object? ratioHauteur = freezed,
     Object? observation = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? createdBy = freezed,
+    Object? updatedBy = freezed,
+    Object? createdOn = freezed,
+    Object? updatedOn = freezed,
   }) {
     return _then(_$ArbreMesureImpl(
       idArbreMesure: null == idArbreMesure
@@ -321,6 +375,30 @@ class __$$ArbreMesureImplCopyWithImpl<$Res>
           ? _value.observation
           : observation // ignore: cast_nullable_to_non_nullable
               as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedOn: freezed == updatedOn
+          ? _value.updatedOn
+          : updatedOn // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -347,7 +425,13 @@ class _$ArbreMesureImpl extends _ArbreMesure {
       this.codeEcolo,
       this.refCodeEcolo,
       this.ratioHauteur,
-      this.observation})
+      this.observation,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.updatedBy,
+      this.createdOn,
+      this.updatedOn})
       : super._();
 
   @override
@@ -388,10 +472,22 @@ class _$ArbreMesureImpl extends _ArbreMesure {
   final bool? ratioHauteur;
   @override
   final String? observation;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? createdBy;
+  @override
+  final String? updatedBy;
+  @override
+  final String? createdOn;
+  @override
+  final String? updatedOn;
 
   @override
   String toString() {
-    return 'ArbreMesure(idArbreMesure: $idArbreMesure, idArbre: $idArbre, idCycle: $idCycle, diametre1: $diametre1, diametre2: $diametre2, type: $type, hauteurTotale: $hauteurTotale, hauteurBranche: $hauteurBranche, stadeDurete: $stadeDurete, stadeEcorce: $stadeEcorce, liane: $liane, diametreLiane: $diametreLiane, coupe: $coupe, limite: $limite, idNomenclatureCodeSanitaire: $idNomenclatureCodeSanitaire, codeEcolo: $codeEcolo, refCodeEcolo: $refCodeEcolo, ratioHauteur: $ratioHauteur, observation: $observation)';
+    return 'ArbreMesure(idArbreMesure: $idArbreMesure, idArbre: $idArbre, idCycle: $idCycle, diametre1: $diametre1, diametre2: $diametre2, type: $type, hauteurTotale: $hauteurTotale, hauteurBranche: $hauteurBranche, stadeDurete: $stadeDurete, stadeEcorce: $stadeEcorce, liane: $liane, diametreLiane: $diametreLiane, coupe: $coupe, limite: $limite, idNomenclatureCodeSanitaire: $idNomenclatureCodeSanitaire, codeEcolo: $codeEcolo, refCodeEcolo: $refCodeEcolo, ratioHauteur: $ratioHauteur, observation: $observation, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy, updatedBy: $updatedBy, createdOn: $createdOn, updatedOn: $updatedOn)';
   }
 
   @override
@@ -432,7 +528,19 @@ class _$ArbreMesureImpl extends _ArbreMesure {
             (identical(other.ratioHauteur, ratioHauteur) ||
                 other.ratioHauteur == ratioHauteur) &&
             (identical(other.observation, observation) ||
-                other.observation == observation));
+                other.observation == observation) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.updatedBy, updatedBy) ||
+                other.updatedBy == updatedBy) &&
+            (identical(other.createdOn, createdOn) ||
+                other.createdOn == createdOn) &&
+            (identical(other.updatedOn, updatedOn) ||
+                other.updatedOn == updatedOn));
   }
 
   @override
@@ -456,7 +564,13 @@ class _$ArbreMesureImpl extends _ArbreMesure {
         codeEcolo,
         refCodeEcolo,
         ratioHauteur,
-        observation
+        observation,
+        createdAt,
+        updatedAt,
+        createdBy,
+        updatedBy,
+        createdOn,
+        updatedOn
       ]);
 
   @JsonKey(ignore: true)
@@ -486,7 +600,13 @@ abstract class _ArbreMesure extends ArbreMesure {
       final String? codeEcolo,
       final String? refCodeEcolo,
       final bool? ratioHauteur,
-      final String? observation}) = _$ArbreMesureImpl;
+      final String? observation,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final String? createdBy,
+      final String? updatedBy,
+      final String? createdOn,
+      final String? updatedOn}) = _$ArbreMesureImpl;
   const _ArbreMesure._() : super._();
 
   @override
@@ -527,6 +647,18 @@ abstract class _ArbreMesure extends ArbreMesure {
   bool? get ratioHauteur;
   @override
   String? get observation;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get createdBy;
+  @override
+  String? get updatedBy;
+  @override
+  String? get createdOn;
+  @override
+  String? get updatedOn;
   @override
   @JsonKey(ignore: true)
   _$$ArbreMesureImplCopyWith<_$ArbreMesureImpl> get copyWith =>
