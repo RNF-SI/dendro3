@@ -314,10 +314,13 @@ class DispositifsApiImpl implements DispositifsApi {
         "$apiBase/psdrf/dispositif-synchronisation/result/$taskId";
     final resultResponse = await Dio().get(resultUrl);
     if (resultResponse.statusCode == 200) {
-      return SyncResults.fromApi(
-        resultResponse.data["data"]["data"],
-        resultResponse.data["data"]["counts"],
-      );
+      var data = resultResponse.data["data"];
+      Map<String, dynamic> dataField =
+          data["data"] ?? {}; // Provide an empty map if data is null
+      Map<String, dynamic> countsField =
+          data["counts"] ?? {}; // Provide an empty map if counts is null
+      print("aaa");
+      return SyncResults.fromApi(dataField, countsField);
     } else {
       throw Exception(
           'Failed to fetch dispositif result: ${resultResponse.statusCode}');

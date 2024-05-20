@@ -55,4 +55,22 @@ class SyncCounts {
       reperesUpdated: json['reperes']['updated'],
     );
   }
+
+  SyncCounts.empty()
+      : corCyclesPlacettesCreated = 0,
+        corCyclesPlacettesUpdated = 0,
+        regenerationsCreated = 0,
+        regenerationsUpdated = 0,
+        transectsCreated = 0,
+        transectsUpdated = 0,
+        arbresCreated = 0,
+        arbresUpdated = 0,
+        arbresMesuresCreated = 0,
+        arbresMesuresUpdated = 0,
+        bmsSup30Created = 0,
+        bmsSup30Updated = 0,
+        bmSup30MesuresCreated = 0,
+        bmSup30MesuresUpdated = 0,
+        reperesCreated = 0,
+        reperesUpdated = 0;
 }

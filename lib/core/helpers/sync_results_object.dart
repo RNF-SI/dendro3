@@ -26,18 +26,37 @@ class SyncResults {
   final List<Placette> placettes;
   final SyncCounts counts;
 
-  SyncResults(
-      {required this.cycles, required this.placettes, required this.counts});
+  SyncResults({
+    required this.cycles,
+    required this.placettes,
+    required this.counts,
+  });
 
-  factory SyncResults.fromApi(Map<String, dynamic> jsonData, counts) {
+  factory SyncResults.fromApi(
+      Map<String, dynamic> jsonData, Map<String, dynamic> countsData) {
+    var cyclesList = jsonData['cycles'] ?? [];
+    var placettesList = jsonData['placettes'] ?? [];
+    // var counts = countsData != null
+    //     ? SyncCounts.fromJson(countsData)
+    //     : SyncCounts.empty();
+    var isCountsEmpty = countsData == null ||
+        countsData.isEmpty ||
+        countsData.keys
+            .where((k) => countsData[k] != null && countsData[k] != {})
+            .isEmpty;
+
+    var counts = isCountsEmpty
+        ? SyncCounts.empty()
+        : SyncCounts.fromJson(countsData as Map<String, dynamic>);
+
     return SyncResults(
-      cycles: (jsonData['cycles'] as List)
-          .map((item) => CycleMapper.transformFromApiToModel(item))
+      cycles: cyclesList
+          .map<Cycle>((item) => CycleMapper.transformFromApiToModel(item))
           .toList(),
-      placettes: (jsonData['placettes'] as List)
-          .map((item) => PlacetteMapper.fromApi(item))
+      placettes: placettesList
+          .map<Placette>((item) => PlacetteMapper.fromApi(item))
           .toList(),
-      counts: SyncCounts.fromJson(counts),
+      counts: counts,
     );
   }
 }
