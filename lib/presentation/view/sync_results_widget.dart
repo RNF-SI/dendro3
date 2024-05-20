@@ -15,13 +15,29 @@ class SyncResultsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final syncState = ref.watch(syncStateProvider(dispositifId));
 
-    return Scaffold(
-      appBar: AppBar(title: Text("Synchronization")),
-      body: syncState.isLoading
-          ? Center(child: CircularProgressIndicator())
-          : syncState.error != null
-              ? Text("Error: ${syncState.error}")
-              : _buildSyncResults(context, syncState),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Synchronization"),
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.publish), text: 'Export'),
+              Tab(icon: Icon(Icons.download), text: 'Import'),
+            ],
+          ),
+        ),
+        body: syncState.isLoading
+            ? Center(child: CircularProgressIndicator())
+            : syncState.error != null
+                ? Text("Error: ${syncState.error}")
+                : TabBarView(
+                    children: [
+                      _buildSyncResults(context, syncState),
+                      _buildSyncSummary(context, syncState),
+                    ],
+                  ),
+      ),
     );
   }
 
@@ -34,9 +50,18 @@ class SyncResultsWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ..._buildListSections(state.results!),
-            if (state.counts != null) ..._buildCountsView(state.counts!),
           ],
         ),
+      );
+    }
+  }
+
+  Widget _buildSyncSummary(BuildContext context, SyncState state) {
+    if (state.counts == null) {
+      return Text("Pas de données de synchros valides.");
+    } else {
+      return ListView(
+        children: _buildCountsView(state.counts!),
       );
     }
   }
