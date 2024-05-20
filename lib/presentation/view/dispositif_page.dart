@@ -1,10 +1,10 @@
-import 'package:dendro3/core/helpers/sync_objects.dart';
+import 'package:dendro3/core/helpers/export_objects.dart';
 import 'package:dendro3/domain/model/cycle_list.dart';
 import 'package:dendro3/domain/model/dispositif.dart';
 import 'package:dendro3/domain/model/placette_list.dart';
 import 'package:dendro3/presentation/model/dispositifInfo.dart';
 import 'package:dendro3/presentation/view/placette_list_widget.dart';
-import 'package:dendro3/presentation/view/sync_result.dart';
+import 'package:dendro3/presentation/view/sync_results_widget.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/placette_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/dispositif_viewmodel.dart';
 import 'package:dendro3/presentation/widgets/chiffres_widget.dart';

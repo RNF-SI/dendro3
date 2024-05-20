@@ -1,4 +1,5 @@
-import 'package:dendro3/core/helpers/sync_objects.dart';
+import 'package:dendro3/core/helpers/export_objects.dart';
+import 'package:dendro3/core/helpers/sync_results_object.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
@@ -116,5 +117,20 @@ class DispositifsRepositoryImpl implements DispositifsRepository {
         await database.getDispositifAllData(idDispositif, lastSyncTime!);
 
     return await api.exportDispositifData(data);
+  }
+
+  @override
+  Future<SyncResults> syncDispositifsFromStagingServer(
+    int idDispositif,
+    String? lastSyncTime,
+  ) async {
+    // Sync data from server
+    SyncResults syncResults =
+        await api.syncDispositifFromStagingServer(idDispositif, lastSyncTime);
+
+    // Map and insert/update dispositif and related entities in the database
+    await database.insertOrUpdateDispositifWithData(syncResults);
+
+    return syncResults;
   }
 }

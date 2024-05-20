@@ -1,23 +1,33 @@
-import 'package:dendro3/core/helpers/sync_objects.dart';
+import 'package:dendro3/core/helpers/export_objects.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/usecase/export_dispositif_data_usecase.dart';
+import 'package:dendro3/domain/usecase/get_last_sync_time_for_dispositif.dart';
+import 'package:dendro3/domain/usecase/sync_dispositif_from_staging_server_usecase.dart';
+import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final syncStateProvider = StateNotifierProvider.autoDispose
     .family<SyncStateNotifier, SyncState, int>((ref, dispositifId) {
   return SyncStateNotifier(
-    dispositifId,
-    ref.watch(exportDispositifDataUseCaseProvider),
-  );
+      dispositifId,
+      ref.watch(exportDispositifDataUseCaseProvider),
+      ref.watch(syncDispositifFromStagingServerUseCaseProvider),
+      ref.watch(getLastSyncTimeForDispositifUseCaseProvider));
 });
 
 class SyncStateNotifier extends StateNotifier<SyncState> {
   final ExportDispositifDataUseCase _exportDispositifDataUseCase;
+  final SyncDispositifFromStagingServerUseCase
+      _syncDispositifFromStagingServerUseCase;
+  final GetLastSyncTimeForDispositifUseCase
+      _getLastSyncTimeForDispositifUseCase;
 
   SyncStateNotifier(
     int dispositifId,
     this._exportDispositifDataUseCase,
+    this._syncDispositifFromStagingServerUseCase,
+    this._getLastSyncTimeForDispositifUseCase,
   ) : super(SyncState.initial()) {
     _startSync(dispositifId);
   }
@@ -25,10 +35,21 @@ class SyncStateNotifier extends StateNotifier<SyncState> {
   void _startSync(int dispositifId) async {
     state = SyncState.loading();
     try {
+      final String? lastSyncTime =
+          await _getLastSyncTimeForDispositifUseCase.execute(dispositifId);
+
       // Execute the synchronization use case
-      SyncResults results =
-          await _exportDispositifDataUseCase.execute(dispositifId);
-      state = SyncState.success(results);
+      final results = await Future.wait([
+        _exportDispositifDataUseCase.execute(
+          dispositifId,
+          lastSyncTime,
+        ),
+        _syncDispositifFromStagingServerUseCase.execute(
+          dispositifId,
+          lastSyncTime,
+        ),
+      ]);
+      state = SyncState.success(results[0] as ExportResults);
     } catch (e) {
       state = SyncState.error(e.toString());
     }
@@ -37,7 +58,7 @@ class SyncStateNotifier extends StateNotifier<SyncState> {
 
 // Define the state classes
 class SyncState {
-  final SyncResults? results;
+  final ExportResults? results;
   final String? error;
   final bool isLoading;
 

@@ -1,4 +1,4 @@
-import 'package:dendro3/core/helpers/sync_objects.dart';
+import 'package:dendro3/core/helpers/export_objects.dart';
 import 'package:dendro3/presentation/viewmodel/dispositif/sync_state_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +24,7 @@ class SyncResultsWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildSyncResults(BuildContext context, SyncResults? results) {
+  Widget _buildSyncResults(BuildContext context, ExportResults? results) {
     if (results == null) {
       return Text("No synchronization data available.");
     } else {
@@ -37,7 +37,7 @@ class SyncResultsWidget extends ConsumerWidget {
     }
   }
 
-  List<Widget> _buildListSections(SyncResults results) {
+  List<Widget> _buildListSections(ExportResults results) {
     List<Widget> sections = [];
     // Example for one section, repeat for others
     // Section for CorCyclePlacettes
@@ -95,7 +95,7 @@ class SyncResultsWidget extends ConsumerWidget {
     return sections;
   }
 
-  Widget _buildSection(String title, SyncDetails data, IconData icon) {
+  Widget _buildSection(String title, ExportDetails data, IconData icon) {
     return ExpansionTile(
       title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
       leading: Icon(icon),

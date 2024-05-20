@@ -31,7 +31,7 @@ class ArbreMapper {
     );
   }
 
-  // Function concentratingh only on arbre properties (and not on arbreMesures)
+  // Function concentrating only on arbre properties (and not on arbreMesures)
   static Arbre transformFromApiToModel(final Map<String, dynamic> entity) {
     try {
       return Arbre(

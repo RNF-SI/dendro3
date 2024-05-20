@@ -1,4 +1,4 @@
-import 'package:dendro3/core/helpers/sync_objects.dart';
+import 'package:dendro3/core/helpers/export_objects.dart';
 import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
 import 'package:dendro3/domain/repository/bmsSup30_repository.dart';
@@ -20,11 +20,10 @@ class ExportDispositifDataUseCaseImpl implements ExportDispositifDataUseCase {
   );
 
   @override
-  Future<SyncResults> execute(
+  Future<ExportResults> execute(
     final int id,
+    final String? lastSyncTime,
   ) async {
-    String? lastSyncTime =
-        await _localStorageRepository.getLastSyncTimeForDispositif(id);
     TaskResult resultExport =
         await _repository.exportDispositifData(id, lastSyncTime);
     // Actualize the Arbre id_arbre_orig values
@@ -35,6 +34,6 @@ class ExportDispositifDataUseCaseImpl implements ExportDispositifDataUseCase {
 
     await _localStorageRepository.setLastSyncTimeForDispositif(
         id, DateTime.now());
-    return resultExport.syncResults;
+    return resultExport.exportResults;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/sync_results_object.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
 
 abstract class DispositifsDatabase {
@@ -12,4 +13,5 @@ abstract class DispositifsDatabase {
     final int id,
     String lastSyncTime,
   );
+  Future<void> insertOrUpdateDispositifWithData(final SyncResults syncResults);
 }

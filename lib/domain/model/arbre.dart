@@ -8,16 +8,17 @@ part 'arbre.freezed.dart';
 
 @freezed
 class Arbre with _$Arbre implements SaisisableObjectMesure {
-  const factory Arbre(
-      {required String idArbre,
-      required int idArbreOrig,
-      required int idPlacette,
-      required String codeEssence,
-      required double azimut,
-      required double distance,
-      bool? taillis,
-      String? observation,
-      ArbreMesureList? arbresMesures}) = _Arbre;
+  const factory Arbre({
+    required String idArbre,
+    required int idArbreOrig,
+    required int idPlacette,
+    required String codeEssence,
+    required double azimut,
+    required double distance,
+    bool? taillis,
+    String? observation,
+    ArbreMesureList? arbresMesures,
+  }) = _Arbre;
 
   const Arbre._();
 

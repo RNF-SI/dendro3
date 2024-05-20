@@ -1,6 +1,10 @@
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/get_last_sync_time_for_dispositif.dart';
+import 'package:dendro3/domain/usecase/get_last_sync_time_for_dispositif_impl.dart';
+import 'package:dendro3/domain/usecase/sync_dispositif_from_staging_server_usecase.dart';
+import 'package:dendro3/domain/usecase/sync_dispositif_from_staging_server_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/update_bmSup30_and_create_bmSup30_mesure_usecase.dart';
@@ -325,6 +329,11 @@ final getCorCyclePlacetteLocalStorageUseCaseprovider =
         GetInProgressCorCyclePlacetteLocalStorageUseCaseImpl(
             ref.watch(localStorageProvider)));
 
+final getLastSyncTimeForDispositifUseCaseProvider =
+    Provider<GetLastSyncTimeForDispositifUseCase>((ref) =>
+        GetLastSyncTimeForDispositifUseCaseImpl(
+            ref.watch(localStorageProvider)));
+
 final exportDispositifDataUseCaseProvider =
     Provider<ExportDispositifDataUseCase>(
   (ref) => ExportDispositifDataUseCaseImpl(
@@ -334,6 +343,12 @@ final exportDispositifDataUseCaseProvider =
     ref.watch(localStorageProvider),
   ),
 );
+
+final syncDispositifFromStagingServerUseCaseProvider =
+    Provider<SyncDispositifFromStagingServerUseCase>((ref) =>
+        SyncDispositifFromStagingServerUseCaseImpl(
+            ref.watch(dispositifsRepositoryProvider),
+            ref.watch(localStorageProvider)));
 
 final deleteDatabaseUseCaseProvider = Provider<DeleteDatabaseUseCase>((ref) =>
     DeleteDatabaseUseCaseImpl(ref.watch(globalDatabaseRepositoryProvider)));

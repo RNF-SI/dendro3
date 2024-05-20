@@ -72,6 +72,58 @@ class PlacetteMapper {
     }
   }
 
+  static Placette fromApi(final PlacetteEntity entity) {
+    try {
+      return Placette(
+        idPlacette:
+            entity['id_placette'] ?? logAndReturnNull<int>('id_placette'),
+        idDispositif:
+            entity['id_dispositif'] ?? logAndReturnNull<int>('id_dispositif'),
+        idPlacetteOrig: entity['id_placette_orig'] ??
+            logAndReturnNull<String>('id_placette_orig'),
+        strate: entity['strate'] ?? logAndReturnNull<int>('strate'),
+        pente: entity['pente'] ?? logAndReturnNull<double>('pente'),
+        poidsPlacette: entity['poids_placette'] ??
+            logAndReturnNull<double>('poids_placette'),
+        correctionPente: entity['correction_pente'] ==
+            'true', // Assuming the response is 'true' or 'false'
+        exposition: entity['exposition'] as int?,
+        profondeurApp: entity['profondeur_app'] as String?,
+        profondeurHydr: entity['profondeur_hydr'] as double?,
+        texture: entity['texture'] as String?,
+        habitat: entity['habitat'] as String?,
+        station: entity['station'] as String?,
+        typologie: entity['typologie'] as String?,
+        groupe: entity['groupe'] as String?,
+        groupe1: entity['groupe1'] as String?,
+        groupe2: entity['groupe2'] as String?,
+        refHabitat: entity['ref_habitat'] as String?,
+        precisionHabitat: entity['precision_habitat'] as String?,
+        refStation: entity['ref_station'] as String?,
+        refTypologie: entity['ref_typologie'] as String?,
+        descriptifGroupe: entity['descriptif_groupe'] as String?,
+        descriptifGroupe1: entity['descriptif_groupe1'] as String?,
+        descriptifGroupe2: entity['descriptif_groupe2'] as String?,
+        precisionGps: entity['precision_gps'] as String?,
+        cheminement: entity['cheminement'] as String?,
+        arbres: entity.containsKey('arbres')
+            ? ArbreListMapper.transformFromApiToModel(entity['arbres'])
+            : null,
+        bmsSup30: entity.containsKey('bmsSup30')
+            ? BmSup30ListMapper.transformFromApiToModel(entity['bmsSup30'])
+            : null,
+        reperes: entity.containsKey('reperes')
+            ? RepereListMapper.transformFromApiToModel(entity['reperes'])
+            : null,
+      );
+    } catch (e) {
+      print("Error in fromApi: $e");
+      print("Entity causing error: ${entity.toString()}");
+      // You may want to handle the error or rethrow it
+      rethrow;
+    }
+  }
+
   static Placette transformFromDBToModel(final PlacetteEntity entity) {
     try {
       return Placette(

@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:dendro3/core/error/failure.dart';
-import 'package:dendro3/core/helpers/sync_objects.dart';
+import 'package:dendro3/core/helpers/export_objects.dart';
+import 'package:dendro3/core/helpers/sync_results_object.dart';
 import 'package:dendro3/data/datasource/interface/api/dispositifs_api.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
 import 'package:dendro3/config/config.dart';
@@ -186,63 +187,63 @@ class DispositifsApiImpl implements DispositifsApi {
 
     if (resultResponse.statusCode == 200) {
       final result = resultResponse.data['data'];
-      // Parse your result here and create SyncResults
+      // Parse your result here and create ExportResults
       // Assuming result is a Map and directly contains the counts
-      SyncResults syncResults = SyncResults(
-        distantArbres: SyncDetails(
+      ExportResults exportResults = ExportResults(
+        distantArbres: ExportDetails(
           created: result['counts_arbre']['created'] ?? 0,
           updated: result['counts_arbre']['updated'] ?? 0,
           deleted: result['counts_arbre']['deleted'] ?? 0,
         ),
-        localArbres: SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantArbresMesures: SyncDetails(
+        localArbres: ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantArbresMesures: ExportDetails(
           created: result['counts_arbre_mesure']['created'] ?? 0,
           updated: result['counts_arbre_mesure']['updated'] ?? 0,
           deleted: result['counts_arbre_mesure']['deleted'] ?? 0,
         ),
-        localArbresMesures: SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantBms: SyncDetails(
+        localArbresMesures: ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantBms: ExportDetails(
           created: result['counts_bm']['created'] ?? 0,
           updated: result['counts_bm']['updated'] ?? 0,
           deleted: result['counts_bm']['deleted'] ?? 0,
         ),
-        localBms: SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantBmsMesures: SyncDetails(
+        localBms: ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantBmsMesures: ExportDetails(
           created: result['counts_bm_mesure']['created'] ?? 0,
           updated: result['counts_bm_mesure']['updated'] ?? 0,
           deleted: result['counts_bm_mesure']['deleted'] ?? 0,
         ),
-        localBmsMesures: SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantReperes: SyncDetails(
+        localBmsMesures: ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantReperes: ExportDetails(
           created: result['counts_repere']['created'] ?? 0,
           updated: result['counts_repere']['updated'] ?? 0,
           deleted: result['counts_repere']['deleted'] ?? 0,
         ),
-        localReperes: SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantCorCyclesPlacettes: SyncDetails(
+        localReperes: ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantCorCyclesPlacettes: ExportDetails(
           created: result['counts_cor_cycle_placette']['created'] ?? 0,
           updated: result['counts_cor_cycle_placette']['updated'] ?? 0,
           deleted: result['counts_cor_cycle_placette']['deleted'] ?? 0,
         ),
         localCorCyclesPlacettes:
-            SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantRegenerations: SyncDetails(
+            ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantRegenerations: ExportDetails(
           created: result['counts_regeneration']['created'] ?? 0,
           updated: result['counts_regeneration']['updated'] ?? 0,
           deleted: result['counts_regeneration']['deleted'] ?? 0,
         ),
-        localRegenerations: SyncDetails(created: 0, updated: 0, deleted: 0),
-        distantTransects: SyncDetails(
+        localRegenerations: ExportDetails(created: 0, updated: 0, deleted: 0),
+        distantTransects: ExportDetails(
           created: result['counts_transect']['created'] ?? 0,
           updated: result['counts_transect']['updated'] ?? 0,
           deleted: result['counts_transect']['deleted'] ?? 0,
         ),
-        localTransects: SyncDetails(created: 0, updated: 0, deleted: 0),
+        localTransects: ExportDetails(created: 0, updated: 0, deleted: 0),
       );
 
-      // Create a new type containing SyncResults and created_arbres
+      // Create a new type containing ExportResults and created_arbres
       return TaskResult(
-        syncResults: syncResults,
+        exportResults: exportResults,
         createdArbres: (result['created_arbres'] as List)
             .map((item) => item as Map<String, dynamic>)
             .toList(),
@@ -252,6 +253,71 @@ class DispositifsApiImpl implements DispositifsApi {
       );
     } else {
       throw Exception('Failed to fetch results: ${resultResponse.statusCode}');
+    }
+  }
+
+  @override
+  Future<SyncResults> syncDispositifFromStagingServer(
+    final int dispId,
+    String? lastSync,
+  ) async {
+    final url = "$apiBase/psdrf/dispositif-synchronisation/$dispId";
+    try {
+      final response = await Dio().get(url, queryParameters: {
+        'last_sync': lastSync,
+      });
+      if (response.statusCode == 202) {
+        final taskId = response.data['task_id'];
+        return pollSyncTaskForDispositif(taskId);
+      } else {
+        throw Exception('Failed to initiate task: ${response.statusCode}');
+      }
+    } on DioException catch (err) {
+      throw Exception(
+          'Error retrieving dispositif: ${err.response?.statusMessage}');
+    }
+  }
+
+  Future<SyncResults> pollSyncTaskForDispositif(String taskId) async {
+    final statusUrl =
+        "$apiBase/psdrf/dispositif-synchronisation/status/$taskId";
+    double progress = 0.0;
+    const int maxSteps = 120;
+    int currentStep = 0;
+
+    while (true) {
+      final statusResponse = await Dio().get(statusUrl);
+      if (statusResponse.statusCode == 200 &&
+          statusResponse.data['state'] == 'SUCCESS') {
+        // onProgressUpdate(1.0); // Full progress when completed
+        return fetchSyncDispositifResult(taskId);
+      } else if (statusResponse.data['state'] == 'FAILURE') {
+        throw Exception(
+            'Task failed with error: ${statusResponse.data['status']}');
+      } else if (statusResponse.statusCode == 202) {
+        progress = currentStep / maxSteps;
+        progress = progress < 1.0
+            ? progress
+            : 0.95; // Never reach full progress unless completed
+        // onProgressUpdate(progress);
+        currentStep++;
+      } else {
+        throw Exception(
+            'Unexpected response status: ${statusResponse.statusCode}');
+      }
+      await Future.delayed(Duration(seconds: 20)); // Wait before polling again
+    }
+  }
+
+  Future<SyncResults> fetchSyncDispositifResult(String taskId) async {
+    final resultUrl =
+        "$apiBase/psdrf/dispositif-synchronisation/result/$taskId";
+    final resultResponse = await Dio().get(resultUrl);
+    if (resultResponse.statusCode == 200) {
+      return SyncResults.fromApi(resultResponse.data["data"]["data"]);
+    } else {
+      throw Exception(
+          'Failed to fetch dispositif result: ${resultResponse.statusCode}');
     }
   }
 }

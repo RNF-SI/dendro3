@@ -1,8 +1,12 @@
+import 'package:dendro3/core/helpers/sync_results_object.dart';
 import 'package:dendro3/data/datasource/implementation/database/cycles_database_impl.dart';
 import 'package:dendro3/data/datasource/implementation/database/db.dart';
 import 'package:dendro3/data/datasource/implementation/database/placettes_database_impl.dart';
 import 'package:dendro3/data/datasource/interface/database/dispositifs_database.dart';
 import 'package:dendro3/data/entity/dispositifs_entity.dart';
+import 'package:dendro3/data/mapper/cycle_mapper.dart';
+import 'package:dendro3/data/mapper/dispositif_mapper.dart';
+import 'package:dendro3/data/mapper/placette_mapper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DispositifsDatabaseImpl implements DispositifsDatabase {
@@ -110,5 +114,29 @@ class DispositifsDatabaseImpl implements DispositifsDatabase {
         db, id, lastSyncTime);
     final cycleObj = await CyclesDatabaseImpl.getDispCycles(db, id);
     return {...dispList[0], 'placettes': placettesObj, 'cycles': cycleObj};
+  }
+
+  @override
+  Future<void> insertOrUpdateDispositifWithData(SyncResults syncResults) async {
+    final db = await database;
+
+    await db.transaction((txn) async {
+      Batch batch = txn.batch();
+
+      // Handle placettes
+      for (var placette in syncResults.placettes) {
+        PlacettesDatabaseImpl.insertPlacette(
+            batch, PlacetteMapper.transformToMap(placette));
+      }
+
+      // Handle cycles
+      for (var cycle in syncResults.cycles) {
+        CyclesDatabaseImpl.insertCycle(
+            batch, CycleMapper.transformToMap(cycle));
+      }
+
+      // Commit all inserts/updates as a single transaction
+      await batch.commit(noResult: true);
+    });
   }
 }
