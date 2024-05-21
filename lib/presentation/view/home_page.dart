@@ -21,6 +21,10 @@ class HomePage extends ConsumerWidget {
     final authViewModel = ref.read(authenticationViewModelProvider);
     final databaseService = ref.read(databaseServiceProvider);
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showVersionAlert(context);
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF598979), // Brand blue
@@ -73,7 +77,7 @@ class HomePage extends ConsumerWidget {
         return AlertDialog(
           title: const Text('Attention'),
           content: const Text(
-              "Attention, cette version de l'application est faite pour qu'un seul mobile soit utilisé par placette.\n\nDe plus, la synchronisation ne se fait que dans un sens: Les données sont prises dans le serveur de production et sont envoyées dans un serveur staging après vos saisies.\n\nEn d'autres termes, les modifications faites avec un autre mobile sur une autre placette de votre dispositif ne seront pas visibles sur votre téléphone même après une synchronisation."),
+              "Attention, cette version de l'application est faite pour qu'un seul mobile soit utilisé par dispositif.\n\nDe plus, la synchronisation ne se fait que dans un sens: Les données sont prises dans le serveur de production et sont envoyées dans un serveur staging après vos saisies.\n\nEn d'autres termes, les modifications faites avec un autre mobile sur une autre placette de votre dispositif ne seront pas visibles sur votre téléphone même après une synchronisation."),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
