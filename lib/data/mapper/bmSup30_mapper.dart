@@ -33,10 +33,10 @@ class BmSup30Mapper {
         observation: entity['observation'] as String?,
         createdAt: entity['created_at'] != null
             ? DateTime.parse(entity['created_at'] as String)
-            : null,
+            : DateTime.now(),
         updatedAt: entity['updated_at'] != null
             ? DateTime.parse(entity['updated_at'] as String)
-            : null,
+            : DateTime.now(),
         createdBy: entity['created_by'] as String?,
         updatedBy: entity['updated_by'] as String?,
         createdOn: entity['created_on'] as String?,
