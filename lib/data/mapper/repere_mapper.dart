@@ -25,10 +25,10 @@ class RepereMapper {
         observation: entity['observation'] as String?,
         createdAt: entity['created_at'] != null
             ? DateTime.parse(entity['created_at'] as String)
-            : DateTime.now(),
+            : DateTime.now().toUtc(),
         updatedAt: entity['updated_at'] != null
             ? DateTime.parse(entity['updated_at'] as String)
-            : DateTime.now(),
+            : DateTime.now().toUtc(),
         createdBy: entity['created_by'] as String?,
         updatedBy: entity['updated_by'] as String?,
         createdOn: entity['created_on'] as String?,

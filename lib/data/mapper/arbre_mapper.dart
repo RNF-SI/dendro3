@@ -1,3 +1,4 @@
+import 'package:dendro3/core/helpers/format_DateTime.dart';
 import 'package:dendro3/data/entity/arbres_entity.dart';
 import 'package:dendro3/data/mapper/arbreMesure_list_mapper.dart';
 import 'package:dendro3/data/mapper/mapper_utils.dart';
@@ -48,10 +49,10 @@ class ArbreMapper {
         observation: entity['observation'] as String?,
         createdAt: entity['created_at'] != null
             ? DateTime.parse(entity['created_at'] as String)
-            : DateTime.now(),
+            : DateTime.now().toUtc(),
         updatedAt: entity['updated_at'] != null
             ? DateTime.parse(entity['updated_at'] as String)
-            : DateTime.now(),
+            : DateTime.now().toUtc(),
         createdBy: entity['created_by'] as String?,
         updatedBy: entity['updated_by'] as String?,
         createdOn: entity['created_on'] as String?,
