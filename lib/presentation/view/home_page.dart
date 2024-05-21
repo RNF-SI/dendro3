@@ -45,7 +45,7 @@ class HomePage extends ConsumerWidget {
             icon: const Icon(Icons.delete,
                 color: Color(0xFF8B5500)), // Brand green
             onPressed: () async {
-              _confirmDelete(context, databaseService, ref);
+              _confirmDelete(context, databaseService, authViewModel, ref);
             },
           ),
           IconButton(
@@ -86,7 +86,7 @@ class HomePage extends ConsumerWidget {
   }
 
   void _confirmDelete(BuildContext context, DatabaseService databaseService,
-      WidgetRef ref) async {
+      AuthenticationViewModel authViewModel, WidgetRef ref) async {
     final confirm = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
@@ -120,6 +120,7 @@ class HomePage extends ConsumerWidget {
         ref
             .read(userDispositifListViewModelStateNotifierProvider.notifier)
             .refreshDispositifs();
+        await authViewModel.signOut(ref, context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
