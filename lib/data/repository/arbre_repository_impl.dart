@@ -80,4 +80,9 @@ class ArbresRepositoryImpl implements ArbresRepository {
       List<Map<String, dynamic>> arbresList) async {
     await database.actualizeArbreIdArbreOrigAfterSync(arbresList);
   }
+
+  @override
+  Future<void> setArbreAsUpdated(String idArbre) async {
+    await database.setArbreAsUpdated(idArbre);
+  }
 }

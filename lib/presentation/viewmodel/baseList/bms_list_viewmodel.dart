@@ -2,7 +2,7 @@ import 'package:dendro3/domain/domain_module.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/bmSup30_list.dart';
-import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_create_bmSup30_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/create_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_and_mesure_usecase.dart';
 import 'package:dendro3/domain/usecase/delete_bmSup30_mesure_usecase.dart';
@@ -11,6 +11,7 @@ import 'package:dendro3/presentation/state/state.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/base_list_viewmodel.dart';
 import 'package:dendro3/presentation/viewmodel/displayable_list_notifier.dart';
 import 'package:dendro3/presentation/viewmodel/last_selected_Id_notifier.dart';
+import 'package:dendro3/presentation/widgets/saisie_data_table/saisie_data_table_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final bmSup30ListProvider = Provider<BmSup30List>((ref) {
@@ -22,29 +23,33 @@ final bmSup30ListViewModelStateNotifierProvider =
     StateNotifierProvider<BmSup30ListViewModel, State<BmSup30List>>((ref) {
   final lastSelectedProvider = ref.watch(lastSelectedIdProvider.notifier);
   final displayableListNotifier = ref.watch(displayableListProvider.notifier);
-
+  final selectedMesureIndexProviderRef =
+      ref.watch(selectedMesureIndexProvider.notifier);
   return BmSup30ListViewModel(
     // ref.watch(getBmSup30ListUseCaseProvider),
     ref.watch(createBmSup30AndMesureUseCaseProvider),
     ref.watch(updateBmSup30AndMesureUseCaseProvider),
-    ref.watch(addBmSup30MesureUseCaseProvider),
+    ref.watch(updateBmSup30AndCreateBmSup30MesureUseCaseProvider),
     ref.watch(deleteBmSup30AndMesureUseCaseProvider),
     ref.watch(deleteBmSup30MesureUseCaseProvider),
     // ref.watch(deleteBmSup30UseCaseProvider),
     // bmsup30Liste,
     lastSelectedProvider,
     displayableListNotifier,
+    selectedMesureIndexProviderRef,
   );
 });
 
 class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   late final LastSelectedIdNotifier _lastSelectedProvider;
   late final DisplayableListNotifier _displayableListNotifier;
+  late final SelectedMesureIndexNotifier _selectedMesureIndexProviderRef;
 
   // final GetBmSup30ListUseCase _getBmSup30ListUseCase;
   final CreateBmSup30AndMesureUseCase _createBmSup30AndMesureUseCase;
   final UpdateBmSup30AndMesureUseCase _updateBmSup30AndMesureUseCase;
-  final AddBmSup30MesureUseCase _addBmSup30MesureUseCase;
+  final UpdateBmSup30AndCreateBmSup30MesureUseCase
+      _updateBmSup30AndCreateBmSup30MesureUseCase;
   final DeleteBmSup30AndMesureUseCase _deleteBmSup30AndMesureUseCase;
   final DeleteBmSup30MesureUseCase _deleteBmSup30MesureUseCase;
 
@@ -54,13 +59,14 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     // this._getBmSup30ListUseCase,
     this._createBmSup30AndMesureUseCase,
     this._updateBmSup30AndMesureUseCase,
-    this._addBmSup30MesureUseCase,
+    this._updateBmSup30AndCreateBmSup30MesureUseCase,
     this._deleteBmSup30AndMesureUseCase,
     this._deleteBmSup30MesureUseCase,
     // this._deleteBmSup30UseCase,
     // final BmSup30List bmsup30Liste
     this._lastSelectedProvider,
     this._displayableListNotifier,
+    this._selectedMesureIndexProviderRef,
   ) : super(const State.init());
 
   // completeBmSup30(final BmSup30 todo) {
@@ -173,8 +179,20 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
     final Map item,
   ) async {
     try {
-      final newBmSup30 = await _addBmSup30MesureUseCase.execute(
+      final newBmSup30 =
+          await _updateBmSup30AndCreateBmSup30MesureUseCase.execute(
         bmSup30,
+        item['idBmSup30'],
+        item['idBmSup30Orig'],
+        item["idPlacette"],
+        item["idArbre"],
+        item["codeEssence"],
+        item["azimut"],
+        item["distance"],
+        item["orientation"],
+        item["azimutSouche"],
+        item["distanceSouche"],
+        item["observation"],
         item["idCycle"],
         item["diametreIni"],
         item["diametreMed"],
@@ -208,11 +226,12 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) async {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) async {
     try {
       await _deleteBmSup30AndMesureUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('BmsSup30', null);
       state = State.success(state.data!.removeItemFromList(id));
+      _selectedMesureIndexProviderRef.setSelectedMesureIndex(0);
       _displayableListNotifier.setDisplayableList(state.data!);
       return true;
     } on Exception catch (e) {
@@ -260,6 +279,7 @@ class BmSup30ListViewModel extends BaseListViewModel<State<BmSup30List>> {
       // Set the new state with the updated Arbres list
       BmSup30List updatedBmSup30List = BmSup30List(values: updatedBmsSup30);
       state = State.success(updatedBmSup30List);
+      _selectedMesureIndexProviderRef.setSelectedMesureIndex(0);
       _displayableListNotifier.setDisplayableList(updatedBmSup30List);
 
       _lastSelectedProvider.setLastSelectedId('BmsSup30', null);

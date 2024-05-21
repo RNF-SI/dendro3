@@ -1,11 +1,16 @@
 import 'package:dendro3/domain/model/regeneration.dart';
+import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/regenerations_repository.dart';
 import 'package:dendro3/domain/usecase/update_regeneration_usecase.dart';
 
 class UpdateRegenerationUseCaseImpl implements UpdateRegenerationUseCase {
+  final CorCyclesPlacettesRepository _corCyclesPlacettesRepository;
   final RegenerationsRepository _regenerationRepository;
 
-  UpdateRegenerationUseCaseImpl(this._regenerationRepository);
+  UpdateRegenerationUseCaseImpl(
+    this._corCyclesPlacettesRepository,
+    this._regenerationRepository,
+  );
 
   @override
   Future<Regeneration> execute(
@@ -22,6 +27,9 @@ class UpdateRegenerationUseCaseImpl implements UpdateRegenerationUseCase {
     int? idNomenclatureAbroutissement,
     String? observation,
   ) async {
+    await _corCyclesPlacettesRepository
+        .setCorCyclePlacetteAsUpdated(idCyclePlacette);
+
     Regeneration regenerationUpdated =
         await _regenerationRepository.updateRegeneration(
       idRegeneration,

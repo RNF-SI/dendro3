@@ -1,10 +1,10 @@
 import 'package:dendro3/data/data_module.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart';
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
-import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
-import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase_impl.dart';
-import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase.dart';
-import 'package:dendro3/domain/usecase/add_bmSup30_mesure_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case_impl.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_create_bmSup30_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_bmSup30_and_create_bmSup30_mesure_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case.dart';
 import 'package:dendro3/domain/usecase/clear_user_id_from_local_storage_use_case_impl.dart';
 import 'package:dendro3/domain/usecase/clear_user_name_from_local_storage_use_case.dart';
@@ -200,17 +200,19 @@ final updateArbreAndMesureUseCaseProvider =
               ref.watch(arbresMesuresRepositoryProvider),
             ));
 
-final addArbreMesureUseCaseProvider =
-    Provider<AddArbreMesureUseCase>((ref) => AddArbreMesureUseCaseImpl(
-          ref.watch(arbresRepositoryProvider),
-          ref.watch(arbresMesuresRepositoryProvider),
-        ));
+final updateArbreAndCreateArbreMesureUseCaseProvider =
+    Provider<UpdateArbreAndCreateArbreMesureUseCase>(
+        (ref) => UpdateArbreAndCreateArbreMesureUseCaseImpl(
+              ref.watch(arbresRepositoryProvider),
+              ref.watch(arbresMesuresRepositoryProvider),
+            ));
 
-final addBmSup30MesureUseCaseProvider =
-    Provider<AddBmSup30MesureUseCase>((ref) => AddBmSup30MesureUseCaseImpl(
-          ref.watch(bmsSup30RepositoryProvider),
-          ref.watch(bmsSup30MesuresRepositoryProvider),
-        ));
+final updateBmSup30AndCreateBmSup30MesureUseCaseProvider =
+    Provider<UpdateBmSup30AndCreateBmSup30MesureUseCase>(
+        (ref) => UpdateBmSup30AndCreateBmSup30MesureUseCaseImpl(
+              ref.watch(bmsSup30RepositoryProvider),
+              ref.watch(bmsSup30MesuresRepositoryProvider),
+            ));
 
 final createBmSup30AndMesureUseCaseProvider =
     Provider<CreateBmSup30AndMesureUseCase>((ref) =>
@@ -237,20 +239,27 @@ final updateBmSup30AndMesureUseCaseProvider =
 final createRepereUseCaseProvider = Provider<CreateRepereUseCase>(
     (ref) => CreateRepereUseCaseImpl(ref.watch(repereRepositoryProvider)));
 
-final createRegenerationUseCaseProvider = Provider<CreateRegenerationUseCase>(
-    (ref) => CreateRegenerationUseCaseImpl(
-        ref.watch(regenerationRepositoryProvider)));
+final createRegenerationUseCaseProvider =
+    Provider<CreateRegenerationUseCase>((ref) => CreateRegenerationUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
+          ref.watch(regenerationRepositoryProvider),
+        ));
 
-final createTransectUseCaseProvider = Provider<CreateTransectUseCase>(
-    (ref) => CreateTransectUseCaseImpl(ref.watch(transectRepositoryProvider)));
+final createTransectUseCaseProvider =
+    Provider<CreateTransectUseCase>((ref) => CreateTransectUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
+          ref.watch(transectRepositoryProvider),
+        ));
 
 final updateTransectUseCaseProvider =
     Provider<UpdateTransectUseCase>((ref) => UpdateTransectUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(transectRepositoryProvider),
         ));
 
 final updateRegenerationUseCaseProvider =
     Provider<UpdateRegenerationUseCase>((ref) => UpdateRegenerationUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(regenerationRepositoryProvider),
         ));
 
@@ -266,7 +275,7 @@ final deleteArbreAndMesureUseCaseProvider =
 
 final deleteArbreMesureUseCaseProvider =
     Provider<DeleteArbreMesureUseCase>((ref) => DeleteArbreMesureUseCaseImpl(
-          ref.watch(arbresMesuresRepositoryProvider),
+          ref.watch(arbresRepositoryProvider),
           ref.watch(arbresMesuresRepositoryProvider),
         ));
 
@@ -277,16 +286,19 @@ final deleteBmSup30AndMesureUseCaseProvider =
 
 final deleteBmSup30MesureUseCaseProvider = Provider<DeleteBmSup30MesureUseCase>(
     (ref) => DeleteBmSup30MesureUseCaseImpl(
+          ref.watch(bmsSup30RepositoryProvider),
           ref.watch(bmsSup30MesuresRepositoryProvider),
         ));
 
 final deleteTransectUseCaseProvider =
     Provider<DeleteTransectUseCase>((ref) => DeleteTransectUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(transectRepositoryProvider),
         ));
 
 final deleteRegenerationUseCaseProvider =
     Provider<DeleteRegenerationUseCase>((ref) => DeleteRegenerationUseCaseImpl(
+          ref.watch(corCyclePlacetteRepositoryProvider),
           ref.watch(regenerationRepositoryProvider),
         ));
 

@@ -129,9 +129,9 @@ class RegenerationListViewModel
   }
 
   @override
-  Future<bool> deleteItem(String id) async {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) async {
     try {
-      await _deleteRegenerationUseCase.execute(id);
+      await _deleteRegenerationUseCase.execute(idCyclePlacette!, id);
       _lastSelectedProvider.setLastSelectedId('Regenerations', null);
       state = State.success(state.data!.removeItemFromList(id));
       _displayableListNotifier.setDisplayableList(state.data!);

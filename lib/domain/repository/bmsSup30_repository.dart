@@ -36,4 +36,6 @@ abstract class BmsSup30Repository {
 
   Future<void> actualizeBmIdBmSup30OrigAfterSync(
       final List<Map<String, dynamic>> bms);
+
+  Future<void> setBmSup30AsUpdated(final String idBmSup30);
 }

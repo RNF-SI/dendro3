@@ -3,18 +3,27 @@ import 'package:dendro3/domain/model/arbreMesure.dart';
 import 'package:dendro3/domain/model/arbreMesure_list.dart';
 import 'package:dendro3/domain/repository/arbres_mesures_repository.dart';
 import 'package:dendro3/domain/repository/arbres_repository.dart';
-import 'package:dendro3/domain/usecase/add_arbre_mesure_usecase.dart';
+import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case.dart';
 
-class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
+class UpdateArbreAndCreateArbreMesureUseCaseImpl
+    implements UpdateArbreAndCreateArbreMesureUseCase {
   final ArbresRepository _arbreRepository;
   final ArbresMesuresRepository _arbreMesureRepository;
 
-  const AddArbreMesureUseCaseImpl(
+  const UpdateArbreAndCreateArbreMesureUseCaseImpl(
       this._arbreRepository, this._arbreMesureRepository);
 
   @override
   Future<Arbre> execute(
     Arbre arbre,
+    final String idArbre,
+    final int idArbreOrig,
+    int idPlacette,
+    String codeEssence,
+    double azimut,
+    double distance,
+    bool? taillis,
+    String? observation,
     final int? idCycle,
     int? numCycle,
     double? diametre1,
@@ -34,6 +43,17 @@ class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
     bool? ratioHauteur,
     String? observationMesure,
   ) async {
+    Arbre arbreUpdated = await _arbreRepository.updateArbre(
+      idArbre,
+      idArbreOrig,
+      idPlacette,
+      codeEssence,
+      azimut,
+      distance,
+      taillis,
+      observation,
+    );
+
     ArbreMesure arbreMesure = await _arbreMesureRepository.insertArbreMesure(
       arbre.idArbre,
       idCycle,
@@ -57,7 +77,7 @@ class AddArbreMesureUseCaseImpl implements AddArbreMesureUseCase {
 
     var updatedMesureList = arbre.arbresMesures!.addArbreMesure(arbreMesure);
 
-    return arbre.copyWith(
+    return arbreUpdated.copyWith(
       arbresMesures: updatedMesureList,
     );
   }

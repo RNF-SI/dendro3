@@ -41,4 +41,9 @@ class Placette with _$Placette {
       RepereList? reperes}) = _Placette;
 
   const Placette._();
+
+  Placette updateCorCyclesPlacettes(
+      final CorCyclePlacetteList? newCorCyclesPlacettesList) {
+    return copyWith(corCyclesPlacettes: newCorCyclesPlacettesList);
+  }
 }

@@ -8,4 +8,5 @@ abstract class ArbresDatabase {
   Future<List<String>> getArbreIdsForPlacette(final int idPlacette);
   Future<void> actualizeArbreIdArbreOrigAfterSync(
       final List<Map<String, dynamic>> arbresList);
+  Future<void> setArbreAsUpdated(final String idArbre);
 }

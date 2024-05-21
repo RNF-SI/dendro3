@@ -1,11 +1,16 @@
 import 'package:dendro3/domain/model/transect.dart';
+import 'package:dendro3/domain/repository/cor_cycles_placettes_repository.dart';
 import 'package:dendro3/domain/repository/transects_repository.dart';
 import 'package:dendro3/domain/usecase/update_transect_usecase.dart';
 
 class UpdateTransectUseCaseImpl implements UpdateTransectUseCase {
+  final CorCyclesPlacettesRepository _corCyclesPlacettesRepository;
   final TransectsRepository _transectRepository;
 
-  UpdateTransectUseCaseImpl(this._transectRepository);
+  UpdateTransectUseCaseImpl(
+    this._corCyclesPlacettesRepository,
+    this._transectRepository,
+  );
 
   @override
   Future<Transect> execute(
@@ -28,6 +33,9 @@ class UpdateTransectUseCaseImpl implements UpdateTransectUseCase {
     final int stadeEcorce,
     String? observation,
   ) async {
+    await _corCyclesPlacettesRepository
+        .setCorCyclePlacetteAsUpdated(idCyclePlacette);
+
     Transect transectUpdated = await _transectRepository.updateTransect(
       idTransect,
       idCyclePlacette,

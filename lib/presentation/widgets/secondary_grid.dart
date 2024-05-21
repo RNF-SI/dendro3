@@ -1,12 +1,16 @@
 import 'dart:math';
+import 'package:dendro3/presentation/lib/screen_size_provider.dart';
+import 'package:dendro3/presentation/widgets/action_button.dart';
+import 'package:dendro3/presentation/widgets/expandingFAB.dart';
 import 'package:flutter/material.dart';
 import 'package:dendro3/domain/model/arbre.dart';
 import 'package:dendro3/domain/model/bmSup30.dart';
 import 'package:dendro3/domain/model/regeneration.dart';
 import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/transect.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SecondaryGrid extends StatefulWidget {
+class SecondaryGrid extends ConsumerStatefulWidget {
   final Map<int, int> mapIdCycleNumCycle;
   final List<dynamic> mesuresList;
   final Function(int) onItemSelected;
@@ -32,24 +36,65 @@ class SecondaryGrid extends StatefulWidget {
   _SecondaryGridState createState() => _SecondaryGridState();
 }
 
-class _SecondaryGridState extends State<SecondaryGrid> {
+class _SecondaryGridState extends ConsumerState<SecondaryGrid> {
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final ScreenSize screenSize = ref.watch(screenSizeProvider(context));
+    double paddingTopStack,
+        fontSizeTitle,
+        fontSizeText,
+        mainAxisSpacing,
+        childAspectRatio,
+        crossAxisSpacing;
+    int crossAxisCount;
+
+    switch (screenSize) {
+      case ScreenSize.small:
+        paddingTopStack = 5;
+        fontSizeTitle = 10;
+        fontSizeText = 12;
+        mainAxisSpacing = 1;
+        crossAxisCount = 3;
+        childAspectRatio = 2.5;
+        crossAxisSpacing = 1;
+        break;
+      case ScreenSize.medium:
+        paddingTopStack = 10;
+        fontSizeTitle = 13;
+        fontSizeText = 16;
+        mainAxisSpacing = 3;
+        crossAxisCount = 3;
+        childAspectRatio = 2;
+        crossAxisSpacing = 5;
+        break;
+      case ScreenSize.large:
+        paddingTopStack = 10;
+        fontSizeTitle = 15;
+        fontSizeText = 18;
+        mainAxisSpacing = 3;
+        crossAxisCount = 6;
+        childAspectRatio = 3.5;
+        crossAxisSpacing = 2;
+        break;
+    }
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scale =
+        screenWidth / 360; // scale factor based on typical screen width
+
     // Sort mesuresList based on the order of cycles in mapIdCycleNumCycle
     widget.mesuresList.sort((a, b) {
       int cycleNumA = widget.mapIdCycleNumCycle[a['idCycle']] ?? 0;
       int cycleNumB = widget.mapIdCycleNumCycle[b['idCycle']] ?? 0;
       return cycleNumA.compareTo(cycleNumB);
     });
-
     currentIndex = widget.currentIndex;
     if (widget.mesuresList.isEmpty) {
       return const SizedBox
           .shrink(); // Return an empty widget if the list is empty
     }
-
     var maxNumberCyclePlacette = widget.mapIdCycleNumCycle.isNotEmpty
         ? widget.mapIdCycleNumCycle.values.reduce(max)
         : null;
@@ -62,7 +107,6 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         ? widget.mapIdCycleNumCycle.keys.firstWhere(
             (k) => widget.mapIdCycleNumCycle[k] == maxNumberCyclePlacette - 1)
         : null;
-
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.mesuresList.length + 1,
@@ -83,8 +127,8 @@ class _SecondaryGridState extends State<SecondaryGrid> {
                 widget.onItemMesureAdded(widget.mesuresList[currentIndex]);
               },
               child: Container(
-                width: 200, // Same width as other items
-                height: 120,
+                width: 200 * scale, // Same width as other items
+                height: 120 * scale,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 child: const Card(
                   color: Color(0xFF8AAC3E), // Different color to distinguish
@@ -121,135 +165,133 @@ class _SecondaryGridState extends State<SecondaryGrid> {
         currentItem = filterMesureItem(currentItem, widget.displayTypeState);
 
         return Container(
-          width: 300,
-          height: 120,
-          margin: const EdgeInsets.symmetric(horizontal: 5),
+          width: 250 * scale,
+          height: 150 * scale,
+          margin: EdgeInsets.symmetric(horizontal: 2 * scale),
           child: Card(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Stack(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        widget.onItemMesureUpdated(index);
-                      },
-                      iconSize: 18, // Reduced icon size
-                      padding: const EdgeInsets.all(4), // Reduced padding
-                      constraints: const BoxConstraints(),
-                    ),
-                    // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
-                    // ou bien si il y a plus de 1 mesure de cet arbre
-                    if (maxNumberCyclePlacette == currentItem['numCycle'] &&
-                        widget.mesuresList.length > 1)
-                      IconButton(
-                        icon:
-                            const Icon(Icons.delete, color: Color(0xFF8B5500)),
-                        onPressed: () {
-                          // Show confirmation dialog
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirmer la suppression'),
-                                content: const Text(
-                                    'Etes vous sûr de vouloir supprimer cet élément?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Annuler'),
-                                    onPressed: () {
-                                      // Close the dialog
-                                      Navigator.of(context).pop();
-                                    },
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: paddingTopStack,
+                          right: 30,
+                          left: 10), // Ensure enough padding for icons
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics:
+                            const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisSpacing: mainAxisSpacing,
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: childAspectRatio,
+                          crossAxisSpacing: crossAxisSpacing,
+                        ),
+                        itemCount: currentItem.entries.length,
+                        itemBuilder: (context, itemIndex) {
+                          var entry = currentItem.entries.elementAt(itemIndex);
+                          List<String> titleGridNames =
+                              _getTitleGridNamesForType(
+                                  currentItem.keys.toList(),
+                                  widget.displayTypeState);
+                          String titleName = titleGridNames[
+                              itemIndex]; // Get the modified title name
+
+                          // Determine the display value
+                          String displayValue;
+                          if (entry.value is double) {
+                            double doubleValue = entry.value as double;
+                            displayValue = doubleValue == doubleValue.toInt()
+                                ? doubleValue.toInt().toString()
+                                : doubleValue.toStringAsFixed(1);
+                          } else {
+                            displayValue = entry.value.toString();
+                          }
+
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  "$titleName:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: fontSizeTitle,
                                   ),
-                                  TextButton(
-                                    child: const Text('Supprimer',
-                                        style: TextStyle(
-                                            color: Color(0xFF8B5500))),
-                                    onPressed: () {
-                                      // Close the dialog
-                                      Navigator.of(context).pop();
-                                      // Perform the delete action
-                                      widget.onItemMesureDeleted(
-                                          widget.mesuresList[index]);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  displayValue,
+                                  style: TextStyle(fontSize: fontSizeText),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           );
                         },
-                        iconSize: 18, // Reduced icon size
-                        padding: const EdgeInsets.all(4), // Reduced padding
-                        constraints: const BoxConstraints(),
                       ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics:
-                        const NeverScrollableScrollPhysics(), // to disable GridView's scrolling
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4, // Number of columns in the grid
-                      childAspectRatio: 2, // Aspect ratio of each grid cell
                     ),
-                    itemCount: currentItem.entries.length,
-                    itemBuilder: (context, itemIndex) {
-                      var entry = currentItem.entries.elementAt(itemIndex);
-                      List<String> titleGridNames = _getTitleGridNamesForType(
-                          currentItem.keys.toList(), widget.displayTypeState);
-                      String titleName = titleGridNames[
-                          itemIndex]; // Get the modified title name
-
-                      // Determine the display value
-                      String displayValue;
-                      if (entry.value is double) {
-                        double doubleValue = entry.value as double;
-                        displayValue = doubleValue == doubleValue.toInt()
-                            ? doubleValue.toInt().toString()
-                            : doubleValue.toStringAsFixed(1);
-                      } else {
-                        displayValue = entry.value.toString();
-                      }
-
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: ExpandingFAB(
+                        distance: 46.0,
+                        heroTag: "secondaryGridHeroTag$index",
                         children: [
-                          Flexible(
-                            child: Text(
-                              "$titleName:",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 11),
-                              overflow: TextOverflow.ellipsis,
+                          // La mesure ne peut être supprimée que si elle est dans le dernier cycle de la placette
+                          // ou bien si il y a plus de 1 mesure de cet arbre
+                          if (maxNumberCyclePlacette ==
+                                  currentItem['numCycle'] &&
+                              widget.mesuresList.length > 1)
+                            ActionButton(
+                              icon: const Icon(Icons.delete,
+                                  color: Color(0xFF8B5500)),
+                              onPressed: () {
+                                // Show confirmation dialog
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                          'Confirmer la suppression'),
+                                      content: const Text(
+                                          'Etes vous sûr de vouloir supprimer cet élément?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Annuler'),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                        ),
+                                        TextButton(
+                                          child: const Text('Supprimer',
+                                              style: TextStyle(
+                                                  color: Color(0xFF8B5500))),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            widget.onItemMesureDeleted(
+                                                widget.mesuresList[index]);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              displayValue,
-                              style: const TextStyle(fontSize: 15),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          ActionButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              widget.onItemMesureUpdated(index);
+                            },
                           ),
                         ],
-                      );
-                    },
-                  ),
-
-                  // child: Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: currentItem.entries.map((entry) {
-                  //     return Padding(
-                  //       padding: const EdgeInsets.only(bottom: 2.0),
-                  //       child: Text("${entry.key}: ${entry.value}"),
-                  //     );
-                  //   }).toList(),
-                  // ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

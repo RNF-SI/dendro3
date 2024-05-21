@@ -50,7 +50,7 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) {
     // TODO: implement deleteItem
     // Pour l'instant n'est pas à implémenter, si c'est le cas, alors changer String par int
     throw UnimplementedError();
@@ -74,7 +74,7 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
       item["exposition"],
     );
 
-    _placetteListViewModel.updateList(newPlacette);
+    _placetteListViewModel.updateExpositionAndPenteInPlacette(newPlacette);
 
     state = State.success(newPlacette);
     // final value = state.data!.updatePlacette(newPlacette);
@@ -82,10 +82,11 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
 
   Future<void> appendToCorCyclePlacetteList(
       CorCyclePlacette corCyclePlacette) async {
-    final Placette placette = state.data!;
-    placette.corCyclesPlacettes?.addItemToList(corCyclePlacette);
-    _placetteListViewModel.updateList(placette);
-    state = State.success(placette);
+    final Placette oldPlacette = state.data!;
+    final Placette newPlacette = oldPlacette.updateCorCyclesPlacettes(
+        oldPlacette.corCyclesPlacettes?.addItemToList(corCyclePlacette));
+    _placetteListViewModel.updateCorCyclePlacetteInPlacette(newPlacette);
+    state = State.success(newPlacette);
   }
 
   Future<void> updateCorCyclePlacetteList(
@@ -96,7 +97,7 @@ class PlacetteViewModel extends BaseListViewModel<State<Placette>> {
 
     final Placette newPlacette =
         oldPlacette.copyWith(corCyclesPlacettes: newCorCyclesPlacettes);
-    _placetteListViewModel.updateList(newPlacette);
+    _placetteListViewModel.updateCorCyclePlacetteInPlacette(newPlacette);
     state = State.success(newPlacette);
   }
 }

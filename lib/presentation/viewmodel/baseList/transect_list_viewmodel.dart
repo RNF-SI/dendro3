@@ -130,9 +130,9 @@ class TransectListViewModel extends BaseListViewModel<State<TransectList>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) async {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) async {
     try {
-      await _deleteTransectUseCase.execute(id);
+      await _deleteTransectUseCase.execute(idCyclePlacette!, id);
       _lastSelectedProvider.setLastSelectedId('Transects', null);
       state = State.success(state.data!.removeItemFromList(id));
       _displayableListNotifier.setDisplayableList(state.data!);

@@ -178,6 +178,8 @@ showAlertDialog(
 void showSyncResultsDialog(BuildContext context, int dispositifId) {
   showDialog(
     context: context,
+    barrierDismissible:
+        false,
     builder: (BuildContext context) {
       return Dialog(
         child: Container(

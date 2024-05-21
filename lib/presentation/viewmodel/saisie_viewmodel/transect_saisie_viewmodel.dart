@@ -264,7 +264,9 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
       DropdownFieldConfig<String>(
         fieldName: "Transect",
         fieldRequired: true,
-        value: _refTransect != null ? _refTransect.toString() : '',
+        value: ['11', '12', '21', '22', '31', '32'].contains(_refTransect)
+            ? _refTransect!
+            : '',
         validator: (value, formData) {
           if (value == '') {
             return 'Le champ transect est nécessaire.';
@@ -282,7 +284,6 @@ class TransectSaisieViewModel extends ObjectSaisieViewModel {
         ],
         onChanged: (value) {
           _refTransect = value;
-          // setRefTransect(value!);
         },
       ),
 

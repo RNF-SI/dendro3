@@ -109,7 +109,7 @@ class RepereListViewModel extends BaseListViewModel<State<RepereList>> {
   }
 
   @override
-  Future<bool> deleteItem(String id) async {
+  Future<bool> deleteItem(String id, {String? idCyclePlacette}) async {
     try {
       await _deleteRepereUseCase.execute(id);
       _lastSelectedProvider.setLastSelectedId('Reperes', null);

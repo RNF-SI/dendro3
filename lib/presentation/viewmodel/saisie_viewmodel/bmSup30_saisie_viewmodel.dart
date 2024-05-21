@@ -70,8 +70,6 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
 
   BmSup30? bmsup30;
 
-  // late BmSup30Id _idBmSup30;
-  // var _idBmSup30Orig;
   late String? _idBmSup30;
   int? _idBmSup30Orig;
   var _idPlacette;
@@ -196,6 +194,7 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
     } else if (formType == 'newMesure') {
       // Init ArbreInfos
       _idBmSup30 = bmsup30!.idBmSup30;
+      _idBmSup30Orig = bmsup30.idBmSup30Orig;
       _idArbre = bmsup30.idArbre;
       _codeEssence = bmsup30.codeEssence;
       _azimut = bmsup30.azimut;
@@ -259,6 +258,17 @@ class BmSup30SaisieViewModel extends ObjectSaisieViewModel {
       _bmsup30ListViewModel.addMesureItem(
         bmsup30!,
         {
+          'idBmSup30': _idBmSup30,
+          'idBmSup30Orig': _idBmSup30Orig,
+          'idPlacette': _idPlacette,
+          'idArbre': _idArbre,
+          'codeEssence': _codeEssence,
+          'azimut': _azimut,
+          'distance': _distance,
+          'orientation': _orientation,
+          'azimutSouche': _azimutSouche,
+          'distanceSouche': _distanceSouche,
+          'observation': _observation,
           'idCycle': _idCycle,
           'diametreIni': _diametreIni,
           'diametreMed': _diametreMed,

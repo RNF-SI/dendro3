@@ -26,9 +26,9 @@ class RegenerationMapper {
             entity['code_essence'] ?? logAndReturnNull<String>('code_essence'),
         recouvrement:
             entity['recouvrement'] ?? logAndReturnNull<double>('recouvrement'),
-        classe1: entity['classe1'] ?? logAndReturnNull<int>('classe1'),
-        classe2: entity['classe2'] ?? logAndReturnNull<int>('classe2'),
-        classe3: entity['classe3'] ?? logAndReturnNull<int>('classe3'),
+        classe1: entity['classe1'] as int? ?? 0,
+        classe2: entity['classe2'] as int? ?? 0,
+        classe3: entity['classe3'] as int? ?? 0,
         taillis: entity['taillis'] == true ? true : false,
         abroutissement: entity['abroutissement'] == true ? true : false,
         idNomenclatureAbroutissement:

@@ -21,6 +21,10 @@ class HomePage extends ConsumerWidget {
     final authViewModel = ref.read(authenticationViewModelProvider);
     final databaseService = ref.read(databaseServiceProvider);
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showVersionAlert(context);
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF598979), // Brand blue
@@ -45,8 +49,13 @@ class HomePage extends ConsumerWidget {
             icon: const Icon(Icons.delete,
                 color: Color(0xFF8B5500)), // Brand green
             onPressed: () async {
-              _confirmDelete(context, databaseService, ref);
+              _confirmDelete(context, databaseService, authViewModel, ref);
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.info_outline,
+                color: Color(0xFF1a1a18)), // Icon for version info
+            onPressed: () => _showVersionAlert(context),
           ),
           IconButton(
             icon: const Icon(Icons.logout,
@@ -61,8 +70,31 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, DatabaseService databaseService,
-      WidgetRef ref) async {
+  void _showVersionAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Attention'),
+          content: const Text(
+              "Attention, cette version de l'application est faite pour qu'un seul mobile soit utilisé par dispositif.\n\nDe plus, la synchronisation ne se fait que dans un sens: Les données sont prises dans le serveur de production et sont envoyées dans un serveur staging après vos saisies.\n\nEn d'autres termes, les modifications faites avec un autre mobile sur une autre placette de votre dispositif ne seront pas visibles sur votre téléphone même après une synchronisation."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Fermer"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _confirmDelete(
+    BuildContext context,
+    DatabaseService databaseService,
+    AuthenticationViewModel authViewModel,
+    WidgetRef ref,
+  ) async {
     final confirm = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
@@ -96,6 +128,7 @@ class HomePage extends ConsumerWidget {
         ref
             .read(userDispositifListViewModelStateNotifierProvider.notifier)
             .refreshDispositifs();
+        await authViewModel.signOut(ref, context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

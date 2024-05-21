@@ -30,7 +30,7 @@ class ArbreMesureMapper {
         liane: entity['liane'] as String?,
         diametreLiane: entity['diametre_liane'] as double?,
         coupe: entity['coupe'] as String?,
-        limite: entity['limite'] ?? logAndReturnNull<bool>('limite'),
+        limite: entity['limite'] as bool? ?? false,
         idNomenclatureCodeSanitaire:
             entity['id_nomenclature_code_sanitaire'] as int?,
         codeEcolo: entity['code_ecolo'] as String?,

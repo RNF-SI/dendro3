@@ -13,6 +13,7 @@ import 'package:dendro3/domain/model/repere.dart';
 import 'package:dendro3/domain/model/saisisable_object.dart';
 import 'package:dendro3/domain/model/saisisable_object_mesure.dart';
 import 'package:dendro3/domain/model/transect.dart';
+import 'package:dendro3/presentation/lib/screen_size_provider.dart';
 import 'package:dendro3/presentation/lib/simple_element.dart';
 import 'package:dendro3/presentation/view/form_saisie_placette_page.dart';
 import 'package:dendro3/presentation/viewmodel/baseList/arbre_list_viewmodel.dart';
@@ -123,6 +124,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    final ScreenSize screenSize = ref.watch(screenSizeProvider(context));
+
     List<Cycle> cycleList = ref.watch(cycleSelectedProvider);
     // create a Map with key idCycle and value numCycle
     Map<int, int> mapIdCycleNumCycle = {
@@ -178,16 +181,41 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
       columnVisibility,
     );
 
+    double containerHeight,
+        columnSpacingDataTable2,
+        horizontalMarginDataTable2,
+        dataRowHeightDataTable2;
+
+    switch (screenSize) {
+      case ScreenSize.small:
+        containerHeight = 160;
+        columnSpacingDataTable2 = 3;
+        horizontalMarginDataTable2 = 3;
+        dataRowHeightDataTable2 = 25;
+        break;
+      case ScreenSize.medium:
+        containerHeight = 350;
+        columnSpacingDataTable2 = 7;
+        horizontalMarginDataTable2 = 8;
+        dataRowHeightDataTable2 = 50;
+        break;
+      case ScreenSize.large:
+        containerHeight = 350;
+        columnSpacingDataTable2 = 7;
+        horizontalMarginDataTable2 = 8;
+        dataRowHeightDataTable2 = 60;
+        break;
+    }
+
     return Scaffold(
       body: Column(
         children: [
           Container(
-            height: 300,
-            padding: const EdgeInsets.only(right: 12),
-            decoration: const BoxDecoration(
+            height: containerHeight, // Dynamic height based on screen size
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
               color: Colors.white,
-              // border: Border(),
-              // borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: columnNameList.isEmpty
                 ? Container(
@@ -200,8 +228,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                         "Il n'y a pas de ${widget.displayTypeState} à afficher."),
                   )
                 : DataTable2(
-                    columnSpacing: 10,
-                    horizontalMargin: 10,
+                    columnSpacing: columnSpacingDataTable2,
+                    horizontalMargin: horizontalMarginDataTable2,
                     fixedLeftColumns: 1,
                     scrollController: _controller,
                     dividerThickness: 2,
@@ -209,7 +237,7 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     minWidth: _extendedList[0] ? null : arrayWidth,
                     columns: columns,
                     rows: rows,
-                    dataRowHeight: 50,
+                    dataRowHeight: dataRowHeightDataTable2,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -302,9 +330,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
             ),
         ],
       ),
-
-      // Add the FloatingActionButton here
       floatingActionButton: FloatingActionButton(
+        heroTag: "addFAB",
         onPressed: () {
           // Define the action to be performed when the FAB is pressed
           Navigator.push(
@@ -374,7 +401,8 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.all(10), // Marge externe
+        margin: const EdgeInsets.symmetric(
+            horizontal: 10, vertical: 0), // Marge externe
         decoration: BoxDecoration(
           color: Color(0xFF7DAB9C),
           borderRadius: BorderRadius.circular(12),
@@ -427,8 +455,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 } else if (selectedItemDetailsCo is Regeneration) {
                   final regenerationListViewModel = ref.read(
                       regenerationListViewModelStateNotifierProvider.notifier);
-                  deletionResult = await regenerationListViewModel
-                      .deleteItem(selectedItemDetailsCo.idRegeneration);
+                  deletionResult = await regenerationListViewModel.deleteItem(
+                    selectedItemDetailsCo.idRegeneration,
+                    idCyclePlacette: selectedItemDetailsCo.idCyclePlacette,
+                  );
                 } else if (selectedItemDetailsCo is Repere) {
                   final repereListViewModel = ref
                       .read(repereListViewModelStateNotifierProvider.notifier);
@@ -437,8 +467,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                 } else if (selectedItemDetailsCo is Transect) {
                   final transectListViewModel = ref.read(
                       transectListViewModelStateNotifierProvider.notifier);
-                  deletionResult = await transectListViewModel
-                      .deleteItem(selectedItemDetailsCo.idTransect);
+                  deletionResult = await transectListViewModel.deleteItem(
+                    selectedItemDetailsCo.idTransect,
+                    idCyclePlacette: selectedItemDetailsCo.idCyclePlacette,
+                  );
                 }
                 // Display the SnackBar based on the result of deletion
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -481,8 +513,9 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
               Expanded(
                 child: Container(
                   margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                  padding: const EdgeInsets.all(10),
+                      const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
                   decoration: BoxDecoration(
                     color: Color(0xFF598979),
                     borderRadius: BorderRadius.circular(10),
@@ -493,8 +526,10 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
                     mapIdCycleNumCycle: mapIdCycleNumCycle,
                     displayTypeState: widget.displayTypeState,
                     onItemSelected: (int selectedIndex) {
-                      ref.watch(selectedMesureIndexProvider.notifier).state =
-                          selectedIndex;
+                      ref
+                          .watch(selectedMesureIndexProvider.notifier)
+                          .setSelectedMesureIndex(selectedIndex);
+                      selectedIndex;
                       // ref
                       //     .read(selectedItemMesureDetailsProvider.notifier)
                       //     .setSelectedItemMesureDetails(selectedIndex);
@@ -652,16 +687,16 @@ class SaisieDataTableState extends ConsumerState<SaisieDataTable> {
 
     if (selectedItem is Arbre) {
       selectedItem;
-      ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
-              .arbresMesures!
-              .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
-          0;
+      ref.watch(selectedMesureIndexProvider.notifier).setSelectedMesureIndex(
+          selectedItem.arbresMesures!
+                  .findIndexOfArbreMesureFromIdCycle(value['idCycle']) ??
+              0);
     } else if (selectedItem is BmSup30) {
       selectedItem;
-      ref.watch(selectedMesureIndexProvider.notifier).state = selectedItem
-              .bmsSup30Mesures!
-              .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
-          0;
+      ref.watch(selectedMesureIndexProvider.notifier).setSelectedMesureIndex(
+          selectedItem.bmsSup30Mesures!
+                  .findIndexOfBmSup30MesureFromIdCycle(value['idCycle']) ??
+              0);
     }
   }
 
