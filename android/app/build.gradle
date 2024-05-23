@@ -55,9 +55,19 @@ android {
         versionName flutterVersionName
     }
 
+
+    signingConfigs {
+        release {
+            keyAlias 'dendro3-key-alias'
+            keyPassword 'Dendro3mdp1!'
+            storeFile file('/home/aschlegel/dendro3-release-key.jks')
+            storePassword 'Dendro3mdp1!'
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
