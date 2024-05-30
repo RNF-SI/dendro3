@@ -10,7 +10,13 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<User> login(final String identifiant, final String password) async {
-    final userEntity = await api.login(identifiant, password);
-    return UserMapper.transformToModel(userEntity);
+    try {
+      final userEntity = await api.login(identifiant, password);
+      return UserMapper.transformToModel(userEntity);
+    } catch (e) {
+      // Handle or log the error accordingly
+      print("Error in AuthenticationRepositoryImpl login: $e");
+      rethrow;
+    }
   }
 }
