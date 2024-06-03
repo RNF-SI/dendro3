@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DB {
@@ -16,7 +19,6 @@ class DB {
     return _database!;
   }
 
-  // add a function to set the database to null
   static void setDatabaseNull() {
     _database = null;
   }
@@ -37,13 +39,43 @@ class DB {
           }
         }
       },
-      // onConfigure: _onConfigure,
       version: _databaseVersion,
     );
   }
 
-  // ToDo: add Foreign Key in futures dev
-  // static Future _onConfigure(Database db) async {
-  //   await db.execute('PRAGMA foreign_keys = ON');
-  // }
+  Future<void> exportDatabase() async {
+    if (!await _requestPermissions()) {
+      throw Exception("Storage permission not granted");
+    }
+
+    final dbPath = join(await getDatabasesPath(), databaseName);
+
+    // Get the downloads directory
+    final downloadsDir = Directory('/storage/emulated/0/Download');
+    if (!await downloadsDir.exists()) {
+      throw Exception("Downloads directory not found");
+    }
+
+    final newPath = join(downloadsDir.path, databaseName);
+
+    final dbFile = File(dbPath);
+    if (await dbFile.exists()) {
+      await dbFile.copy(newPath);
+      print('Database copied to $newPath');
+    } else {
+      throw Exception("Database file does not exist");
+    }
+  }
+
+  Future<bool> _requestPermissions() async {
+    final plugin = DeviceInfoPlugin();
+    final android = await plugin.androidInfo;
+
+    final storageStatus = android.version.sdkInt < 33
+        ? await Permission.storage.request()
+        : PermissionStatus.granted;
+
+    print('Current storage permission status: $storageStatus');
+    return storageStatus.isGranted;
+  }
 }

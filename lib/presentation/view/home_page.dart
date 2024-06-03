@@ -1,4 +1,6 @@
-// import 'package:authentication_riverpod/providers/auth_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:dendro3/presentation/viewmodel/database/database_service.dart';
 import 'dart:io';
 
 import 'package:dendro3/domain/domain_module.dart';
@@ -30,6 +32,11 @@ class HomePage extends ConsumerWidget {
         backgroundColor: Color(0xFF598979), // Brand blue
         title: const Text("Mes Dispositifs"),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.save,
+                color: Color(0xFF1a1a18)), // Icon for export database
+            onPressed: () => _exportDatabase(context, databaseService),
+          ),
           IconButton(
             icon: const Icon(Icons.refresh,
                 color: Color(0xFFF4F1E4)), // Beige icon for contrast
@@ -165,5 +172,35 @@ class HomePage extends ConsumerWidget {
         );
       },
     );
+  }
+
+  void _exportDatabase(
+      BuildContext context, DatabaseService databaseService) async {
+    bool permissionGranted = await databaseService.requestStoragePermission();
+    print('Permission granted: $permissionGranted'); // Temporary log
+    if (permissionGranted) {
+      try {
+        await databaseService.exportDatabase();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'La base de données a été copiée dans un dossier accessible du téléphone'),
+          ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Erreur lors de la copie de la BDD dans un dossier accessible du téléphone: $e'),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Permission de stockage non accordée'),
+        ),
+      );
+    }
   }
 }

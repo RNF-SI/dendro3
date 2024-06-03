@@ -160,4 +160,9 @@ class GlobalDatabaseImpl implements GlobalDatabase {
     // Reinitialize the database
     await DB.instance.database;
   }
+
+  @override
+  Future<void> exportDatabase() async {
+    await DB.instance.exportDatabase();
+  }
 }

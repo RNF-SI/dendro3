@@ -16,4 +16,6 @@ abstract class GlobalDatabase {
   Future<void> insertNomenclatures(NomenclatureListEntity list);
 
   Future<void> deleteAndReinitializeCurrentDatabase();
+
+  Future<void> exportDatabase();
 }

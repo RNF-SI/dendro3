@@ -32,4 +32,9 @@ class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
   Future<void> deleteDatabase() async {
     await database.deleteAndReinitializeCurrentDatabase();
   }
+
+  @override
+  Future<void> exportDatabase() async {
+    await database.exportDatabase();
+  }
 }
