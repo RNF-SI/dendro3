@@ -994,6 +994,7 @@ class ArbreSaisieViewModel extends ObjectSaisieViewModel {
           const MapEntry('EFI', 'EFI'),
           const MapEntry('engref', 'engref'),
           const MapEntry('prosilva', 'prosilva'),
+          const MapEntry('2018', '2018'),
           const MapEntry('', '')
         ],
         onChanged: (value) {
