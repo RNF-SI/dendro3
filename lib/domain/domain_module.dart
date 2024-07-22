@@ -3,6 +3,8 @@ import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase.dart
 import 'package:dendro3/domain/usecase/actualiser_cycles_dispositif_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/export_database_in_accessible_location_usecase.dart';
 import 'package:dendro3/domain/usecase/export_database_in_accessible_location_usecase_impl.dart';
+import 'package:dendro3/domain/usecase/refresh_nomenclatures_usecase.dart';
+import 'package:dendro3/domain/usecase/refresh_nomenclatures_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/request_storage_permission_usecase.dart';
 import 'package:dendro3/domain/usecase/request_storage_permission_usecase_impl.dart';
 import 'package:dendro3/domain/usecase/update_arbre_and_create_arbre_mesure_use_case.dart';
@@ -400,3 +402,10 @@ final exportDatabaseInAccessibleLocationUseCaseProvider =
 final requestStoragePermissionUseCaseProvider =
     Provider<RequestStoragePermissionUseCase>(
         (ref) => RequestStoragePermissionUseCaseImpl());
+
+final refreshNomenclaturesUseCaseProvider =
+    Provider<RefreshNomenclaturesUseCase>(
+  (ref) => RefreshNomenclaturesUseCaseImpl(
+    ref.watch(globalDatabaseRepositoryProvider),
+  ),
+);

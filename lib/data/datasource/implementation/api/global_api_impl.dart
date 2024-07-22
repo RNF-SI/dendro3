@@ -53,4 +53,19 @@ class GlobalApiImpl implements GlobalApi {
     }
     return nomenclatureListEnt;
   }
+
+  @override
+  Future<NomenclatureListEntity> refreshNomenclatures() async {
+    Response response = await Dio().get('$apiBase/psdrf/t_nomenclatures');
+    NomenclatureListEntity nomenclatureListEnt = [];
+    NomenclatureEntity nomenclatureEnt = {};
+
+    for (var i = 0; i < response.data.length; i++) {
+      var currentElement = response.data[i];
+      nomenclatureEnt = {};
+      currentElement.forEach((k, v) => {nomenclatureEnt[k] = v});
+      nomenclatureListEnt.add(nomenclatureEnt);
+    }
+    return nomenclatureListEnt;
+  }
 }

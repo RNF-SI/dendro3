@@ -69,6 +69,18 @@ class HomePage extends ConsumerWidget {
                 color: Color(0xFF1a1a18)), // Brand noir
             onPressed: () => _confirmSignOut(context, authViewModel, ref),
           ),
+          IconButton(
+            icon:
+                const Icon(Icons.download, // New icon for refresh nomenclatures
+                    color: Color(0xFF1a1a18)),
+            onPressed: () async {
+              await databaseService.refreshNomenclatures();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Nomenclatures mises à jour avec succès')),
+              );
+            },
+          ),
         ],
       ),
       body: const SafeArea(

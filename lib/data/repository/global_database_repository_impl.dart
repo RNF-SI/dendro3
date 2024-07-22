@@ -37,4 +37,9 @@ class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
   Future<void> exportDatabase() async {
     await database.exportDatabase();
   }
+
+  @override
+  Future<void> refreshNomenclatures() async {
+    await database.refreshNomenclatures(await api.refreshNomenclatures());
+  }
 }
