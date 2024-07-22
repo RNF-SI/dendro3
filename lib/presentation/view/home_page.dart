@@ -15,16 +15,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../state/state.dart' as custom_async_state;
+
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authViewModel = ref.read(authenticationViewModelProvider);
-    final databaseService = ref.read(databaseServiceProvider);
+    final databaseService = ref.read(databaseServiceProvider.notifier);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showVersionAlert(context);
+    });
+
+    ref.listen<custom_async_state.State<void>>(databaseServiceProvider,
+        (previous, state) {
+      state.whenOrNull(
+        error: (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $e')),
+          );
+        },
+        success: (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Nomenclatures mises à jour avec succès'),
+              duration: const Duration(seconds: 8), // Display for 5 seconds
+            ),
+          );
+        },
+      );
     });
 
     return Scaffold(
@@ -35,36 +56,38 @@ class HomePage extends ConsumerWidget {
           PopupMenuButton<String>(
             icon: const Icon(Icons.menu), // Menu icon
             onSelected: (value) async {
-              switch (value) {
-                case 'export':
-                  _exportDatabase(context, databaseService);
-                  break;
-                case 'refresh':
-                  ref
-                      .read(userDispositifListViewModelStateNotifierProvider
-                          .notifier)
-                      .refreshDispositifs();
-                  await ref
-                      .read(setTerminalNameFromLocalStorageUseCaseProvider)
-                      .execute();
-                  break;
-                case 'delete':
-                  _confirmDelete(context, databaseService, authViewModel, ref);
-                  break;
-                case 'version':
-                  _showVersionAlert(context);
-                  break;
-                case 'logout':
-                  _confirmSignOut(context, authViewModel, ref);
-                  break;
-                case 'refreshNomenclatures':
-                  await databaseService.refreshNomenclatures();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content:
-                            Text('Nomenclatures mises à jour avec succès')),
-                  );
-                  break;
+              try {
+                switch (value) {
+                  case 'export':
+                    await _exportDatabase(context, databaseService);
+                    break;
+                  case 'refresh':
+                    await ref
+                        .read(userDispositifListViewModelStateNotifierProvider
+                            .notifier)
+                        .refreshDispositifs();
+                    await ref
+                        .read(setTerminalNameFromLocalStorageUseCaseProvider)
+                        .execute();
+                    break;
+                  case 'delete':
+                    await _confirmDelete(
+                        context, databaseService, authViewModel, ref);
+                    break;
+                  case 'version':
+                    _showVersionAlert(context);
+                    break;
+                  case 'logout':
+                    await _confirmSignOut(context, authViewModel, ref);
+                    break;
+                  case 'refreshNomenclatures':
+                    await databaseService.refreshNomenclatures();
+                    break;
+                }
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
               }
             },
             itemBuilder: (BuildContext context) {
@@ -79,7 +102,7 @@ class HomePage extends ConsumerWidget {
                 const PopupMenuItem<String>(
                   value: 'refresh',
                   child: ListTile(
-                    leading: Icon(Icons.refresh, color: Color(0xFF1a1a18)),
+                    leading: Icon(Icons.refresh, color: Color(0xFFF4F1E4)),
                     title: Text('Rafraîchir la liste'),
                   ),
                 ),
@@ -107,7 +130,8 @@ class HomePage extends ConsumerWidget {
                 const PopupMenuItem<String>(
                   value: 'refreshNomenclatures',
                   child: ListTile(
-                    leading: Icon(Icons.sync, color: Color(0xFF1a1a18)),
+                    leading:
+                        Icon(Icons.sync, color: Color(0xFF1a1a18)), // New icon
                     title: Text('Mettre à jour les nomenclatures'),
                   ),
                 ),
@@ -141,7 +165,7 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(
+  Future<void> _confirmDelete(
     BuildContext context,
     DatabaseService databaseService,
     AuthenticationViewModel authViewModel,
@@ -192,8 +216,8 @@ class HomePage extends ConsumerWidget {
     }
   }
 
-  void _confirmSignOut(BuildContext context,
-      AuthenticationViewModel authViewModel, WidgetRef ref) {
+  Future<void> _confirmSignOut(BuildContext context,
+      AuthenticationViewModel authViewModel, WidgetRef ref) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -219,7 +243,7 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  void _exportDatabase(
+  Future<void> _exportDatabase(
       BuildContext context, DatabaseService databaseService) async {
     bool permissionGranted = await databaseService.requestStoragePermission();
     print('Permission granted: $permissionGranted'); // Temporary log

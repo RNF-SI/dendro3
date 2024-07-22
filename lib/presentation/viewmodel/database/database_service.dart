@@ -7,7 +7,9 @@ import 'package:dendro3/presentation/state/state.dart' as custom_async_state;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final databaseServiceProvider = Provider.autoDispose<DatabaseService>((ref) {
+final databaseServiceProvider =
+    StateNotifierProvider<DatabaseService, custom_async_state.State<void>>(
+        (ref) {
   return DatabaseService(
     ref,
     ref.watch(deleteDatabaseUseCaseProvider),
