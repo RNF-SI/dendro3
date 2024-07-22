@@ -29,56 +29,89 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF598979), // Brand blue
+        backgroundColor: const Color(0xFF598979), // Brand blue
         title: const Text("Mes Dispositifs"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.save,
-                color: Color(0xFF1a1a18)), // Icon for export database
-            onPressed: () => _exportDatabase(context, databaseService),
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh,
-                color: Color(0xFFF4F1E4)), // Beige icon for contrast
-            onPressed: () async {
-              // Refresh list logic
-              ref
-                  .read(
-                      userDispositifListViewModelStateNotifierProvider.notifier)
-                  .refreshDispositifs();
-              // Save the device name in shared preferences
-              await ref
-                  .read(setTerminalNameFromLocalStorageUseCaseProvider)
-                  .execute();
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.menu), // Menu icon
+            onSelected: (value) async {
+              switch (value) {
+                case 'export':
+                  _exportDatabase(context, databaseService);
+                  break;
+                case 'refresh':
+                  ref
+                      .read(userDispositifListViewModelStateNotifierProvider
+                          .notifier)
+                      .refreshDispositifs();
+                  await ref
+                      .read(setTerminalNameFromLocalStorageUseCaseProvider)
+                      .execute();
+                  break;
+                case 'delete':
+                  _confirmDelete(context, databaseService, authViewModel, ref);
+                  break;
+                case 'version':
+                  _showVersionAlert(context);
+                  break;
+                case 'logout':
+                  _confirmSignOut(context, authViewModel, ref);
+                  break;
+                case 'refreshNomenclatures':
+                  await databaseService.refreshNomenclatures();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content:
+                            Text('Nomenclatures mises à jour avec succès')),
+                  );
+                  break;
+              }
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete,
-                color: Color(0xFF8B5500)), // Brand green
-            onPressed: () async {
-              _confirmDelete(context, databaseService, authViewModel, ref);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.info_outline,
-                color: Color(0xFF1a1a18)), // Icon for version info
-            onPressed: () => _showVersionAlert(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout,
-                color: Color(0xFF1a1a18)), // Brand noir
-            onPressed: () => _confirmSignOut(context, authViewModel, ref),
-          ),
-          IconButton(
-            icon:
-                const Icon(Icons.download, // New icon for refresh nomenclatures
-                    color: Color(0xFF1a1a18)),
-            onPressed: () async {
-              await databaseService.refreshNomenclatures();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Nomenclatures mises à jour avec succès')),
-              );
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'export',
+                  child: ListTile(
+                    leading: Icon(Icons.save, color: Color(0xFF1a1a18)),
+                    title: Text('Exporter la base de données'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'refresh',
+                  child: ListTile(
+                    leading: Icon(Icons.refresh, color: Color(0xFF1a1a18)),
+                    title: Text('Rafraîchir la liste'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'delete',
+                  child: ListTile(
+                    leading: Icon(Icons.delete, color: Color(0xFF8B5500)),
+                    title: Text('Supprimer la base de données'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'version',
+                  child: ListTile(
+                    leading: Icon(Icons.info_outline, color: Color(0xFF1a1a18)),
+                    title: Text('Informations sur la version'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'logout',
+                  child: ListTile(
+                    leading: Icon(Icons.logout, color: Color(0xFF1a1a18)),
+                    title: Text('Déconnexion'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'refreshNomenclatures',
+                  child: ListTile(
+                    leading: Icon(Icons.sync, color: Color(0xFF1a1a18)),
+                    title: Text('Mettre à jour les nomenclatures'),
+                  ),
+                ),
+              ];
             },
           ),
         ],
@@ -171,7 +204,7 @@ class HomePage extends ConsumerWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Annuler"),
+              child: const Text("Annuler"),
             ),
             TextButton(
               onPressed: () async {
@@ -209,7 +242,7 @@ class HomePage extends ConsumerWidget {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Permission de stockage non accordée'),
         ),
       );
