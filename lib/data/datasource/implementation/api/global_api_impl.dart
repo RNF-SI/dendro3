@@ -25,18 +25,22 @@ class GlobalApiImpl implements GlobalApi {
 
   @override
   Future<NomenclatureTypeListEntity> getBibNomenclaturesTypes() async {
-    Response response =
-        await Dio().get('$apiBase/psdrf/bib_nomenclatures_types');
-    NomenclatureTypeListEntity nomenclatureTypeListEnt = [];
-    NomenclatureTypeEntity nomenclatureTypeEnt = {};
+    try {
+      Response response =
+          await Dio().get('$apiBase/psdrf/bib_nomenclatures_types');
+      NomenclatureTypeListEntity nomenclatureTypeListEnt = [];
+      NomenclatureTypeEntity nomenclatureTypeEnt = {};
 
-    for (var i = 0; i < response.data.length; i++) {
-      var currentElement = response.data[i];
-      nomenclatureTypeEnt = {};
-      currentElement.forEach((k, v) => {nomenclatureTypeEnt[k] = v});
-      nomenclatureTypeListEnt.add(nomenclatureTypeEnt);
+      for (var i = 0; i < response.data.length; i++) {
+        var currentElement = response.data[i];
+        nomenclatureTypeEnt = {};
+        currentElement.forEach((k, v) => {nomenclatureTypeEnt[k] = v});
+        nomenclatureTypeListEnt.add(nomenclatureTypeEnt);
+      }
+      return nomenclatureTypeListEnt;
+    } catch (e) {
+      throw Exception('Failed to fetch nomenclature types: $e');
     }
-    return nomenclatureTypeListEnt;
   }
 
   @override
@@ -56,16 +60,20 @@ class GlobalApiImpl implements GlobalApi {
 
   @override
   Future<NomenclatureListEntity> refreshNomenclatures() async {
-    Response response = await Dio().get('$apiBase/psdrf/t_nomenclatures');
-    NomenclatureListEntity nomenclatureListEnt = [];
-    NomenclatureEntity nomenclatureEnt = {};
+    try {
+      Response response = await Dio().get('$apiBase/psdrf/t_nomenclatures');
+      NomenclatureListEntity nomenclatureListEnt = [];
+      NomenclatureEntity nomenclatureEnt = {};
 
-    for (var i = 0; i < response.data.length; i++) {
-      var currentElement = response.data[i];
-      nomenclatureEnt = {};
-      currentElement.forEach((k, v) => {nomenclatureEnt[k] = v});
-      nomenclatureListEnt.add(nomenclatureEnt);
+      for (var i = 0; i < response.data.length; i++) {
+        var currentElement = response.data[i];
+        nomenclatureEnt = {};
+        currentElement.forEach((k, v) => {nomenclatureEnt[k] = v});
+        nomenclatureListEnt.add(nomenclatureEnt);
+      }
+      return nomenclatureListEnt;
+    } catch (e) {
+      throw Exception('Failed to fetch nomenclatures: $e');
     }
-    return nomenclatureListEnt;
   }
 }

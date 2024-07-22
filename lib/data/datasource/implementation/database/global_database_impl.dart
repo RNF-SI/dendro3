@@ -19,28 +19,32 @@ class GlobalDatabaseImpl implements GlobalDatabase {
   @override
   Future<void> insertEssences(EssenceListEntity essenceListEntity) async {
     final db = await database;
-    await db.transaction((txn) async {
-      Batch batch = txn.batch();
+    try {
+      await db.transaction((txn) async {
+        Batch batch = txn.batch();
 
-      essenceListEntity.map((essenceEntity) async {
-        final essenceInsertProperties = {
-          for (var property in essenceEntity.keys.where((k) =>
-              k == 'code_essence' ||
-              k == 'cd_nom' ||
-              k == 'nom' ||
-              k == 'nom_latin' ||
-              k == 'ess_reg' ||
-              k == 'couleur'))
-            property: essenceEntity[property]
-        };
-        batch.insert(
-          'bib_essences',
-          essenceInsertProperties,
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }).toList();
-      await batch.commit();
-    });
+        essenceListEntity.map((essenceEntity) async {
+          final essenceInsertProperties = {
+            for (var property in essenceEntity.keys.where((k) =>
+                k == 'code_essence' ||
+                k == 'cd_nom' ||
+                k == 'nom' ||
+                k == 'nom_latin' ||
+                k == 'ess_reg' ||
+                k == 'couleur'))
+              property: essenceEntity[property]
+          };
+          batch.insert(
+            'bib_essences',
+            essenceInsertProperties,
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }).toList();
+        await batch.commit();
+      });
+    } catch (e) {
+      throw Exception('Failed to insert essences: $e');
+    }
   }
 
   @override
@@ -170,42 +174,46 @@ class GlobalDatabaseImpl implements GlobalDatabase {
   Future<void> refreshNomenclatures(
       NomenclatureListEntity nomenclatureListEntity) async {
     final db = await database;
-    await db.transaction((txn) async {
-      Batch batch = txn.batch();
+    try {
+      await db.transaction((txn) async {
+        Batch batch = txn.batch();
 
-      nomenclatureListEntity.map((nomenclatureEntity) async {
-        final nomenclatureInsertProperties = {
-          for (var property in nomenclatureEntity.keys.where((k) =>
-              k == 'id_nomenclature' ||
-              k == 'id_type' ||
-              k == 'cd_nomenclature' ||
-              k == 'mnemonique' ||
-              k == 'label_default' ||
-              k == 'definition_default' ||
-              k == 'label_fr' ||
-              k == 'definition_fr' ||
-              k == 'label_en' ||
-              k == 'definition_en' ||
-              k == 'label_es' ||
-              k == 'definition_es' ||
-              k == 'label_de' ||
-              k == 'definition_de' ||
-              k == 'label_it' ||
-              k == 'definition_it' ||
-              k == 'source' ||
-              k == 'statut' ||
-              k == 'id_broader' ||
-              k == 'hierarchy' ||
-              k == 'active'))
-            property: nomenclatureEntity[property]
-        };
-        batch.insert(
-          't_nomenclatures',
-          nomenclatureInsertProperties,
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }).toList();
-      await batch.commit();
-    });
+        nomenclatureListEntity.map((nomenclatureEntity) async {
+          final nomenclatureInsertProperties = {
+            for (var property in nomenclatureEntity.keys.where((k) =>
+                k == 'id_nomenclature' ||
+                k == 'id_type' ||
+                k == 'cd_nomenclature' ||
+                k == 'mnemonique' ||
+                k == 'label_default' ||
+                k == 'definition_default' ||
+                k == 'label_fr' ||
+                k == 'definition_fr' ||
+                k == 'label_en' ||
+                k == 'definition_en' ||
+                k == 'label_es' ||
+                k == 'definition_es' ||
+                k == 'label_de' ||
+                k == 'definition_de' ||
+                k == 'label_it' ||
+                k == 'definition_it' ||
+                k == 'source' ||
+                k == 'statut' ||
+                k == 'id_broader' ||
+                k == 'hierarchy' ||
+                k == 'active'))
+              property: nomenclatureEntity[property]
+          };
+          batch.insert(
+            't_nomenclatures',
+            nomenclatureInsertProperties,
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }).toList();
+        await batch.commit();
+      });
+    } catch (e) {
+      throw Exception('Failed to refresh nomenclatures: $e');
+    }
   }
 }

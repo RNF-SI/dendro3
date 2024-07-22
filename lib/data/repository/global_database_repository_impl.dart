@@ -1,6 +1,7 @@
 import 'package:dendro3/data/datasource/interface/api/global_api.dart';
 import 'package:dendro3/data/datasource/interface/database/global_database.dart';
 import 'package:dendro3/data/entity/essences_entity.dart';
+import 'package:dendro3/data/entity/nomenclatures_entity.dart';
 import 'package:dendro3/domain/repository/global_database_repository.dart';
 
 class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
@@ -11,35 +12,52 @@ class GlobalDatabaseRepositoryImpl implements GlobalDatabaseRepository {
 
   @override
   Future<void> initDatabase() async {
-    await database.initDatabase();
-    // Import essences only if table is empty
-    if (await database.checkBibEssenceEmpty()) {
-      EssenceListEntity bibEssences = await api.getBibEssences();
-      await database.insertEssences(bibEssences);
-    }
-    // Import nomenclatures types only if table is empty
-    if (await database.checkBibNomenclaturesTypesEmpty()) {
-      await database
-          .insertBibNomenclaturesTypes(await api.getBibNomenclaturesTypes());
-    }
-    // Import nomenclatures only if table is empty
-    if (await database.checkNomenclaturesEmpty()) {
-      await database.insertNomenclatures(await api.getNomenclatures());
+    try {
+      await database.initDatabase();
+      // Import essences only if table is empty
+      if (await database.checkBibEssenceEmpty()) {
+        EssenceListEntity bibEssences = await api.getBibEssences();
+        await database.insertEssences(bibEssences);
+      }
+      // Import nomenclatures types only if table is empty
+      if (await database.checkBibNomenclaturesTypesEmpty()) {
+        await database
+            .insertBibNomenclaturesTypes(await api.getBibNomenclaturesTypes());
+      }
+      // Import nomenclatures only if table is empty
+      if (await database.checkNomenclaturesEmpty()) {
+        await database.insertNomenclatures(await api.getNomenclatures());
+      }
+    } catch (e) {
+      throw Exception('Failed to initialize database: $e');
     }
   }
 
   @override
   Future<void> deleteDatabase() async {
-    await database.deleteAndReinitializeCurrentDatabase();
+    try {
+      await database.deleteAndReinitializeCurrentDatabase();
+    } catch (e) {
+      throw Exception('Failed to delete database: $e');
+    }
   }
 
   @override
   Future<void> exportDatabase() async {
-    await database.exportDatabase();
+    try {
+      await database.exportDatabase();
+    } catch (e) {
+      throw Exception('Failed to export database: $e');
+    }
   }
 
   @override
   Future<void> refreshNomenclatures() async {
-    await database.refreshNomenclatures(await api.refreshNomenclatures());
+    try {
+      NomenclatureListEntity nomenclatures = await api.refreshNomenclatures();
+      await database.refreshNomenclatures(nomenclatures);
+    } catch (e) {
+      throw Exception('Failed to refresh nomenclatures: $e');
+    }
   }
 }
