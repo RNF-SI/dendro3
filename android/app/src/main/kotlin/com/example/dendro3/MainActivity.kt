@@ -1,4 +1,4 @@
-package com.example.dendro3
+package org.reserves_naturelles.dendro3
 
 import io.flutter.embedding.android.FlutterActivity
 

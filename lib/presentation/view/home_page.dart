@@ -1,4 +1,6 @@
-// import 'package:authentication_riverpod/providers/auth_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:dendro3/presentation/viewmodel/database/database_service.dart';
 import 'dart:io';
 
 import 'package:dendro3/domain/domain_module.dart';
@@ -13,54 +15,128 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../state/state.dart' as custom_async_state;
+
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authViewModel = ref.read(authenticationViewModelProvider);
-    final databaseService = ref.read(databaseServiceProvider);
+    final databaseService = ref.read(databaseServiceProvider.notifier);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showVersionAlert(context);
     });
 
+    ref.listen<custom_async_state.State<void>>(databaseServiceProvider,
+        (previous, state) {
+      state.whenOrNull(
+        error: (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $e')),
+          );
+        },
+        success: (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Nomenclatures mises à jour avec succès'),
+              duration: const Duration(seconds: 8), // Display for 5 seconds
+            ),
+          );
+        },
+      );
+    });
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF598979), // Brand blue
+        backgroundColor: const Color(0xFF598979), // Brand blue
         title: const Text("Mes Dispositifs"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh,
-                color: Color(0xFFF4F1E4)), // Beige icon for contrast
-            onPressed: () async {
-              // Refresh list logic
-              ref
-                  .read(
-                      userDispositifListViewModelStateNotifierProvider.notifier)
-                  .refreshDispositifs();
-              // Save the device name in shared preferences
-              await ref
-                  .read(setTerminalNameFromLocalStorageUseCaseProvider)
-                  .execute();
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.menu), // Menu icon
+            onSelected: (value) async {
+              try {
+                switch (value) {
+                  case 'export':
+                    await _exportDatabase(context, databaseService);
+                    break;
+                  case 'refresh':
+                    await ref
+                        .read(userDispositifListViewModelStateNotifierProvider
+                            .notifier)
+                        .refreshDispositifs();
+                    await ref
+                        .read(setTerminalNameFromLocalStorageUseCaseProvider)
+                        .execute();
+                    break;
+                  case 'delete':
+                    await _confirmDelete(
+                        context, databaseService, authViewModel, ref);
+                    break;
+                  case 'version':
+                    _showVersionAlert(context);
+                    break;
+                  case 'logout':
+                    await _confirmSignOut(context, authViewModel, ref);
+                    break;
+                  case 'refreshNomenclatures':
+                    await databaseService.refreshNomenclatures();
+                    break;
+                }
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
+              }
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete,
-                color: Color(0xFF8B5500)), // Brand green
-            onPressed: () async {
-              _confirmDelete(context, databaseService, authViewModel, ref);
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'export',
+                  child: ListTile(
+                    leading: Icon(Icons.save, color: Color(0xFF1a1a18)),
+                    title: Text('Exporter la base de données'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'refresh',
+                  child: ListTile(
+                    leading: Icon(Icons.refresh, color: Color(0xFFF4F1E4)),
+                    title: Text('Rafraîchir la liste'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'delete',
+                  child: ListTile(
+                    leading: Icon(Icons.delete, color: Color(0xFF8B5500)),
+                    title: Text('Supprimer la base de données'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'version',
+                  child: ListTile(
+                    leading: Icon(Icons.info_outline, color: Color(0xFF1a1a18)),
+                    title: Text('Informations sur la version'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'logout',
+                  child: ListTile(
+                    leading: Icon(Icons.logout, color: Color(0xFF1a1a18)),
+                    title: Text('Déconnexion'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'refreshNomenclatures',
+                  child: ListTile(
+                    leading:
+                        Icon(Icons.sync, color: Color(0xFF1a1a18)), // New icon
+                    title: Text('Mettre à jour les nomenclatures'),
+                  ),
+                ),
+              ];
             },
-          ),
-          IconButton(
-            icon: const Icon(Icons.info_outline,
-                color: Color(0xFF1a1a18)), // Icon for version info
-            onPressed: () => _showVersionAlert(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout,
-                color: Color(0xFF1a1a18)), // Brand noir
-            onPressed: () => _confirmSignOut(context, authViewModel, ref),
           ),
         ],
       ),
@@ -89,7 +165,7 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(
+  Future<void> _confirmDelete(
     BuildContext context,
     DatabaseService databaseService,
     AuthenticationViewModel authViewModel,
@@ -140,8 +216,8 @@ class HomePage extends ConsumerWidget {
     }
   }
 
-  void _confirmSignOut(BuildContext context,
-      AuthenticationViewModel authViewModel, WidgetRef ref) {
+  Future<void> _confirmSignOut(BuildContext context,
+      AuthenticationViewModel authViewModel, WidgetRef ref) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -152,7 +228,7 @@ class HomePage extends ConsumerWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Annuler"),
+              child: const Text("Annuler"),
             ),
             TextButton(
               onPressed: () async {
@@ -165,5 +241,35 @@ class HomePage extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> _exportDatabase(
+      BuildContext context, DatabaseService databaseService) async {
+    bool permissionGranted = await databaseService.requestStoragePermission();
+    print('Permission granted: $permissionGranted'); // Temporary log
+    if (permissionGranted) {
+      try {
+        await databaseService.exportDatabase();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'La base de données a été copiée dans un dossier accessible du téléphone'),
+          ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Erreur lors de la copie de la BDD dans un dossier accessible du téléphone: $e'),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Permission de stockage non accordée'),
+        ),
+      );
+    }
   }
 }
